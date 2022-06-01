@@ -1,0 +1,26 @@
+{
+    "appName": "Sharp Cooking",
+    "topBar": {
+        "search": "Search...",
+        "home": "Home",
+        "about": "About",
+        "options": "Options",
+        "openMainMenu": "Open main menu"
+    },
+    "recipes": {
+        "title": "All Recipes",
+        "search": "Search..."
+    },
+    "recipe": {
+        "title": "View Recipe"
+    },
+    "options": {
+        "title": "Options"
+    },
+    "about": {
+        "title": "About"
+    },
+    "newRecipe": {
+        "title": "New Recipe"
+    }
+}
