@@ -3,19 +3,30 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useState } from "../services/store";
-import { getRecipes } from "../services/dataService";
+import { getRecipes, getRecipeImage } from "../services/dataService";
 import { Recipe } from "../services/recipe";
+
+class RecipeViewModel extends Recipe {
+  image?: string;
+  imageAvailable: boolean = false;
+}
 
 const router = useRouter();
 const { t } = useI18n();
 const state = useState()!;
 
-const items = ref([] as Recipe[]);
+const items = ref([] as RecipeViewModel[]);
 
 onMounted(async () => {
   state.title = "All Recipes";
 
-  const allRecipes = await getRecipes();
+  const allRecipes = await getRecipes() as RecipeViewModel[];
+
+  for (const recipe of allRecipes) {
+    const item = await getRecipeImage(recipe.id || 0);
+    recipe.image = item && item.image;
+    recipe.imageAvailable = recipe.image ? true : false;
+  }
 
   items.value = allRecipes;
 });
@@ -40,14 +51,39 @@ function gotToNew() {
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 m-4 gap-5">
       <div
+        v-for="item in items"
         @click="goToRecipe(item.id || 0)"
         @keydown.enter="goToRecipe(item.id || 0)"
         tabindex="0"
-        v-for="item in items"
-        class="p-5 rounded-lg shadow shadow-slate-50 bg-white dark:bg-theme-secondary-gray"
+        class="p-5 h-60 rounded-lg shadow bg-white dark:bg-theme-secondary-gray overflow-hidden"
       >
-        <img src="../assets/logo.png" class="mx-auto" />
-        <div>
+        <div
+          style="height: calc(100% - 0.5rem)"
+          class="-mx-5 -mt-5 overflow-hidden"
+        >
+          <img
+            v-if="item.imageAvailable"
+            :src="item.image"
+            style=""
+            class="object-contain"
+          />
+          <div v-else class="bg-theme-primary h-full grid place-items-center">
+            <svg
+              class="h-16 w-16 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </div>
+        </div>
+        <div class="h-full pt-2">
           <span class="text-ellipsis text-black dark:text-white text-lg">{{
             item.title
           }}</span>
@@ -59,7 +95,7 @@ function gotToNew() {
     </div>
     <button
       @click="gotToNew()"
-      class="p-0 w-14 h-14 fixed bottom-6 right-6 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none"
+      class="p-0 w-14 h-14 fixed bottom-6 right-6 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
     >
       <svg
         viewBox="0 0 20 20"

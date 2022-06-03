@@ -14,7 +14,7 @@ const { t } = useI18n();
 
 <template>
   <TopBar />
-  <div class="container mt-20 mx-auto">
+  <div class="container mx-auto">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component"></component>

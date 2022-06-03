@@ -46,6 +46,16 @@ export async function getRecipeImages(id: number): Promise<RecipeImage[]> {
     return result;
 }
 
+export async function getRecipeImage(id: number): Promise<RecipeImage | undefined> {
+    console.time(`getRecipeImage_${id}`);
+
+    var result = await db.recipeImages.where("recipeId").equals(id).first();
+
+    console.timeEnd(`getRecipeImage_${id}`);
+
+    return result;
+}
+
 export async function saveRecipe(recipe: Recipe) {
     console.time("saveRecipe");
 

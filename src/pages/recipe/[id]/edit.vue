@@ -74,7 +74,6 @@ function getBase64(file: File): Promise<string> {
     <button type="button" @click="save">Save</button>
     <div>
       <img :src="image" width="320" />
-      <!-- <img src="@/assets/logo.png" /> -->
       <input
         type="file"
         @change="fileSelected(($event!.target! as HTMLInputElement)!.files)"

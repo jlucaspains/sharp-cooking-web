@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useState } from '../services/store';
+import { useState } from "../services/store";
 
 const route = useRoute();
 const router = useRouter();
@@ -24,10 +24,10 @@ function closeMenu() {
 <template>
   <div>
     <nav
-      class="fixed w-full top-0 border-gray-200 px-2 sm:px-4 py-2.5 bg-theme-primary shadow shadow-slate"
+      class="header fixed w-full top-0 border-gray-200 px-4 bg-theme-primary shadow shadow-slate"
     >
       <div
-        class="container flex flex-wrap justify-between items-center mx-auto"
+        class="container flex flex-wrap justify-between sm:items-center mx-auto"
       >
         <div class="flex">
           <button
@@ -51,7 +51,7 @@ function closeMenu() {
           </button>
           <router-link class="flex items-center" to="/">
             <span
-              class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+              class="text-lg font-semibold whitespace-nowrap dark:text-white"
               >{{ state.title }}</span
             >
           </router-link>
@@ -89,11 +89,11 @@ function closeMenu() {
             ></path>
           </svg>
         </button>
-        <input
+        <!-- <input
           type="text"
           :placeholder="t('topBar.search')"
           class="mx-4 hidden md:block p-2 rounded text-black"
-        />
+        /> -->
         <div
           :class="[expand ? '' : 'hidden', 'w-full md:block md:w-auto']"
           id="mobile-menu"
@@ -124,3 +124,10 @@ function closeMenu() {
     </nav>
   </div>
 </template>
+
+<style>
+.header {
+  padding-top: max(0.625rem, env(safe-area-inset-top));
+  padding-bottom: 0.3rem;
+}
+</style>
