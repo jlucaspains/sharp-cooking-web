@@ -5,11 +5,7 @@ import { useI18n } from "vue-i18n";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeImage } from "../services/dataService";
 import { Recipe } from "../services/recipe";
-
-class RecipeViewModel extends Recipe {
-  image?: string;
-  imageAvailable: boolean = false;
-}
+import { RecipeViewModel } from "./recipe/recipeViewModel";
 
 const router = useRouter();
 const { t } = useI18n();
