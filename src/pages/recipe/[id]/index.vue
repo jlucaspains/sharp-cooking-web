@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { getRecipe, getRecipeImages } from "../../../services/dataService";
 import { RecipeImage, Recipe } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
 
 const route = useRoute();
+const router = useRouter();
 
 const id = computed(() => parseInt(<string>route.params.id));
 const state = useState()!;
@@ -24,7 +25,13 @@ const item = ref({
 const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
 
 onMounted(async () => {
-  const recipe = <RecipeViewModel>(await getRecipe(id.value));
+  state.menuOptions = [
+    {
+      svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
+    },
+  ];
+
+  const recipe = <RecipeViewModel>await getRecipe(id.value);
 
   display.value = [];
   display.value.push({
@@ -39,11 +46,11 @@ onMounted(async () => {
       subItems: [step],
     });
   });
-  
+
   display.value.push({
     time: "13:50",
     title: "Enjoy!",
-    subItems: []
+    subItems: [],
   });
 
   if (recipe) {
@@ -59,6 +66,10 @@ onMounted(async () => {
     item.value = recipe;
   }
 });
+
+function editItem() {
+  router.push(`/recipe/${id.value}/edit`);
+}
 </script>
 
 <template>
@@ -87,7 +98,12 @@ onMounted(async () => {
       </svg>
     </div>
     <div class="w-full">
-      <button class="right-0">action 1</button>
+      <button
+        class="p-2 w-10 h-10 m-2 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        @click="editItem"
+      >
+        <svg class="h-5 w-5 text-white" width="24"  height="24"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
+      </button>
       <button>action 2</button>
       <button>action 3</button>
     </div>
@@ -107,7 +123,7 @@ onMounted(async () => {
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
-        <div class="col-span-5  mt-3">{{ displayItem.title }}</div>
+        <div class="col-span-5 mt-3">{{ displayItem.title }}</div>
         <template v-for="subItem in displayItem.subItems">
           <div class="col-span-2"></div>
           <div class="border-l-4 border-theme-secondary"></div>

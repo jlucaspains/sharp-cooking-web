@@ -26,12 +26,10 @@ function closeMenu() {
     <nav
       class="header fixed w-full top-0 border-gray-200 px-4 bg-theme-primary shadow shadow-slate"
     >
-      <div
-        class="container flex flex-wrap justify-between sm:items-center mx-auto"
-      >
-        <div class="flex">
+      <div class="flex flex-wrap justify-between sm:items-center mx-auto">
+        <div class="mr-2 w-2 py-2 flex">
           <button
-            class="text-white-500 mr-2 md:hidden"
+            class="text-white-500"
             v-if="canGoBack"
             @click="$router.back()"
           >
@@ -49,6 +47,8 @@ function closeMenu() {
               />
             </svg>
           </button>
+        </div>
+        <div class="flex py-2">
           <router-link class="flex items-center" to="/">
             <span
               class="text-lg font-semibold whitespace-nowrap dark:text-white"
@@ -56,69 +56,21 @@ function closeMenu() {
             >
           </router-link>
         </div>
-        <button
-          @click.prevent="expand = !expand"
-          type="button"
-          class="inline-flex items-center p-2 ml-3 text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="mobile-menu"
-          aria-expanded="false"
-        >
-          <span class="sr-only">{{ t("topBar.openMainMenu") }}</span>
-          <svg
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <svg
-            class="hidden w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-        <!-- <input
-          type="text"
-          :placeholder="t('topBar.search')"
-          class="mx-4 hidden md:block p-2 rounded text-black"
-        /> -->
-        <div
-          :class="[expand ? '' : 'hidden', 'w-full md:block md:w-auto']"
-          id="mobile-menu"
-        >
-          <ul
-            class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium"
-          >
-            <li>
-              <router-link
-                @click.native="closeMenu"
-                class="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                to="/"
-                >{{ t("topBar.home") }}</router-link
-              >
-            </li>
-
-            <li>
-              <router-link
-                @click.native="closeMenu"
-                class="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                to="/options"
-                >{{ t("topBar.options") }}</router-link
-              >
-            </li>
-          </ul>
+        <div class="flex py-2">
+          <div class="w-8" v-for="menuOption in state.menuOptions">
+            <button class="text-white-500">
+              <svg
+                class="h-6 w-6 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                v-html="menuOption.svg"
+              ></svg>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
