@@ -8,6 +8,7 @@ import {
   getRecipeImages,
 } from "../../../services/dataService";
 import { RecipeImage, Recipe } from "../../../services/recipe";
+import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 const state = useState()!;
 
@@ -21,31 +22,35 @@ const item = ref({
   ingredients: [] as string[],
   steps: [] as string[],
   notes: "",
-} as Recipe);
-const image = ref("");
+  image: "",
+  imageAvailable: false,
+} as RecipeViewModel);
 const images = ref([] as RecipeImage[]);
 
 onMounted(async () => {
   state.menuOptions = [
-      {
-        svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`
-      },
-    ];
+    {
+      text: "Save",
+      action: save,
+      svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`,
+    },
+  ];
 
-  const recipe = await getRecipe(id.value);
+  const recipe = <RecipeViewModel>await getRecipe(id.value);
 
   if (recipe) {
-    item.value = recipe;
-
-    state.title = recipe.title + " Edit";
+    state.title = recipe.title;
 
     const allImages = await getRecipeImages(id.value);
 
     if (allImages.length > 0) {
       images.value = allImages;
 
-      image.value = allImages[0].image;
+      recipe.image = allImages[0].image;
+      recipe.imageAvailable = recipe.image ? true : false;
     }
+
+    item.value = recipe;
   }
 });
 
@@ -53,14 +58,14 @@ async function save() {
   const recipe = JSON.parse(JSON.stringify(item.value)); // remove proxy stuff
   await saveRecipe(recipe);
 
-  if (image.value) {
-    await saveRecipeImage(new RecipeImage(recipe.id, image.value));
+  if (item.value.image) {
+    await saveRecipeImage(new RecipeImage(recipe.id, item.value.image));
   }
 }
 
 async function fileSelected(selectedFiles: FileList | null) {
   if (selectedFiles && selectedFiles.length > 0) {
-    image.value = await getBase64(selectedFiles[0]);
+    item.value.image = await getBase64(selectedFiles[0]);
   }
 }
 
@@ -75,39 +80,63 @@ function getBase64(file: File): Promise<string> {
 </script>
 
 <template>
-  <div class="mt-16 mx-4 dark:text-white">
-    <span class="dark:text-white">{{ item.title }}</span>
-    <button type="button" @click="save">Save</button>
+  <div class="mt-16 mx-4 mb-10 dark:text-white">
     <div>
-      <img :src="image" width="320" />
+      <img
+        :src="item.image"
+        v-if="item.imageAvailable"
+        class="w-full rounded-lg h-80"
+      />
       <input
         type="file"
         @change="fileSelected(($event!.target! as HTMLInputElement)!.files)"
         accept="image/*"
       />
     </div>
-    <label>Title</label>
+    <label for="title">Title</label>
     <input
+      id="title"
       type="text"
       v-model="item.title"
-      class="block p-2 rounded text-black"
+      class="block p-2 w-full rounded text-black"
     />
     <label>Score</label>
     <input
       type="number"
       v-model.number="item.score"
-      class="block p-2 rounded text-black"
+      class="block p-2 w-full rounded text-black"
     />
     <label>Ingredients</label>
-    <button @click="item.ingredients.push('')">Add</button>
-    <div class="flex my-3" v-for="(ingredient, index) in item.ingredients">
+    <button class="ml-2 align-middle" type="button" @click="item.ingredients.push('')">
+      <svg
+        class="h-4 w-4 text-white"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </button>
+    <div
+      class="flex my-3 w-full"
+      v-for="(ingredient, index) in item.ingredients"
+    >
       <input
         type="text"
         placeholder="1 cup flour"
         v-model="item.ingredients[index]"
-        class="block p-2 rounded text-black"
+        class="block p-2 rounded flex-auto text-black"
       />
-      <button class="ml-2" @click="item.ingredients.splice(index, 1)">
+      <button
+        type="button"
+        class="ml-2 align-middle"
+        @click="item.ingredients.splice(index, 1)"
+      >
         <svg
           class="h-4 w-4 text-white"
           width="24"
@@ -129,15 +158,29 @@ function getBase64(file: File): Promise<string> {
       </button>
     </div>
     <label>Steps</label>
-    <button @click="item.steps.push('')">Add</button>
-    <div class="flex my-3" v-for="(step, index) in item.steps">
+    <button class="ml-2" type="button" @click="item.steps.push('')">
+      <svg
+        class="h-4 w-4 text-white"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </button>
+    <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
       <input
         type="text"
         placeholder="Preheat oven to 350 F"
         v-model="item.steps[index]"
-        class="block p-2 rounded text-black"
+        class="block p-2 flex-auto rounded text-black"
       />
-      <button class="ml-2" @click="item.steps.splice(index, 1)">
+      <button type="button" class="ml-2" @click="item.steps.splice(index, 1)">
         <svg
           class="h-4 w-4 text-white"
           width="24"
@@ -159,10 +202,9 @@ function getBase64(file: File): Promise<string> {
       </button>
     </div>
     <label>Notes</label>
-    <input
-      type="text"
+    <textarea
       v-model="item.notes"
-      class="block p-2 rounded text-black"
+      class="block p-2 flex-auto w-full h-20 bg-white rounded text-base text-black"
     />
   </div>
 </template>

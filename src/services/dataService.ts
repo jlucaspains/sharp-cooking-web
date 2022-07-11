@@ -67,8 +67,8 @@ export async function saveRecipe(recipe: Recipe) {
 export async function initialize() {
     const recipes = [
         { id: 1, title: "Sourdough Bread", score: 5, ingredients: ["flour", "water", "salt"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() },
-        { id: 2, title: "Banana bread", score: 5, ingredients: ["flour", "banana", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() },
-        { id: 3, title: "Carrot cake", score: 5, ingredients: ["flour", "carrots", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() }
+        { id: 2, title: "Banana bread", score: 4, ingredients: ["flour", "banana", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() },
+        { id: 3, title: "Carrot cake", score: 3, ingredients: ["flour", "carrots", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() }
     ];
 
     for (const recipe of recipes) {
@@ -82,4 +82,12 @@ export async function saveRecipeImage(recipeImage: RecipeImage) {
     await db.recipeImages.put(recipeImage);
 
     console.timeEnd("saveRecipeImage");
+}
+
+export async function deleteRecipe(id: number) {
+    console.time("deleteRecipe");
+    
+    await db.recipeImages.delete(id);
+
+    console.timeEnd("deleteRecipe");
 }

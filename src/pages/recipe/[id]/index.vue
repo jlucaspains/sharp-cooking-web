@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getRecipe, getRecipeImages } from "../../../services/dataService";
+import {
+  getRecipe,
+  getRecipeImages,
+  deleteRecipe,
+} from "../../../services/dataService";
 import { RecipeImage, Recipe } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import Modal from "../../../components/Modal.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -23,10 +29,30 @@ const item = ref({
   imageAvailable: false,
 } as RecipeViewModel);
 const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
+const isOpen = ref(false);
+
+async function deleteItem() {
+  await deleteRecipe(item.value.id || 0);
+}
 
 onMounted(async () => {
   state.menuOptions = [
     {
+      text: "More",
+      children: [
+        {
+          text: "Delete",
+          action: deleteItem,
+        },
+        {
+          text: "Share Recipe Text",
+          action: () => {},
+        },
+        {
+          text: "Share Recipe File",
+          action: () => {},
+        },
+      ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
   ];
@@ -70,18 +96,28 @@ onMounted(async () => {
 function editItem() {
   router.push(`/recipe/${id.value}/edit`);
 }
+
+function toggleScreenLight() {
+  // TODO: how to do this?
+}
+
+function changeMultiplier() {
+  isOpen.value = true;
+}
+
+function printItem() {
+  window.print();
+}
+
+function changeTime() {}
 </script>
 
 <template>
   <div class="mt-16 mx-4 dark:text-white">
-    <img
-      :src="item.image"
-      v-if="item.imageAvailable"
-      class="w-full rounded-lg h-80"
-    />
+    <img :src="item.image" v-if="item.imageAvailable" class="rounded-lg h-80" />
     <div
       v-else
-      class="bg-theme-primary rounded-lg grid place-items-center h-80"
+      class="bg-theme-primary rounded-lg grid place-items-center md:w-80 h-80"
     >
       <svg
         class="h-16 w-16 text-white"
@@ -137,9 +173,22 @@ function editItem() {
       </button>
       <button
         class="w-12 h-12 m-1 p-0 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
-        @click="changeServings"
+        @click="changeMultiplier"
       >
-        <span class="text-white text-sm m-auto my-0 py-0">1x</span>
+        <svg
+          class="h-5 w-5 text-white m-auto"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 3 21 3 21 9" />
+          <polyline points="9 21 3 21 3 15" />
+          <line x1="21" y1="3" x2="14" y2="10" />
+          <line x1="3" y1="21" x2="10" y2="14" />
+        </svg>
       </button>
       <button
         class="w-12 h-12 m-1 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
@@ -216,6 +265,24 @@ function editItem() {
         <li>Some note</li>
       </ul>
     </div>
+    <Modal
+      :isOpen="isOpen"
+      @closed="isOpen = false"
+      title="Multiplier"
+      :buttons="[
+        {
+          title: 'Ok',
+          action: () => {
+            isOpen = false;
+          },
+        },
+      ]"
+    >
+      <span class="dark:text-white"
+        >Enter decimal value of quantity. E.g. 0.5 or 2</span
+      >
+      <input type="number" class="block my-2 p-2 w-full rounded text-black" />
+    </Modal>
   </div>
 </template>
 

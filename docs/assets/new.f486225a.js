@@ -1,1 +1,0 @@
-import{d as e,c as t,a as s,e as o}from"./index.8ed86269.js";const a={class:"mt-16 mx-4"},c=o("span",{class:"dark:text-white"},"New Recipe",-1),n=[c],p=e({setup(_){return(r,d)=>(s(),t("div",a,n))}});export{p as default};

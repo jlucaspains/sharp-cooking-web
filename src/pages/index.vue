@@ -1,27 +1,86 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeImage } from "../services/dataService";
 import { Recipe } from "../services/recipe";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
+import debounce from "lodash.debounce";
 
 const router = useRouter();
 const { t } = useI18n();
 const state = useState()!;
 
 const items = ref([] as RecipeViewModel[]);
+const searchText = ref("");
+const isOpen = ref(false);
+let allRecipes = [] as RecipeViewModel[];
+let debouncedWatch: (currentValue: string, oldValue: string) => void;
+
+function sortByTitle(items: Array<RecipeViewModel>) {
+  return items.sort((a, b) => {
+    const al = a.title.toLowerCase();
+    const bl = b.title.toLowerCase();
+
+    if (al < bl) return -1;
+    else if (al > bl) return 1;
+    return 0;
+  });
+}
+
+function sortByRating(items: Array<RecipeViewModel>) {
+  return items.sort((a, b) => {
+    return a.score - b.score;
+  });
+}
+
+function sortByDate(items: Array<RecipeViewModel>) {
+  return items; // TODO: implement
+}
 
 onMounted(async () => {
   state.title = "All Recipes";
   state.menuOptions = [
     {
       svg: `<path stroke="none" d="M0 0h24v24H0z"/>  <line x1="4" y1="6" x2="13" y2="6" />  <line x1="4" y1="12" x2="11" y2="12" />  <line x1="4" y1="18" x2="11" y2="18" />  <polyline points="15 15 18 18 21 15" />  <line x1="18" y1="6" x2="18" y2="18" />`,
+      children: [
+        {
+          text: "By Title",
+          action: () => {
+            items.value = sortByTitle(items.value);
+          },
+        },
+        {
+          text: "By Rating",
+          action: () => {
+            items.value = sortByRating(items.value);
+          },
+        },
+        {
+          text: "By Recipe Date",
+          action: () => {
+            items.value = sortByDate(items.value);
+          },
+        },
+      ],
     },
   ];
 
-  const allRecipes = (await getRecipes()) as RecipeViewModel[];
+  debouncedWatch = debounce((currentValue: string, oldValue: string) => {
+    items.value = allRecipes.filter((item) =>
+      item.title.toLowerCase().includes(currentValue.toLowerCase())
+    );
+  }, 200);
+
+  allRecipes = (await getRecipes()) as RecipeViewModel[];
 
   for (const recipe of allRecipes) {
     const item = await getRecipeImage(recipe.id || 0);
@@ -30,6 +89,10 @@ onMounted(async () => {
   }
 
   items.value = allRecipes;
+});
+
+watch(searchText, (currentValue, oldValue) => {
+  debouncedWatch(currentValue, oldValue);
 });
 
 function goToRecipe(id: number) {
@@ -47,6 +110,7 @@ function gotToNew() {
       <input
         type="text"
         :placeholder="t('recipes.search')"
+        v-model="searchText"
         class="mx-4 p-2 my-2 rounded text-black"
       />
     </div>
@@ -65,7 +129,6 @@ function gotToNew() {
           <img
             v-if="item.imageAvailable"
             :src="item.image"
-            style=""
             class="object-contain"
           />
           <div v-else class="bg-theme-primary h-full grid place-items-center">

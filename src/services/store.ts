@@ -1,7 +1,10 @@
 import { reactive, provide, inject, InjectionKey } from 'vue';
 
 interface MenuOption {
-    svg: string;
+    text?: string;
+    svg?: string;
+    action?: (() => void) | (() => Promise<void>);
+    children?: MenuOption[];
 }
 
 interface State {
