@@ -11,7 +11,7 @@ import English from './locales/en.json'
 import routes from '~pages'
 import { createState, stateSymbol } from './services/store'
 
-registerSW({ immediate: true, onOfflineReady() { alert("offline!") } })
+registerSW({ immediate: true, onOfflineReady() {  } })
 
 const router = createRouter({
     history: createWebHashHistory(),

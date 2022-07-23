@@ -28,10 +28,10 @@ function closeMenu() {
       class="header fixed w-full top-0 border-gray-200 px-4 bg-theme-primary shadow shadow-slate"
     >
       <div class="flex flex-wrap justify-between sm:items-center mx-auto">
-        <div class="flex">
+        <div class="flex w-10">
           <button
             class="p-2 inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-theme-secondary hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-            v-if="canGoBack"
+            v-show="canGoBack"
             @click="$router.back()"
           >
             <svg
@@ -57,7 +57,7 @@ function closeMenu() {
             >
           </router-link>
         </div>
-        <div class="flex">
+        <div class="flex w-10">
           <template v-for="menuOption in state.menuOptions">
             <Menu
               v-if="menuOption.children && menuOption.children.length > 0"

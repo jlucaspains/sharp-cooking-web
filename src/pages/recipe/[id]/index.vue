@@ -110,16 +110,22 @@ function printItem() {
 }
 
 function changeTime() {}
+
+function openImage() {
+  router.push(`/recipe/${id.value}/gallery`);
+}
 </script>
 
 <template>
   <div class="mt-16 mx-4 dark:text-white">
-    <img :src="item.image" v-if="item.imageAvailable" class="rounded-lg h-80" />
     <div
-      v-else
-      class="bg-theme-primary rounded-lg grid place-items-center md:w-80 h-80"
+      class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+      @click="openImage"
     >
+      <img :src="item.image" v-if="item.imageAvailable" class="rounded-lg object-contain" />
+
       <svg
+        v-else
         class="h-16 w-16 text-white"
         viewBox="0 0 24 24"
         fill="none"
