@@ -39,7 +39,7 @@ onMounted(async () => {
   <swiper
     :slides-per-view="1"
     :space-between="50"
-    class="mt-16 mx-4 mb-10 dark:text-white"
+    class="mt-16 mx-4 mb-10 w-full h-80 dark:text-white"
   >
     <swiper-slide v-for="image in images">
       <img
@@ -49,3 +49,9 @@ onMounted(async () => {
     </swiper-slide>
   </swiper>
 </template>
+
+<style>
+/* .swiper, .swiper-wrapper, .swiper-slide, img {
+  z-index: 99
+} */
+</style>

@@ -61,10 +61,6 @@ function closeModal() {
                 {{ props.title }}
               </DialogTitle>
               <div class="mt-2">
-                <!-- <p class="text-sm text-gray-500">
-                  Your payment has been successfully submitted. We’ve sent you
-                  an email with all of the details of your order.
-                </p> -->
                 <slot></slot>
               </div>
 
@@ -72,7 +68,7 @@ function closeModal() {
                 <button
                   v-for="button in props.buttons"
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-theme-primary px-4 py-2 text-sm font-medium text-white hover:bg-theme-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-theme-primary px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-theme-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   @click="button.action"
                 >
                   {{ button.title }}

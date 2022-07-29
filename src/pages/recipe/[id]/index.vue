@@ -11,6 +11,7 @@ import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import Modal from "../../../components/Modal.vue";
+import TimePicker from "../../../components/TimePicker.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -29,7 +30,9 @@ const item = ref({
   imageAvailable: false,
 } as RecipeViewModel);
 const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
-const isOpen = ref(false);
+const isMultiplierModalOpen = ref(false);
+const isTimeModalOpen = ref(false);
+const startTime = ref("");
 
 async function deleteItem() {
   await deleteRecipe(item.value.id || 0);
@@ -102,14 +105,16 @@ function toggleScreenLight() {
 }
 
 function changeMultiplier() {
-  isOpen.value = true;
+  isMultiplierModalOpen.value = true;
 }
 
 function printItem() {
   window.print();
 }
 
-function changeTime() {}
+function changeTime() {
+  isTimeModalOpen.value = true;
+}
 
 function openImage() {
   router.push(`/recipe/${id.value}/gallery`);
@@ -119,13 +124,17 @@ function openImage() {
 <template>
   <div class="mt-16 mx-4 dark:text-white">
     <div
-      class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+      class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
       @click="openImage"
+      v-if="item.imageAvailable"
     >
-      <img :src="item.image" v-if="item.imageAvailable" class="rounded-lg object-contain" />
-
+      <img :src="item.image" class="rounded-lg object-contain" />
+    </div>
+    <div
+      class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+      v-else
+    >
       <svg
-        v-else
         class="h-16 w-16 text-white"
         viewBox="0 0 24 24"
         fill="none"
@@ -272,14 +281,20 @@ function openImage() {
       </ul>
     </div>
     <Modal
-      :isOpen="isOpen"
-      @closed="isOpen = false"
+      :isOpen="isMultiplierModalOpen"
+      @closed="isMultiplierModalOpen = false"
       title="Multiplier"
       :buttons="[
         {
           title: 'Ok',
           action: () => {
-            isOpen = false;
+            isMultiplierModalOpen = false;
+          },
+        },
+        {
+          title: 'Cancel',
+          action: () => {
+            isMultiplierModalOpen = false;
           },
         },
       ]"
@@ -288,6 +303,27 @@ function openImage() {
         >Enter decimal value of quantity. E.g. 0.5 or 2</span
       >
       <input type="number" class="block my-2 p-2 w-full rounded text-black" />
+    </Modal>
+    <Modal
+      :isOpen="isTimeModalOpen"
+      @closed="isTimeModalOpen = false"
+      title="Start Time"
+      :buttons="[
+        {
+          title: 'Ok',
+          action: () => {
+            isTimeModalOpen = false;
+          },
+        },
+        {
+          title: 'Cancel',
+          action: () => {
+            isTimeModalOpen = false;
+          },
+        },
+      ]"
+    >
+      <TimePicker v-model="startTime"></TimePicker>
     </Modal>
   </div>
 </template>
