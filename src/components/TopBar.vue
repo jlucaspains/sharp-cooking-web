@@ -24,12 +24,35 @@ function closeMenu() {
 <template>
   <div class="no-print">
     <nav
-      class="header fixed w-full top-0 border-gray-200 px-4 bg-theme-primary shadow shadow-slate"
+      class="
+        header
+        fixed
+        w-full
+        top-0
+        border-gray-200
+        px-4
+        bg-theme-primary
+        shadow shadow-slate
+      "
     >
       <div class="flex flex-wrap justify-between sm:items-center mx-auto">
         <div class="flex w-10">
           <button
-            class="p-2 inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-theme-secondary hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            class="
+              p-2
+              inline-flex
+              w-full
+              justify-center
+              rounded-md
+              text-sm
+              font-medium
+              text-white
+              hover:bg-theme-secondary hover:bg-opacity-30
+              focus:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-white
+              focus-visible:ring-opacity-75
+            "
             v-show="canGoBack"
             @click="$router.back()"
           >
@@ -66,7 +89,21 @@ function closeMenu() {
             >
               <div>
                 <MenuButton
-                  class="py-2 inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-theme-secondary hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                  class="
+                    py-2
+                    inline-flex
+                    w-full
+                    justify-center
+                    rounded-md
+                    text-sm
+                    font-medium
+                    text-white
+                    hover:bg-theme-secondary hover:bg-opacity-30
+                    focus:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-white
+                    focus-visible:ring-opacity-75
+                  "
                 >
                   <svg
                     class="h-6 w-6 text-white"
@@ -90,7 +127,19 @@ function closeMenu() {
                 leave-to-class="transform scale-95 opacity-0"
               >
                 <MenuItems
-                  class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  class="
+                    absolute
+                    right-0
+                    mt-2
+                    w-56
+                    origin-top-right
+                    divide-y divide-gray-100
+                    rounded-md
+                    bg-white
+                    shadow-lg
+                    ring-1 ring-black ring-opacity-5
+                    focus:outline-none
+                  "
                 >
                   <div class="px-1 py-1">
                     <MenuItem
@@ -126,7 +175,21 @@ function closeMenu() {
             </Menu>
             <button
               v-else
-              class="p-2 inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-theme-secondary hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+              class="
+                p-2
+                inline-flex
+                w-full
+                justify-center
+                rounded-md
+                text-sm
+                font-medium
+                text-white
+                hover:bg-theme-secondary hover:bg-opacity-30
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-white
+                focus-visible:ring-opacity-75
+              "
               @click.prevent="menuOption.action"
             >
               <svg
@@ -151,10 +214,5 @@ function closeMenu() {
 .header {
   padding-top: max(0.625rem, env(safe-area-inset-top));
   padding-bottom: 0.3rem;
-}
-@media print {
-    .no-print {
-        display: none;
-    }
 }
 </style>

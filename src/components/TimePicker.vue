@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 
 const props = defineProps<{
   modelValue: string;
@@ -10,6 +10,17 @@ const emit = defineEmits<{
 }>();
 
 const localValue = ref("");
+
+watch(
+  () => props.modelValue,
+  (newValue: string) => {
+    localValue.value = newValue;
+  }
+);
+
+onMounted(() => {
+  localValue.value = props.modelValue;
+});
 
 function updateValue(event: Event) {
   if (!event.target) {

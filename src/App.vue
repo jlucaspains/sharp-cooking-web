@@ -6,7 +6,7 @@ import { initialize } from "./services/dataService"
 
 onMounted(async () => {
   document.body.classList.add("dark:bg-theme-gray");
-  await initialize();
+  // await initialize();
 });
 
 const { t } = useI18n();

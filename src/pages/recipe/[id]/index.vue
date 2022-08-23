@@ -109,10 +109,14 @@ function changeMultiplier() {
 }
 
 function printItem() {
-  router.push(`/recipe/${id.value}/print`);
+  window.print();
 }
 
 function changeTime() {
+  const date = new Date();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  startTime.value = `${hours}:${minutes}`;
   isTimeModalOpen.value = true;
 }
 
@@ -123,6 +127,7 @@ function openImage() {
 
 <template>
   <div class="mt-16 mx-4 dark:text-white">
+    <h1 class="print-only text-lg font-semibold whitespace-nowrap">{{ item.title }}</h1>
     <div
       class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
       @click="openImage"
@@ -131,7 +136,15 @@ function openImage() {
       <img :src="item.image" class="rounded-lg object-contain" />
     </div>
     <div
-      class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+      class="
+        bg-theme-primary
+        rounded-lg
+        grid
+        place-items-center
+        w-full
+        h-80
+        overflow-hidden
+      "
       v-else
     >
       <svg
@@ -148,9 +161,18 @@ function openImage() {
         <polyline points="21 15 16 10 5 21" />
       </svg>
     </div>
-    <div class="float-right">
+    <div class="no-print float-right h-20">
       <button
-        class="w-12 h-12 m-1 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        class="
+          w-12
+          h-12
+          m-1
+          bg-theme-primary
+          rounded-full
+          hover:bg-theme-secondary
+          focus:ring-4 focus:ring-theme-primary focus:outline-none
+          shadow-lg
+        "
         @click="editItem"
       >
         <svg
@@ -169,7 +191,16 @@ function openImage() {
         </svg>
       </button>
       <button
-        class="w-12 h-12 m-1 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        class="
+          w-12
+          h-12
+          m-1
+          bg-theme-primary
+          rounded-full
+          hover:bg-theme-secondary
+          focus:ring-4 focus:ring-theme-primary focus:outline-none
+          shadow-lg
+        "
         @click="toggleScreenLight"
       >
         <svg
@@ -187,7 +218,17 @@ function openImage() {
         </svg>
       </button>
       <button
-        class="w-12 h-12 m-1 p-0 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        class="
+          w-12
+          h-12
+          m-1
+          p-0
+          bg-theme-primary
+          rounded-full
+          hover:bg-theme-secondary
+          focus:ring-4 focus:ring-theme-primary focus:outline-none
+          shadow-lg
+        "
         @click="changeMultiplier"
       >
         <svg
@@ -206,7 +247,16 @@ function openImage() {
         </svg>
       </button>
       <button
-        class="w-12 h-12 m-1 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        class="
+          w-12
+          h-12
+          m-1
+          bg-theme-primary
+          rounded-full
+          hover:bg-theme-secondary
+          focus:ring-4 focus:ring-theme-primary focus:outline-none
+          shadow-lg
+        "
         @click="changeTime"
       >
         <svg
@@ -226,7 +276,16 @@ function openImage() {
         </svg>
       </button>
       <button
-        class="w-12 h-12 m-1 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
+        class="
+          w-12
+          h-12
+          m-1
+          bg-theme-primary
+          rounded-full
+          hover:bg-theme-secondary
+          focus:ring-4 focus:ring-theme-primary focus:outline-none
+          shadow-lg
+        "
         @click="printItem"
       >
         <svg
@@ -249,10 +308,11 @@ function openImage() {
         </svg>
       </button>
     </div>
-
-    <div class="grid grid-cols-8 w-full mt-7">
+    <div class="grid grid-cols-12 w-full mt-7">
       <template v-for="displayItem in display">
-        <div class="col-span-2 mt-3">{{ displayItem.time }}</div>
+        <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+          {{ displayItem.time }}
+        </div>
         <div class="-ml-3.5 mt-3">
           <svg
             class="h-8 w-8 text-theme-secondary"
@@ -266,11 +326,15 @@ function openImage() {
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
-        <div class="col-span-5 mt-3">{{ displayItem.title }}</div>
+        <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
+          {{ displayItem.title }}
+        </div>
         <template v-for="subItem in displayItem.subItems">
-          <div class="col-span-2"></div>
+          <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
           <div class="border-l-4 border-theme-secondary"></div>
-          <div class="col-span-5">{{ subItem }}</div>
+          <div class="lg:col-span-10 sm:col-span-9 col-span-8">
+            {{ subItem }}
+          </div>
         </template>
       </template>
     </div>

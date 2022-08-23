@@ -11,3 +11,13 @@ html {
 body {
   -webkit-tap-highlight-color: transparent;
 }
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+@media screen {
+  .print-only {
+    display: none;
+  }
+}

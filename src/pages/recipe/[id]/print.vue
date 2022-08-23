@@ -105,9 +105,9 @@ onMounted(async () => {
             <h2>Notes</h2>
             <span>{{ item.notes }}</span>
         </div>
-        <!-- <footer>
+        <footer>
             <span>https://app.sharpcooking.net</span>
-        </footer>-->
+        </footer>
     </div>
 </template>
 
