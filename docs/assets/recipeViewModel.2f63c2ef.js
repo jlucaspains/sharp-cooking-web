@@ -1,1 +1,0 @@
-var s=Object.defineProperty;var m=(a,e,i)=>e in a?s(a,e,{enumerable:!0,configurable:!0,writable:!0,value:i}):a[e]=i;var l=(a,e,i)=>(m(a,typeof e!="symbol"?e+"":e,i),i);import{R as o}from"./recipe.6c369b61.js";class r extends o{constructor(){super(...arguments);l(this,"image");l(this,"imageAvailable",!1)}}export{r as RecipeViewModel};

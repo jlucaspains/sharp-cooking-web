@@ -100,7 +100,7 @@ function goToRecipe(id: number) {
 }
 
 function gotToNew() {
-  router.push("/recipe/new");
+  router.push("/recipe/0/edit");
 }
 </script>
 

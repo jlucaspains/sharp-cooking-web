@@ -1,23 +1,34 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps<{
   modelValue: string;
 }>();
 
 const emit = defineEmits<{
-  (e: "update:modelValue"): void;
+  (e: "update:modelValue", value: string): void;
 }>();
 
 const localValue = ref("");
 
-function updateValue(event) {
-  emit("update:modelValue", event.target.value);
+function updateValue(event: Event) {
+  if (!event.target) {
+    return;
+  }
+
+  const value = (event.target as HTMLInputElement)?.value;
+
+  emit("update:modelValue", value);
 }
 </script>
 
 <template>
   <div class="w-full flex text-xl">
-    <input type="time" class="block m-2 p-2 rounded text-black" v-model="localValue" @input="updateValue" />
+    <input
+      type="time"
+      class="block m-2 p-2 rounded text-black"
+      v-model="localValue"
+      @input="updateValue"
+    />
   </div>
 </template>

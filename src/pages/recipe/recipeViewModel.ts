@@ -1,6 +1,13 @@
 import { Recipe } from "../../services/recipe";
 
 export class RecipeViewModel extends Recipe {
-    image?: string;
-    imageAvailable: boolean = false;
-  }
+  constructor() {
+    super();
+    
+    this.ingredients = [];
+    this.steps = [];
+   }
+
+  image?: string;
+  imageAvailable: boolean = false;
+}

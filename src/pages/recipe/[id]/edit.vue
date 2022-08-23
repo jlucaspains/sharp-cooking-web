@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
   saveRecipe,
   saveRecipeImage,
   getRecipeImages,
+  getNextRecipeId
 } from "../../../services/dataService";
 import { RecipeImage, Recipe } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
@@ -13,6 +14,7 @@ import { useState } from "../../../services/store";
 const state = useState()!;
 
 const route = useRoute();
+const router = useRouter();
 
 const id = computed(() => parseInt(<string>route.params.id));
 const item = ref({
@@ -35,8 +37,14 @@ onMounted(async () => {
       svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`,
     },
   ];
-
-  const recipe = <RecipeViewModel>await getRecipe(id.value);
+  let recipe: RecipeViewModel;
+  if (id.value === 0) {
+    recipe = new RecipeViewModel();
+    recipe.steps.push("");
+    recipe.ingredients.push("");
+  } else {
+    recipe = <RecipeViewModel>await getRecipe(id.value);
+  }
 
   if (recipe) {
     state.title = recipe.title;
@@ -55,17 +63,28 @@ onMounted(async () => {
 });
 
 async function save() {
-  const recipe = JSON.parse(JSON.stringify(item.value)); // remove proxy stuff
+  const isNew = !item.value.id;
+  if (isNew) {
+    item.value.id = await getNextRecipeId();
+  }
+
+  // remove proxy stuff
+  const recipe = JSON.parse(JSON.stringify(item.value));
   await saveRecipe(recipe);
 
   if (item.value.image) {
     await saveRecipeImage(new RecipeImage(recipe.id, item.value.image));
+  }
+
+  if (isNew) {
+    router.replace(`/recipe/${item.value.id}/edit`);
   }
 }
 
 async function fileSelected(selectedFiles: FileList | null) {
   if (selectedFiles && selectedFiles.length > 0) {
     item.value.image = await getBase64(selectedFiles[0]);
+    item.value.imageAvailable = !!item.value.image;
   }
 }
 
@@ -81,12 +100,39 @@ function getBase64(file: File): Promise<string> {
 
 <template>
   <div class="mt-16 mx-4 mb-10 dark:text-white">
-    <div>
-      <img
-        :src="item.image"
-        v-if="item.imageAvailable"
-        class="w-full rounded-lg h-80"
+    <!-- <div>
+      <img :src="item.image" v-if="item.imageAvailable" class="w-full rounded-lg h-80" />
+      <input
+        type="file"
+        @change="fileSelected(($event!.target! as HTMLInputElement)!.files)"
+        accept="image/*"
       />
+    </div>-->
+    <div>
+      <div
+        class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+        v-if="item.imageAvailable"
+      >
+        <img :src="item.image" class="rounded-lg object-contain" />
+      </div>
+      <div
+        class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+        v-else
+      >
+        <svg
+          class="h-16 w-16 text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+      </div>
       <input
         type="file"
         @change="fileSelected(($event!.target! as HTMLInputElement)!.files)"
@@ -94,26 +140,12 @@ function getBase64(file: File): Promise<string> {
       />
     </div>
     <label for="title">Title</label>
-    <input
-      id="title"
-      type="text"
-      v-model="item.title"
-      class="block p-2 w-full rounded text-black"
-    />
+    <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black" />
     <label>Score</label>
-    <input
-      type="number"
-      v-model.number="item.score"
-      class="block p-2 w-full rounded text-black"
-    />
+    <input type="number" v-model.number="item.score" class="block p-2 w-full rounded text-black" />
     <label>Ingredients</label>
     <button class="ml-2 align-middle" type="button" @click="item.ingredients.push('')">
-      <svg
-        class="h-4 w-4 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
+      <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -122,21 +154,14 @@ function getBase64(file: File): Promise<string> {
         />
       </svg>
     </button>
-    <div
-      class="flex my-3 w-full"
-      v-for="(ingredient, index) in item.ingredients"
-    >
+    <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
       <input
         type="text"
         placeholder="1 cup flour"
         v-model="item.ingredients[index]"
         class="block p-2 rounded flex-auto text-black"
       />
-      <button
-        type="button"
-        class="ml-2 align-middle"
-        @click="item.ingredients.splice(index, 1)"
-      >
+      <button type="button" class="ml-2 align-middle" @click="item.ingredients.splice(index, 1)">
         <svg
           class="h-4 w-4 text-white"
           width="24"
@@ -159,12 +184,7 @@ function getBase64(file: File): Promise<string> {
     </div>
     <label>Steps</label>
     <button class="ml-2" type="button" @click="item.steps.push('')">
-      <svg
-        class="h-4 w-4 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
+      <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"

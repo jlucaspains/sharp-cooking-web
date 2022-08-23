@@ -91,3 +91,15 @@ export async function deleteRecipe(id: number) {
 
     console.timeEnd("deleteRecipe");
 }
+
+export async function getNextRecipeId(): Promise<number> {
+    console.time("getNextRecipeId");
+    
+    const item = await db.recipes.orderBy("id").reverse().first();
+
+    const result = item?.id ? item.id + 1 : 1; 
+
+    console.timeEnd("getNextRecipeId");
+
+    return result;
+}
