@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useState } from "../services/store";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
-const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 const state = useState()!;
@@ -23,7 +22,7 @@ function closeMenu() {
 </script>
 
 <template>
-  <div>
+  <div class="no-print">
     <nav
       class="header fixed w-full top-0 border-gray-200 px-4 bg-theme-primary shadow shadow-slate"
     >
@@ -152,5 +151,10 @@ function closeMenu() {
 .header {
   padding-top: max(0.625rem, env(safe-area-inset-top));
   padding-bottom: 0.3rem;
+}
+@media print {
+    .no-print {
+        display: none;
+    }
 }
 </style>

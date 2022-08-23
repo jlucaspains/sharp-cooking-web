@@ -6,6 +6,7 @@ export class Recipe {
     steps!: string[];
     notes!: string;
     changedOn!: string;
+    source!: string;
 }
 
 export class RecipeImage {

@@ -109,7 +109,7 @@ function changeMultiplier() {
 }
 
 function printItem() {
-  window.print();
+  router.push(`/recipe/${id.value}/print`);
 }
 
 function changeTime() {
