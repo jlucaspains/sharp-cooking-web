@@ -66,9 +66,9 @@ export async function saveRecipe(recipe: Recipe) {
 
 export async function initialize() {
     const recipes = [
-        { id: 1, title: "Sourdough Bread", score: 5, ingredients: ["flour", "water", "salt"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() },
-        { id: 2, title: "Banana bread", score: 4, ingredients: ["flour", "banana", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() },
-        { id: 3, title: "Carrot cake", score: 3, ingredients: ["flour", "carrots", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", changedOn: new Date().toISOString() }
+        { id: 1, title: "Sourdough Bread", score: 5, ingredients: ["flour", "water", "salt"], steps: ["mix everything by hand", "Perform the folds"], notes: "", source: "", changedOn: new Date().toISOString() },
+        { id: 2, title: "Banana bread", score: 4, ingredients: ["flour", "banana", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", source: "", changedOn: new Date().toISOString() },
+        { id: 3, title: "Carrot cake", score: 3, ingredients: ["flour", "carrots", "sugar"], steps: ["mix everything by hand", "Perform the folds"], notes: "", source: "", changedOn: new Date().toISOString() }
     ];
 
     for (const recipe of recipes) {
