@@ -2,7 +2,8 @@
 import { onMounted } from "vue";
 import TopBar from "./components/TopBar.vue";
 import { useI18n } from "vue-i18n";
-import { initialize } from "./services/dataService"
+import { initialize } from "./services/dataService";
+import Notification from "./components/Notification.vue";
 
 onMounted(async () => {
   document.body.classList.add("dark:bg-theme-gray");
@@ -21,6 +22,7 @@ const { t } = useI18n();
       </transition>
     </router-view>
   </div>
+  <Notification />
 </template>
 
 <style>
