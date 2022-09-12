@@ -9,7 +9,7 @@ import {
 
 const props = defineProps<{
   isOpen: boolean;
-  buttons: Array<{ title: string; action: () => void }>;
+  buttons: Array<{ title: string; danger?: boolean; action: () => void }>;
   title: string;
 }>();
 
@@ -25,38 +25,19 @@ function closeModal() {
 <template>
   <TransitionRoot appear :show="props.isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
-      <TransitionChild
-        as="template"
-        enter="duration-300 ease-out"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="duration-200 ease-in"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
-      >
+      <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+        leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
-        <div
-          class="flex min-h-full items-center justify-center p-4 text-center"
-        >
-          <TransitionChild
-            as="template"
-            enter="duration-300 ease-out"
-            enter-from="opacity-0 scale-95"
-            enter-to="opacity-100 scale-100"
-            leave="duration-200 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-95"
-          >
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+          <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95">
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl dark:bg-theme-gray bg-white p-6 text-left align-middle shadow-xl transition-all"
-            >
-              <DialogTitle
-                as="h3"
-                class="text-lg font-medium leading-6 dark:text-white text-gray-900"
-              >
+              class="w-full max-w-md transform overflow-hidden rounded-2xl dark:bg-theme-gray bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <DialogTitle as="h3" class="text-lg font-medium leading-6 dark:text-white text-gray-900">
                 {{ props.title }}
               </DialogTitle>
               <div class="mt-2">
@@ -64,12 +45,9 @@ function closeModal() {
               </div>
 
               <div class="mt-4">
-                <button
-                  v-for="button in props.buttons"
-                  type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-theme-primary px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-theme-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="button.action"
-                >
+                <button v-for="button in props.buttons" type="button" :class="['inline-flex justify-center rounded-md border border-transparent', 
+                'px-4 py-2 mr-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2', 
+                button.danger ? 'bg-red-500 hover:bg-red-700' : 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-900']" @click="button.action">
                   {{ button.title }}
                 </button>
               </div>

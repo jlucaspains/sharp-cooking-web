@@ -87,7 +87,13 @@ export async function saveRecipeImage(recipeImage: RecipeImage) {
 export async function deleteRecipe(id: number) {
     console.time("deleteRecipe");
     
-    await db.recipeImages.delete(id);
+    var images = await db.recipeImages.where("recipeId").equals(id).toArray();
+
+    for (const item of images) {
+        db.recipeImages.delete(item.id || 0);
+    }
+
+    await db.recipes.delete(id);
 
     console.timeEnd("deleteRecipe");
 }

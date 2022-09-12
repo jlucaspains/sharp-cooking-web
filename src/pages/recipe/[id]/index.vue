@@ -33,10 +33,30 @@ const item = ref({
 const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
 const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
+const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 
+function confirmDeleteItem() {
+  isDeleteModalOpen.value = true;
+}
+
 async function deleteItem() {
-  await deleteRecipe(item.value.id || 0);
+  try {
+    isDeleteModalOpen.value = false;
+    await deleteRecipe(item.value.id || 0);
+    notify({
+      group: "success",
+      title: "Success",
+      text: "Recipe deleted successfully."
+    }, 2000);
+    router.back();
+  } catch {
+    notify({
+      group: "error",
+      title: "Error",
+      text: "Failed to delete the recipe"
+    }, 2000);
+  }
 }
 
 onMounted(async () => {
@@ -46,7 +66,7 @@ onMounted(async () => {
       children: [
         {
           text: "Delete",
-          action: deleteItem,
+          action: confirmDeleteItem,
         },
         {
           text: "Share Recipe Text",
@@ -54,7 +74,7 @@ onMounted(async () => {
         },
         {
           text: "Share Recipe File",
-          action: () => { },
+          action: shareAsFile,
         },
       ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
@@ -333,6 +353,21 @@ function shareAsFile() {
       },
     ]">
       <TimePicker v-model="startTime"></TimePicker>
+    </Modal>
+    <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false" title="Are you sure?" :buttons="[
+      {
+        title: 'Yes',
+        danger: true,
+        action: deleteItem,
+      },
+      {
+        title: 'No',
+        action: () => {
+          isDeleteModalOpen = false;
+        },
+      },
+    ]">
+      <span class="dark:text-white">Deleting the recipe is a permanent action. Would you like to delete anyway?</span>
     </Modal>
   </div>
 </template>
