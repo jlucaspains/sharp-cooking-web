@@ -21,3 +21,7 @@ body {
     display: none;
   }
 }
+
+input[type="text"], input[type="number"], textarea {
+  border-width: 1px;
+}
