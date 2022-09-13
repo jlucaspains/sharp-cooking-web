@@ -12,6 +12,7 @@ import { RecipeImage, Recipe } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
+import RatingPicker from "../../../components/RatingPicker.vue"
 
 const state = useState()!;
 
@@ -125,9 +126,9 @@ function getBase64(file: File): Promise<string> {
     <label for="title">Title</label>
     <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
     <label>Score</label>
-    <input type="number" v-model.number="item.score" class="block p-2 w-full rounded text-black shadow-sm" />
+    <RatingPicker v-model="item.score" />
     <label>Ingredients</label>
-    <button class="ml-2 align-middle" type="button" @click="item.ingredients.push('')">
+    <button class="ml-2 align-middle" type="button" title="Add Ingredient" @click="item.ingredients.push('')">
       <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -136,7 +137,7 @@ function getBase64(file: File): Promise<string> {
     <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
       <input type="text" placeholder="1 cup flour" v-model="item.ingredients[index]"
         class="block p-2 rounded flex-auto text-black shadow-sm" />
-      <button type="button" class="ml-2 align-middle" @click="item.ingredients.splice(index, 1)">
+      <button type="button" class="ml-2 align-middle" title="Delete Ingredient" @click="item.ingredients.splice(index, 1)">
         <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
@@ -149,7 +150,7 @@ function getBase64(file: File): Promise<string> {
       </button>
     </div>
     <label>Steps</label>
-    <button class="ml-2" type="button" @click="item.steps.push('')">
+    <button class="ml-2" type="button" title="Add Step" @click="item.steps.push('')">
       <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -158,7 +159,7 @@ function getBase64(file: File): Promise<string> {
     <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
       <input type="text" placeholder="Preheat oven to 350 F" v-model="item.steps[index]"
         class="block p-2 flex-auto rounded text-black shadow-sm" />
-      <button type="button" class="ml-2" @click="item.steps.splice(index, 1)">
+      <button type="button" class="ml-2" title="Delete Step" @click="item.steps.splice(index, 1)">
         <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
@@ -170,7 +171,7 @@ function getBase64(file: File): Promise<string> {
         </svg>
       </button>
     </div>
-    <label>Notes</label>
-    <textarea v-model="item.notes" class="block p-2 flex-auto w-full h-20 bg-white rounded text-base text-black" />
+    <label for="notes">Notes</label>
+    <textarea id="notes" v-model="item.notes" class="block p-2 flex-auto w-full h-20 bg-white rounded text-base text-black" />
   </div>
 </template>

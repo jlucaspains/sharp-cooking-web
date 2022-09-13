@@ -15,13 +15,13 @@ const state = useState()!;
 
 const route = useRoute();
 
-const id = computed(() => parseInt(<string>route.params.id));
+const id = computed(() => parseInt(route.params.id as string));
 const images = ref([] as RecipeImage[]);
 
 onMounted(async () => {
   state.menuOptions = [];
 
-  const recipe = <RecipeViewModel>await getRecipe(id.value);
+  const recipe = await getRecipe(id.value as number);
 
   if (recipe) {
     state.title = recipe.title;
