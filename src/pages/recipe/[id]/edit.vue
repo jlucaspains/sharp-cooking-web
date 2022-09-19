@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
   saveRecipe,
   saveRecipeImage,
   getRecipeImages,
-  getNextRecipeId
+  getNextRecipeId,
 } from "../../../services/dataService";
 import { RecipeImage, Recipe } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
-import RatingPicker from "../../../components/RatingPicker.vue"
+import RatingPicker from "../../../components/RatingPicker.vue";
+import { fileOpen, supported } from "browser-fs-access";
+import Modal from "../../../components/Modal.vue";
 
 const state = useState()!;
-
 const route = useRoute();
 const router = useRouter();
 
@@ -31,6 +32,27 @@ const item = ref({
   imageAvailable: false,
 } as RecipeViewModel);
 const images = ref([] as RecipeImage[]);
+const isDirtyModalOpen = ref(false);
+let isDirtyNextCheck: RouteLocationNormalized;
+let isDirty = true;
+
+router.beforeEach(async (to, from) => {
+  isDirtyNextCheck = to;
+  isDirtyModalOpen.value = true;
+
+  return !isDirty;
+});
+
+async function isDirtyModalClose(shouldSave: boolean) {
+  if (shouldSave) {
+    await save();
+  }
+
+  isDirtyModalOpen.value = false;
+  isDirty = false;
+  
+  await router.push(isDirtyNextCheck.path);
+}
 
 onMounted(async () => {
   state.menuOptions = [
@@ -46,7 +68,7 @@ onMounted(async () => {
     recipe.steps.push("");
     recipe.ingredients.push("");
   } else {
-    recipe = await getRecipe(id.value) as RecipeViewModel;
+    recipe = (await getRecipe(id.value)) as RecipeViewModel;
   }
 
   if (recipe) {
@@ -83,11 +105,30 @@ async function save() {
     router.replace(`/recipe/${item.value.id}/edit`);
   }
 
-  notify({
-    group: "success",
-    title: "Success",
-    text: "Saved successfully!"
-  }, 2000);
+  notify(
+    {
+      group: "success",
+      title: "Success",
+      text: "Saved successfully!",
+    },
+    2000
+  );
+}
+
+async function pickImage() {
+  if (supported) {
+    console.log("Using the File System Access API.");
+  } else {
+    console.log("Using the fallback implementation.");
+  }
+
+  // Open a file.
+  const imagePicked = await fileOpen({
+    mimeTypes: ["image/*"],
+  });
+
+  item.value.image = await getBase64(imagePicked);
+  item.value.imageAvailable = !!item.value.image;
 }
 
 async function fileSelected(selectedFiles: FileList | null) {
@@ -109,37 +150,97 @@ function getBase64(file: File): Promise<string> {
 
 <template>
   <div class="mt-16 mx-4 mb-10 dark:text-white">
-    <div>
-      <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-if="item.imageAvailable">
+    <div @click="pickImage">
+      <div
+        class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
+        v-if="item.imageAvailable"
+      >
         <img :src="item.image" class="rounded-lg object-contain" />
       </div>
-      <div class="bg-theme-primary rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-else>
-        <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+      <div
+        class="
+          bg-theme-primary
+          rounded-lg
+          grid
+          place-items-center
+          w-full
+          h-80
+          overflow-hidden
+        "
+        v-else
+      >
+        <svg
+          class="h-16 w-16 text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
           <circle cx="8.5" cy="8.5" r="1.5" />
           <polyline points="21 15 16 10 5 21" />
         </svg>
       </div>
-      <input type="file" @change="fileSelected(($event!.target! as HTMLInputElement)!.files)" accept="image/*" />
     </div>
     <label for="title">Title</label>
-    <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
-    <label>Score</label>
-    <RatingPicker v-model="item.score" />
+    <input
+      id="title"
+      type="text"
+      v-model="item.title"
+      class="block p-2 w-full rounded text-black shadow-sm"
+    />
+    <label>Rating</label>
+    <RatingPicker class="mb-2" v-model="item.score" />
     <label>Ingredients</label>
-    <button class="ml-2 align-middle" type="button" title="Add Ingredient" @click="item.ingredients.push('')">
-      <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <button
+      class="ml-2 align-middle"
+      type="button"
+      title="Add Ingredient"
+      @click="item.ingredients.push('')"
+    >
+      <svg
+        class="h-4 w-4 text-black dark:text-white"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
     </button>
-    <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
-      <input type="text" placeholder="1 cup flour" v-model="item.ingredients[index]"
-        class="block p-2 rounded flex-auto text-black shadow-sm" />
-      <button type="button" class="ml-2 align-middle" title="Delete Ingredient" @click="item.ingredients.splice(index, 1)">
-        <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <div
+      class="flex my-3 w-full"
+      v-for="(ingredient, index) in item.ingredients"
+    >
+      <input
+        type="text"
+        placeholder="1 cup flour"
+        v-model="item.ingredients[index]"
+        class="block p-2 rounded flex-auto text-black shadow-sm"
+      />
+      <button
+        type="button"
+        class="ml-2 align-middle"
+        title="Delete Ingredient"
+        @click="item.ingredients.splice(index, 1)"
+      >
+        <svg
+          class="h-4 w-4 text-black dark:text-white"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path stroke="none" d="M0 0h24v24H0z" />
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="10" y1="11" x2="10" y2="17" />
@@ -150,18 +251,50 @@ function getBase64(file: File): Promise<string> {
       </button>
     </div>
     <label>Steps</label>
-    <button class="ml-2" type="button" title="Add Step" @click="item.steps.push('')">
-      <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <button
+      class="ml-2"
+      type="button"
+      title="Add Step"
+      @click="item.steps.push('')"
+    >
+      <svg
+        class="h-4 w-4 text-black dark:text-white"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
     </button>
     <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
-      <input type="text" placeholder="Preheat oven to 350 F" v-model="item.steps[index]"
-        class="block p-2 flex-auto rounded text-black shadow-sm" />
-      <button type="button" class="ml-2" title="Delete Step" @click="item.steps.splice(index, 1)">
-        <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <input
+        type="text"
+        placeholder="Preheat oven to 350 F"
+        v-model="item.steps[index]"
+        class="block p-2 flex-auto rounded text-black shadow-sm"
+      />
+      <button
+        type="button"
+        class="ml-2"
+        title="Delete Step"
+        @click="item.steps.splice(index, 1)"
+      >
+        <svg
+          class="h-4 w-4 text-black dark:text-white"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path stroke="none" d="M0 0h24v24H0z" />
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="10" y1="11" x2="10" y2="17" />
@@ -172,6 +305,38 @@ function getBase64(file: File): Promise<string> {
       </button>
     </div>
     <label for="notes">Notes</label>
-    <textarea id="notes" v-model="item.notes" class="block p-2 flex-auto w-full h-20 bg-white rounded text-base text-black" />
+    <textarea
+      id="notes"
+      v-model="item.notes"
+      class="
+        block
+        p-2
+        flex-auto
+        w-full
+        h-20
+        bg-white
+        rounded
+        text-base text-black
+      "
+    />
+    <Modal
+      :isOpen="isDirtyModalOpen"
+      @closed="isDirtyModalOpen = false"
+      title="Save?"
+      :buttons="[
+        {
+          title: 'Yes',
+          action: () => isDirtyModalClose(true),
+        },
+        {
+          title: 'No',
+          action: () => isDirtyModalClose(false),
+        },
+      ]"
+    >
+      <span class="dark:text-white"
+        >Would you like to save your changes first?</span
+      >
+    </Modal>
   </div>
 </template>

@@ -1,7 +1,7 @@
 {
   "name": "sharp-cooking-pwa",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.10",
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.6.5",
+    "browser-fs-access": "^0.31.0",
     "dexie": "^3.2.2",
     "lodash.debounce": "^4.0.8",
     "notiwind": "^1.2.6",

@@ -10,15 +10,10 @@ const { t } = useI18n();
 const state = useState()!;
 
 const canGoBack = ref(false);
-const expand = ref(false);
 
 router.afterEach((to) => {
   canGoBack.value = to.path !== "/";
 });
-
-function closeMenu() {
-  expand.value = false;
-}
 </script>
 
 <template>
