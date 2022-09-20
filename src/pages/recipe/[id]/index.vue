@@ -13,6 +13,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
+import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
 
 const route = useRoute();
 const router = useRouter();
@@ -99,16 +100,27 @@ onMounted(async () => {
     title: "Ingredients",
     subItems: recipe.ingredients,
   });
+
+  // TODO: move to configuration
+  const defaultTime = 5 * 60 * 1000;
+  currentTime.setTime(currentTime.getTime() + defaultTime);
+
   recipe.steps.forEach((step, index) => {
-    currentTime.setTime(currentTime.getTime() + 5 * 60 * 1000);
     display.value.push({
       time: parseTime(currentTime),
       title: `Step ${index + 1}`,
       subItems: [step],
     });
+
+    // TODO: move regex to translated resource
+    const impliedTime = getImpliedTimeFromString(
+      step,
+      /(?<Minutes>\d+\.{0,1}\d*)\s*(minutes|minute|min)\b|(?<Hours>\d+\.{0,1}\d*)\s*(hours|hour)\b|(?<Days>\d+\.{0,1}\d*)\s*(days|day)\b/
+    );
+    const actualTime = impliedTime > 0 ? impliedTime : defaultTime;
+    currentTime.setTime(currentTime.getTime() + actualTime);
   });
 
-  currentTime.setTime(currentTime.getTime() + 5 * 60 * 1000);
   display.value.push({
     time: parseTime(currentTime),
     title: "Enjoy!",
