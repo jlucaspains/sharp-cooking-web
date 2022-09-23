@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
+import { ref, watch, onMounted, computed, nextTick } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
   saveRecipe,
@@ -33,26 +33,17 @@ const item = ref({
 } as RecipeViewModel);
 const images = ref([] as RecipeImage[]);
 const isDirtyModalOpen = ref(false);
-let isDirtyNextCheck: RouteLocationNormalized;
-let isDirty = true;
+const stepRefs = ref<HTMLInputElement[]>([]);
+const ingredientRefs = ref<HTMLInputElement[]>([]);
+let isDirty = false;
 
-router.beforeEach(async (to, from) => {
-  isDirtyNextCheck = to;
-  isDirtyModalOpen.value = true;
-
-  return !isDirty;
-});
-
-async function isDirtyModalClose(shouldSave: boolean) {
-  if (shouldSave) {
-    await save();
-  }
-
-  isDirtyModalOpen.value = false;
-  isDirty = false;
-  
-  await router.push(isDirtyNextCheck.path);
-}
+watch(
+  item,
+  (newValue: RecipeViewModel) => {
+    isDirty = true;
+  },
+  { deep: true }
+);
 
 onMounted(async () => {
   state.menuOptions = [
@@ -84,8 +75,31 @@ onMounted(async () => {
     }
 
     item.value = recipe;
+    nextTick(() => {
+      isDirty = false;
+    });
   }
 });
+
+router.beforeEach(async (to, from) => {
+  if (isDirty) {
+    isDirtyModalOpen.value = true;
+    return false;
+  }
+
+  return true;
+});
+
+async function isDirtyModalClose(shouldSave: boolean) {
+  if (shouldSave) {
+    await save();
+  }
+
+  isDirtyModalOpen.value = false;
+  isDirty = false;
+
+  await router.back();
+}
 
 async function save() {
   const isNew = !item.value.id;
@@ -104,6 +118,8 @@ async function save() {
   if (isNew) {
     router.replace(`/recipe/${item.value.id}/edit`);
   }
+
+  isDirty = false;
 
   notify(
     {
@@ -144,6 +160,20 @@ function getBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
+  });
+}
+
+function addIngredientAt(index: number) {
+  item.value.ingredients.splice(index + 1, 0, "");
+  nextTick(() => {
+    ingredientRefs.value[index + 1].focus();
+  });
+}
+
+function addStepAt(index: number) {
+  item.value.steps.splice(index + 1, 0, "");
+  nextTick(() => {
+    stepRefs.value[index + 1].focus();
   });
 }
 </script>
@@ -198,7 +228,7 @@ function getBase64(file: File): Promise<string> {
       class="ml-2 align-middle"
       type="button"
       title="Add Ingredient"
-      @click="item.ingredients.push('')"
+      @click="addIngredientAt(item.ingredients.length - 1)"
     >
       <svg
         class="h-4 w-4 text-black dark:text-white"
@@ -222,6 +252,8 @@ function getBase64(file: File): Promise<string> {
         type="text"
         placeholder="1 cup flour"
         v-model="item.ingredients[index]"
+        @keyup.enter="addIngredientAt(index)"
+        ref="ingredientRefs"
         class="block p-2 rounded flex-auto text-black shadow-sm"
       />
       <button
@@ -255,7 +287,7 @@ function getBase64(file: File): Promise<string> {
       class="ml-2"
       type="button"
       title="Add Step"
-      @click="item.steps.push('')"
+      @click="addStepAt(item.steps.length - 1)"
     >
       <svg
         class="h-4 w-4 text-black dark:text-white"
@@ -277,6 +309,8 @@ function getBase64(file: File): Promise<string> {
         placeholder="Preheat oven to 350 F"
         v-model="item.steps[index]"
         class="block p-2 flex-auto rounded text-black shadow-sm"
+        ref="stepRefs"
+        @keyup.enter="addStepAt(index)"
       />
       <button
         type="button"

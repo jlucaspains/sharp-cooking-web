@@ -14,6 +14,7 @@ import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
 import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
+import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 
 const route = useRoute();
 const router = useRouter();
@@ -27,6 +28,7 @@ const item = ref({
   ingredients: [] as string[],
   steps: [] as string[],
   notes: "",
+  multiplier: 1,
   changedOn: "",
   image: "",
   imageAvailable: false,
@@ -36,6 +38,7 @@ const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
+const newMultiplier = ref(1);
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -67,6 +70,27 @@ async function deleteItem() {
 }
 
 onMounted(async () => {
+  setupMenuOptions();
+
+  const recipe = (await getRecipe(id.value)) as RecipeViewModel;
+
+  display.value = getDisplayValues(recipe);
+
+  if (recipe) {
+    state.title = recipe.title;
+
+    const allImages = await getRecipeImages(id.value);
+
+    if (allImages.length > 0) {
+      recipe.image = allImages[0].image;
+      recipe.imageAvailable = recipe.image ? true : false;
+    }
+
+    item.value = recipe;
+  }
+});
+
+function setupMenuOptions() {
   state.menuOptions = [
     {
       text: "More",
@@ -87,18 +111,28 @@ onMounted(async () => {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
   ];
+}
 
-  const recipe = (await getRecipe(id.value)) as RecipeViewModel;
-
+function getDisplayValues(
+  recipe: RecipeViewModel
+): Array<{ time: string; title: string; subItems: string[] }> {
+  const result: Array<{ time: string; title: string; subItems: string[] }> = [];
   const parseTime = (date: Date) =>
     date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const currentTime = new Date();
-  display.value = [];
-  display.value.push({
+
+  result.push({
     time: parseTime(currentTime),
     title: "Ingredients",
-    subItems: recipe.ingredients,
+    subItems: recipe.ingredients.map((ingredient) =>
+      applyMultiplierToString(
+        ingredient,
+        recipe.multiplier,
+        false,
+        /^(?<CompositeFraction>\d+ \d+\/\d+)|(?<Fraction>\d+\/\d+)|^(?<Regular>\d+\.{0,1}\d*)/
+      )
+    ),
   });
 
   // TODO: move to configuration
@@ -106,7 +140,7 @@ onMounted(async () => {
   currentTime.setTime(currentTime.getTime() + defaultTime);
 
   recipe.steps.forEach((step, index) => {
-    display.value.push({
+    result.push({
       time: parseTime(currentTime),
       title: `Step ${index + 1}`,
       subItems: [step],
@@ -121,25 +155,14 @@ onMounted(async () => {
     currentTime.setTime(currentTime.getTime() + actualTime);
   });
 
-  display.value.push({
+  result.push({
     time: parseTime(currentTime),
     title: "Enjoy!",
     subItems: [],
   });
 
-  if (recipe) {
-    state.title = recipe.title;
-
-    const allImages = await getRecipeImages(id.value);
-
-    if (allImages.length > 0) {
-      recipe.image = allImages[0].image;
-      recipe.imageAvailable = recipe.image ? true : false;
-    }
-
-    item.value = recipe;
-  }
-});
+  return result;
+}
 
 function editItem() {
   router.push(`/recipe/${id.value}/edit`);
@@ -151,6 +174,14 @@ function toggleScreenLight() {
 
 function changeMultiplier() {
   isMultiplierModalOpen.value = true;
+}
+
+function applyMultiplier() {
+  item.value.multiplier = newMultiplier.value;
+
+  display.value = getDisplayValues(item.value);
+
+  isMultiplierModalOpen.value = false;
 }
 
 function printItem() {
@@ -443,9 +474,7 @@ function shareAsFile() {
       :buttons="[
         {
           title: 'Ok',
-          action: () => {
-            isMultiplierModalOpen = false;
-          },
+          action: applyMultiplier,
         },
         {
           title: 'Cancel',
@@ -458,7 +487,12 @@ function shareAsFile() {
       <span class="dark:text-white"
         >Enter decimal value of quantity. E.g. 0.5 or 2</span
       >
-      <input type="number" class="block my-2 p-2 w-full rounded text-black" />
+      <input
+        @keyup.enter="applyMultiplier"
+        type="number"
+        v-model="newMultiplier"
+        class="block my-2 p-2 w-full rounded text-black"
+      />
     </Modal>
     <Modal
       :isOpen="isTimeModalOpen"

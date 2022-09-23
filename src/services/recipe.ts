@@ -5,6 +5,7 @@ export class Recipe {
     ingredients!: string[];
     steps!: string[];
     notes!: string;
+    multiplier: number = 1;
     changedOn!: string;
     source!: string;
 }
