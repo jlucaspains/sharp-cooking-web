@@ -74,7 +74,8 @@ onMounted(async () => {
 
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
 
-  display.value = getDisplayValues(recipe);
+  const currentTime = new Date();
+  display.value = getDisplayValues(recipe, currentTime);
 
   if (recipe) {
     state.title = recipe.title;
@@ -114,13 +115,12 @@ function setupMenuOptions() {
 }
 
 function getDisplayValues(
-  recipe: RecipeViewModel
+  recipe: RecipeViewModel,
+  currentTime: Date
 ): Array<{ time: string; title: string; subItems: string[] }> {
   const result: Array<{ time: string; title: string; subItems: string[] }> = [];
   const parseTime = (date: Date) =>
     date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-  const currentTime = new Date();
 
   result.push({
     time: parseTime(currentTime),
@@ -179,7 +179,8 @@ function changeMultiplier() {
 function applyMultiplier() {
   item.value.multiplier = newMultiplier.value;
 
-  display.value = getDisplayValues(item.value);
+  const currentTime = new Date();
+  display.value = getDisplayValues(item.value, currentTime);
 
   isMultiplierModalOpen.value = false;
 }
@@ -190,11 +191,26 @@ function printItem() {
 
 function changeTime() {
   const date = new Date();
-  startTime.value = date.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  startTime.value = `${hours}:${minutes}`;
+
   isTimeModalOpen.value = true;
+}
+
+function setDisplayTime() {
+  const currentTime = new Date();
+  
+  const year = currentTime.getFullYear().toString();
+  const month = currentTime.getMonth().toString().padStart(2, "0");
+  const date = currentTime.getDate().toString().padStart(2, "0");
+  
+  const newDate = new Date(`${year}-${month}-${date}T${startTime.value}`);
+
+  display.value = getDisplayValues(item.value, newDate);
+
+  isTimeModalOpen.value = false;
 }
 
 function openImage() {
@@ -501,9 +517,7 @@ function shareAsFile() {
       :buttons="[
         {
           title: 'Ok',
-          action: () => {
-            isTimeModalOpen = false;
-          },
+          action: setDisplayTime,
         },
         {
           title: 'Cancel',
@@ -513,7 +527,7 @@ function shareAsFile() {
         },
       ]"
     >
-      <TimePicker v-model="startTime"></TimePicker>
+      <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
     </Modal>
     <Modal
       :isOpen="isDeleteModalOpen"
