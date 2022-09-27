@@ -15,6 +15,7 @@ import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
 import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
 import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
+import NoSleep from "nosleep.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -39,6 +40,8 @@ const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
+
+const noSleep = new NoSleep();
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -168,8 +171,28 @@ function editItem() {
   router.push(`/recipe/${id.value}/edit`);
 }
 
-function toggleScreenLight() {
-  // TODO: how to do this?
+async function toggleScreenLight() {
+  if (noSleep.isEnabled) {
+    noSleep.disable();
+    notify(
+      {
+        group: "success",
+        title: "Screen",
+        text: "Always on disabled",
+      },
+      2000
+    );
+  } else {
+    await noSleep.enable();
+    notify(
+      {
+        group: "success",
+        title: "Screen",
+        text: "Always on enabled",
+      },
+      2000
+    );
+  }
 }
 
 function changeMultiplier() {
@@ -201,11 +224,11 @@ function changeTime() {
 
 function setDisplayTime() {
   const currentTime = new Date();
-  
+
   const year = currentTime.getFullYear().toString();
   const month = currentTime.getMonth().toString().padStart(2, "0");
   const date = currentTime.getDate().toString().padStart(2, "0");
-  
+
   const newDate = new Date(`${year}-${month}-${date}T${startTime.value}`);
 
   display.value = getDisplayValues(item.value, newDate);
@@ -527,7 +550,10 @@ function shareAsFile() {
         },
       ]"
     >
-      <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
+      <TimePicker
+        @keyup.enter="setDisplayTime"
+        v-model="startTime"
+      ></TimePicker>
     </Modal>
     <Modal
       :isOpen="isDeleteModalOpen"
