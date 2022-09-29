@@ -131,7 +131,7 @@ function getDisplayValues(
         ingredient,
         recipe.multiplier,
         false,
-        /^(?<CompositeFraction>\d+ \d+\/\d+)|(?<Fraction>\d+\/\d+)|^(?<Regular>\d+\.?\d*)/
+        /^(?<CompositeFraction>\d{1,5} \d{1,5}\/\d{1,5})|(?<Fraction>\d{1,5}\/\d{1,5})|^(?<Regular>\d{1,5}\.?\d{0,5})/
       )
     ),
   });
