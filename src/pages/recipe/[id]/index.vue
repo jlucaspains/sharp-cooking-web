@@ -150,7 +150,7 @@ function getDisplayValues(
     // TODO: move regex to translated resource
     const impliedTime = getImpliedTimeFromString(
       step,
-      /(?<Minutes>\d+\.?\d*)\s*(minutes|minute|min)\b|(?<Hours>\d+\.?\d*)\s*(hours|hour)\b|(?<Days>\d+\.?\d*)\s*(days|day)\b/
+      /(?<Minutes>\d{1,5}\.?\d{0,5})\s*(minutes|minute|min)\b|(?<Hours>\d{1,5}\.?\d{0,5})\s*(hours|hour)\b|(?<Days>\d{1,5}\.?\d{0,5})\s*(days|day)\b/
     );
     const actualTime = impliedTime > 0 ? impliedTime : defaultTime;
     currentTime.setTime(currentTime.getTime() + actualTime);
