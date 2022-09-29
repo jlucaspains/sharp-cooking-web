@@ -131,7 +131,7 @@ function getDisplayValues(
         ingredient,
         recipe.multiplier,
         false,
-        /^(?<CompositeFraction>\d+ \d+\/\d+)|(?<Fraction>\d+\/\d+)|^(?<Regular>\d+\.{0,1}\d*)/
+        /^(?<CompositeFraction>\d+ \d+\/\d+)|(?<Fraction>\d+\/\d+)|^(?<Regular>\d+\.?\d*)/
       )
     ),
   });
@@ -150,7 +150,7 @@ function getDisplayValues(
     // TODO: move regex to translated resource
     const impliedTime = getImpliedTimeFromString(
       step,
-      /(?<Minutes>\d+\.{0,1}\d*)\s*(minutes|minute|min)\b|(?<Hours>\d+\.{0,1}\d*)\s*(hours|hour)\b|(?<Days>\d+\.{0,1}\d*)\s*(days|day)\b/
+      /(?<Minutes>\d+\.?\d*)\s*(minutes|minute|min)\b|(?<Hours>\d+\.?\d*)\s*(hours|hour)\b|(?<Days>\d+\.?\d*)\s*(days|day)\b/
     );
     const actualTime = impliedTime > 0 ? impliedTime : defaultTime;
     currentTime.setTime(currentTime.getTime() + actualTime);

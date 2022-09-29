@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useState } from "../../services/store";
-import { notify } from "notiwind";
 import * as cheerio from 'cheerio';
 
 const route = useRoute();
@@ -58,10 +57,6 @@ async function importRecipe() {
       >
         GO
       </button>
-      <!-- <iframe height="1000" width="100%" :src="urlText" /> -->
     </div>
   </div>
 </template>
-
-<style>
-</style>

@@ -18,7 +18,6 @@ function applyMultiplier(compositeFractionGroup: string, fractionGroup: string, 
     let originalFraction = "";
     let parsedMatch = 0;
 
-
     if (compositeFractionGroup) {
         originalFraction = compositeFractionGroup;
         const parts = compositeFractionGroup.split(' ');
@@ -67,10 +66,9 @@ function applyMultiplier(compositeFractionGroup: string, fractionGroup: string, 
     if (whole === newIngredientValue) {
         return newIngredientValue.toString();
     }
-    else {
-        const { numerator, denominator } = getFraction(newIngredientValue - whole);
-        return whole == 0 ? `${numerator}/${denominator}` : `${whole} ${numerator}/${denominator}`;
-    }
+
+    const { numerator, denominator } = getFraction(newIngredientValue - whole);
+    return whole == 0 ? `${numerator}/${denominator}` : `${whole} ${numerator}/${denominator}`;
 }
 
 function getFraction(value: number): { numerator: number, denominator: number } {
