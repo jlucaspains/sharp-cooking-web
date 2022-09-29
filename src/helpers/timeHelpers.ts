@@ -1,5 +1,4 @@
 export function getImpliedTimeFromString(input: string, timeIdentifierRegex: string | RegExp) {
-    const regex = new RegExp(timeIdentifierRegex);
     const match = input.match(timeIdentifierRegex)
 
     if (!match || match?.length <= 0 || !match.groups)

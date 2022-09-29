@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
     getRecipe,
@@ -67,7 +67,7 @@ onMounted(async () => {
                 class="rounded-lg grid place-items-center w-1/2 overflow-hidden"
                 v-if="item.imageAvailable"
             >
-                <img :src="item.image" class="rounded-lg object-contain" />
+                <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
             </div>
             <div
                 class="bg-theme-primary rounded-lg grid place-items-center w-1/2 h-80 overflow-hidden"
@@ -87,7 +87,7 @@ onMounted(async () => {
                     <polyline points="21 15 16 10 5 21" />
                 </svg>
             </div>
-            <img :src="item.image" width="50%" height="auto" />
+            <img alt="Recipe Image" :src="item.image" width="50%" height="auto" />
         </div>
         <div>
             <h2>Ingredients</h2>

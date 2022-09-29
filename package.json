@@ -10,7 +10,9 @@
   "dependencies": {
     "@headlessui/vue": "^1.6.5",
     "browser-fs-access": "^0.31.0",
+    "cheerio": "^1.0.0-rc.12",
     "dexie": "^3.2.2",
+    "jszip": "^3.10.1",
     "lodash.debounce": "^4.0.8",
     "nosleep.js": "^0.12.0",
     "notiwind": "^1.2.6",

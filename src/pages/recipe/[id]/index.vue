@@ -6,10 +6,8 @@ import {
   getRecipeImages,
   deleteRecipe,
 } from "../../../services/dataService";
-import { RecipeImage, Recipe } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
@@ -295,7 +293,7 @@ function shareAsFile() {
       @click="openImage"
       v-if="item.imageAvailable"
     >
-      <img :src="item.image" class="rounded-lg object-contain" />
+      <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
     </div>
     <div
       class="

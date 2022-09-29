@@ -8,7 +8,7 @@ import {
   getRecipeImages,
   getNextRecipeId,
 } from "../../../services/dataService";
-import { RecipeImage, Recipe } from "../../../services/recipe";
+import { RecipeImage } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
@@ -98,7 +98,7 @@ async function isDirtyModalClose(shouldSave: boolean) {
   isDirtyModalOpen.value = false;
   isDirty = false;
 
-  await router.back();
+  router.back();
 }
 
 async function save() {
@@ -185,7 +185,7 @@ function addStepAt(index: number) {
         class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
         v-if="item.imageAvailable"
       >
-        <img :src="item.image" class="rounded-lg object-contain" />
+        <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
       </div>
       <div
         class="

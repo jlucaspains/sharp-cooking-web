@@ -11,7 +11,6 @@ import {
 } from "@headlessui/vue";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeImage } from "../services/dataService";
-import { Recipe } from "../services/recipe";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 
@@ -127,6 +126,7 @@ function gotToNew() {
           class="-mx-5 -mt-5 overflow-hidden"
         >
           <img
+            alt="Recipe image"
             v-if="item.imageAvailable"
             :src="item.image"
             class="object-contain"

@@ -19,7 +19,7 @@ const db = new RecipeDatabase();
 export async function getRecipe(id: number): Promise<Recipe | undefined> {
     console.time(`getRecipe_${id}`);
 
-    var result = await db.recipes.get(id);
+    const result = await db.recipes.get(id);
 
     console.timeEnd(`getRecipe_${id}`);
 
@@ -29,7 +29,7 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
 export async function getRecipes(): Promise<Recipe[]> {
     console.time("getRecipes");
 
-    var result = await db.recipes.toArray();
+    const result = await db.recipes.toArray();
 
     console.timeEnd("getRecipes");
 
@@ -39,7 +39,7 @@ export async function getRecipes(): Promise<Recipe[]> {
 export async function getRecipeImages(id: number): Promise<RecipeImage[]> {
     console.time(`getRecipeImages_${id}`);
 
-    var result = await db.recipeImages.where("recipeId").equals(id).toArray();
+    const result = await db.recipeImages.where("recipeId").equals(id).toArray();
 
     console.timeEnd(`getRecipeImages_${id}`);
 
@@ -49,7 +49,7 @@ export async function getRecipeImages(id: number): Promise<RecipeImage[]> {
 export async function getRecipeImage(id: number): Promise<RecipeImage | undefined> {
     console.time(`getRecipeImage_${id}`);
 
-    var result = await db.recipeImages.where("recipeId").equals(id).first();
+    const result = await db.recipeImages.where("recipeId").equals(id).first();
 
     console.timeEnd(`getRecipeImage_${id}`);
 
@@ -87,7 +87,7 @@ export async function saveRecipeImage(recipeImage: RecipeImage) {
 export async function deleteRecipe(id: number) {
     console.time("deleteRecipe");
     
-    var images = await db.recipeImages.where("recipeId").equals(id).toArray();
+    const images = await db.recipeImages.where("recipeId").equals(id).toArray();
 
     for (const item of images) {
         db.recipeImages.delete(item.id || 0);

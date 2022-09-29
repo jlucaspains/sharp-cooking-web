@@ -5,8 +5,7 @@ import {
   getRecipe,
   getRecipeImages,
 } from "../../../services/dataService";
-import { RecipeImage, Recipe } from "../../../services/recipe";
-import { RecipeViewModel } from "../recipeViewModel";
+import { RecipeImage } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
@@ -43,6 +42,7 @@ onMounted(async () => {
   >
     <swiper-slide v-for="image in images">
       <img
+        alt="Recipe Image"
         :src="image.image"
         class="w-full rounded-lg h-80"
       />

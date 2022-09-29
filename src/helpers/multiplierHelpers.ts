@@ -53,7 +53,7 @@ function applyMultiplier(compositeFractionGroup: string, fractionGroup: string, 
             return "0";
     }
 
-    var newIngredientValue = parsedMatch * multiplier;
+    const newIngredientValue = parsedMatch * multiplier;
 
     if (!useFractionsOverDecimal)
         return newIngredientValue.toString();
