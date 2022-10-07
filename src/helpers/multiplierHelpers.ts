@@ -30,7 +30,7 @@ function applyMultiplier(compositeFractionGroup: string, fractionGroup: string, 
         const fracNumerator = parseFloat(fractionParts[0]);
         const fracDecimal = parseFloat(fractionParts[1]);
 
-        if (fracNumerator === 0 || fracDecimal === 0 || firstNumber === 0)
+        if (fracNumerator === 0 || fracDecimal === 0)
             return first;
 
         parsedMatch = firstNumber + (fracNumerator / fracDecimal);
