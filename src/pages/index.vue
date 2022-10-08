@@ -115,7 +115,7 @@ function goToNew() {
   router.push("/recipe/0/edit");
 }
 function goToImport() {
-  router.push("/recipe/import");
+  router.push("/recipe/0/edit?import=1");
 }
 </script>
 

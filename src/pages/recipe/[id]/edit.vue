@@ -21,6 +21,7 @@ const route = useRoute();
 const router = useRouter();
 
 const id = computed(() => parseInt(route.params.id as string));
+const query = computed(() => route.query);
 const item = ref({
   id: 1,
   title: "",
@@ -33,6 +34,8 @@ const item = ref({
 } as RecipeViewModel);
 const images = ref([] as RecipeImage[]);
 const isDirtyModalOpen = ref(false);
+const isImportModalOpen = ref(false);
+const importRecipeUrl = ref("");
 const stepRefs = ref<HTMLInputElement[]>([]);
 const ingredientRefs = ref<HTMLInputElement[]>([]);
 let isDirty = false;
@@ -53,9 +56,15 @@ onMounted(async () => {
       svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`,
     },
   ];
+
+  if (query.value.import == "1") {
+    isImportModalOpen.value = true;
+  }
+
   let recipe: RecipeViewModel;
   if (id.value === 0) {
     recipe = new RecipeViewModel();
+    recipe.title = "New Recipe";
     recipe.steps.push("");
     recipe.ingredients.push("");
   } else {
@@ -176,19 +185,70 @@ function addStepAt(index: number) {
     stepRefs.value[index + 1].focus();
   });
 }
+
+async function importRecipe() {
+  const result = await fetch("https://sharpcookingapi.azurewebsites.net/recipe/parse", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: `{"url": "${importRecipeUrl.value}"}`
+  });
+
+  if (!result.ok) {
+    notify(
+      {
+        group: "error",
+        title: "Error",
+        text: "Failed messages!",
+      },
+      2000
+    );
+  }
+
+  const html = await result.json();
+  item.value.title = html.title;
+  item.value.score = 5;
+  item.value.ingredients = html.ingredients.map((x: any) => x.raw);
+  item.value.steps = html.instructions.map((x: any) => x.raw);
+
+  try {
+    const imageResponse = await fetch(html.image);
+    const imageBlob = await imageResponse.blob();
+    item.value.image = URL.createObjectURL(imageBlob);
+    item.value.imageAvailable = true;
+
+    notify(
+      {
+        group: "success",
+        title: "Success",
+        text: "Imported successfully!",
+      },
+      2000
+    );
+  }
+  catch {
+    notify(
+      {
+        group: "error",
+        title: "Error",
+        text: "Found recipe but image failed to load",
+      },
+      2000
+    );
+  }
+
+  isImportModalOpen.value = false;
+}
 </script>
 
 <template>
   <div class="mt-16 mx-4 mb-10 dark:text-white">
     <div @click="pickImage">
-      <div
-        class="rounded-lg grid place-items-center w-full h-80 overflow-hidden"
-        v-if="item.imageAvailable"
-      >
+      <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-if="item.imageAvailable">
         <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
       </div>
-      <div
-        class="
+      <div class="
           bg-theme-primary
           rounded-lg
           grid
@@ -196,18 +256,9 @@ function addStepAt(index: number) {
           w-full
           h-80
           overflow-hidden
-        "
-        v-else
-      >
-        <svg
-          class="h-16 w-16 text-white"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+        " v-else>
+        <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
           <circle cx="8.5" cy="8.5" r="1.5" />
           <polyline points="21 15 16 10 5 21" />
@@ -215,64 +266,25 @@ function addStepAt(index: number) {
       </div>
     </div>
     <label for="title">Title</label>
-    <input
-      id="title"
-      type="text"
-      v-model="item.title"
-      class="block p-2 w-full rounded text-black shadow-sm"
-    />
+    <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
     <label>Rating</label>
     <RatingPicker class="mb-2" v-model="item.score" />
     <label>Ingredients</label>
-    <button
-      class="ml-2 align-middle"
-      type="button"
-      title="Add Ingredient"
-      @click="addIngredientAt(item.ingredients.length - 1)"
-    >
-      <svg
-        class="h-4 w-4 text-black dark:text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
+    <button class="ml-2 align-middle" type="button" title="Add Ingredient"
+      @click="addIngredientAt(item.ingredients.length - 1)">
+      <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     </button>
-    <div
-      class="flex my-3 w-full"
-      v-for="(ingredient, index) in item.ingredients"
-    >
-      <input
-        type="text"
-        placeholder="1 cup flour"
-        v-model="item.ingredients[index]"
-        @keyup.enter="addIngredientAt(index)"
-        ref="ingredientRefs"
-        class="block p-2 rounded flex-auto text-black shadow-sm"
-      />
-      <button
-        type="button"
-        class="ml-2 align-middle"
-        title="Delete Ingredient"
-        @click="item.ingredients.splice(index, 1)"
-      >
-        <svg
-          class="h-4 w-4 text-black dark:text-white"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+    <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
+      <input type="text" placeholder="1 cup flour" v-model="item.ingredients[index]"
+        @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
+        class="block p-2 rounded flex-auto text-black shadow-sm" />
+      <button type="button" class="ml-2 align-middle" title="Delete Ingredient"
+        @click="item.ingredients.splice(index, 1)">
+        <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="10" y1="11" x2="10" y2="17" />
@@ -283,52 +295,18 @@ function addStepAt(index: number) {
       </button>
     </div>
     <label>Steps</label>
-    <button
-      class="ml-2"
-      type="button"
-      title="Add Step"
-      @click="addStepAt(item.steps.length - 1)"
-    >
-      <svg
-        class="h-4 w-4 text-black dark:text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
+    <button class="ml-2" type="button" title="Add Step" @click="addStepAt(item.steps.length - 1)">
+      <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     </button>
     <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
-      <input
-        type="text"
-        placeholder="Preheat oven to 350 F"
-        v-model="item.steps[index]"
-        class="block p-2 flex-auto rounded text-black shadow-sm"
-        ref="stepRefs"
-        @keyup.enter="addStepAt(index)"
-      />
-      <button
-        type="button"
-        class="ml-2"
-        title="Delete Step"
-        @click="item.steps.splice(index, 1)"
-      >
-        <svg
-          class="h-4 w-4 text-black dark:text-white"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <input type="text" placeholder="Preheat oven to 350 F" v-model="item.steps[index]"
+        class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
+      <button type="button" class="ml-2" title="Delete Step" @click="item.steps.splice(index, 1)">
+        <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="10" y1="11" x2="10" y2="17" />
@@ -339,10 +317,7 @@ function addStepAt(index: number) {
       </button>
     </div>
     <label for="notes">Notes</label>
-    <textarea
-      id="notes"
-      v-model="item.notes"
-      class="
+    <textarea id="notes" v-model="item.notes" class="
         block
         p-2
         flex-auto
@@ -351,26 +326,30 @@ function addStepAt(index: number) {
         bg-white
         rounded
         text-base text-black
-      "
-    />
-    <Modal
-      :isOpen="isDirtyModalOpen"
-      @closed="isDirtyModalOpen = false"
-      title="Save?"
-      :buttons="[
-        {
-          title: 'Yes',
-          action: () => isDirtyModalClose(true),
-        },
-        {
-          title: 'No',
-          action: () => isDirtyModalClose(false),
-        },
-      ]"
-    >
-      <span class="dark:text-white"
-        >Would you like to save your changes first?</span
-      >
+      " />
+    <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" title="Save?" :buttons="[
+      {
+        title: 'Yes',
+        action: () => isDirtyModalClose(true),
+      },
+      {
+        title: 'No',
+        action: () => isDirtyModalClose(false),
+      },
+    ]">
+      <span class="dark:text-white">Would you like to save your changes first?</span>
+    </Modal>
+    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" title="Please provide recipe URL" :buttons="[
+      {
+        title: 'OK',
+        action: importRecipe,
+      },
+      {
+        title: 'Cancel',
+        action: () => isImportModalOpen = false,
+      },
+    ]">
+      <input v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
   </div>
 </template>
