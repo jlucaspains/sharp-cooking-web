@@ -30,7 +30,7 @@ router.afterEach((to) => {
         shadow shadow-slate
       "
     >
-      <div class="flex flex-wrap justify-between sm:items-center mx-auto">
+      <div class="flex justify-between sm:items-center mx-auto">
         <div class="flex w-10">
           <button
             class="
@@ -66,8 +66,8 @@ router.afterEach((to) => {
             </svg>
           </button>
         </div>
-        <div class="flex">
-          <router-link class="flex items-center py-2" to="/">
+        <div class="flex truncate">
+          <router-link class="items-center py-2" to="/">
             <span
               class="text-lg font-semibold whitespace-nowrap dark:text-white"
               >{{ state.title }}</span

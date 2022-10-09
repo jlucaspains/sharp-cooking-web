@@ -192,7 +192,7 @@ async function importRecipe() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: `{"url": "${importRecipeUrl.value}"}`
+    body: `{"url": "${importRecipeUrl.value}", "downloadImage": true}`
   });
 
   if (!result.ok) {
@@ -211,32 +211,8 @@ async function importRecipe() {
   item.value.score = 5;
   item.value.ingredients = html.ingredients.map((x: any) => x.raw);
   item.value.steps = html.instructions.map((x: any) => x.raw);
-
-  try {
-    const imageResponse = await fetch(html.image);
-    const imageBlob = await imageResponse.blob();
-    item.value.image = URL.createObjectURL(imageBlob);
-    item.value.imageAvailable = true;
-
-    notify(
-      {
-        group: "success",
-        title: "Success",
-        text: "Imported successfully!",
-      },
-      2000
-    );
-  }
-  catch {
-    notify(
-      {
-        group: "error",
-        title: "Error",
-        text: "Found recipe but image failed to load",
-      },
-      2000
-    );
-  }
+  item.value.image = html.image;
+  item.value.imageAvailable = !!item.value.image
 
   isImportModalOpen.value = false;
 }

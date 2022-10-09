@@ -122,20 +122,12 @@ function goToImport() {
 <template>
   <div class="mt-16 bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
-      <input
-        type="text"
-        :placeholder="t('recipes.search')"
-        v-model="searchText"
-        class="mx-4 p-2 my-2 rounded text-black"
-      />
+      <input type="text" :placeholder="t('recipes.search')" v-model="searchText"
+        class="mx-4 p-2 my-2 rounded text-black" />
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 m-4 gap-5">
-      <div
-        v-for="item in items"
-        @click="goToRecipe(item.id || 0)"
-        @keydown.enter="goToRecipe(item.id || 0)"
-        tabindex="0"
-        class="
+      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
+        tabindex="0" class="
           p-5
           h-60
           rounded-lg
@@ -143,28 +135,12 @@ function goToImport() {
           bg-white
           dark:bg-theme-secondary-gray
           overflow-hidden
-        "
-      >
-        <div
-          style="height: calc(100% - 0.5rem)"
-          class="-mx-5 -mt-5 overflow-hidden"
-        >
-          <img
-            alt="Recipe image"
-            v-if="item.imageAvailable"
-            :src="item.image"
-            class="object-contain"
-          />
+        ">
+        <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
+          <img alt="Recipe image" v-if="item.imageAvailable" :src="item.image" class="object-contain" />
           <div v-else class="bg-theme-primary h-full grid place-items-center">
-            <svg
-              class="h-16 w-16 text-white"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
               <polyline points="21 15 16 10 5 21" />
@@ -172,12 +148,14 @@ function goToImport() {
           </div>
         </div>
         <div class="h-full pt-2">
-          <span class="text-ellipsis text-black dark:text-white text-lg">{{
+          <div class="truncate inline-block" style="width: calc(100% - 35px)">
+            <span class="text-ellipsis text-black dark:text-white text-lg">{{
             item.title
-          }}</span>
-          <span class="float-right text-black dark:text-white"
-            >{{ item.score }}⭐</span
-          >
+            }}</span>
+          </div>
+          <div class="truncate inline-block" syle="width: 30px">
+            <span class="text-black dark:text-white">{{ item.score }}⭐</span>
+          </div>
         </div>
       </div>
     </div>
@@ -200,8 +178,7 @@ function goToImport() {
     </button> -->
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
-        <MenuButton
-          class="
+        <MenuButton class="
             p-0
             w-14
             h-14
@@ -213,33 +190,19 @@ function goToImport() {
             hover:bg-theme-secondary
             focus:ring-4 focus:ring-theme-primary focus:outline-none
             shadow-lg
-          "
-        >
-          <svg
-            viewBox="0 0 20 20"
-            enable-background="new 0 0 20 20"
-            class="w-6 h-6 inline-block"
-          >
-            <path
-              fill="#FFFFFF"
-              d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
+          ">
+          <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
+            <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
                                 C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
-                                C15.952,9,16,9.447,16,10z"
-            />
+                                C15.952,9,16,9.447,16,10z" />
           </svg>
         </MenuButton>
       </div>
 
-      <transition
-        enter-active-class="transition duration-100 ease-out"
-        enter-from-class="transform scale-95 opacity-0"
-        enter-to-class="transform scale-100 opacity-100"
-        leave-active-class="transition duration-75 ease-in"
-        leave-from-class="transform scale-100 opacity-100"
-        leave-to-class="transform scale-95 opacity-0"
-      >
-        <MenuItems
-          class="
+      <transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0"
+        enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in"
+        leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+        <MenuItems class="
             -top-2
             transform
             -translate-y-full
@@ -253,23 +216,15 @@ function goToImport() {
             shadow-lg
             ring-1 ring-black ring-opacity-5
             focus:outline-none
-          "
-        >
+          ">
           <div class="px-1 py-1">
-            <MenuItem
-              :key="child.name"
-              v-for="child in addOptions"
-              v-slot="{ active }"
-            >
-              <button
-                @click="child.action"
-                :class="[
-                  active ? 'bg-theme-secondary text-white' : 'text-gray-900',
-                  'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                ]"
-              >
-                {{ child.text }}
-              </button>
+            <MenuItem :key="child.name" v-for="child in addOptions" v-slot="{ active }">
+            <button @click="child.action" :class="[
+              active ? 'bg-theme-secondary text-white' : 'text-gray-900',
+              'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+            ]">
+              {{ child.text }}
+            </button>
             </MenuItem>
           </div>
         </MenuItems>
