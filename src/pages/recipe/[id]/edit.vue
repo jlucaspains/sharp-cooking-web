@@ -64,7 +64,7 @@ onMounted(async () => {
   let recipe: RecipeViewModel;
   if (id.value === 0) {
     recipe = new RecipeViewModel();
-    recipe.title = "New Recipe";
+    recipe.title = "";
     recipe.steps.push("");
     recipe.ingredients.push("");
   } else {
@@ -72,7 +72,7 @@ onMounted(async () => {
   }
 
   if (recipe) {
-    state.title = recipe.title;
+    state.title = recipe.title || "New Recipe";
 
     const allImages = await getRecipeImages(id.value);
 
@@ -129,6 +129,8 @@ async function save() {
   }
 
   isDirty = false;
+
+  state.title = recipe.title;
 
   notify(
     {

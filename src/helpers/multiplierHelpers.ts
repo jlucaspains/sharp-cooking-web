@@ -1,6 +1,10 @@
 export function applyMultiplierToString(input: string, multiplier: number, useFractionsOverDecimal: boolean, regex: string | RegExp): string {
     multiplier = multiplier > 0 ? multiplier : 1;
 
+    if (multiplier == 1) {
+        return input;
+    }
+
     const regexp = new RegExp(regex);
     const match = input.match(regex);
 
