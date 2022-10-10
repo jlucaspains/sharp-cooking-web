@@ -47,7 +47,7 @@
                         <div class="px-4 py-2 -mx-3">
                             <div class="mx-3">
                                 <span class="font-semibold text-red-500">{{ notification.title }}</span>
-                                <p class="text-sm text-gray-600 dark:bg-theme-secondary-gray">{{ notification.text }}</p>
+                                <p class="text-sm text-gray-600 dark:text-white">{{ notification.text }}</p>
                             </div>
                         </div>
                     </div>

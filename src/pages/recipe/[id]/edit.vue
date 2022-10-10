@@ -36,9 +36,11 @@ const images = ref([] as RecipeImage[]);
 const isDirtyModalOpen = ref(false);
 const isImportModalOpen = ref(false);
 const importRecipeUrl = ref("");
+const isImporting = ref(false);
 const stepRefs = ref<HTMLInputElement[]>([]);
 const ingredientRefs = ref<HTMLInputElement[]>([]);
 let isDirty = false;
+
 
 watch(
   item,
@@ -189,34 +191,47 @@ function addStepAt(index: number) {
 }
 
 async function importRecipe() {
-  const result = await fetch("https://sharpcookingapi.azurewebsites.net/recipe/parse", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: `{"url": "${importRecipeUrl.value}", "downloadImage": true}`
-  });
-
-  if (!result.ok) {
-    notify(
-      {
-        group: "error",
-        title: "Error",
-        text: "Failed messages!",
+  let success = true;
+  try {
+    isImporting.value = true;
+    const result = await fetch("https://sharpcookingapi.azurewebsites.net/recipe/parse", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
       },
-      2000
-    );
+      body: `{"url": "${importRecipeUrl.value}", "downloadImage": true}`
+    });
+
+
+    success = result.ok; 
+    if (!result.ok) {
+      
+    }
+
+    const html = await result.json();
+    item.value.title = html.title;
+    item.value.score = 5;
+    item.value.ingredients = html.ingredients.map((x: any) => x.raw);
+    item.value.steps = html.instructions.map((x: any) => x.raw);
+    item.value.image = html.image;
+    item.value.imageAvailable = !!item.value.image
   }
+  catch {
+    success = false;
+  }
+  finally {
+    isImportModalOpen.value = false;
+    isImporting.value = false;
 
-  const html = await result.json();
-  item.value.title = html.title;
-  item.value.score = 5;
-  item.value.ingredients = html.ingredients.map((x: any) => x.raw);
-  item.value.steps = html.instructions.map((x: any) => x.raw);
-  item.value.image = html.image;
-  item.value.imageAvailable = !!item.value.image
-
-  isImportModalOpen.value = false;
+    notify(
+        {
+          group: success ? "success" : "error",
+          title: success ? "Done" : "Error",
+          text: success ? "Imported successfully" : "This recipe could not be imported",
+        },
+        2000
+      );
+  }
 }
 </script>
 
@@ -327,7 +342,8 @@ async function importRecipe() {
         action: () => isImportModalOpen = false,
       },
     ]">
-      <input v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
+      <span class="dark:text-white" v-if="isImporting">Loading recipe. This may take up to a minute.</span>
+      <input :disabled="isImporting" v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
   </div>
 </template>
