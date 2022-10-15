@@ -35,6 +35,11 @@ const addOptions = [
     text: "Import from website",
     action: goToImport,
   },
+  {
+    name: "ImportFromBackup",
+    text: "Import from backup file",
+    action: goToImportFromBackup,
+  },
 ];
 
 function sortByTitle(items: Array<RecipeViewModel>) {
@@ -117,10 +122,13 @@ function goToNew() {
 function goToImport() {
   router.push("/recipe/0/edit?import=1");
 }
+function goToImportFromBackup() {
+  router.push("/recipe/import-backup");
+}
 </script>
 
 <template>
-  <div class="mt-16 bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
+  <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
       <input type="text" :placeholder="t('recipes.search')" v-model="searchText"
         class="mx-4 p-2 my-2 rounded text-black" />

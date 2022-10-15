@@ -14,11 +14,13 @@ const { t } = useI18n();
 <template>
   <TopBar />
   <div class="container mx-auto">
-    <router-view v-slot="{ Component }">
-      <transition name="fade" mode="out-in">
-        <component :is="Component"></component>
-      </transition>
-    </router-view>
+    <div class="mt-16 mx-4 mb-10 dark:text-white">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
+      </router-view>
+    </div>
   </div>
   <Notification />
 </template>

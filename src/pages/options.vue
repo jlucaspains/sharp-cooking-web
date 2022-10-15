@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-<div class="mt-16 w-full px-4 lg:px-96 mx-auto">
+<div class="w-full px-4 lg:px-96 mx-auto">
   <div class="py-2 dark:text-white">
     <label class="dark:text-white">Steps Interval</label>
     <div class="dark:text-white float-right ">

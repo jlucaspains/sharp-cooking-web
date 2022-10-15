@@ -10,4 +10,5 @@ export class RecipeViewModel extends Recipe {
 
   image?: string;
   imageAvailable: boolean = false;
+  hasNotes: boolean = false;
 }

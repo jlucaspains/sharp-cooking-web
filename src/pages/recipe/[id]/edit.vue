@@ -194,7 +194,7 @@ async function importRecipe() {
   let success = true;
   try {
     isImporting.value = true;
-    const result = await fetch("https://sharpcookingapi.azurewebsites.net/recipe/parse", {
+    const result = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/parse`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -202,10 +202,9 @@ async function importRecipe() {
       body: `{"url": "${importRecipeUrl.value}", "downloadImage": true}`
     });
 
-
-    success = result.ok; 
+    success = result.ok;
     if (!result.ok) {
-      
+      return;
     }
 
     const html = await result.json();
@@ -224,19 +223,19 @@ async function importRecipe() {
     isImporting.value = false;
 
     notify(
-        {
-          group: success ? "success" : "error",
-          title: success ? "Done" : "Error",
-          text: success ? "Imported successfully" : "This recipe could not be imported",
-        },
-        2000
-      );
+      {
+        group: success ? "success" : "error",
+        title: success ? "Done" : "Error",
+        text: success ? "Imported successfully" : "This recipe could not be imported",
+      },
+      2000
+    );
   }
 }
 </script>
 
 <template>
-  <div class="mt-16 mx-4 mb-10 dark:text-white">
+  <div>
     <div @click="pickImage">
       <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-if="item.imageAvailable">
         <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
