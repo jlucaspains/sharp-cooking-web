@@ -67,25 +67,29 @@ onMounted(async () => {
   state.title = "All Recipes";
   state.menuOptions = [
     {
-      svg: `<path stroke="none" d="M0 0h24v24H0z"/>  <line x1="4" y1="6" x2="13" y2="6" />  <line x1="4" y1="12" x2="11" y2="12" />  <line x1="4" y1="18" x2="11" y2="18" />  <polyline points="15 15 18 18 21 15" />  <line x1="18" y1="6" x2="18" y2="18" />`,
+      svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
       children: [
         {
-          text: "By Title",
+          text: "Sort by Title",
           action: () => {
             items.value = sortByTitle(items.value);
           },
         },
         {
-          text: "By Rating",
+          text: "Sort by Rating",
           action: () => {
             items.value = sortByRating(items.value);
           },
         },
         {
-          text: "By Recipe Date",
+          text: "Sort by Recipe Date",
           action: () => {
             items.value = sortByDate(items.value);
           },
+        },
+        {
+          text: "Options",
+          action: goToOptions,
         },
       ],
     },
@@ -125,15 +129,18 @@ function goToImport() {
 function goToImportFromBackup() {
   router.push("/recipe/import-backup");
 }
+function goToOptions() {
+  router.push("/options");
+}
 </script>
 
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
       <input type="text" :placeholder="t('recipes.search')" v-model="searchText"
-        class="mx-4 p-2 my-2 rounded text-black" />
+        class="p-2 my-2 rounded text-black" />
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 m-4 gap-5">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
       <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
         tabindex="0" class="
           p-5
