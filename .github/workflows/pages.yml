@@ -35,7 +35,8 @@ jobs:
       - name: Set current date as env variable
         run: echo "NOW::$(date +'%Y.%m.%d.%H')" >> $GITHUB_ENV
 
-      - uses: datamonsters/replace-action
+      - name: Set Version number in .env
+        uses: datamonsters/replace-action@v2
         with:
           files: '.env'
           replacements: 'DEV=$NOW'
