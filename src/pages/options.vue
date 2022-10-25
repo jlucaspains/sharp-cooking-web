@@ -1,26 +1,77 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useState } from "../services/store";
+import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
+import Modal from "../components/Modal.vue";
+import { fileSave } from "browser-fs-access";
+import { useI18n } from "vue-i18n";
 
 const state = useState()!;
+const router = useRouter()!;
 const version = ref("");
+const useFractions = ref(false);
+const stepsInterval = ref(5);
+const stepsIntervalEditing = ref(5);
+const isStepsIntervalModalOpen = ref(false);
+const { t } = useI18n();
 
-onMounted(() => {
-  state.title = "Options";
+onMounted(async () => {
+  state.title = t("options.title");
   state.menuOptions = [];
+
+  const stepsInvervalValue = await getSetting("StepsInterval", "5");
+  const useFractionsValue = await getSetting("UseFractions", "False");
+
+  stepsInterval.value = parseInt(stepsInvervalValue);
+  useFractions.value = useFractionsValue === "true";
 
   version.value = import.meta.env.VITE_APP_VERSION;
 });
 
+function reviewReleaseNotes() {
+  window.open("https://sharpcooking.net/changelog")
+}
+
 function changeStepsInterval() {
-  alert("steps");
+  stepsIntervalEditing.value = stepsInterval.value;
+  isStepsIntervalModalOpen.value = true;
+}
+
+async function takeBackup() {
+  const backup = await prepareBackup();
+  const stringBackup = JSON.stringify(backup);
+  const blob = new Blob([stringBackup]);
+  await fileSave(blob, { fileName: "sharp_cooking.json", mimeTypes: ["application/json"] });
+}
+
+function restoreBackup() {
+  router.push("/recipe/import-backup");
+}
+
+function reviewTermsOfUse() {
+  window.open("https://sharpcooking.net/termsofuse")
+}
+
+function reviewPrivacyPolicy() {
+  window.open("https://sharpcooking.net/privacypolicy")
+}
+
+function updateStepsInterval() {
+  stepsInterval.value = stepsIntervalEditing.value;
+  saveSetting("StepsInterval", stepsInterval.value.toString());
+  isStepsIntervalModalOpen.value = false;
+}
+
+function updateUseFractions() {
+  saveSetting("UseFractions", `${useFractions.value}`);
 }
 </script>
 
 <template>
   <div class="w-full lg:px-96 mx-auto">
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Sharp Cooking</span>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewReleaseNotes">
+      <span class="dark:text-white">{{t("appName")}}</span>
       <div class="dark:text-white float-right">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -29,14 +80,14 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">See release notes for version {{version}}</span>
+        <span class="text-gray-500 text-sm">{{t("options.releaseNotes")}} {{version}}</span>
       </div>
     </div>
 
     <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="changeStepsInterval">
-      <label class="dark:text-white">Steps Interval</label>
+      <label class="dark:text-white">{{t("options.stepsInterval")}}</label>
       <div class="dark:text-white float-right ">
-        <button class="mr-2 align-top">2 minutes</button>
+        <button class="mr-2 align-top">{{stepsInterval}} {{t("options.minutes")}}</button>
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -44,21 +95,21 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">Interval used when no information is available for the step</span>
+        <span class="text-gray-500 text-sm">{{t("options.stepsIntervalDescription")}}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Multipler uses fractions</span>
+      <span class="dark:text-white">{{t("options.multiplierType")}}</span>
       <label class="switch float-right align-middle">
-        <input type="checkbox">
+        <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
         <span class="slider round"></span>
       </label>
       <div>
-        <span class="text-gray-500 text-sm">Uses fractions over decimals</span>
+        <span class="text-gray-500 text-sm">{{t("options.multiplierTypeDescription")}}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Take a backup</span>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="takeBackup">
+      <span class="dark:text-white">{{t("options.takeBackup")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -67,11 +118,11 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">Keep your data safe with a file backup</span>
+        <span class="text-gray-500 text-sm">{{t("options.takeBackupDescription")}}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Restore a backup</span>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="restoreBackup">
+      <span class="dark:text-white">{{t("options.restoreBackup")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -80,12 +131,12 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">Restore your data to a known point</span>
+        <span class="text-gray-500 text-sm">{{t("options.restoreBackupDescription")}}</span>
       </div>
     </div>
 
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Terms of Use</span>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewTermsOfUse">
+      <span class="dark:text-white">{{t("options.termsOfUse")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -94,11 +145,11 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">Review the terms of use of Sharp Cooking</span>
+        <span class="text-gray-500 text-sm">{{t("termsOfUseDescription")}}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">Privacy Policy</span>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewPrivacyPolicy">
+      <span class="dark:text-white">{{t("options.privacyPolicy")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -107,9 +158,22 @@ function changeStepsInterval() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">Review our policy to understand what we know and keep about you</span>
+        <span class="text-gray-500 text-sm">{{t("privacyPolicyDescription")}}</span>
       </div>
     </div>
+    <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
+      :title="t('options.stepsIntervalQuestion')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: updateStepsInterval,
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isStepsIntervalModalOpen = false,
+        },
+      ]">
+      <input v-model.number="stepsIntervalEditing" class="block my-2 p-2 w-full rounded text-black" />
+    </Modal>
   </div>
 </template>
 

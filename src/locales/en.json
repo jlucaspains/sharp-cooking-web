@@ -7,20 +7,43 @@
         "options": "Options",
         "openMainMenu": "Open main menu"
     },
-    "recipes": {
-        "title": "All Recipes",
-        "search": "Search..."
+    "general": {
+        "yes": "Yes",
+        "ok": "OK",
+        "no": "No",
+        "cancel": "Cancel"
     },
-    "recipe": {
-        "title": "View Recipe"
-    },
-    "options": {
-        "title": "Options"
-    },
-    "about": {
-        "title": "About"
-    },
-    "newRecipe": {
-        "title": "New Recipe"
+    "pages": {
+        "index": {
+            "title": "All Recipes",
+            "search": "Search..."
+        },
+        "options": {
+            "title": "Options",
+            "releaseNotes": "See release notes for version",
+            "stepsInterval": "Steps Interval",
+            "minutes": "minutes",
+            "stepsIntervalDescription": "Interval used when no information is available for the step",
+            "stepsIntervalQuestion": "Please provide the interval in minutes",
+            "multiplierType": "Multipler uses fractions",
+            "multiplierTypeDescription": "Uses fractions over decimals",
+            "takeBackup": "Take a backup",
+            "takeBackupDescription": "Keep your data safe with a file backup",
+            "restoreBackup": "Restore a backup",
+            "restoreBackupDescription": "Restore your data to a known point",
+            "termsOfUse": "Terms of Use",
+            "termsOfUseDescription": "Review the terms of use of Sharp Cooking",
+            "privacyPolicy": "Privacy Policy",
+            "privacyPolicyDescription": "Review our policy to understand what we know and keep about you"
+        },
+        "recipe": {
+            "id": {
+                "edit": {},
+                "gallery": {},
+                "index": {},
+                "print": {}
+            },
+            "import-backup": {}
+        }
     }
 }

@@ -53,27 +53,35 @@ async function pickFile() {
     canSave.value = false;
 
     // Open a file.
-    const imagePicked = await fileOpen({
-        mimeTypes: ["application/zip"],
+    const filePicked = await fileOpen({
+        mimeTypes: ["application/zip", "application/json"],
     });
 
     let success = false;
 
     try {
-        var data = new FormData();
-        data.append('file', imagePicked);
+        let result;
 
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/backup/parse`, {
-            method: "POST",
-            body: data
-        });
+        if (filePicked.name.endsWith(".zip")) {
+            var data = new FormData();
+            data.append('file', filePicked);
 
-        success = response.ok;
-        if (!success) {
-            return;
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/backup/parse`, {
+                method: "POST",
+                body: data
+            });
+
+            success = response.ok;
+            if (!success) {
+                return;
+            }
+
+            result = await response.json();
+        } else {
+            const textResult = await filePicked.text();
+            result = JSON.parse(textResult);
         }
 
-        const result = await response.json();
         for (const recipe of result) {
 
             const parsedRecipe = new RecipeViewModel();
@@ -120,7 +128,7 @@ function selectAll() {
 <template>
     <div>
         <span>1. Select a backup, the backup must have been created by Sharp Cooking iOS, Android, or Web App and must
-            be a .zip or a .sc_bak file</span>
+            be a .zip or a .json file</span>
         <div class="flex mt-3">
             <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
                 @click="pickFile">Select a file...</button>

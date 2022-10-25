@@ -5,6 +5,7 @@ import {
   getRecipe,
   getRecipeImages,
   deleteRecipe,
+  prepareRecipeBackup,
 } from "../../../services/dataService";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
@@ -14,6 +15,7 @@ import { notify } from "notiwind";
 import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
 import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
+import { fileSave } from "browser-fs-access";
 
 const route = useRoute();
 const router = useRouter();
@@ -262,17 +264,14 @@ function shareAsText() {
   }
 }
 
-function shareAsFile() {
-  if (navigator.share) {
-    navigator
-      .share({
-        files: [], // TODO: implement
-        title: item.value.title,
-        url: "https://app.sharpcooking.net/",
-      })
-      .then(() => console.log("Successful share"))
-      .catch((error) => console.log("Error sharing", error));
-  } else {
+async function shareAsFile() {
+  try {
+    const backup = await prepareRecipeBackup(id.value);
+
+    const stringBackup = JSON.stringify(backup);
+    const blob = new Blob([stringBackup]);
+    await fileSave(blob, { fileName: "sharp_cooking.json", mimeTypes: ["application/json"] });
+  } catch {
     notify(
       {
         group: "error",

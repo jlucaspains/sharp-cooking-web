@@ -1,15 +1,20 @@
 import { Dexie, Table } from "dexie";
+import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
+import { BackupModel } from "../pages/recipe/backupModel"
 import { Recipe, RecipeImage } from "./recipe";
+import { Setting } from "./setting";
 
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
     public recipeImages!: Table<RecipeImage, number>;
+    public settings!: Table<Setting, string>;
 
     public constructor() {
         super("RecipeDatabase");
-        this.version(1).stores({
+        this.version(2).stores({
             recipes: "++id,title,score,changedOn",
-            recipeImages: "++id,recipeId"
+            recipeImages: "++id,recipeId",
+            settings: "name"
         });
     }
 }
@@ -106,6 +111,60 @@ export async function getNextRecipeId(): Promise<number> {
     const result = item?.id ? item.id + 1 : 1; 
 
     console.timeEnd("getNextRecipeId");
+
+    return result;
+}
+
+export async function saveSetting(name: string, value: string): Promise<void> {
+    console.time("saveSetting");
+    
+    await db.settings.put({ name: name, value: value });
+
+    console.timeEnd("saveSetting");
+}
+
+export async function getSetting(name: string, defaultValue: string): Promise<string> {
+    console.time("getSetting");
+    
+    const setting = await db.settings.get(name);
+    const result = setting ? setting.value : defaultValue;
+
+    console.timeEnd("getSetting");
+
+    return result;
+}
+
+export async function prepareBackup(): Promise<Array<BackupModel>> {
+    console.time("prepareBackup");
+
+    const allRecipes = await db.recipes.toArray();
+    const allImages = await db.recipeImages.toArray();
+
+    const result = [];
+    for (const recipe of allRecipes) {
+        const model = recipe as BackupModel;
+        model.images = allImages.filter(item => item.recipeId == model.id).map(item => item.image);
+        result.push(model);
+    }
+
+    console.timeEnd("prepareBackup");
+
+    return result;
+}
+
+
+export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel>> {
+    console.time("prepareRecipeBackup");
+
+    const recipe = await db.recipes.get(id);
+    const allImages = await db.recipeImages.where("recipeId").equals(id).toArray();
+
+    const result = [];
+    const model = recipe as BackupModel;
+    model.images = allImages.map(item => item.image);
+    result.push(model);
+
+    console.timeEnd("prepareRecipeBackup");
 
     return result;
 }

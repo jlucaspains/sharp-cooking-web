@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
 import { useState } from "../services/store";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const router = useRouter();
-const { t } = useI18n();
 const state = useState()!;
 
 const canGoBack = ref(false);

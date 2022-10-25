@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import TopBar from "./components/TopBar.vue";
-import { useI18n } from "vue-i18n";
 import Notification from "./components/Notification.vue";
 
 onMounted(async () => {
   document.body.classList.add("dark:bg-theme-gray");
 });
-
-const { t } = useI18n();
 </script>
 
 <template>
