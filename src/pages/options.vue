@@ -17,7 +17,7 @@ const isStepsIntervalModalOpen = ref(false);
 const { t } = useI18n();
 
 onMounted(async () => {
-  state.title = t("options.title");
+  state.title = t("pages.options.title");
   state.menuOptions = [];
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
@@ -30,7 +30,7 @@ onMounted(async () => {
 });
 
 function reviewReleaseNotes() {
-  window.open("https://sharpcooking.net/changelog")
+  window.open("https://sharpcooking.net/changelog", "Change Log", "noopener")
 }
 
 function changeStepsInterval() {
@@ -50,11 +50,11 @@ function restoreBackup() {
 }
 
 function reviewTermsOfUse() {
-  window.open("https://sharpcooking.net/termsofuse")
+  window.open("https://sharpcooking.net/termsofuse", "Terms of Use", "noopener")
 }
 
 function reviewPrivacyPolicy() {
-  window.open("https://sharpcooking.net/privacypolicy")
+  window.open("https://sharpcooking.net/privacypolicy", "Privacy Policy", "noopener")
 }
 
 function updateStepsInterval() {
@@ -80,14 +80,14 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("options.releaseNotes")}} {{version}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.releaseNotes")}} {{version}}</span>
       </div>
     </div>
 
     <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="changeStepsInterval">
-      <label class="dark:text-white">{{t("options.stepsInterval")}}</label>
+      <label class="dark:text-white">{{t("pages.options.stepsInterval")}}</label>
       <div class="dark:text-white float-right ">
-        <button class="mr-2 align-top">{{stepsInterval}} {{t("options.minutes")}}</button>
+        <button class="mr-2 align-top">{{stepsInterval}} {{t("pages.options.minutes")}}</button>
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -95,21 +95,21 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("options.stepsIntervalDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.stepsIntervalDescription")}}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">{{t("options.multiplierType")}}</span>
+      <span class="dark:text-white">{{t("pages.options.multiplierType")}}</span>
       <label class="switch float-right align-middle">
         <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
         <span class="slider round"></span>
       </label>
       <div>
-        <span class="text-gray-500 text-sm">{{t("options.multiplierTypeDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.multiplierTypeDescription")}}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="takeBackup">
-      <span class="dark:text-white">{{t("options.takeBackup")}}</span>
+      <span class="dark:text-white">{{t("pages.options.takeBackup")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -118,11 +118,11 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("options.takeBackupDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.takeBackupDescription")}}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="restoreBackup">
-      <span class="dark:text-white">{{t("options.restoreBackup")}}</span>
+      <span class="dark:text-white">{{t("pages.options.restoreBackup")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -131,12 +131,12 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("options.restoreBackupDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.restoreBackupDescription")}}</span>
       </div>
     </div>
 
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewTermsOfUse">
-      <span class="dark:text-white">{{t("options.termsOfUse")}}</span>
+      <span class="dark:text-white">{{t("pages.options.termsOfUse")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -149,7 +149,7 @@ function updateUseFractions() {
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewPrivacyPolicy">
-      <span class="dark:text-white">{{t("options.privacyPolicy")}}</span>
+      <span class="dark:text-white">{{t("pages.options.privacyPolicy")}}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
