@@ -9,10 +9,11 @@ import { RecipeImage } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
+import { useI18n } from "vue-i18n";
 
 const state = useState()!;
-
 const route = useRoute();
+const { t } = useI18n();
 
 const id = computed(() => parseInt(route.params.id as string));
 const images = ref([] as RecipeImage[]);
@@ -42,16 +43,10 @@ onMounted(async () => {
   >
     <swiper-slide v-for="image in images">
       <img
-        alt="Recipe Image"
+        :alt="t('pages.recipe.id.gallery.recipeImage')"
         :src="image.image"
         class="w-full rounded-lg h-80"
       />
     </swiper-slide>
   </swiper>
 </template>
-
-<style>
-/* .swiper, .swiper-wrapper, .swiper-slide, img {
-  z-index: 99
-} */
-</style>

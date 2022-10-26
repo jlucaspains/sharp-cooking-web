@@ -2,13 +2,6 @@
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/vue";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeImage } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
@@ -16,28 +9,27 @@ import debounce from "lodash.debounce";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const router = useRouter();
-const { t } = useI18n();
+const { t } = useI18n();  
 const state = useState()!;
 
 const items = ref([] as RecipeViewModel[]);
 const searchText = ref("");
-const isOpen = ref(false);
 let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 const addOptions = [
   {
     name: "AddManual",
-    text: "Add manually",
+    text: t("pages.index.addManually"),
     action: goToNew,
   },
   {
     name: "ImportFromWebsite",
-    text: "Import from website",
+    text: t("pages.index.importFromWebsite"),
     action: goToImport,
   },
   {
     name: "ImportFromBackup",
-    text: "Import from backup file",
+    text: t("pages.index.importFromBackup"),
     action: goToImportFromBackup,
   },
 ];
@@ -64,31 +56,31 @@ function sortByDate(items: Array<RecipeViewModel>) {
 }
 
 onMounted(async () => {
-  state.title = "All Recipes";
+  state.title = t("pages.index.title");
   state.menuOptions = [
     {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
       children: [
         {
-          text: "Sort by Title",
+          text: t("pages.index.sortByTitle"),
           action: () => {
             items.value = sortByTitle(items.value);
           },
         },
         {
-          text: "Sort by Rating",
+          text: t("pages.index.sortByRating"),
           action: () => {
             items.value = sortByRating(items.value);
           },
         },
         {
-          text: "Sort by Recipe Date",
+          text: t("pages.index.sortByRecipeDate"),
           action: () => {
             items.value = sortByDate(items.value);
           },
         },
         {
-          text: "Options",
+          text: t("pages.index.options"),
           action: goToOptions,
         },
       ],
@@ -137,7 +129,7 @@ function goToOptions() {
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
-      <input type="text" :placeholder="t('recipes.search')" v-model="searchText"
+      <input type="text" :placeholder="t('pages.index.search')" v-model="searchText"
         class="p-2 my-2 rounded text-black" />
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
@@ -174,23 +166,6 @@ function goToOptions() {
         </div>
       </div>
     </div>
-    <!-- <button
-      @click="goToNew()"
-      class="p-0 w-14 h-14 fixed bottom-6 right-6 bg-theme-primary rounded-full hover:bg-theme-secondary focus:ring-4 focus:ring-theme-primary focus:outline-none shadow-lg"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        enable-background="new 0 0 20 20"
-        class="w-6 h-6 inline-block"
-      >
-        <path
-          fill="#FFFFFF"
-          d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
-                                C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
-                                C15.952,9,16,9.447,16,10z"
-        />
-      </svg>
-    </button> -->
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
         <MenuButton class="

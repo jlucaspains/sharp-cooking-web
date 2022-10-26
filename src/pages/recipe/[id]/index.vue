@@ -16,6 +16,7 @@ import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
 import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
+import { useI18n } from "vue-i18n";
 
 const route = useRoute();
 const router = useRouter();
@@ -41,6 +42,7 @@ const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
+const { t } = useI18n();
 
 const noSleep = new NoSleep();
 
@@ -55,8 +57,8 @@ async function deleteItem() {
     notify(
       {
         group: "success",
-        title: "Success",
-        text: "Recipe deleted successfully.",
+        title: t("general.success"),
+        text: t("pages.recipe.id.index.recipeDeleted"),
       },
       2000
     );
@@ -65,8 +67,8 @@ async function deleteItem() {
     notify(
       {
         group: "error",
-        title: "Error",
-        text: "Failed to delete the recipe",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.recipeDeleteFailed"),
       },
       2000
     );
@@ -99,18 +101,18 @@ onMounted(async () => {
 function setupMenuOptions() {
   state.menuOptions = [
     {
-      text: "More",
+      text: t("pages.recipe.id.index.more"),
       children: [
         {
-          text: "Delete",
+          text: t("pages.recipe.id.index.delete"),
           action: confirmDeleteItem,
         },
         {
-          text: "Share Recipe Text",
+          text: t("pages.recipe.id.index.shareAsText"),
           action: shareAsText,
         },
         {
-          text: "Share Recipe File",
+          text: t("pages.recipe.id.index.shareAsFile"),
           action: shareAsFile,
         },
       ],
@@ -147,7 +149,7 @@ function getDisplayValues(
   recipe.steps.forEach((step, index) => {
     result.push({
       time: parseTime(currentTime),
-      title: `Step ${index + 1}`,
+      title: `${t('pages.recipe.id.index.step')} ${index + 1}`,
       subItems: [step],
     });
 
@@ -162,7 +164,7 @@ function getDisplayValues(
 
   result.push({
     time: parseTime(currentTime),
-    title: "Enjoy!",
+    title: t("pages.recipe.id.index.enjoy"),
     subItems: [],
   });
 
@@ -179,8 +181,8 @@ async function toggleScreenLight() {
     notify(
       {
         group: "success",
-        title: "Screen",
-        text: "Always on disabled",
+        title: t("pages.recipe.id.index.toggleScreenOnTitle"),
+        text: t("pages.recipe.id.index.toggleScreenOnDisabled"),
       },
       2000
     );
@@ -189,8 +191,8 @@ async function toggleScreenLight() {
     notify(
       {
         group: "success",
-        title: "Screen",
-        text: "Always on enabled",
+        title: t("pages.recipe.id.index.toggleScreenOnTitle"),
+        text: t("pages.recipe.id.index.toggleScreenOnEnabled"),
       },
       2000
     );
@@ -256,8 +258,8 @@ function shareAsText() {
     notify(
       {
         group: "error",
-        title: "Error",
-        text: "Your system does not support Sharing!",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingNotSupported"),
       },
       2000
     );
@@ -275,8 +277,8 @@ async function shareAsFile() {
     notify(
       {
         group: "error",
-        title: "Error",
-        text: "Your system does not support Sharing!",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingNotSupported"),
       },
       2000
     );
@@ -419,17 +421,17 @@ async function shareAsFile() {
         </template>
       </template>
     </div>
-    <h2 v-if="item.hasNotes" class="mt-4">Notes</h2>
+    <h2 v-if="item.hasNotes" class="mt-4">{{t("pages.recipe.id.index.notes")}}</h2>
     <div v-if="item.hasNotes" class="steps">
       {{item.notes}}
     </div>
-    <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false" title="Multiplier" :buttons="[
+    <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false" :title="t('pages.recipe.id.index.multiplierTitle')" :buttons="[
       {
-        title: 'Ok',
+        title: t('general.ok'),
         action: applyMultiplier,
       },
       {
-        title: 'Cancel',
+        title: t('general.cancel'),
         action: () => {
           isMultiplierModalOpen = false;
         },
@@ -439,13 +441,13 @@ async function shareAsFile() {
       <input @keyup.enter="applyMultiplier" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
-    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" title="Start Time" :buttons="[
+    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
       {
-        title: 'Ok',
+        title: t('general.ok'),
         action: setDisplayTime,
       },
       {
-        title: 'Cancel',
+        title: t('general.cancel'),
         action: () => {
           isTimeModalOpen = false;
         },
@@ -453,21 +455,20 @@ async function shareAsFile() {
     ]">
       <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
     </Modal>
-    <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false" title="Are you sure?" :buttons="[
+    <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false" :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[
       {
-        title: 'Yes',
+        title: t('general.yes'),
         danger: true,
         action: deleteItem,
       },
       {
-        title: 'No',
+        title: t('general.no'),
         action: () => {
           isDeleteModalOpen = false;
         },
       },
     ]">
-      <span class="dark:text-white">Deleting the recipe is a permanent action. Would you like to delete
-        anyway?</span>
+      <span class="dark:text-white">{{t("pages.recipe.id.index.deleteModalBody")}}</span>
     </Modal>
   </div>
 </template>

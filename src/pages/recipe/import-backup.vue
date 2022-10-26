@@ -6,19 +6,20 @@ import { saveRecipe, saveRecipeImage } from "../../services/dataService";
 import { RecipeImage } from "../../services/recipe";
 import { notify } from "notiwind";
 import { RecipeViewModel } from "./recipeViewModel";
+import { useI18n } from "vue-i18n";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
 const canSave = ref(false);
 let importItems = [] as Array<RecipeViewModel>;
+const { t } = useI18n();
 
 onMounted(() => {
-    state.title = "Import Backup";
+    state.title = t("pages.recipe.importBackup.title");
     state.menuOptions = [];
 });
 
 function saveRecipes() {
-    console.log("saveRecipes");
     importItems.forEach(async (recipe, index) => {
         if (!importItemsDisplay.value[index].isSelected) {
             return;
@@ -35,8 +36,8 @@ function saveRecipes() {
     notify(
         {
             group: "success",
-            title: "Done",
-            text: "Imported successfully"
+            title: t("general.done"),
+            text: t("pages.recipe.importBackup.importedSuccessfully")
         },
         2000);
 }
@@ -63,7 +64,7 @@ async function pickFile() {
         let result;
 
         if (filePicked.name.endsWith(".zip")) {
-            var data = new FormData();
+            const data = new FormData();
             data.append('file', filePicked);
 
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/backup/parse`, {
@@ -110,8 +111,8 @@ async function pickFile() {
         notify(
             {
                 group: success ? "success" : "error",
-                title: success ? "Done" : "Error",
-                text: success ? "Parsed backup successfully" : "Failed to parse the backup file",
+                title: success ? t("general.done") : t("general.error"),
+                text: success ? t("pages.recipe.importBackup.parsedSuccessfully") : t("pages.recipe.importBackup.parsedFailed"),
             },
             2000
         );
@@ -127,26 +128,24 @@ function selectAll() {
 
 <template>
     <div>
-        <span>1. Select a backup, the backup must have been created by Sharp Cooking iOS, Android, or Web App and must
-            be a .zip or a .json file</span>
+        <span>{{t("pages.recipe.importBackup.step1")}}</span>
         <div class="flex mt-3">
             <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
-                @click="pickFile">Select a file...</button>
+                @click="pickFile">{{t("pages.recipe.importBackup.selectFile")}}</button>
         </div>
         <div class="flex mt-3" v-if="canSave">
-            <span>2. select which recipes to import</span>
+            <span>{{t("pages.recipe.importBackup.step2")}}</span>
         </div>
         <div class="mt-3" v-if="canSave">
             <ul>
                 <li class="mt-1"><input type="checkbox" id="importAll" @change="selectAll()" /> <label
-                        for="importAll">Select
-                        all</label></li>
+                        for="importAll">{{t("pages.recipe.importBackup.selectFile")}}</label></li>
                 <li class="mt-1" v-for="(item, idx) in importItemsDisplay"><input type="checkbox" :id="`import-${idx}`"
                         v-model="item.isSelected" /> <label :for="`import-${idx}`">{{item.title}}</label></li>
             </ul>
         </div>
         <div class="flex mt-3" v-if="canSave">
-            <span>3. save</span>
+            <span>{{t("pages.recipe.importBackup.step3")}}</span>
         </div>
     </div>
 </template>

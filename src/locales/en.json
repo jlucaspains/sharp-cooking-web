@@ -11,12 +11,23 @@
         "yes": "Yes",
         "ok": "OK",
         "no": "No",
-        "cancel": "Cancel"
+        "success": "Success",
+        "done": "Done",
+        "error": "Error",
+        "cancel": "Cancel",
+        "save": "Save"
     },
     "pages": {
         "index": {
             "title": "All Recipes",
-            "search": "Search..."
+            "search": "Search...",
+            "addManually": "Add manually",
+            "importFromWebsite": "Import from website",
+            "importFromBackup": "Import from backup file",
+            "sortByTitle": "Sort by Title",
+            "sortByRating": "Sort by Rating",
+            "sortByRecipeDate": "Sort by Recipe Date",
+            "options": "Options"
         },
         "options": {
             "title": "Options",
@@ -38,12 +49,57 @@
         },
         "recipe": {
             "id": {
-                "edit": {},
-                "gallery": {},
-                "index": {},
+                "edit": {
+                    "newRecipe": "New Recipe",
+                    "savedSuccessfully": "Saved successfully!",
+                    "importedSuccessfully": "Imported successfully",
+                    "couldNotImport": "This recipe could not be imported",
+                    "recipeImage": "Recipe Image",
+                    "rating": "Rating",
+                    "ingredients": "Ingredients",
+                    "addIngredient": "Add Ingredient",
+                    "steps": "Steps",
+                    "notes": "Notes",
+                    "dirtyTitle": "Save?",
+                    "dirtyContent": "Would you like to save your changes first?",
+                    "importTitle": "Please provide recipe URL",
+                    "importContent": "Loading recipe. This may take up to a minute."
+                },
+                "gallery": {
+                    "recipeImage": "Recipe Image"
+                },
+                "index": {
+                    "more": "More",
+                    "delete": "Delete",
+                    "shareAsText": "Share Recipe Text",
+                    "shareAsFile": "Share Recipe File",
+                    "step": "Step",
+                    "enjoy": "Enjoy!",
+                    "toggleScreenOnTitle": "Screen",
+                    "toggleScreenOnDisabled": "Always on disabled",
+                    "toggleScreenOnEnabled": "Always on enabled",
+                    "sharingNotSupported": "Your system does not support Sharing!",
+                    "recipeDeleted": "Recipe deleted successfully.",
+                    "recipeDeleteFailed": "Failed to delete the recipe",
+                    "notes": "Notes",
+                    "multiplierTitle": "Multiplier",
+                    "startTimeTitle": "Start Time",
+                    "deleteModalTitle": "Are you sure?",
+                    "deleteModalBody": "Deleting the recipe is a permanent action. Would you like to delete anyway?"
+                },
                 "print": {}
             },
-            "import-backup": {}
+            "importBackup": {
+                "title": "Import Backup",
+                "parsedSuccessfully": "Parsed backup successfully",
+                "parsedFailed": "Failed to parse the backup file",
+                "selectFile": "Select a file...",
+                "selectAll": "Select all",
+                "step1": "1. Select a backup, the backup must have been created by Sharp Cooking iOS, Android, or Web App and must be a .zip or a .json file",
+                "step2": "2. select which recipes to import",
+                "step3": "3. save",
+                "importedSuccessfully": "Imported successfully"
+            }
         }
     }
 }

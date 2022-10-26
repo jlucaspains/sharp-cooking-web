@@ -15,10 +15,12 @@ import { notify } from "notiwind";
 import RatingPicker from "../../../components/RatingPicker.vue";
 import { fileOpen, supported } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
+import { useI18n } from "vue-i18n";
 
 const state = useState()!;
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 
 const id = computed(() => parseInt(route.params.id as string));
 const query = computed(() => route.query);
@@ -41,7 +43,6 @@ const stepRefs = ref<HTMLInputElement[]>([]);
 const ingredientRefs = ref<HTMLInputElement[]>([]);
 let isDirty = false;
 
-
 watch(
   item,
   (newValue: RecipeViewModel) => {
@@ -53,7 +54,7 @@ watch(
 onMounted(async () => {
   state.menuOptions = [
     {
-      text: "Save",
+      text: t("general.save"),
       action: save,
       svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`,
     },
@@ -74,7 +75,7 @@ onMounted(async () => {
   }
 
   if (recipe) {
-    state.title = recipe.title || "New Recipe";
+    state.title = recipe.title || t("pages.recipe.id.edit.newRecipe");
 
     const allImages = await getRecipeImages(id.value);
 
@@ -137,8 +138,8 @@ async function save() {
   notify(
     {
       group: "success",
-      title: "Success",
-      text: "Saved successfully!",
+      title: t("general.success"),
+      text: t("pages.recipe.id.edit.savedSuccessfully"),
     },
     2000
   );
@@ -225,8 +226,8 @@ async function importRecipe() {
     notify(
       {
         group: success ? "success" : "error",
-        title: success ? "Done" : "Error",
-        text: success ? "Imported successfully" : "This recipe could not be imported",
+        title: success ? t("general.done") : t("general.error"),
+        text: success ? t("pages.recipe.id.edit.importedSuccessfully") : t("pages.recipe.id.edit.couldNotImport"),
       },
       2000
     );
@@ -238,7 +239,7 @@ async function importRecipe() {
   <div>
     <div @click="pickImage">
       <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-if="item.imageAvailable">
-        <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
+        <img :alt="t('pages.recipe.id.edit.recipeImage')" :src="item.image" class="rounded-lg object-contain" />
       </div>
       <div class="
           bg-theme-primary
@@ -259,10 +260,10 @@ async function importRecipe() {
     </div>
     <label for="title">Title</label>
     <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
-    <label>Rating</label>
+    <label>{{t("pages.recipe.id.edit.rating")}}</label>
     <RatingPicker class="mb-2" v-model="item.score" />
-    <label>Ingredients</label>
-    <button class="ml-2 align-middle" type="button" title="Add Ingredient"
+    <label>{{t("pages.recipe.id.edit.ingredients")}}</label>
+    <button class="ml-2 align-middle" type="button" :title="t('pages.recipe.id.edit.addIngredient')"
       @click="addIngredientAt(item.ingredients.length - 1)">
       <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -286,7 +287,7 @@ async function importRecipe() {
         </svg>
       </button>
     </div>
-    <label>Steps</label>
+    <label>{{t("pages.recipe.id.edit.steps")}}</label>
     <button class="ml-2" type="button" title="Add Step" @click="addStepAt(item.steps.length - 1)">
       <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -308,7 +309,7 @@ async function importRecipe() {
         </svg>
       </button>
     </div>
-    <label for="notes">Notes</label>
+    <label for="notes">{{t("pages.recipe.id.edit.notes")}}</label>
     <textarea id="notes" v-model="item.notes" class="
         block
         p-2
@@ -319,29 +320,29 @@ async function importRecipe() {
         rounded
         text-base text-black
       " />
-    <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" title="Save?" :buttons="[
+    <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')" :buttons="[
       {
-        title: 'Yes',
+        title: t('general.yes'),
         action: () => isDirtyModalClose(true),
       },
       {
-        title: 'No',
+        title: t('general.no'),
         action: () => isDirtyModalClose(false),
       },
     ]">
-      <span class="dark:text-white">Would you like to save your changes first?</span>
+      <span class="dark:text-white">{{t('pages.recipe.id.edit.dirtyContent')}}</span>
     </Modal>
-    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" title="Please provide recipe URL" :buttons="[
+    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
       {
-        title: 'OK',
+        title: t('general.ok'),
         action: importRecipe,
       },
       {
-        title: 'Cancel',
+        title: t('general.cancel'),
         action: () => isImportModalOpen = false,
       },
     ]">
-      <span class="dark:text-white" v-if="isImporting">Loading recipe. This may take up to a minute.</span>
+      <span class="dark:text-white" v-if="isImporting">{{t('pages.recipe.id.edit.importContent')}}</span>
       <input :disabled="isImporting" v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
   </div>

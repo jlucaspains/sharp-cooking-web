@@ -1,5 +1,4 @@
 import { Dexie, Table } from "dexie";
-import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import { BackupModel } from "../pages/recipe/backupModel"
 import { Recipe, RecipeImage } from "./recipe";
 import { Setting } from "./setting";

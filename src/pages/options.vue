@@ -145,7 +145,7 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("termsOfUseDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.termsOfUseDescription")}}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewPrivacyPolicy">
@@ -158,11 +158,11 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("privacyPolicyDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{t("pages.options.privacyPolicyDescription")}}</span>
       </div>
     </div>
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
-      :title="t('options.stepsIntervalQuestion')" :buttons="[
+      :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
         {
           title: t('general.ok'),
           action: updateStepsInterval,
