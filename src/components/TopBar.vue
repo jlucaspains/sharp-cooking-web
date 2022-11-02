@@ -15,7 +15,7 @@ router.afterEach((to) => {
 </script>
 
 <template>
-  <div class="no-print">
+  <div class="no-print" v-show="!state.hideTopBar">
     <nav
       class="
         header
@@ -207,5 +207,6 @@ router.afterEach((to) => {
 .header {
   padding-top: max(0.625rem, env(safe-area-inset-top));
   padding-bottom: 0.3rem;
+  z-index: 1;
 }
 </style>

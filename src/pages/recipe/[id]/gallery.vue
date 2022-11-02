@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, onBeforeRouteLeave } from "vue-router";
 import {
   getRecipe,
   getRecipeImages,
@@ -8,7 +8,6 @@ import {
 import { RecipeImage } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/css';
 import { useI18n } from "vue-i18n";
 
 const state = useState()!;
@@ -20,6 +19,8 @@ const images = ref([] as RecipeImage[]);
 
 onMounted(async () => {
   state.menuOptions = [];
+  state.fullScreen = true;
+  state.hideTopBar = false;
 
   const recipe = await getRecipe(id.value as number);
 
@@ -33,20 +34,30 @@ onMounted(async () => {
     }
   }
 });
+
+onBeforeRouteLeave((to, from) => {
+  state.fullScreen = false;
+});
+
+function toggleHideTopBar() {
+  state.hideTopBar = !state.hideTopBar;
+}
 </script>
 
 <template>
-  <swiper
-    :slides-per-view="1"
-    :space-between="50"
-    class="w-full h-80 dark:text-white"
-  >
-    <swiper-slide v-for="image in images">
-      <img
-        :alt="t('pages.recipe.id.gallery.recipeImage')"
-        :src="image.image"
-        class="w-full rounded-lg h-80"
-      />
+  <swiper :slides-per-view="1" class="w-screen h-screen">
+    <swiper-slide @click="toggleHideTopBar()" :zoom="true" v-for="image in images">
+      <img :alt="t('pages.recipe.id.gallery.recipeImage')" :src="image.image"
+        class="object-contain w-screen h-screen" />
     </swiper-slide>
   </swiper>
 </template>
+
+<style>
+@import 'swiper/scss';
+
+.swiper,
+.swiper div {
+  z-index: auto !important;
+}
+</style>

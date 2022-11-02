@@ -58,7 +58,7 @@ async function pickFile() {
         mimeTypes: ["application/zip", "application/json"],
     });
 
-    let success = false;
+    let success = true;
 
     try {
         let result;
@@ -84,13 +84,12 @@ async function pickFile() {
         }
 
         for (const recipe of result) {
-
             const parsedRecipe = new RecipeViewModel();
             parsedRecipe.title = recipe.title;
             parsedRecipe.score = 5;
             parsedRecipe.notes = recipe.notes;
-            parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw);
-            parsedRecipe.steps = recipe.instructions.map((x: any) => x.raw);
+            parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw || x);
+            parsedRecipe.steps = recipe.steps.map((x: any) => x.raw || x);
             parsedRecipe.image = recipe.image;
 
             importItems.push(parsedRecipe);

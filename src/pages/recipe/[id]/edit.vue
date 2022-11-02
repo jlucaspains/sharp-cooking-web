@@ -212,7 +212,7 @@ async function importRecipe() {
     item.value.title = html.title;
     item.value.score = 5;
     item.value.ingredients = html.ingredients.map((x: any) => x.raw);
-    item.value.steps = html.instructions.map((x: any) => x.raw);
+    item.value.steps = html.steps.map((x: any) => x.raw);
     item.value.image = html.image;
     item.value.imageAvailable = !!item.value.image
   }

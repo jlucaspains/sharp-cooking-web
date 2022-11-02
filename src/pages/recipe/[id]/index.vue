@@ -291,7 +291,7 @@ async function shareAsFile() {
     <h1 class="print-only text-lg font-semibold whitespace-nowrap">
       {{ item.title }}
     </h1>
-    <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" @click="openImage"
+    <div class="rounded-lg grid place-items-center w-full overflow-hidden" @click="openImage"
       v-if="item.imageAvailable">
       <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
     </div>

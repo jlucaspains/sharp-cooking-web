@@ -10,6 +10,8 @@ interface MenuOption {
 interface State {
     title: string;
     menuOptions?: MenuOption[];
+    hideTopBar?: boolean;
+    fullScreen?: boolean;
   }
 
 export const stateSymbol = Symbol('state') as InjectionKey<State>;
