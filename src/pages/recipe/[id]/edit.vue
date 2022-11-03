@@ -146,13 +146,6 @@ async function save() {
 }
 
 async function pickImage() {
-  if (supported) {
-    console.log("Using the File System Access API.");
-  } else {
-    console.log("Using the fallback implementation.");
-  }
-
-  // Open a file.
   const imagePicked = await fileOpen({
     mimeTypes: ["image/*"],
   });

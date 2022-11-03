@@ -85,7 +85,9 @@
                     "multiplierTitle": "Multiplier",
                     "startTimeTitle": "Start Time",
                     "deleteModalTitle": "Are you sure?",
-                    "deleteModalBody": "Deleting the recipe is a permanent action. Would you like to delete anyway?"
+                    "deleteModalBody": "Deleting the recipe is a permanent action. Would you like to delete anyway?",
+                    "sharingFailed": "File sharing failed.",
+                    "sharingSucceeded": "File shared successfully."
                 },
                 "print": {}
             },

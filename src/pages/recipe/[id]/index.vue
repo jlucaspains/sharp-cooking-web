@@ -252,7 +252,6 @@ function shareAsText() {
         text: "Recipe body", // TODO: implement
         url: "https://app.sharpcooking.net/",
       })
-      .then(() => console.log("Successful share"))
       .catch((error) => console.log("Error sharing", error));
   } else {
     notify(
@@ -273,12 +272,25 @@ async function shareAsFile() {
     const stringBackup = JSON.stringify(backup);
     const blob = new Blob([stringBackup]);
     await fileSave(blob, { fileName: "sharp_cooking.json", mimeTypes: ["application/json"] });
-  } catch {
+
+    notify(
+      {
+        group: "success",
+        title: t("general.success"),
+        text: t("pages.recipe.id.index.sharingSucceeded"),
+      },
+      2000
+    )
+  } catch (e) {
+    if (e instanceof DOMException && e.ABORT_ERR == DOMException.ABORT_ERR) {
+      return;
+    }
+
     notify(
       {
         group: "error",
         title: t("general.error"),
-        text: t("pages.recipe.id.index.sharingNotSupported"),
+        text: t("pages.recipe.id.index.sharingFailed"),
       },
       2000
     );
@@ -421,54 +433,57 @@ async function shareAsFile() {
         </template>
       </template>
     </div>
-    <h2 v-if="item.hasNotes" class="mt-4">{{t("pages.recipe.id.index.notes")}}</h2>
+    <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>
     <div v-if="item.hasNotes" class="steps">
-      {{item.notes}}
+      {{ item.notes }}
     </div>
-    <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false" :title="t('pages.recipe.id.index.multiplierTitle')" :buttons="[
-      {
-        title: t('general.ok'),
-        action: applyMultiplier,
-      },
-      {
-        title: t('general.cancel'),
-        action: () => {
-          isMultiplierModalOpen = false;
+    <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false"
+      :title="t('pages.recipe.id.index.multiplierTitle')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: applyMultiplier,
         },
-      },
-    ]">
+        {
+          title: t('general.cancel'),
+          action: () => {
+            isMultiplierModalOpen = false;
+          },
+        },
+      ]">
       <span class="dark:text-white">Enter decimal value of quantity. E.g. 0.5 or 2</span>
       <input @keyup.enter="applyMultiplier" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
-    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
-      {
-        title: t('general.ok'),
-        action: setDisplayTime,
-      },
-      {
-        title: t('general.cancel'),
-        action: () => {
-          isTimeModalOpen = false;
+    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
+      :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: setDisplayTime,
         },
-      },
-    ]">
+        {
+          title: t('general.cancel'),
+          action: () => {
+            isTimeModalOpen = false;
+          },
+        },
+      ]">
       <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
     </Modal>
-    <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false" :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[
-      {
-        title: t('general.yes'),
-        danger: true,
-        action: deleteItem,
-      },
-      {
-        title: t('general.no'),
-        action: () => {
-          isDeleteModalOpen = false;
+    <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
+      :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[
+        {
+          title: t('general.yes'),
+          danger: true,
+          action: deleteItem,
         },
-      },
-    ]">
-      <span class="dark:text-white">{{t("pages.recipe.id.index.deleteModalBody")}}</span>
+        {
+          title: t('general.no'),
+          action: () => {
+            isDeleteModalOpen = false;
+          },
+        },
+      ]">
+      <span class="dark:text-white">{{ t("pages.recipe.id.index.deleteModalBody") }}</span>
     </Modal>
   </div>
 </template>
