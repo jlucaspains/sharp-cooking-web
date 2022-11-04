@@ -16,6 +16,7 @@ import RatingPicker from "../../../components/RatingPicker.vue";
 import { fileOpen, supported } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
 import { useI18n } from "vue-i18n";
+import BusyIndicator from "../../../components/BusyIndicator.vue";
 
 const state = useState()!;
 const route = useRoute();
@@ -102,15 +103,13 @@ router.beforeEach(async (to, from) => {
   return true;
 });
 
-async function isDirtyModalClose(shouldSave: boolean) {
-  if (shouldSave) {
-    await save();
-  }
-
+async function isDirtyModalClose(shouldLeave: boolean) {
   isDirtyModalOpen.value = false;
-  isDirty = false;
 
-  router.back();
+  if (shouldLeave) {
+    isDirty = false;
+    router.back();
+  }
 }
 
 async function save() {
@@ -187,6 +186,7 @@ function addStepAt(index: number) {
 async function importRecipe() {
   let success = true;
   try {
+    isImportModalOpen.value = false;
     isImporting.value = true;
     const result = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/parse`, {
       method: "POST",
@@ -210,10 +210,10 @@ async function importRecipe() {
     item.value.imageAvailable = !!item.value.image
   }
   catch {
+    isImportModalOpen.value = true;
     success = false;
   }
   finally {
-    isImportModalOpen.value = false;
     isImporting.value = false;
 
     notify(
@@ -313,30 +313,34 @@ async function importRecipe() {
         rounded
         text-base text-black
       " />
-    <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')" :buttons="[
-      {
-        title: t('general.yes'),
-        action: () => isDirtyModalClose(true),
-      },
-      {
-        title: t('general.no'),
-        action: () => isDirtyModalClose(false),
-      },
-    ]">
+    <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
+      :buttons="[
+        {
+          title: t('pages.recipe.id.edit.dirtyStay'),
+          action: () => isDirtyModalClose(false),
+        },
+        {
+          title: t('pages.recipe.id.edit.dirtyLeave'),
+          danger: true,
+          action: () => isDirtyModalClose(true),
+        },
+      ]">
       <span class="dark:text-white">{{t('pages.recipe.id.edit.dirtyContent')}}</span>
     </Modal>
-    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
-      {
-        title: t('general.ok'),
-        action: importRecipe,
-      },
-      {
-        title: t('general.cancel'),
-        action: () => isImportModalOpen = false,
-      },
-    ]">
-      <span class="dark:text-white" v-if="isImporting">{{t('pages.recipe.id.edit.importContent')}}</span>
-      <input :disabled="isImporting" v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
+    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false"
+      :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
+        {
+          title: t('general.cancel'),
+          action: () => isImportModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipe,
+        },
+      ]">
+      <input v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
+    <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
+            :message2="t('pages.recipe.id.edit.importContent2')" />
   </div>
 </template>

@@ -164,12 +164,12 @@ function updateUseFractions() {
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
       :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
         {
-          title: t('general.ok'),
-          action: updateStepsInterval,
-        },
-        {
           title: t('general.cancel'),
           action: () => isStepsIntervalModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: updateStepsInterval,
         },
       ]">
       <input v-model.number="stepsIntervalEditing" class="block my-2 p-2 w-full rounded text-black" />

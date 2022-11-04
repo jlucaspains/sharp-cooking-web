@@ -440,14 +440,14 @@ async function shareAsFile() {
     <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false"
       :title="t('pages.recipe.id.index.multiplierTitle')" :buttons="[
         {
-          title: t('general.ok'),
-          action: applyMultiplier,
-        },
-        {
           title: t('general.cancel'),
           action: () => {
             isMultiplierModalOpen = false;
           },
+        },
+        {
+          title: t('general.ok'),
+          action: applyMultiplier,
         },
       ]">
       <span class="dark:text-white">Enter decimal value of quantity. E.g. 0.5 or 2</span>
@@ -457,14 +457,14 @@ async function shareAsFile() {
     <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
       :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
         {
-          title: t('general.ok'),
-          action: setDisplayTime,
-        },
-        {
           title: t('general.cancel'),
           action: () => {
             isTimeModalOpen = false;
           },
+        },
+        {
+          title: t('general.ok'),
+          action: setDisplayTime,
         },
       ]">
       <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
@@ -472,15 +472,15 @@ async function shareAsFile() {
     <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
       :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[
         {
-          title: t('general.yes'),
-          danger: true,
-          action: deleteItem,
-        },
-        {
           title: t('general.no'),
           action: () => {
             isDeleteModalOpen = false;
           },
+        },
+        {
+          title: t('pages.recipe.id.index.deleteYes'),
+          danger: true,
+          action: deleteItem,
         },
       ]">
       <span class="dark:text-white">{{ t("pages.recipe.id.index.deleteModalBody") }}</span>

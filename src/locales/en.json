@@ -60,10 +60,13 @@
                     "addIngredient": "Add Ingredient",
                     "steps": "Steps",
                     "notes": "Notes",
-                    "dirtyTitle": "Save?",
-                    "dirtyContent": "Would you like to save your changes first?",
+                    "dirtyTitle": "Leave without saving?",
+                    "dirtyContent": "Changes you made so far will not be saved.",
+                    "dirtyLeave": "Leave anyway",
+                    "dirtyStay": "Keep editing",
                     "importTitle": "Please provide recipe URL",
-                    "importContent": "Loading recipe. This may take up to a minute."
+                    "importContent1": "Loading recipe...",
+                    "importContent2": "Still loading. This may take up to a minute."
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -84,8 +87,9 @@
                     "notes": "Notes",
                     "multiplierTitle": "Multiplier",
                     "startTimeTitle": "Start Time",
-                    "deleteModalTitle": "Are you sure?",
-                    "deleteModalBody": "Deleting the recipe is a permanent action. Would you like to delete anyway?",
+                    "deleteModalTitle": "Delete this recipe?",
+                    "deleteYes": "Yes, delete",
+                    "deleteModalBody": "This action cannot be undone.",
                     "sharingFailed": "File sharing failed.",
                     "sharingSucceeded": "File shared successfully."
                 },
@@ -100,7 +104,9 @@
                 "step1": "1. Select a backup, the backup must have been created by Sharp Cooking iOS, Android, or Web App and must be a .zip or a .json file",
                 "step2": "2. select which recipes to import",
                 "step3": "3. save",
-                "importedSuccessfully": "Imported successfully"
+                "importedSuccessfully": "Imported successfully",
+                "processing1": "Processing the backup file...",
+                "processing2": "Still processing. This may take up to 1 minute..."
             }
         }
     }
