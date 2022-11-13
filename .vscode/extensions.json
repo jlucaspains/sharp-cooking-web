@@ -1,3 +1,7 @@
 {
-  "recommendations": ["Vue.volar"]
+  "recommendations": [
+    "Vue.volar",
+    "ms-playwright.playwright",
+    "bradlc.vscode-tailwindcss"
+  ]
 }

@@ -231,7 +231,7 @@ async function importRecipe() {
 <template>
   <div>
     <div @click="pickImage">
-      <div class="rounded-lg grid place-items-center w-full h-80 overflow-hidden" v-if="item.imageAvailable">
+      <div class="rounded-lg grid place-items-center w-full h-60 overflow-hidden" v-if="item.imageAvailable">
         <img :alt="t('pages.recipe.id.edit.recipeImage')" :src="item.image" class="rounded-lg object-contain" />
       </div>
       <div class="

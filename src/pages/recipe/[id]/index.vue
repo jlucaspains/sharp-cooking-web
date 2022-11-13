@@ -129,9 +129,11 @@ function getDisplayValues(
   const parseTime = (date: Date) =>
     date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
+  const ingredientTitle = `${t("pages.recipe.id.index.ingredients")} (${recipe.multiplier || 1}x)`;
+
   result.push({
     time: parseTime(currentTime),
-    title: "Ingredients",
+    title: ingredientTitle,
     subItems: recipe.ingredients.map((ingredient) =>
       applyMultiplierToString(
         ingredient,
@@ -303,7 +305,7 @@ async function shareAsFile() {
     <h1 class="print-only text-lg font-semibold whitespace-nowrap">
       {{ item.title }}
     </h1>
-    <div class="rounded-lg grid place-items-center w-full overflow-hidden" @click="openImage"
+    <div class="rounded-lg grid place-items-center w-full h-60 md:h-full overflow-hidden" @click="openImage"
       v-if="item.imageAvailable">
       <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
     </div>

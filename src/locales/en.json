@@ -91,7 +91,8 @@
                     "deleteYes": "Yes, delete",
                     "deleteModalBody": "This action cannot be undone.",
                     "sharingFailed": "File sharing failed.",
-                    "sharingSucceeded": "File shared successfully."
+                    "sharingSucceeded": "File shared successfully.",
+                    "ingredients": "Ingredients"
                 },
                 "print": {}
             },

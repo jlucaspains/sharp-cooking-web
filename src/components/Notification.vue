@@ -1,6 +1,6 @@
 <template>
     <NotificationGroup group="success">
-        <div class="fixed inset-0 flex items-start justify-center p-6 px-4 py-12 pointer-events-none">
+        <div class="fixed inset-0 flex items-start justify-center p-6 px-4 py-20 pointer-events-none">
             <div class="w-full max-w-sm">
                 <Notification v-slot="{ notifications }" enter="transform ease-out duration-300 transition"
                     enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
@@ -28,7 +28,7 @@
         </div>
     </NotificationGroup>
     <NotificationGroup group="error">
-        <div class="fixed inset-0 flex items-start justify-center p-6 px-4 py-12 pointer-events-none">
+        <div class="fixed inset-0 flex items-start justify-center p-6 px-4 py-20 pointer-events-none">
             <div class="w-full max-w-sm">
                 <Notification v-slot="{ notifications }" enter="transform ease-out duration-300 transition"
                     enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"

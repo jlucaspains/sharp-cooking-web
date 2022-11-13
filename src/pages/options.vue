@@ -69,7 +69,7 @@ function updateUseFractions() {
 </script>
 
 <template>
-  <div class="w-full lg:px-96 mx-auto">
+  <div class="w-full lg:px-40 mx-auto">
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewReleaseNotes">
       <span class="dark:text-white">{{t("appName")}}</span>
       <div class="dark:text-white float-right">
