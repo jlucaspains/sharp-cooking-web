@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
-import { fileOpen, supported } from "browser-fs-access";
+import { fileOpen } from "browser-fs-access";
 import { saveRecipe, saveRecipeImage } from "../../services/dataService";
 import { RecipeImage } from "../../services/recipe";
 import { notify } from "notiwind";
@@ -102,8 +102,6 @@ async function pickFile() {
         }];
     }
     catch (error) {
-        success = false;
-
         notify(
             {
                 group: "error",

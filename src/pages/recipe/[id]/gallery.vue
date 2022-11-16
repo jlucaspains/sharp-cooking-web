@@ -22,7 +22,7 @@ onMounted(async () => {
   state.fullScreen = true;
   state.hideTopBar = false;
 
-  const recipe = await getRecipe(id.value as number);
+  const recipe = await getRecipe(id.value);
 
   if (recipe) {
     state.title = recipe.title;

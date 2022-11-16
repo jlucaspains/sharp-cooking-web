@@ -13,7 +13,7 @@ import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
 import RatingPicker from "../../../components/RatingPicker.vue";
-import { fileOpen, supported } from "browser-fs-access";
+import { fileOpen } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
 import { useI18n } from "vue-i18n";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
