@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-async function createRecipe(page) {
+async function createRecipe(page, id) {
   await page.goto('https://app.sharpcooking.net/#/');
   await page.locator('#headlessui-menu-button-1').click();
   await page.getByRole('menuitem', { name: 'Add manually' }).click();
   await expect(page).toHaveURL('https://app.sharpcooking.net/#/recipe/0/edit');
   await page.getByLabel('Title').click();
-  await page.getByLabel('Title').fill('Bread');
+  await page.getByLabel('Title').fill(`Bread ${id}`);
   await page.getByRole('button', { name: '⭐' }).nth(3).click();
   await page.getByPlaceholder('1 cup flour').click();
   await page.getByPlaceholder('1 cup flour').fill('1000g flour');
@@ -37,15 +37,24 @@ async function createRecipe(page) {
   await page.locator('div:nth-child(21) > .block').press('Enter');
   await page.locator('div:nth-child(22) > .block').fill('Bake for 15 minutes without the lid');
   await page.locator('nav:has-text("New Recipe")').getByRole('button').nth(1).click();
-  await expect(page).toHaveURL('https://app.sharpcooking.net/#/recipe/1/edit');
+  await expect(page).toHaveURL(`https://app.sharpcooking.net/#/recipe/${id}/edit`);
 }
 
 test('add new recipe', async ({ page }) => {
-  await createRecipe(page);
+  await createRecipe(page, 1);
+  await page.goto('https://app.sharpcooking.net/#/');
+  await page.getByText('Bread 1').first().click();
 });
 
-test('edit 2', async ({ page }) => {
-  await createRecipe(page);
+test('create many recipes', async ({ page }) => {
+  await createRecipe(page, 1);
   await page.goto('https://app.sharpcooking.net/#/');
-  
+  expect(await page.getByText('Bread 1').first()).toBeDefined();
+  await page.getByText('Bread 1').first();
+  await createRecipe(page, 2);
+  await page.goto('https://app.sharpcooking.net/#/');
+  await page.getByText('Bread 2').first();
+  await createRecipe(page, 3);
+  await page.goto('https://app.sharpcooking.net/#/');
+  await page.getByText('Bread 3').first();
 });

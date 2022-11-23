@@ -6,6 +6,7 @@ import {
   getRecipeImages,
   deleteRecipe,
   prepareRecipeBackup,
+  saveRecipe,
 } from "../../../services/dataService";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
@@ -90,6 +91,7 @@ onMounted(async () => {
 
     if (allImages.length > 0) {
       recipe.image = allImages[0].image;
+      console.log(recipe.image);
       recipe.imageAvailable = recipe.image ? true : false;
     }
     recipe.hasNotes = !!recipe.notes;
@@ -205,13 +207,16 @@ function changeMultiplier() {
   isMultiplierModalOpen.value = true;
 }
 
-function applyMultiplier() {
+async function applyMultiplier() {
   item.value.multiplier = newMultiplier.value;
 
   const currentTime = new Date();
   display.value = getDisplayValues(item.value, currentTime);
 
   isMultiplierModalOpen.value = false;
+  
+  const recipe = JSON.parse(JSON.stringify(item.value));
+  await saveRecipe(recipe);
 }
 
 function printItem() {

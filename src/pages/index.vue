@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeImage } from "../services/dataService";
+import { getRecipes, getRecipeImage, initialize } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
@@ -56,6 +56,7 @@ function sortByDate(items: Array<RecipeViewModel>) {
 }
 
 onMounted(async () => {
+  await initialize();
   state.title = t("pages.index.title");
   state.menuOptions = [
     {
@@ -144,7 +145,7 @@ function goToOptions() {
           overflow-hidden
         ">
         <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
-          <img alt="Recipe image" v-if="item.imageAvailable" :src="item.image" class="object-contain" />
+          <img alt="Recipe image" @error="item.imageAvailable = false" v-if="item.imageAvailable" :src="item.image" class="object-contain" />
           <div v-else class="bg-theme-primary h-full grid place-items-center">
             <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
