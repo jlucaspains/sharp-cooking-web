@@ -1,5 +1,7 @@
 {
   "recommendations": [
+    "ms-azuretools.vscode-azurefunctions",
+    "ms-python.python",
     "Vue.volar",
     "ms-playwright.playwright",
     "bradlc.vscode-tailwindcss"
