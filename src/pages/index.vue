@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeImage, initialize } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
@@ -9,7 +9,7 @@ import debounce from "lodash.debounce";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const router = useRouter();
-const { t } = useI18n();  
+const { t } = useTranslation();
 const state = useState()!;
 
 const items = ref([] as RecipeViewModel[]);

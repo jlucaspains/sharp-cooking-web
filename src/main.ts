@@ -6,11 +6,14 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import App from './App.vue';
 import { registerSW } from 'virtual:pwa-register';
 import './index.css';
-import { createI18n } from 'vue-i18n';
-import English from './locales/en.json';
 import routes from '~pages';
 import { createState, stateSymbol } from './services/store';
 import Notifications from 'notiwind';
+
+import i18next from 'i18next'
+import I18NextVue from 'i18next-vue'
+import LanguageDetector from 'i18next-browser-languagedetector'
+import Backend from 'i18next-http-backend';
 
 registerSW({ immediate: true, onOfflineReady() { } });
 
@@ -19,17 +22,18 @@ const router = createRouter({
     routes,
 });
 
-const i18n = createI18n({
-    legacy: false,
-    locale: 'en',
-    fallbackLocale: 'en',
-    messages: { en: English },
-});
+i18next
+  .use(LanguageDetector)
+  .use(Backend)
+  .init({
+    debug: true,
+    fallbackLng: 'en'
+  });
 
 const app = createApp(App);
 
 app.use(router);
-app.use(i18n);
+app.use(I18NextVue, { i18next });
 app.use(Notifications);
 app.provide(stateSymbol, createState());
 app.mount('#app')

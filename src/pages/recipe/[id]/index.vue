@@ -18,7 +18,7 @@ import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
 import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -44,7 +44,7 @@ const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
-const { t } = useI18n();
+const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
@@ -95,7 +95,6 @@ onMounted(async () => {
 
     if (allImages.length > 0) {
       recipe.image = allImages[0].image;
-      console.log(recipe.image);
       recipe.imageAvailable = recipe.image ? true : false;
     }
     recipe.hasNotes = !!recipe.notes;

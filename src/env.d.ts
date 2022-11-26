@@ -10,3 +10,5 @@ declare module '*.vue' {
 declare module 'virtual:pwa-register';
 
 declare module 'notiwind';
+
+declare module 'i18next-http-backend';

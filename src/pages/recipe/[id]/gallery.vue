@@ -8,11 +8,11 @@ import {
 import { RecipeImage } from "../../../services/recipe";
 import { useState } from "../../../services/store";
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 
 const state = useState()!;
 const route = useRoute();
-const { t } = useI18n();
+const { t } = useTranslation();
 
 const id = computed(() => parseInt(route.params.id as string));
 const images = ref([] as RecipeImage[]);

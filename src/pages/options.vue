@@ -5,7 +5,7 @@ import { useState } from "../services/store";
 import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
 import Modal from "../components/Modal.vue";
 import { fileSave } from "browser-fs-access";
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 
 const state = useState()!;
 const router = useRouter()!;
@@ -14,7 +14,7 @@ const useFractions = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
-const { t } = useI18n();
+const { t } = useTranslation();
 
 onMounted(async () => {
   state.title = t("pages.options.title");

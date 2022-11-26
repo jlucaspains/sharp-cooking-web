@@ -6,14 +6,14 @@ import { saveRecipe, saveRecipeImage } from "../../services/dataService";
 import { RecipeImage } from "../../services/recipe";
 import { notify } from "notiwind";
 import { RecipeViewModel } from "./recipeViewModel";
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
 const canSave = ref(false);
 let importItems = [] as Array<RecipeViewModel>;
-const { t } = useI18n();
+const { t } = useTranslation();
 
 const isBusy = ref(false);
 

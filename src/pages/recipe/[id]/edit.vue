@@ -15,13 +15,13 @@ import { notify } from "notiwind";
 import RatingPicker from "../../../components/RatingPicker.vue";
 import { fileOpen } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
-import { useI18n } from "vue-i18n";
+import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
 
 const state = useState()!;
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { t } = useTranslation();
 
 const id = computed(() => parseInt(route.params.id as string));
 const query = computed(() => route.query);
