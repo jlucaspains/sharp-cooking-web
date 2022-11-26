@@ -41,7 +41,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                         "totalTime": 0,
                         "yields": "",
                         "ingredients": parse_recipe_ingredients(recipe["Ingredients"], ureg),
-                        "instructions": parse_recipe_instructions(recipe["Instructions"]),
+                        "steps": parse_recipe_instructions(recipe["Instructions"]),
                         "image": parse_image(recipe["MainImagePath"], image_file),
                         "host": "",
                         "notes": recipe["Notes"]

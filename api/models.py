@@ -17,7 +17,7 @@ class Recipe(BaseModel):
     totalTime: Union[int, None] = None
     yields: Union[str, None] = None
     ingredients: list[RecipeIngredient] = []
-    instructions: list[RecipeInstruction] = []
+    steps: list[RecipeInstruction] = []
     image: Union[str, None] = None
     host: Union[str, None] = None
     notes: Union[str, None] = None

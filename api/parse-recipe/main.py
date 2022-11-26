@@ -35,7 +35,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "totalTime": scraper.total_time(),
             "yields": scraper.yields(),
             "ingredients": list(ingredients),
-            "instructions": list(instructions),
+            "steps": list(instructions),
             "image": scraper.image(),
             "host": scraper.host()
         }
