@@ -22,7 +22,7 @@ const router = createRouter({
     routes,
 });
 
-await i18next
+i18next
   .use(LanguageDetector)
   .use(Backend)
   .init({

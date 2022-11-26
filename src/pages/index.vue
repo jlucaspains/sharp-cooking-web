@@ -16,23 +16,7 @@ const items = ref([] as RecipeViewModel[]);
 const searchText = ref("");
 let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
-const addOptions = [
-  {
-    name: "AddManual",
-    text: t("pages.index.addManually"),
-    action: goToNew,
-  },
-  {
-    name: "ImportFromWebsite",
-    text: t("pages.index.importFromWebsite"),
-    action: goToImport,
-  },
-  {
-    name: "ImportFromBackup",
-    text: t("pages.index.importFromBackup"),
-    action: goToImportFromBackup,
-  },
-];
+const addOptions = ref([] as Array<{name: string, text: string, action: () => void}>);
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -57,6 +41,21 @@ function sortByDate(items: Array<RecipeViewModel>) {
 
 onMounted(async () => {
   await initialize();
+  addOptions.value = [{
+    name: "AddManual",
+    text: t("pages.index.addManually"),
+    action: goToNew,
+  },
+  {
+    name: "ImportFromWebsite",
+    text: t("pages.index.importFromWebsite"),
+    action: goToImport,
+  },
+  {
+    name: "ImportFromBackup",
+    text: t("pages.index.importFromBackup"),
+    action: goToImportFromBackup,
+  }];
   state.title = t("pages.index.title");
   state.menuOptions = [
     {
