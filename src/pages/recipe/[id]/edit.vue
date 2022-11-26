@@ -188,7 +188,7 @@ async function importRecipe() {
   try {
     isImportModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/parse`, {
+    const result = await fetch("/api/parse-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

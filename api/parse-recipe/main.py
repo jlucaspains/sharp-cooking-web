@@ -1,5 +1,6 @@
 import logging
 import json
+
 import azure.functions as func
 
 from zipfile import ZipFile
@@ -8,20 +9,19 @@ from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
-from .util import parse_recipe_ingredient, parse_recipe_ingredients, parse_recipe_instruction
-from .util import parse_recipe_instructions, parse_recipe_image, parse_image
-from .models import ImageResult, ParseRequest, Recipe
+from ..util import parse_recipe_ingredient, parse_recipe_instruction, parse_recipe_image
+from ..models import Recipe
 
 ureg = UnitRegistry()
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
+    start = perf_counter()
     correlation_id = uuid4()
 
     req_body = req.get_json()
     url: str = req_body.get("url")
     downloadImage: bool = req_body.get("downloadImage") or False
     try:
-        start = perf_counter()
         logging.info(f"processing parse request id {correlation_id} for url: {url}")
         scraper = scrape_me(url, wild_mode=True)
         

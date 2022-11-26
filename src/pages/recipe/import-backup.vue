@@ -65,7 +65,7 @@ async function pickFile() {
             const data = new FormData();
             data.append('file', filePicked);
 
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}recipe/backup/parse`, {
+            const response = await fetch("/api/parse-backup", {
                 method: "POST",
                 body: data
             });
