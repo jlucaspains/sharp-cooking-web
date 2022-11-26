@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  min-height: calc(100% + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
+
+input[type="text"], input[type="number"], textarea {
+  border-width: 1px;
+}
