@@ -137,7 +137,7 @@ function selectAll() {
             <ul>
                 <li class="mt-1"><input type="checkbox" id="importAll" @change="selectAll()" /> <label
                         for="importAll">{{ t("pages.recipe.importBackup.selectFile") }}</label></li>
-                <li class="mt-1" v-for="(item, idx) in importItemsDisplay"><input type="checkbox" :id="`import-${idx}`"
+                <li class="mt-1" v-for="(item, idx) in importItemsDisplay" v-bind:key="idx"><input type="checkbox" :id="`import-${idx}`"
                         v-model="item.isSelected" /> <label :for="`import-${idx}`">{{ item.title }}</label></li>
             </ul>
         </div>

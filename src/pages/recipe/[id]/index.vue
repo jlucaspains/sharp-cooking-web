@@ -256,8 +256,7 @@ function shareAsText() {
     navigator
       .share({
         title: item.value.title,
-        text: "Recipe body", // TODO: implement
-        url: "https://app.sharpcooking.net/",
+        text: asText(item.value), 
       })
       .catch((error) => console.log("Error sharing", error));
   } else {
@@ -271,6 +270,16 @@ function shareAsText() {
     );
   }
 }
+
+function asText(item: RecipeViewModel) {
+  return `${item.title}
+
+${t("pages.recipe.id.index.ingredients")}:
+${item.ingredients.join("\r\n")}
+
+${t("pages.recipe.id.index.instructions")}:
+${item.steps.join("\r\n")}`;
+  }
 
 async function shareAsFile() {
   try {

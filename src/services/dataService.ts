@@ -69,6 +69,12 @@ export async function saveRecipe(recipe: Recipe) {
 }
 
 export async function initialize() {
+    const count = await db.recipes.count();
+
+    if (count > 0) {
+        return;
+    }
+
     const id = await getNextRecipeId();
     const recipes = [
         {
