@@ -5,10 +5,10 @@ on:
     branches:
       - main
       - feature/1.0
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+  # pull_request:
+  #   types: [opened, synchronize, reopened, closed]
+  #   branches:
+  #     - main
 
 jobs:
   build_and_deploy_job:
