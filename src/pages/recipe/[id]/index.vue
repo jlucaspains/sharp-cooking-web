@@ -7,6 +7,7 @@ import {
   deleteRecipe,
   prepareRecipeBackup,
   saveRecipe,
+  getSetting,
 } from "../../../services/dataService";
 import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
@@ -46,6 +47,7 @@ const newMultiplier = ref(1);
 const { t } = useI18n();
 
 const noSleep = new NoSleep();
+let defaultTimeSetting = "5";
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -83,6 +85,8 @@ onMounted(async () => {
 
   const currentTime = new Date();
   display.value = getDisplayValues(recipe, currentTime);
+
+  defaultTimeSetting = await getSetting("StepsInterval", "5")
 
   if (recipe) {
     state.title = recipe.title;
@@ -146,8 +150,7 @@ function getDisplayValues(
     ),
   });
 
-  // TODO: move to configuration
-  const defaultTime = 5 * 60 * 1000;
+  const defaultTime = parseInt(defaultTimeSetting) * 60 * 1000;
   currentTime.setTime(currentTime.getTime() + defaultTime);
 
   recipe.steps.forEach((step, index) => {
