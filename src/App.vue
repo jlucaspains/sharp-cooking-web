@@ -3,11 +3,15 @@ import { onMounted } from "vue";
 import TopBar from "./components/TopBar.vue";
 import { useState } from "./services/store";
 import Notification from "./components/Notification.vue";
+import { i18nextPromise } from './i18n';
+import i18next from "i18next";
 
 const state = useState()!;
 
 onMounted(async () => {
+  await i18nextPromise;
   document.body.classList.add("dark:bg-theme-gray");
+  document.documentElement.lang = i18next.resolvedLanguage;
 });
 </script>
 
