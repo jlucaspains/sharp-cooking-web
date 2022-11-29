@@ -3,7 +3,7 @@
 
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
-import App from './App.vue';
+import Suspenser from './Suspenser.vue';
 import { registerSW } from 'virtual:pwa-register';
 import './index.css';
 import routes from '~pages';
@@ -18,7 +18,7 @@ const router = createRouter({
     routes,
 });
 
-const app = createApp(App);
+const app = createApp(Suspenser);
 
 app.use(router);
 app.use(Notifications);

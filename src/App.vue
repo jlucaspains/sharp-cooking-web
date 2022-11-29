@@ -8,6 +8,8 @@ import i18next from "i18next";
 
 const state = useState()!;
 
+await i18nextPromise;
+
 onMounted(async () => {
   await i18nextPromise;
   document.body.classList.add("dark:bg-theme-gray");
