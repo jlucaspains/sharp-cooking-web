@@ -48,6 +48,7 @@ const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
+let useFractionsOverDecimal = false;
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -83,10 +84,12 @@ onMounted(async () => {
 
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
 
+  defaultTimeSetting = await getSetting("StepsInterval", "5");
+  const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
+  useFractionsOverDecimal = useFractionsOverDecimalString == "true";
+
   const currentTime = new Date();
   display.value = getDisplayValues(recipe, currentTime);
-
-  defaultTimeSetting = await getSetting("StepsInterval", "5")
 
   if (recipe) {
     state.title = recipe.title;
@@ -143,8 +146,8 @@ function getDisplayValues(
       applyMultiplierToString(
         ingredient,
         recipe.multiplier,
-        false,
-        /^(?<CompositeFraction>\d{1,5} \d{1,5}\/\d{1,5})|(?<Fraction>\d{1,5}\/\d{1,5})|^(?<Regular>\d{1,5}\.?\d{0,5})/
+        t("logic.ingredientRegex"),
+        useFractionsOverDecimal,
       )
     ),
   });
@@ -159,10 +162,9 @@ function getDisplayValues(
       subItems: [step],
     });
 
-    // TODO: move regex to translated resource
     const impliedTime = getImpliedTimeFromString(
       step,
-      /(?<Minutes>\d{1,5}\.?\d{0,5})\s*(minutes|minute|min)\b|(?<Hours>\d{1,5}\.?\d{0,5})\s*(hours|hour)\b|(?<Days>\d{1,5}\.?\d{0,5})\s*(days|day)\b/
+      t("logic.stepRegex")
     );
     const actualTime = impliedTime > 0 ? impliedTime : defaultTime;
     currentTime.setTime(currentTime.getTime() + actualTime);
