@@ -31,7 +31,6 @@ export function applyMultiplierToString(input: string, multiplier: number, regex
 
     const maybeFraction = new Fraction(match.groups["Quantity"]).mul(multiplier);
 
-    console.log(`applyMultiplier useFractionsOverDecimal is ${useFractionsOverDecimal}`);
     const newValue = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString();
 
     return input.replace(regexp, newValue);

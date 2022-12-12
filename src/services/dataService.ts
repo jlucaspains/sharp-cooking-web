@@ -74,6 +74,7 @@ export async function getRecipeImage(id: number): Promise<RecipeImage | undefine
 export async function saveRecipe(recipe: Recipe) {
     console.time("saveRecipe");
 
+    recipe.changedOn = new Date().toISOString();
     await db.recipes.put(recipe);
 
     console.timeEnd("saveRecipe");

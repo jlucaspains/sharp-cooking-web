@@ -36,7 +36,16 @@ function sortByRating(items: Array<RecipeViewModel>) {
 }
 
 function sortByDate(items: Array<RecipeViewModel>) {
-  return items; // TODO: implement
+  return items.sort((a, b) => {
+    if (a.changedOn < b.changedOn) {
+      return -1;
+    }
+    if (a.changedOn > b.changedOn) {
+      return 1;
+    }
+
+    return 0;
+  });
 }
 
 onMounted(async () => {
