@@ -17,6 +17,10 @@
         "cancel": "Cancel",
         "save": "Save"
     },
+    "logic": {
+        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\.?\\d{0,5})",
+        "stepRegex": "(?<Minutes>\\d{1,5}\\.?\\d{0,5})\\s*(minutes|minute|min)\\b|(?<Hours>\\d{1,5}\\.?\\d{0,5})\\s*(hours|hour)\\b|(?<Days>\\d{1,5}\\.?\\d{0,5})\\s*(days|day)\\b"
+    },
     "pages": {
         "index": {
             "title": "All Recipes",
