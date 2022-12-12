@@ -30,7 +30,7 @@
             "importFromBackup": "Import from backup file",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
-            "sortByRecipeDate": "Sort by Recipe Date",
+            "sortByRecipeDate": "Sort by Changed Date",
             "options": "Options"
         },
         "options": {
