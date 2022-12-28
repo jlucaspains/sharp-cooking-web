@@ -19,6 +19,7 @@ import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
+import ImageGallery from "../../../components/ImageGallery.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -44,6 +45,7 @@ const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
+const images = ref([] as Array<{url: string, thumb: string}>);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -97,6 +99,9 @@ onMounted(async () => {
     const allImages = await getRecipeImages(id.value);
 
     if (allImages.length > 0) {
+      allImages.forEach((item) => {
+        images.value.push({url: item.image, thumb: item.image})
+      });
       recipe.image = allImages[0].image;
       recipe.imageAvailable = recipe.image ? true : false;
     }
@@ -323,10 +328,11 @@ async function shareAsFile() {
     <h1 class="print-only text-lg font-semibold whitespace-nowrap">
       {{ item.title }}
     </h1>
-    <div class="rounded-lg grid place-items-center w-full h-60 md:h-full overflow-hidden" @click="openImage"
+    <ImageGallery v-if="item.imageAvailable" :images="images" />
+    <!-- <div class="rounded-lg grid place-items-center w-full h-60 md:h-full overflow-hidden" @click="openImage"
       v-if="item.imageAvailable">
       <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
-    </div>
+    </div> -->
     <div class="
         bg-theme-primary
         rounded-lg

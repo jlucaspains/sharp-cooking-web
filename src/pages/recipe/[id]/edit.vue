@@ -251,7 +251,7 @@ async function importRecipe() {
         </svg>
       </div>
     </div>
-    <label for="title">Title</label>
+    <label for="title" class="mt-4">Title</label>
     <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
     <label>{{t("pages.recipe.id.edit.rating")}}</label>
     <RatingPicker class="mb-2" v-model="item.score" />
