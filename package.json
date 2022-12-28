@@ -27,7 +27,7 @@
     "vue-router": "4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.28.1",
+    "@playwright/test": "^1.29.1",
     "@types/lodash.debounce": "^4.0.7",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.4",
