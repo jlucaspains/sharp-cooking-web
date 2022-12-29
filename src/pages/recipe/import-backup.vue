@@ -5,14 +5,14 @@ import { fileOpen } from "browser-fs-access";
 import { saveRecipe, saveRecipeImage } from "../../services/dataService";
 import { RecipeImage } from "../../services/recipe";
 import { notify } from "notiwind";
-import { RecipeViewModel } from "./recipeViewModel";
+import { ImportRecipeViewModel } from "./recipeViewModel";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
 const canSave = ref(false);
-let importItems = [] as Array<RecipeViewModel>;
+let importItems = [] as Array<ImportRecipeViewModel>;
 const { t } = useTranslation();
 
 const isBusy = ref(false);
@@ -30,9 +30,11 @@ function saveRecipes() {
 
         await saveRecipe(recipe);
 
-        if (recipe.image) {
-            const recipeImage = new RecipeImage(recipe.id || 0, null, recipe.image, recipe.image);
-            await saveRecipeImage(recipeImage);
+        if (recipe.images) {
+            for (const image of recipe.images) {
+                const recipeImage = new RecipeImage(recipe.id || 0, null, image, image);
+                await saveRecipeImage(recipeImage);
+            }
         }
     });
 
@@ -82,13 +84,18 @@ async function pickFile() {
         }
 
         for (const recipe of result) {
-            const parsedRecipe = new RecipeViewModel();
+            const parsedRecipe = new ImportRecipeViewModel();
             parsedRecipe.title = recipe.title;
             parsedRecipe.score = 5;
             parsedRecipe.notes = recipe.notes;
             parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw || x);
             parsedRecipe.steps = recipe.steps.map((x: any) => x.raw || x);
-            parsedRecipe.image = recipe.image;
+
+            if (recipe.images) {
+                parsedRecipe.images = recipe.images;
+            } else if (recipe.image) {
+                parsedRecipe.images = [recipe.image];
+            }
 
             importItems.push(parsedRecipe);
             importItemsDisplay.value.push({ isSelected: true, title: recipe.title })

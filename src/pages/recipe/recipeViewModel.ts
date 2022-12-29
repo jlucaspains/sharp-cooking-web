@@ -12,3 +12,14 @@ export class RecipeViewModel extends Recipe {
   imageAvailable: boolean = false;
   hasNotes: boolean = false;
 }
+
+export class ImportRecipeViewModel extends Recipe {
+  constructor() {
+    super();
+
+    this.ingredients = [];
+    this.steps = [];
+  }
+
+  images?: Array<string>;
+}
