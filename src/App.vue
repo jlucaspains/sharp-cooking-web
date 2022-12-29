@@ -22,7 +22,7 @@ onMounted(async () => {
   <div :class="{'container mx-auto': !state.fullScreen}">
     <div :class="{'mt-16 mx-4 mb-10': !state.fullScreen, 'dark:text-white': true}">
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition mode="out-in">
           <component :is="Component"></component>
         </transition>
       </router-view>
@@ -32,13 +32,13 @@ onMounted(async () => {
 </template>
 
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease;
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
 }
 
-.fade-enter-from,
-.fade-leave-active {
+.v-enter-from,
+.v-leave-to {
   opacity: 0;
 }
 </style>

@@ -20,7 +20,8 @@ def parse_recipe_ingredients(text: str, ureg: UnitRegistry):
     
     result = []
     for ingredient in ingredients:
-        result.append(parse_recipe_ingredient(ingredient, "en", ureg))
+        if ingredient and not ingredient.isspace():
+            result.append(parse_recipe_ingredient(ingredient, "en", ureg))
     
     return result
 
@@ -35,7 +36,7 @@ def parse_recipe_instructions(text: str):
     
     result = []
     for instruction in instructions:
-        if instruction != "":
+        if instruction and not instruction.isspace():
             result.append(parse_recipe_instruction(instruction, "en"))
     
     return result    
