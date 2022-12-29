@@ -100,7 +100,7 @@ function close() {
     
 <template>
     <div class="grid grid-cols-12 w-full lg:max-w-7xl mx-auto lg:p-4">
-        <div class="col-span-12  lg:col-span-6 lg:mr-2">
+        <div class="col-span-12 lg:mr-2">
             <div class="transition-all duration-1000 ease-in-out w-full" ref="el"
                 :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
 
@@ -120,7 +120,7 @@ function close() {
                     <template v-for="(image, i) in props.images" :key="image">
                         <li class="w-full flex-shrink-0 snap-start">
                             <a href="#" @click.prevent="toggleImageIfNotOpen">
-                                <img :alt="`Image Gallery ${i}`" :src="image.url" class="m-auto max-h-60 max-w-full">
+                                <img :alt="`Image Gallery ${i}`" :src="image.url" :class="{ 'm-auto max-h-60 max-w-full': true, 'lg:max-h-80': !isOpen, 'lg:max-h-full': isOpen}">
                             </a>
                         </li>
                     </template>
