@@ -68,7 +68,7 @@ function scrollToImage() {
         return;
     }
 
-    imageEl.scrollLeft = localActiveImage.offsetLeft - (thumbNavEl.clientWidth / 2);
+    imageEl.scrollLeft = localActiveImage.offsetLeft - (imageEl.clientWidth / 2);
 }
 
 function toggleImageIfNotOpen() {
