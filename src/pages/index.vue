@@ -106,7 +106,7 @@ onMounted(async () => {
 
   for (const recipe of allRecipes) {
     const item = await getRecipeImage(recipe.id || 0);
-    recipe.image = item && item.image || undefined;
+    recipe.image = (item && item.url) || undefined;
     recipe.imageAvailable = recipe.image ? true : false;
   }
 
