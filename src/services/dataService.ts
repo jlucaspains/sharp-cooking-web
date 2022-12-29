@@ -15,7 +15,20 @@ class RecipeDatabase extends Dexie {
             recipeImages: "++id,recipeId",
             settings: "name"
         });
-        // this.version(3).stores({
+        this.version(3).stores({
+            recipes: "++id,title,score,changedOn",
+            recipeImages: "++id,recipeId",
+            settings: "name"
+        }).upgrade((transaction) => {
+            transaction.table("recipeImages").toCollection().modify((image: RecipeImage) => {
+                if(image.image) {
+                    image.thumb = image.image;
+                    image.url = image.image;
+                }
+                image.image = null;
+            });
+        });
+        // this.version(4).stores({
         //     recipes: "++id,title,score,changedOn",
         //     recipeImages: "++id,recipeId",
         //     settings: "name"
@@ -124,16 +137,17 @@ export async function initialize() {
 
     for (const recipe of recipes) {
         await saveRecipe(recipe);
-        await saveRecipeImage({recipeId: id, image: "/bread.jpg"})
+        await saveRecipeImage({recipeId: id, image: null, thumb: "/bread.jpg", url: "/bread.jpg"})
     }
 }
 
 export async function saveRecipeImage(recipeImage: RecipeImage) {
-    console.time("saveRecipeImage");
+    const sequence = Math.random();
+    console.time(`saveRecipeImage ${sequence}`);
 
     await db.recipeImages.put(recipeImage);
 
-    console.timeEnd("saveRecipeImage");
+    console.timeEnd(`saveRecipeImage ${sequence}`);
 }
 
 export async function deleteRecipe(id: number) {
@@ -148,6 +162,15 @@ export async function deleteRecipe(id: number) {
     await db.recipes.delete(id);
 
     console.timeEnd("deleteRecipe");
+}
+
+export async function deleteRecipeImage(id: number) {
+    const sequence = Math.random();
+    console.time(`deleteRecipeImage ${sequence}`);
+    
+    await db.recipeImages.delete(id);
+
+    console.timeEnd(`deleteRecipeImage ${sequence}`);
 }
 
 export async function getNextRecipeId(): Promise<number> {
@@ -190,7 +213,7 @@ export async function prepareBackup(): Promise<Array<BackupModel>> {
     const result = [];
     for (const recipe of allRecipes) {
         const model = recipe as BackupModel;
-        model.images = allImages.filter(item => item.recipeId == model.id).map(item => item.image);
+        model.images = allImages.filter(item => item.recipeId == model.id).map(item => item.url);
         result.push(model);
     }
 
@@ -208,7 +231,7 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
 
     const result = [];
     const model = recipe as BackupModel;
-    model.images = allImages.map(item => item.image);
+    model.images = allImages.map(item => item.url);
     result.push(model);
 
     console.timeEnd("prepareRecipeBackup");

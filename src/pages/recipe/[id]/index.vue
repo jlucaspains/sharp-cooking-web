@@ -20,6 +20,7 @@ import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
+import { RecipeImage } from "../../../services/recipe";
 
 const route = useRoute();
 const router = useRouter();
@@ -45,7 +46,7 @@ const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
-const images = ref([] as Array<{url: string, thumb: string}>);
+const images = ref([] as Array<RecipeImage>);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -100,10 +101,9 @@ onMounted(async () => {
 
     if (allImages.length > 0) {
       allImages.forEach((item) => {
-        images.value.push({url: item.image, thumb: item.image})
+        images.value.push(item)
       });
-      recipe.image = allImages[0].image;
-      recipe.imageAvailable = recipe.image ? true : false;
+      recipe.imageAvailable = images.value.length > 0;
     }
     recipe.hasNotes = !!recipe.notes;
 
@@ -329,10 +329,6 @@ async function shareAsFile() {
       {{ item.title }}
     </h1>
     <ImageGallery v-if="item.imageAvailable" :images="images" />
-    <!-- <div class="rounded-lg grid place-items-center w-full h-60 md:h-full overflow-hidden" @click="openImage"
-      v-if="item.imageAvailable">
-      <img alt="Recipe Image" :src="item.image" class="rounded-lg object-contain" />
-    </div> -->
     <div class="
         bg-theme-primary
         rounded-lg
@@ -354,11 +350,14 @@ async function shareAsFile() {
           w-12
           h-12
           m-1
-          bg-theme-primary
           rounded-full
+          bg-theme-primary
           hover:bg-theme-secondary
-          focus:ring-4 focus:ring-theme-primary focus:outline-none
-          shadow-lg
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
         " @click="editItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -370,11 +369,14 @@ async function shareAsFile() {
           w-12
           h-12
           m-1
-          bg-theme-primary
           rounded-full
+          bg-theme-primary
           hover:bg-theme-secondary
-          focus:ring-4 focus:ring-theme-primary focus:outline-none
-          shadow-lg
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
         " @click="toggleScreenLight">
         <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -385,12 +387,14 @@ async function shareAsFile() {
           w-12
           h-12
           m-1
-          p-0
-          bg-theme-primary
           rounded-full
+          bg-theme-primary
           hover:bg-theme-secondary
-          focus:ring-4 focus:ring-theme-primary focus:outline-none
-          shadow-lg
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
         " @click="changeMultiplier">
         <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -404,11 +408,14 @@ async function shareAsFile() {
           w-12
           h-12
           m-1
-          bg-theme-primary
           rounded-full
+          bg-theme-primary
           hover:bg-theme-secondary
-          focus:ring-4 focus:ring-theme-primary focus:outline-none
-          shadow-lg
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
         " @click="changeTime">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -421,11 +428,14 @@ async function shareAsFile() {
           w-12
           h-12
           m-1
-          bg-theme-primary
           rounded-full
+          bg-theme-primary
           hover:bg-theme-secondary
-          focus:ring-4 focus:ring-theme-primary focus:outline-none
-          shadow-lg
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
         " @click="printItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

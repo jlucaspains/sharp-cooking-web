@@ -178,17 +178,17 @@ function goToOptions() {
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
         <MenuButton class="
-            p-0
-            w-14
-            h-14
-            fixed
-            bottom-6
-            right-6
-            bg-theme-primary
-            rounded-full
-            hover:bg-theme-secondary
-            focus:ring-4 focus:ring-theme-primary focus:outline-none
-            shadow-lg
+          w-12
+          h-12
+          m-1
+          rounded-full
+          bg-theme-primary
+          hover:bg-theme-secondary
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
           ">
           <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
             <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601

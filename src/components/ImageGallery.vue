@@ -5,28 +5,17 @@ const props = defineProps<{
     images: Array<{ url: string, thumb: string }>;
 }>();
 
+const emit = defineEmits<{
+    (e: "selectionChanged", value: number): void;
+}>();
+
 const el = ref<HTMLDivElement>();
 const activeImage = ref(0);
 const isOpen = ref(false);
 
-const localValue = ref(0);
-const images = ref([
-    { url: 'https://source.unsplash.com/gKXKBY-C-Dk/1920x1080', 'thumb': 'https://source.unsplash.com/gKXKBY-C-Dk/400x400' },
-    { url: 'https://source.unsplash.com/9UUoGaaHtNE/1920x1080', 'thumb': 'https://source.unsplash.com/9UUoGaaHtNE/400x400' },
-    { url: 'https://source.unsplash.com/w2DsS-ZAP4U/1920x1080', 'thumb': 'https://source.unsplash.com/w2DsS-ZAP4U/400x400' },
-    { url: 'https://source.unsplash.com/cWOzOnSoh6Q/1920x1080', 'thumb': 'https://source.unsplash.com/cWOzOnSoh6Q/400x400' },
-    { url: 'https://source.unsplash.com/NodtnCsLdTE/1920x1080', 'thumb': 'https://source.unsplash.com/NodtnCsLdTE/400x400' },
-    { url: 'https://source.unsplash.com/eMzblc6JmXM/1920x1080', 'thumb': 'https://source.unsplash.com/eMzblc6JmXM/400x400' },
-    { url: 'https://source.unsplash.com/so5nsYDOdxw/1920x1080', 'thumb': 'https://source.unsplash.com/so5nsYDOdxw/400x400' },
-    { url: 'https://source.unsplash.com/GtwiBmtJvaU/1920x1080', 'thumb': 'https://source.unsplash.com/GtwiBmtJvaU/400x400' },
-    { url: 'https://source.unsplash.com/YCPkW_r_6uA/1920x1080', 'thumb': 'https://source.unsplash.com/YCPkW_r_6uA/400x400' },
-    { url: 'https://source.unsplash.com/IbPxGLgJiMI/1920x1080', 'thumb': 'https://source.unsplash.com/IbPxGLgJiMI/400x400' },
-    { url: 'https://source.unsplash.com/Hd7vwFzZpH0/1920x1080', 'thumb': 'https://source.unsplash.com/Hd7vwFzZpH0/400x400' },
-    { url: 'https://source.unsplash.com/0F7GRXNOG7g/1920x1080', 'thumb': 'https://source.unsplash.com/0F7GRXNOG7g/400x400' },
-]);
-
 watch(activeImage,
     () => {
+        emit("selectionChanged", activeImage.value);
         scroll();
     }
 );
@@ -48,16 +37,6 @@ function next() {
 function prev() {
     activeImage.value = activeImage.value > 0 ? activeImage.value - 1 : props.images.length - 1;
 }
-
-// function mousewheelEvent(event: WheelEvent) {
-//     if (event.deltaY > 0) {
-//         next();
-//         event.preventDefault();
-//     } else if (event.deltaY < 0) {
-//         prev();
-//         event.preventDefault();
-//     }
-// }
 
 function scroll() {
     scrollToImage();
@@ -117,7 +96,6 @@ function close() {
     document.body.style.height = '';
     isOpen.value = false;
 }
-
 </script>
     
 <template>
@@ -138,13 +116,11 @@ function close() {
                     </a>
                 </div>
 
-                <ul
-                    class="flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
-                    <!-- @wheel="mousewheelEvent($event)" -->
+                <ul class="flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="image in props.images" :key="image">
                         <li class="w-full flex-shrink-0 snap-start">
                             <a href="#" @click.prevent="toggleImageIfNotOpen">
-                                <img :src="image.url" class="rounded-lg m-auto max-h-full max-w-full">
+                                <img :src="image.url" class="m-auto max-h-60 max-w-full">
                             </a>
                         </li>
                     </template>
@@ -167,7 +143,6 @@ function close() {
                             class="flex md:hidden mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth">
                             <template v-for="(image, i) in props.images" :key="image">
                                 <li class="flex-shrink-0 snap-start mx-1">
-                                    <!-- @wheel="mousewheelEvent($event)" -->
                                     <a class="inline-block" href="#" @click.prevent="activeImage = i">
                                         <svg :class="{ 'h-6 w-6': true, 'dark:text-white': activeImage == i, 'text-slate-400': activeImage != i }"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
