@@ -31,7 +31,7 @@ function saveRecipes() {
         await saveRecipe(recipe);
 
         if (recipe.image) {
-            const recipeImage = new RecipeImage(recipe.id || 0, recipe.image);
+            const recipeImage = new RecipeImage(recipe.id || 0, null, recipe.image, recipe.image);
             await saveRecipeImage(recipeImage);
         }
     });

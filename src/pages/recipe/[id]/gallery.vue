@@ -47,7 +47,7 @@ function toggleHideTopBar() {
 <template>
   <swiper :slides-per-view="1" class="w-screen h-screen">
     <swiper-slide @click="toggleHideTopBar()" :zoom="true" v-for="image in images">
-      <img :alt="t('pages.recipe.id.gallery.recipeImage')" :src="image.image"
+      <img :alt="t('pages.recipe.id.gallery.recipeImage')" :src="image.url"
         class="object-contain w-screen h-screen" />
     </swiper-slide>
   </swiper>
