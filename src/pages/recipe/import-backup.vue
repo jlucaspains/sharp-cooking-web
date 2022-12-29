@@ -65,7 +65,7 @@ async function pickFile() {
             const data = new FormData();
             data.append('file', filePicked);
 
-            const response = await fetch("/api/parse-backup", {
+            const response = await fetch("/api/process-backup", {
                 method: "POST",
                 body: data
             });
