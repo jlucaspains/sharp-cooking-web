@@ -256,10 +256,6 @@ function setDisplayTime() {
   isTimeModalOpen.value = false;
 }
 
-function openImage() {
-  router.push(`/recipe/${id.value}/gallery`);
-}
-
 function shareAsText() {
   if (navigator.share) {
     navigator
