@@ -28,17 +28,6 @@ class RecipeDatabase extends Dexie {
                 image.image = null;
             });
         });
-        // this.version(4).stores({
-        //     recipes: "++id,title,score,changedOn",
-        //     recipeImages: "++id,recipeId",
-        //     settings: "name"
-        // }).upgrade((transaction) => {
-        //     transaction.table("recipes").toCollection().modify((recipe: Recipe) => {
-        //         recipe.parsedIngredients = recipe.ingredients.map(ingredient => {
-        //             return new Ingredient("0", "", ingredient);
-        //         })
-        //     });
-        // });
     }
 }
 

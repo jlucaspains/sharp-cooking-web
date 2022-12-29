@@ -252,9 +252,6 @@ function removeImage() {
 <template>
   <div>
     <div>
-      <!-- <div class="rounded-lg grid place-items-center w-full h-60 overflow-hidden" v-if="item.imageAvailable">
-        <img :alt="t('pages.recipe.id.edit.recipeImage')" :src="item.image" class="rounded-lg object-contain" />
-      </div> -->
       <ImageGallery v-if="item.imageAvailable" @selection-changed="(value) => selectedImage = value" :images="images" />
       <div class="
           bg-theme-primary
