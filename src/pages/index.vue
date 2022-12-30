@@ -165,12 +165,12 @@ function goToOptions() {
         </div>
         <div class="h-full pt-2">
           <div class="truncate inline-block" style="width: calc(100% - 35px)">
-            <span class="text-ellipsis text-black dark:text-white text-lg">{{
+            <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
             item.title
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
-            <span class="text-black dark:text-white">{{ item.score }}⭐</span>
+            <span data-testid="recipe-score" class="text-black dark:text-white">{{ item.score }}⭐</span>
           </div>
         </div>
       </div>
