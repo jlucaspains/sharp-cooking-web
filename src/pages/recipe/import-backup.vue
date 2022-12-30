@@ -106,18 +106,16 @@ async function pickFile() {
     finally {
         isBusy.value = false;
 
-        if (success) {
-            return;
+        if (!success) {
+            notify(
+                {
+                    group: "error",
+                    title: t("general.error"),
+                    text: t("pages.recipe.importBackup.parsedFailed"),
+                },
+                2000
+            );
         }
-
-        notify(
-            {
-                group: "error",
-                title: t("general.error"),
-                text: t("pages.recipe.importBackup.parsedFailed"),
-            },
-            2000
-        );
     }
 }
 
