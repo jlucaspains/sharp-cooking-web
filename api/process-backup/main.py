@@ -35,17 +35,20 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 
                 result = []
                 for recipe in json_content:
-                    image_file = zip.read(recipe["MainImagePath"])
-                    result.append({
-                        "title": recipe["Title"],
-                        "totalTime": 0,
-                        "yields": "",
-                        "ingredients": parse_recipe_ingredients(recipe["Ingredients"], ureg),
-                        "steps": parse_recipe_instructions(recipe["Instructions"]),
-                        "image": parse_image(recipe["MainImagePath"], image_file),
-                        "host": "",
-                        "notes": recipe["Notes"]
-                    })
+                    try:
+                        image_file = zip.read(recipe["MainImagePath"])
+                        result.append({
+                            "title": recipe["Title"],
+                            "totalTime": 0,
+                            "yields": "",
+                            "ingredients": parse_recipe_ingredients(recipe["Ingredients"], ureg),
+                            "steps": parse_recipe_instructions(recipe["Instructions"]),
+                            "image": parse_image(recipe["MainImagePath"], image_file),
+                            "host": "",
+                            "notes": recipe["Notes"]
+                        })
+                    except Exception as e:
+                        logging.warn(f"Failed to process recipe {recipe['Title']} {correlation_id}. Error: {e}")
 
                 return func.HttpResponse(json.dumps(result), status_code=200, mimetype="application/json")
             

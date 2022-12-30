@@ -68,9 +68,6 @@
                     "importContent1": "Loading recipe...",
                     "importContent2": "Still loading. This may take up to a minute."
                 },
-                "gallery": {
-                    "recipeImage": "Recipe Image"
-                },
                 "index": {
                     "more": "More",
                     "delete": "Delete",
