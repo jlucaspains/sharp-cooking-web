@@ -1,30 +1,30 @@
 {
-    "appName": "Sharp Cooking",
+    "appName": "Cozinha Afiada",
     "general": {
-        "yes": "Yes",
+        "yes": "Sim",
         "ok": "OK",
-        "no": "No",
-        "success": "Success",
-        "done": "Done",
-        "error": "Error",
-        "cancel": "Cancel",
-        "save": "Save"
+        "no": "Não",
+        "success": "Sucesso",
+        "done": "Pronto",
+        "error": "Erro",
+        "cancel": "Cancelar",
+        "save": "Salvar"
     },
     "logic": {
-        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\.?\\d{0,5})",
-        "stepRegex": "(?<Minutes>\\d{1,5}\\.?\\d{0,5})\\s*(minutes|minute|min)\\b|(?<Hours>\\d{1,5}\\.?\\d{0,5})\\s*(hours|hour)\\b|(?<Days>\\d{1,5}\\.?\\d{0,5})\\s*(days|day)\\b"
+        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
+        "stepRegex": "(?<Minutes>\\d{1,5}\\,?\\d{0,5})\\s*(minutes|minute|min)\\b|(?<Hours>\\d{1,5}\\,?\\d{0,5})\\s*(hours|hour)\\b|(?<Days>\\d{1,5}\\,?\\d{0,5})\\s*(days|day)\\b"
     },
     "pages": {
         "index": {
-            "title": "All Recipes",
-            "search": "Search...",
-            "addManually": "Add manually",
-            "importFromWebsite": "Import from website",
-            "importFromBackup": "Import from backup file",
-            "sortByTitle": "Sort by Title",
-            "sortByRating": "Sort by Rating",
-            "sortByRecipeDate": "Sort by Changed Date",
-            "options": "Options"
+            "title": "Todas as Receitas",
+            "search": "Buscar...",
+            "addManually": "Adicionar manualmente...",
+            "importFromWebsite": "Importar de website...",
+            "importFromBackup": "Importar de backup...",
+            "sortByTitle": "Classificar por título",
+            "sortByRating": "Classificar por nota",
+            "sortByRecipeDate": "Classificar por data",
+            "options": "Opções..."
         },
         "options": {
             "title": "Options",
