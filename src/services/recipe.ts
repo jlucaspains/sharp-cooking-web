@@ -21,7 +21,7 @@ export class Recipe {
 }
 
 export class RecipeImage {
-    constructor(public recipeId: number, public image: null | string, public url: string, public thumb: string) { }
+    constructor(public recipeId: number, public image: null | string, public url: string) { }
 
     id?: number;
 }

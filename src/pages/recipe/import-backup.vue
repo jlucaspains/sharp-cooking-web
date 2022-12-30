@@ -3,16 +3,15 @@ import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
 import { saveRecipe, saveRecipeImage } from "../../services/dataService";
-import { RecipeImage } from "../../services/recipe";
 import { notify } from "notiwind";
-import { ImportRecipeViewModel } from "./recipeViewModel";
+import { Recipe, RecipeImage } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
 const canSave = ref(false);
-let importItems = [] as Array<ImportRecipeViewModel>;
+let importItems = [] as Array<any>;
 const { t } = useTranslation();
 
 const isBusy = ref(false);
@@ -28,13 +27,19 @@ function saveRecipes() {
             return;
         }
 
-        await saveRecipe(recipe);
+        const parsedRecipe = new Recipe();
+        parsedRecipe.title = recipe.title;
+        parsedRecipe.score = 5;
+        parsedRecipe.notes = recipe.notes;
+        parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw || x);
+        parsedRecipe.steps = recipe.steps.map((x: any) => x.raw || x);
 
-        if (recipe.images) {
-            for (const image of recipe.images) {
-                const recipeImage = new RecipeImage(recipe.id || 0, null, image, image);
-                await saveRecipeImage(recipeImage);
-            }
+        const id = await saveRecipe(parsedRecipe);
+
+        const images = recipe.images || [recipe.image];
+        for (const image of images) {
+            const recipeImage = new RecipeImage(id, null, image);
+            await saveRecipeImage(recipeImage);
         }
     });
 
@@ -83,23 +88,10 @@ async function pickFile() {
             result = JSON.parse(textResult);
         }
 
-        for (const recipe of result) {
-            const parsedRecipe = new ImportRecipeViewModel();
-            parsedRecipe.title = recipe.title;
-            parsedRecipe.score = 5;
-            parsedRecipe.notes = recipe.notes;
-            parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw || x);
-            parsedRecipe.steps = recipe.steps.map((x: any) => x.raw || x);
-
-            if (recipe.images) {
-                parsedRecipe.images = recipe.images;
-            } else if (recipe.image) {
-                parsedRecipe.images = [recipe.image];
-            }
-
-            importItems.push(parsedRecipe);
-            importItemsDisplay.value.push({ isSelected: true, title: recipe.title })
-        }
+        importItems = result;
+        importItemsDisplay.value = importItems.map(item => {
+            return { isSelected: true, title: item.title };
+        });
 
         canSave.value = true;
         state.menuOptions = [{
@@ -109,6 +101,15 @@ async function pickFile() {
         }];
     }
     catch (error) {
+        success = false;
+    }
+    finally {
+        isBusy.value = false;
+
+        if (success) {
+            return;
+        }
+
         notify(
             {
                 group: "error",
@@ -117,9 +118,6 @@ async function pickFile() {
             },
             2000
         );
-    }
-    finally {
-        isBusy.value = false;
     }
 }
 
@@ -144,8 +142,9 @@ function selectAll() {
             <ul>
                 <li class="mt-1"><input type="checkbox" id="importAll" @change="selectAll()" /> <label
                         for="importAll">{{ t("pages.recipe.importBackup.selectFile") }}</label></li>
-                <li class="mt-1" v-for="(item, idx) in importItemsDisplay" v-bind:key="idx"><input type="checkbox" :id="`import-${idx}`"
-                        v-model="item.isSelected" /> <label :for="`import-${idx}`">{{ item.title }}</label></li>
+                <li class="mt-1" v-for="(item, idx) in importItemsDisplay" v-bind:key="idx"><input type="checkbox"
+                        :id="`import-${idx}`" v-model="item.isSelected" /> <label :for="`import-${idx}`">{{ item.title
+}}</label></li>
             </ul>
         </div>
         <div class="flex mt-3" v-if="canSave">

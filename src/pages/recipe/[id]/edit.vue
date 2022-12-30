@@ -34,7 +34,6 @@ const item = ref({
   ingredients: [] as string[],
   steps: [] as string[],
   notes: "",
-  image: "",
   imageAvailable: false,
 } as RecipeViewModel);
 const images = ref([] as Array<RecipeImage>);
@@ -165,7 +164,7 @@ async function pickImage() {
   });
 
   const newImage = await getBase64(imagePicked);
-  images.value.push(new RecipeImage(id.value, null, newImage, newImage));
+  images.value.push(new RecipeImage(id.value, null, newImage));
   item.value.imageAvailable = images.value.length > 0;
 }
 

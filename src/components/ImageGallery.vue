@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from "vue";
 
 const props = defineProps<{
-    images: Array<{ url: string, thumb: string }>;
+    images: Array<{ url: string }>;
 }>();
 
 const emit = defineEmits<{
@@ -159,7 +159,7 @@ function close() {
                                 <li class="w-28 flex-shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
-                                        <img :alt="`Image Gallery ${i}`" :src="image.thumb" class="" height="150" width="150">
+                                        <img :alt="`Image Gallery ${i}`" :src="image.url" class="" height="150" width="150">
                                     </a>
                                 </li>
                             </template>

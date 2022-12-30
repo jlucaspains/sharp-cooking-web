@@ -22,7 +22,6 @@ class RecipeDatabase extends Dexie {
         }).upgrade((transaction) => {
             transaction.table("recipeImages").toCollection().modify((image: RecipeImage) => {
                 if(image.image) {
-                    image.thumb = image.image;
                     image.url = image.image;
                 }
                 image.image = null;
@@ -73,13 +72,15 @@ export async function getRecipeImage(id: number): Promise<RecipeImage | undefine
     return result;
 }
 
-export async function saveRecipe(recipe: Recipe) {
+export async function saveRecipe(recipe: Recipe): Promise<number> {
     console.time("saveRecipe");
 
     recipe.changedOn = new Date().toISOString();
-    await db.recipes.put(recipe);
+    const result = await db.recipes.put(recipe);
 
     console.timeEnd("saveRecipe");
+
+    return result;
 }
 
 export async function initialize() {
@@ -119,14 +120,13 @@ export async function initialize() {
                 "Let it cool completely on rack before carving"
             ],
             notes: "May replace whole wheat flour with rye for added taste",
-            multiplier: 1,
-            image: "/bread.jpg"
+            multiplier: 1
         }
     ];
 
     for (const recipe of recipes) {
         await saveRecipe(recipe);
-        await saveRecipeImage({recipeId: id, image: null, thumb: "/bread.jpg", url: "/bread.jpg"})
+        await saveRecipeImage({recipeId: id, image: null, url: "/bread.jpg"})
     }
 }
 
