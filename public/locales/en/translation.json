@@ -55,6 +55,7 @@
                     "savedSuccessfully": "Saved successfully!",
                     "importedSuccessfully": "Imported successfully",
                     "couldNotImport": "This recipe could not be imported",
+                    "title": "Title",
                     "recipeImage": "Recipe Image",
                     "rating": "Rating",
                     "ingredients": "Ingredients",
