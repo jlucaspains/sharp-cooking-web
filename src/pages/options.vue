@@ -34,10 +34,6 @@ onMounted(async () => {
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.resolvedLanguage;
   displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
-
-  // for (const language of i18next.languages) {
-  //   availableLanguages.value.push(language);
-  // }
 });
 
 function reviewReleaseNotes() {
