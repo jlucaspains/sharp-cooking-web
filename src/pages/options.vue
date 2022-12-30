@@ -6,6 +6,9 @@ import { saveSetting, getSetting, prepareBackup } from "../services/dataService"
 import Modal from "../components/Modal.vue";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
+import i18next from "i18next";
+
+const { t } = useTranslation();
 
 const state = useState()!;
 const router = useRouter()!;
@@ -14,7 +17,10 @@ const useFractions = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
-const { t } = useTranslation();
+const displayLanguage = ref("English");
+const selectedLanguage = ref("");
+const availableLanguages = ref(["pt", "en"] as Array<string>);
+const isLanguagesModalOpen = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -25,8 +31,13 @@ onMounted(async () => {
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
-
   version.value = import.meta.env.VITE_APP_VERSION;
+  selectedLanguage.value = i18next.resolvedLanguage;
+  displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
+
+  // for (const language of i18next.languages) {
+  //   availableLanguages.value.push(language);
+  // }
 });
 
 function reviewReleaseNotes() {
@@ -66,12 +77,26 @@ function updateStepsInterval() {
 function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
 }
+
+function showChangeLanguageModal() {
+  selectedLanguage.value = i18next.resolvedLanguage;
+  isLanguagesModalOpen.value = true;
+}
+
+function setSelectedLanguage() {
+  i18next.changeLanguage(selectedLanguage.value);
+  displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
+  isLanguagesModalOpen.value = false;
+
+  // translation not used in vue template so we need to manually refresh
+  state.title = t("pages.options.title");
+}
 </script>
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewReleaseNotes">
-      <span class="dark:text-white">{{t("appName")}}</span>
+      <span class="dark:text-white">{{ t("appName") }}</span>
       <div class="dark:text-white float-right">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -80,14 +105,12 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.releaseNotes")}} {{version}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.releaseNotes") }} {{ version }}</span>
       </div>
     </div>
-
-    <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="changeStepsInterval">
-      <label class="dark:text-white">{{t("pages.options.stepsInterval")}}</label>
+    <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="showChangeLanguageModal">
+      <label class="dark:text-white">{{ t("pages.options.language") }}</label>
       <div class="dark:text-white float-right ">
-        <button class="mr-2 align-top">{{stepsInterval}} {{t("pages.options.minutes")}}</button>
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -95,21 +118,35 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.stepsIntervalDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ displayLanguage }}</span>
+      </div>
+    </div>
+    <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="changeStepsInterval">
+      <label class="dark:text-white">{{ t("pages.options.stepsInterval") }}</label>
+      <div class="dark:text-white float-right ">
+        <button class="mr-2 align-top">{{ stepsInterval }} {{ t("pages.options.minutes") }}</button>
+        <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.stepsIntervalDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
-      <span class="dark:text-white">{{t("pages.options.multiplierType")}}</span>
+      <span class="dark:text-white">{{ t("pages.options.multiplierType") }}</span>
       <label class="switch float-right align-middle">
         <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
         <span class="slider round"></span>
       </label>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.multiplierTypeDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="takeBackup">
-      <span class="dark:text-white">{{t("pages.options.takeBackup")}}</span>
+      <span class="dark:text-white">{{ t("pages.options.takeBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -118,11 +155,11 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.takeBackupDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.takeBackupDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="restoreBackup">
-      <span class="dark:text-white">{{t("pages.options.restoreBackup")}}</span>
+      <span class="dark:text-white">{{ t("pages.options.restoreBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -131,12 +168,12 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.restoreBackupDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.restoreBackupDescription") }}</span>
       </div>
     </div>
 
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewTermsOfUse">
-      <span class="dark:text-white">{{t("pages.options.termsOfUse")}}</span>
+      <span class="dark:text-white">{{ t("pages.options.termsOfUse") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -145,11 +182,11 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.termsOfUseDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.termsOfUseDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewPrivacyPolicy">
-      <span class="dark:text-white">{{t("pages.options.privacyPolicy")}}</span>
+      <span class="dark:text-white">{{ t("pages.options.privacyPolicy") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -158,21 +195,37 @@ function updateUseFractions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{t("pages.options.privacyPolicyDescription")}}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.privacyPolicyDescription") }}</span>
       </div>
     </div>
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
       :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
-        {
-          title: t('general.cancel'),
-          action: () => isStepsIntervalModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: updateStepsInterval,
-        },
-      ]">
+      {
+        title: t('general.cancel'),
+        action: () => isStepsIntervalModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: updateStepsInterval,
+      },
+    ]">
       <input v-model.number="stepsIntervalEditing" class="block my-2 p-2 w-full rounded text-black" />
+    </Modal>
+    <Modal :isOpen="isLanguagesModalOpen" @closed="isLanguagesModalOpen = false"
+      :title="t('pages.options.languageModalTitle')" :buttons="[
+      {
+        title: t('general.cancel'),
+        action: () => isLanguagesModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: setSelectedLanguage,
+      },
+    ]">
+      <div v-for="language in availableLanguages">
+        <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
+        <label :for="`lang_${language}`" class="dark:text-white ml-2">{{t(`pages.options.${language}`)}}</label>
+      </div>
     </Modal>
   </div>
 </template>
