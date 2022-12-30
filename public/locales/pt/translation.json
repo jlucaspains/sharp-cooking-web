@@ -1,0 +1,117 @@
+{
+    "appName": "Cozinha Afiada",
+    "general": {
+        "yes": "Sim",
+        "ok": "OK",
+        "no": "Não",
+        "success": "Sucesso",
+        "done": "Pronto",
+        "error": "Erro",
+        "cancel": "Cancelar",
+        "save": "Salvar"
+    },
+    "logic": {
+        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
+        "stepRegex": "(?<Minutes>\\d{1,5}\\,?\\d{0,5})\\s*(minutes|minute|min)\\b|(?<Hours>\\d{1,5}\\,?\\d{0,5})\\s*(hours|hour)\\b|(?<Days>\\d{1,5}\\,?\\d{0,5})\\s*(days|day)\\b"
+    },
+    "pages": {
+        "index": {
+            "title": "Todas as Receitas",
+            "search": "Buscar...",
+            "addManually": "Adicionar manualmente...",
+            "importFromWebsite": "Importar de website...",
+            "importFromBackup": "Importar de backup...",
+            "sortByTitle": "Classificar por título",
+            "sortByRating": "Classificar por nota",
+            "sortByRecipeDate": "Classificar por data",
+            "options": "Opções..."
+        },
+        "options": {
+            "title": "Opções",
+            "releaseNotes": "Veja as notas de versão",
+            "stepsInterval": "Intervalo de passos",
+            "minutes": "minutos",
+            "stepsIntervalDescription": "Intervalo utilizado quando não há informação disponível para o passo",
+            "stepsIntervalQuestion": "Por favor, forneça o intervalo em minutos",
+            "multiplierType": "Multiplicador usa frações",
+            "multiplierTypeDescription": "Usa frações em vez de decimais",
+            "takeBackup": "Fazer backup",
+            "takeBackupDescription": "Mantenha seus dados seguros com um arquivo de backup",
+            "restoreBackup": "Restaurar um backup",
+            "restoreBackupDescription": "Restaurar seus dados usando um arquivo de backup",
+            "termsOfUse": "Termos de Uso",
+            "termsOfUseDescription": "Revise os termos de uso do app Cozinha Afiada",
+            "privacyPolicy": "Política de privacidade",
+            "privacyPolicyDescription": "Revise nossa política para entender o que sabemos e mantemos sobre você",
+            "language": "Língua",
+            "languageModalTitle": "Alterar a linguagem do aplicativo",
+            "pt": "Português",
+            "en": "Inglês"
+        },
+        "recipe": {
+            "id": {
+                "edit": {
+                    "newRecipe": "Nova Receita",
+                    "savedSuccessfully": "Salvo com sucesso!",
+                    "importedSuccessfully": "Importado com sucesso",
+                    "couldNotImport": "Esta receita não podia ser importada",
+                    "title": "Nome",
+                    "recipeImage": "Imagem de Receita",
+                    "rating": "Classificação",
+                    "ingredients": "Ingredientes",
+                    "addIngredient": "Adicionar ingrediente",
+                    "steps": "Passos",
+                    "notes": "Notas",
+                    "dirtyTitle": "Sair sem poupar?",
+                    "dirtyContent": "As alterações efetuadas até agora não serão guardadas.",
+                    "dirtyLeave": "Parta de qualquer maneira.",
+                    "dirtyStay": "Continuar a editar",
+                    "importTitle": "Por favor, forneça URL de receita",
+                    "importContent1": "Receita de carregamento...",
+                    "importContent2": "Still loading. This may take up to a minute."
+                },
+                "gallery": {
+                    "recipeImage": "Imagem de Receita"
+                },
+                "index": {
+                    "more": "Mais",
+                    "delete": "Excluir",
+                    "shareAsText": "Compartilhar como texto",
+                    "shareAsFile": "Compartilhar como arquivo",
+                    "step": "Etapa",
+                    "instructions": "Instruções",
+                    "enjoy": "Aproveite!",
+                    "toggleScreenOnTitle": "Tela",
+                    "toggleScreenOnDisabled": "Always on desativado",
+                    "toggleScreenOnEnabled": "Always on ativado",
+                    "sharingNotSupported": "Seu sistema não suporta compartilhamento!",
+                    "recipeDeleted": "Receita excluída com sucesso.",
+                    "recipeDeleteFailed": "Falhou em excluir a receita",
+                    "notes": "Notas",
+                    "multiplierTitle": "Multiplicador",
+                    "startTimeTitle": "Hora de início",
+                    "deleteModalTitle": "Excluir esta receita?",
+                    "deleteYes": "Sim, exclua",
+                    "deleteModalBody": "Essa ação não pode ser desfeita.",
+                    "sharingFailed": "O compartilhamento de arquivos falhou.",
+                    "sharingSucceeded": "Arquivo compartilhado com sucesso.",
+                    "ingredients": "Ingredientes"
+                },
+                "print": {}
+            },
+            "importBackup": {
+                "title": "Importar backup",
+                "parsedSuccessfully": "Backup analisado com sucesso",
+                "parsedFailed": "Falha ao analisar o arquivo de backup",
+                "selectFile": "Selecione um arquivo...",
+                "selectAll": "Selecionar tudo",
+                "step1": "1. Selecione um backup, o backup precisa ser um arquivo .zip ou .json e ter sido criado pelo app Cozinha Afiada Android, Web, ou iOS",
+                "step2": "2. Selecione quais receitas importar",
+                "step3": "3. Salve",
+                "importedSuccessfully": "Importado com sucesso",
+                "processing1": "Processando o arquivo de backup...",
+                "processing2": "Ainda processando. Isso pode demorar até 1 minuto..."
+            }
+        }
+    }
+}
