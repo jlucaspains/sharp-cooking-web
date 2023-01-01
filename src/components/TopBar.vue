@@ -82,6 +82,7 @@ router.afterEach((to) => {
             >
               <div>
                 <MenuButton
+                  data-testid="topbar-options"
                   class="
                     py-2
                     inline-flex
@@ -168,6 +169,7 @@ router.afterEach((to) => {
             </Menu>
             <button
               v-else
+              data-testid="topbar-single-button"
               class="
                 p-2
                 inline-flex

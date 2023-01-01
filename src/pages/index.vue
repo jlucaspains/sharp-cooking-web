@@ -177,7 +177,9 @@ function goToOptions() {
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
-        <MenuButton class="
+        <MenuButton 
+        data-testid="add-menu-button"
+        class="
           w-12
           h-12
           m-1
