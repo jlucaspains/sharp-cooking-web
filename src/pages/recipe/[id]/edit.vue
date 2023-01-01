@@ -311,7 +311,7 @@ function removeImage() {
       </div>
     </div>
     <div>
-      <label for="title">Title</label>
+      <label for="title">{{ t("pages.recipe.id.edit.title") }}</label>
       <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
       <label>{{ t("pages.recipe.id.edit.rating") }}</label>
       <RatingPicker class="mb-2" v-model="item.score" />

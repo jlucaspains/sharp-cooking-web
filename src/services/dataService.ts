@@ -1,6 +1,6 @@
 import { Dexie, Table } from "dexie";
 import { BackupModel } from "../pages/recipe/backupModel"
-import { Ingredient, Recipe, RecipeImage } from "./recipe";
+import { Recipe, RecipeImage } from "./recipe";
 import { Setting } from "./setting";
 
 class RecipeDatabase extends Dexie {
