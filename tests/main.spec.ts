@@ -90,7 +90,7 @@ test.describe('List of recipes', () => {
     page.goBack(); // back to main page
 
     await page.locator('#headlessui-menu-button-10').click();
-    await page.getByRole('menuitem', { name: 'Sort by Rating' }).click();
+    await page.getByRole('menuitem', { name: 'Sort by Changed Date' }).click();
 
     const names = page.getByTestId('recipe-title');
     expect(names.nth(1)).toHaveText('00 first recipe'); // actual first is default recipe created
