@@ -67,7 +67,7 @@ router.afterEach((to) => {
         <div class="flex truncate">
           <router-link class="items-center py-2" to="/">
             <span
-              class="text-lg font-semibold whitespace-nowrap dark:text-white"
+              class="text-lg font-semibold whitespace-nowrap text-white"
               >{{ state.title }}</span
             >
           </router-link>

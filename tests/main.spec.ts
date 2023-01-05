@@ -30,8 +30,8 @@ test.describe('List of recipes', () => {
     await page.getByRole('menuitem', { name: 'Sort by Title' }).click();
 
     const names = page.getByTestId('recipe-title');
-    expect(names.nth(0)).toHaveText('00 first recipe');
-    expect(names.nth(2)).toHaveText('ZZ last recipe');
+    await expect(names.nth(0)).toHaveText('00 first recipe');
+    await expect(names.nth(2)).toHaveText('ZZ last recipe');
   });
 
   test('sort by rating', async ({ page }) => {
@@ -44,8 +44,8 @@ test.describe('List of recipes', () => {
     await page.getByRole('menuitem', { name: 'Sort by Rating' }).click();
 
     const names = page.getByTestId('recipe-title');
-    expect(names.nth(0)).toHaveText('00 first recipe');
-    expect(names.nth(1)).toHaveText('ZZ last recipe');
+    await expect(names.nth(0)).toHaveText('00 first recipe');
+    await expect(names.nth(1)).toHaveText('ZZ last recipe');
   });
 
 
@@ -59,8 +59,8 @@ test.describe('List of recipes', () => {
     await page.getByRole('menuitem', { name: 'Sort by Changed Date' }).click();
 
     const names = page.getByTestId('recipe-title');
-    expect(names.nth(1)).toHaveText('00 first recipe'); // actual first is default recipe created
-    expect(names.nth(2)).toHaveText('ZZ last recipe');
+    await expect(names.nth(1)).toHaveText('00 first recipe'); // actual first is default recipe created
+    await expect(names.nth(2)).toHaveText('ZZ last recipe');
   });
 
   test('options menu go to options', async ({ page }) => {

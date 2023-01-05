@@ -23,3 +23,4 @@ node_modules
 *.sw?
 
 playwright-report
+test-results
