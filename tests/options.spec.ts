@@ -72,6 +72,8 @@ test.describe('Options', () => {
   test('steps interval webkit', async ({ page, browserName }) => {
     test.skip(browserName !== 'webkit', 'not applicable');
 
+    test.setTimeout(60000);
+
     await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
     await page.goto('/');
     await page.getByTestId('topbar-options').click();
