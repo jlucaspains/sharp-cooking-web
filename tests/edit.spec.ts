@@ -8,6 +8,7 @@ test.describe('Edit recipe', () => {
     await page.getByLabel('Title').clear();
     await page.getByLabel('Title').fill('Changed Recipe');
     await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
     await page.goto('/');
     expect(await page.getByText('Changed Recipe').textContent()).toEqual("Changed Recipe");
   });
@@ -19,6 +20,7 @@ test.describe('Edit recipe', () => {
     await page.getByPlaceholder('1 cup flour').last().press("Enter");
     await page.getByPlaceholder('1 cup flour').last().fill("New Ingredient");
     await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
     await page.goto('#/recipe/1');
     expect(await page.getByText('New Ingredient').textContent()).toEqual("New Ingredient");
   });
@@ -30,6 +32,7 @@ test.describe('Edit recipe', () => {
     await page.getByPlaceholder('Preheat oven to 350 F').last().press("Enter");
     await page.getByPlaceholder('Preheat oven to 350 F').last().fill("New Step");
     await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
     await page.goto('#/recipe/1');
     expect(await page.getByText('New Step').textContent()).toEqual("New Step");
   });

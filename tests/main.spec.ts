@@ -21,12 +21,13 @@ test.describe('List of recipes', () => {
   });
 
   test('sort by title', async ({ page }) => {
-    await page.goto('/');
+    test.setTimeout(60000);
+
     await createRecipe(page, 2, "ZZ last recipe", 1);
     await createRecipe(page, 3, "00 first recipe", 2);
-    page.goBack(); // back to main page
+    await page.goto('/');
 
-    await page.locator('#headlessui-menu-button-10').click();
+    await page.getByTestId('topbar-options').click();
     await page.getByRole('menuitem', { name: 'Sort by Title' }).click();
 
     const names = page.getByTestId('recipe-title');
@@ -35,10 +36,11 @@ test.describe('List of recipes', () => {
   });
 
   test('sort by rating', async ({ page }) => {
-    await page.goto('/');
+    test.setTimeout(60000);
+
     await createRecipe(page, 2, "ZZ last recipe", 2);
     await createRecipe(page, 3, "00 first recipe", 1);
-    page.goBack(); // back to main page
+    await page.goto('/');
 
     await page.getByTestId('topbar-options').click();
     await page.getByRole('menuitem', { name: 'Sort by Rating' }).click();
@@ -50,10 +52,11 @@ test.describe('List of recipes', () => {
 
 
   test('sort by changed date', async ({ page }) => {
-    await page.goto('/');
+    test.setTimeout(60000);
+
     await createRecipe(page, 2, "00 first recipe", 2);
     await createRecipe(page, 3, "ZZ last recipe", 1);
-    page.goBack(); // back to main page
+    await page.goto('/');
 
     await page.getByTestId('topbar-options').click();
     await page.getByRole('menuitem', { name: 'Sort by Changed Date' }).click();

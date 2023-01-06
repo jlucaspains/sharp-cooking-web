@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
 
 test('Restore backup', async ({ page }) => {
     await page.addInitScript(() => {

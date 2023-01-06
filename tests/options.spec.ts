@@ -33,6 +33,7 @@ test.describe('Options', () => {
     await page.getByText('Language').click();
     await page.getByText('Portuguese').click();
     await page.getByRole('button').getByText("OK").click();
+    await page.waitForTimeout(1000);
     expect(await page.isVisible("text='Cozinha Afiada'")).toBe(true);
   });
   
@@ -50,7 +51,9 @@ test.describe('Options', () => {
   });
 
   
-  test('steps interval', async ({ page }) => {
+  test('steps interval', async ({ page, browserName }) => {
+    test.skip(browserName === 'webkit', 'not applicable');
+
     await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
     await page.goto('/');
     await page.getByTestId('topbar-options').click();
@@ -64,5 +67,24 @@ test.describe('Options', () => {
     await page.getByTestId('time-value').type("1000AM");
     await page.getByRole('button').getByText("OK").click();
     expect(await page.getByText('10:40 AM').textContent()).toBe('10:40 AM');
+  });
+
+  test('steps interval webkit', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'not applicable');
+
+    await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
+    await page.goto('/');
+    await page.getByTestId('topbar-options').click();
+    await page.getByRole('menuitem', { name: 'Options' }).click();
+    await page.getByText('Steps Interval').click();
+    await page.getByTestId('steps-interval-input').clear();
+    await page.getByTestId('steps-interval-input').fill("10");
+    await page.getByRole('button').getByText("OK").click();
+    await page.goto('#/recipe/2');
+    await page.getByTestId('time-button').click();
+    await page.getByTestId('time-value-input').clear();
+    await page.getByTestId('time-value-input').type("10:00");
+    await page.getByRole('button').getByText("OK").click();
+    expect(await page.getByText('10:40 AM').textContent()).toBe('10:40 AM');
   });
 });

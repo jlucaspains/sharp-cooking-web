@@ -8,6 +8,7 @@ test('add new recipe', async ({ page }) => {
 });
 
 test('create many recipes', async ({ page }) => {
+  test.setTimeout(60000);
   await createRecipe(page, 2, "Bread 2", 5);
   await page.goto('/');
   expect(await page.getByText('Bread 2').textContent()).toEqual('Bread 2');
