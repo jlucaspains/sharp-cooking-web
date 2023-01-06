@@ -72,8 +72,6 @@ test.describe('Options', () => {
   test('steps interval webkit', async ({ page, browserName }) => {
     test.skip(browserName !== 'webkit', 'not applicable');
 
-    test.setTimeout(60000);
-
     await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
     await page.goto('/');
     await page.getByTestId('topbar-options').click();
@@ -84,6 +82,7 @@ test.describe('Options', () => {
     await page.getByRole('button').getByText("OK").click();
     await page.goto('#/recipe/2');
     await page.getByTestId('time-button').click();
+    await page.screenshot({ path: 'test-results/steps-webkit.png'});
     await page.getByTestId('time-value-input').clear();
     await page.getByTestId('time-value-input').type("10:00");
     await page.getByRole('button').getByText("OK").click();
