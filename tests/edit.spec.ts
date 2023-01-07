@@ -36,7 +36,7 @@ test('add step', async ({ page }) => {
   expect(await page.getByText('New Step').textContent()).toEqual("New Step");
 });
 
-test('add image', async ({ page, browserName }) => {
+test('add image', async ({ page, browserName, isMobile }) => {
   test.skip(browserName === 'webkit', 'not applicable');
 
   await page.addInitScript(async () => {
@@ -59,7 +59,11 @@ test('add image', async ({ page, browserName }) => {
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   await page.getByTestId('add-image-button').click();
-  expect(await page.getByRole("img").count()).toBe(4);
+  if (isMobile) {
+    expect(await page.getByRole("img").count()).toBe(2);
+  } else {
+    expect(await page.getByRole("img").count()).toBe(4);
+  }
 });
 
 test('remove image', async ({ page }) => {
