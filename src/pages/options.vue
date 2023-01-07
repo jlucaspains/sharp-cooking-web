@@ -133,7 +133,7 @@ function setSelectedLanguage() {
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.multiplierType") }}</span>
-      <label class="switch float-right align-middle">
+      <label data-testid="use-fractions-toggle" class="switch float-right align-middle">
         <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
         <span class="slider round"></span>
       </label>
@@ -205,7 +205,7 @@ function setSelectedLanguage() {
         action: updateStepsInterval,
       },
     ]">
-      <input v-model.number="stepsIntervalEditing" class="block my-2 p-2 w-full rounded text-black" />
+      <input v-model.number="stepsIntervalEditing" data-testid="steps-interval-input" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <Modal :isOpen="isLanguagesModalOpen" @closed="isLanguagesModalOpen = false"
       :title="t('pages.options.languageModalTitle')" :buttons="[

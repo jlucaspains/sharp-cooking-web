@@ -246,7 +246,7 @@ function setDisplayTime() {
   const currentTime = new Date();
 
   const year = currentTime.getFullYear().toString();
-  const month = currentTime.getMonth().toString().padStart(2, "0");
+  const month = (currentTime.getMonth() + 1).toString().padStart(2, "0");
   const date = currentTime.getDate().toString().padStart(2, "0");
 
   const newDate = new Date(`${year}-${month}-${date}T${startTime.value}`);
@@ -256,14 +256,13 @@ function setDisplayTime() {
   isTimeModalOpen.value = false;
 }
 
-function shareAsText() {
+async function shareAsText() {
   if (navigator.share) {
-    navigator
+    await navigator
       .share({
         title: item.value.title,
         text: asText(item.value), 
       })
-      .catch((error) => console.log("Error sharing", error));
   } else {
     notify(
       {
@@ -354,7 +353,7 @@ async function shareAsFile() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="editItem">
+        " data-testid="edit-button" @click="editItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
@@ -373,7 +372,7 @@ async function shareAsFile() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="toggleScreenLight">
+        " data-testid="toggle-screen-button" @click="toggleScreenLight">
         <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -391,7 +390,7 @@ async function shareAsFile() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="changeMultiplier">
+        " data-testid="multiplier-button" @click="changeMultiplier">
         <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 3 21 3 21 9" />
@@ -412,7 +411,7 @@ async function shareAsFile() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="changeTime">
+        " data-testid="time-button" @click="changeTime">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
@@ -432,7 +431,7 @@ async function shareAsFile() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="printItem">
+        " data-testid="print-button" @click="printItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
@@ -483,7 +482,7 @@ async function shareAsFile() {
         },
       ]">
       <span class="dark:text-white">Enter decimal value of quantity. E.g. 0.5 or 2</span>
-      <input @keyup.enter="applyMultiplier" type="number" v-model="newMultiplier"
+      <input @keyup.enter="applyMultiplier" data-testid="multiplier-value" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
@@ -499,7 +498,7 @@ async function shareAsFile() {
           action: setDisplayTime,
         },
       ]">
-      <TimePicker @keyup.enter="setDisplayTime" v-model="startTime"></TimePicker>
+      <TimePicker @keyup.enter="setDisplayTime" data-testid="time-value" v-model="startTime"></TimePicker>
     </Modal>
     <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
       :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[

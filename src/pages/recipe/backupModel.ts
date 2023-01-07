@@ -1,7 +1,7 @@
 import { Recipe } from "../../services/recipe";
 
 export class BackupModel extends Recipe {
-  constructor(base: Recipe) {
+  constructor() {
     super();
 
     this.ingredients = [];

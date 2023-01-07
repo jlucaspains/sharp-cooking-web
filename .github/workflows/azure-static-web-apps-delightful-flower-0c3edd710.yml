@@ -54,6 +54,46 @@ jobs:
           api_location: "api" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
 
+  test:
+    needs: [build_and_deploy_job]
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    name: E2E Tests
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.29.1-focal
+    env:
+      BASEURL: https://delightful-flower-0c3edd710-${{github.event.number}}.centralus.2.azurestaticapps.net # sets value for URL to test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      # - name: Install yarn
+      #   run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright install chromium firefox webkit
+          HOME=/root npx playwright test
+
+      - name: Create test summary
+        uses: test-summary/action@dist
+        if: always()
+        with:
+          paths: test-results/junit.xml
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest

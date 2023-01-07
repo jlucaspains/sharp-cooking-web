@@ -67,7 +67,7 @@ router.afterEach((to) => {
         <div class="flex truncate">
           <router-link class="items-center py-2" to="/">
             <span
-              class="text-lg font-semibold whitespace-nowrap dark:text-white"
+              class="text-lg font-semibold whitespace-nowrap text-white"
               >{{ state.title }}</span
             >
           </router-link>
@@ -82,6 +82,7 @@ router.afterEach((to) => {
             >
               <div>
                 <MenuButton
+                  data-testid="topbar-options"
                   class="
                     py-2
                     inline-flex
@@ -168,6 +169,7 @@ router.afterEach((to) => {
             </Menu>
             <button
               v-else
+              data-testid="topbar-single-button"
               class="
                 p-2
                 inline-flex

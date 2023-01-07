@@ -138,7 +138,7 @@ function goToOptions() {
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
-      <input type="text" :placeholder="t('pages.index.search')" v-model="searchText"
+      <input type="text" data-testid="search-input" :placeholder="t('pages.index.search')" v-model="searchText"
         class="p-2 my-2 rounded text-black" />
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
@@ -165,19 +165,21 @@ function goToOptions() {
         </div>
         <div class="h-full pt-2">
           <div class="truncate inline-block" style="width: calc(100% - 35px)">
-            <span class="text-ellipsis text-black dark:text-white text-lg">{{
+            <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
             item.title
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
-            <span class="text-black dark:text-white">{{ item.score }}⭐</span>
+            <span data-testid="recipe-score" class="text-black dark:text-white">{{ item.score }}⭐</span>
           </div>
         </div>
       </div>
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
-        <MenuButton class="
+        <MenuButton 
+        data-testid="add-menu-button"
+        class="
           w-12
           h-12
           m-1
