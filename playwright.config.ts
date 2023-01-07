@@ -33,7 +33,7 @@ const config: PlaywrightTestConfig = {
   reporter: [
     ['list'],
     ['html'],
-    ['junit', { outputFile: './test-results/junit.xml' }],    
+    ['junit', { outputFile: './test-results/junit.xml' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -60,6 +60,12 @@ const config: PlaywrightTestConfig = {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+      },
+    },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['DeskDesktop Firefox'],
       },
     },
     {

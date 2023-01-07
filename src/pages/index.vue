@@ -138,7 +138,7 @@ function goToOptions() {
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="flex flex-col mb-2 md:hidden">
-      <input type="text" :placeholder="t('pages.index.search')" v-model="searchText"
+      <input type="text" data-testid="search-input" :placeholder="t('pages.index.search')" v-model="searchText"
         class="p-2 my-2 rounded text-black" />
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">

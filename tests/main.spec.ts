@@ -101,4 +101,20 @@ test.describe('List of recipes', () => {
 
     await expect(page).toHaveURL(new RegExp(".*/import-backup"));
   });
+
+
+  test('search', async ({ page, isMobile }) => {
+    if (!isMobile) {
+      test.skip();
+    }
+
+    await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
+    await page.goto('/');
+
+    await page.getByTestId('search-input').fill("Cookie");
+    await page.waitForTimeout(500);
+    const names = page.getByTestId('recipe-title');
+    expect(await names.count()).toBe(1);
+    await expect(names.first()).toHaveText('Favorite cookie');
+  });
 });
