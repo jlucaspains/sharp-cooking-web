@@ -21,7 +21,7 @@ class RecipeDatabase extends Dexie {
             settings: "name"
         }).upgrade((transaction) => {
             transaction.table("recipeImages").toCollection().modify((image: RecipeImage) => {
-                if(image.image) {
+                if (image.image) {
                     image.url = image.image;
                 }
                 image.image = null;
@@ -126,7 +126,7 @@ export async function initialize() {
 
     for (const recipe of recipes) {
         await saveRecipe(recipe);
-        await saveRecipeImage({recipeId: id, image: null, url: "/bread.jpg"})
+        await saveRecipeImage({ recipeId: id, image: null, url: "/bread.jpg" })
     }
 }
 
@@ -141,7 +141,7 @@ export async function saveRecipeImage(recipeImage: RecipeImage) {
 
 export async function deleteRecipe(id: number) {
     console.time("deleteRecipe");
-    
+
     const images = await db.recipeImages.where("recipeId").equals(id).toArray();
 
     for (const item of images) {
@@ -156,7 +156,7 @@ export async function deleteRecipe(id: number) {
 export async function deleteRecipeImage(id: number) {
     const sequence = Math.random();
     console.time(`deleteRecipeImage ${sequence}`);
-    
+
     await db.recipeImages.delete(id);
 
     console.timeEnd(`deleteRecipeImage ${sequence}`);
@@ -164,10 +164,10 @@ export async function deleteRecipeImage(id: number) {
 
 export async function getNextRecipeId(): Promise<number> {
     console.time("getNextRecipeId");
-    
+
     const item = await db.recipes.orderBy("id").reverse().first();
 
-    const result = item?.id ? item.id + 1 : 1; 
+    const result = item?.id ? item.id + 1 : 1;
 
     console.timeEnd("getNextRecipeId");
 
@@ -176,7 +176,7 @@ export async function getNextRecipeId(): Promise<number> {
 
 export async function saveSetting(name: string, value: string): Promise<void> {
     console.time("saveSetting");
-    
+
     await db.settings.put({ name: name, value: value });
 
     console.timeEnd("saveSetting");
@@ -184,7 +184,7 @@ export async function saveSetting(name: string, value: string): Promise<void> {
 
 export async function getSetting(name: string, defaultValue: string): Promise<string> {
     console.time("getSetting");
-    
+
     const setting = await db.settings.get(name);
     const result = setting ? setting.value : defaultValue;
 
@@ -201,7 +201,16 @@ export async function prepareBackup(): Promise<Array<BackupModel>> {
 
     const result = [];
     for (const recipe of allRecipes) {
-        const model = recipe as BackupModel;
+        const model = new BackupModel();
+        model.id = recipe.id;
+        model.title = recipe.title;
+        model.ingredients = recipe.ingredients;
+        model.multiplier = recipe.multiplier;
+        model.notes = recipe.notes;
+        model.score = recipe.score;
+        model.changedOn = recipe.changedOn;
+        model.source = recipe.source;
+        model.steps = recipe.steps;
         model.images = allImages.filter(item => item.recipeId == model.id).map(item => item.url);
         result.push(model);
     }
@@ -218,8 +227,22 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
     const recipe = await db.recipes.get(id);
     const allImages = await db.recipeImages.where("recipeId").equals(id).toArray();
 
-    const result = [];
-    const model = recipe as BackupModel;
+    const result: Array<BackupModel> = [];
+
+    if (!recipe) {
+        return result;
+    }
+
+    const model = new BackupModel();
+    model.id = recipe.id;
+    model.title = recipe.title;
+    model.ingredients = recipe.ingredients;
+    model.multiplier = recipe.multiplier;
+    model.notes = recipe.notes;
+    model.score = recipe.score;
+    model.changedOn = recipe.changedOn;
+    model.source = recipe.source;
+    model.steps = recipe.steps;
     model.images = allImages.map(item => item.url);
     result.push(model);
 

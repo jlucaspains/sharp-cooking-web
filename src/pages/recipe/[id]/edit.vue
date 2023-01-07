@@ -168,13 +168,6 @@ async function pickImage() {
   item.value.imageAvailable = images.value.length > 0;
 }
 
-async function fileSelected(selectedFiles: FileList | null) {
-  if (selectedFiles && selectedFiles.length > 0) {
-    item.value.image = await getBase64(selectedFiles[0]);
-    item.value.imageAvailable = !!item.value.image;
-  }
-}
-
 function getBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -211,6 +204,7 @@ async function importRecipe() {
       body: `{"url": "${importRecipeUrl.value}", "downloadImage": true}`
     });
 
+
     success = result.ok;
     if (!result.ok) {
       return;
@@ -221,8 +215,12 @@ async function importRecipe() {
     item.value.score = 5;
     item.value.ingredients = html.ingredients.map((x: any) => x.raw);
     item.value.steps = html.steps.map((x: any) => x.raw);
-    item.value.image = html.image;
-    item.value.imageAvailable = !!item.value.image
+
+    if (html.image) {
+      images.value.push(new RecipeImage(id.value, null, html.image));
+    }
+
+    item.value.imageAvailable = images.value.length > 0;
   }
   catch {
     isImportModalOpen.value = true;
@@ -283,7 +281,7 @@ function removeImage() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="pickImage">
+        " data-testid="add-image-button" @click="pickImage">
           <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor"
@@ -302,7 +300,7 @@ function removeImage() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " @click="removeImage">
+        " data-testid="remove-image-button" @click="removeImage">
           <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24">
             <path fill="currentColor"
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
@@ -399,7 +397,7 @@ function removeImage() {
     action: importRecipe,
   },
 ]">
-      <input v-model="importRecipeUrl" class="block my-2 p-2 w-full rounded text-black" />
+      <input v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

@@ -256,14 +256,13 @@ function setDisplayTime() {
   isTimeModalOpen.value = false;
 }
 
-function shareAsText() {
+async function shareAsText() {
   if (navigator.share) {
-    navigator
+    await navigator
       .share({
         title: item.value.title,
         text: asText(item.value), 
       })
-      .catch((error) => console.log("Error sharing", error));
   } else {
     notify(
       {
