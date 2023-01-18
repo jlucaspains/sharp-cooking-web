@@ -7,11 +7,11 @@ export const i18nextPromise = i18next
     .use(LanguageDetector)
     .use(Backend)
     .init({
-        load: 'languageOnly',
-        fallbackLng: 'en'
+        load: 'all',
+        fallbackLng: 'en-US'
     });
 
 export default function (app: any) {
-    app.use(I18NextVue, { i18next })
+    app.use(I18NextVue, { i18next });
     return app
 }

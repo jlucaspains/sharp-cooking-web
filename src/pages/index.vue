@@ -16,7 +16,7 @@ const items = ref([] as RecipeViewModel[]);
 const searchText = ref("");
 let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
-const addOptions = ref([] as Array<{name: string, text: string, action: () => void}>);
+const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -153,7 +153,8 @@ function goToOptions() {
           overflow-hidden
         ">
         <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
-          <img alt="Recipe image" @error="item.imageAvailable = false" v-if="item.imageAvailable" :src="item.image" class="object-contain" />
+          <img alt="Recipe image" @error="item.imageAvailable = false" v-if="item.imageAvailable" :src="item.image"
+            class="object-contain" />
           <div v-else class="bg-theme-primary h-full grid place-items-center">
             <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
@@ -166,7 +167,7 @@ function goToOptions() {
         <div class="h-full pt-2">
           <div class="truncate inline-block" style="width: calc(100% - 35px)">
             <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
-            item.title
+              item.title
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
@@ -177,9 +178,7 @@ function goToOptions() {
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
-        <MenuButton 
-        data-testid="add-menu-button"
-        class="
+        <MenuButton data-testid="add-menu-button" class="
           w-12
           h-12
           m-1
