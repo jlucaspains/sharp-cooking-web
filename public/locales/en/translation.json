@@ -45,8 +45,8 @@
             "privacyPolicyDescription": "Review our policy to understand what we know and keep about you",
             "language": "Language",
             "languageModalTitle": "Change app language",
-            "pt": "Portuguese",
-            "en": "English",
+            "pt-BR": "Brazilian Portuguese",
+            "en-US": "American English",
             "storageStats": "Storage",
             "storageNotTraceable": "Storage cannot be tracked on this device",
             "storageDescription": "Space used {{used}} of {{remaining}} available."

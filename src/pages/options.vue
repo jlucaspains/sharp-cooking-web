@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useState } from "../services/store";
 import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
 import Modal from "../components/Modal.vue";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
-import i18next from "i18next";
 import { humanFileSize } from "../helpers/storageHelper";
 
-const { t } = useTranslation();
+const { t, i18next } = useTranslation();
 
 const state = useState()!;
 const router = useRouter()!;
@@ -18,9 +17,9 @@ const useFractions = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
-const displayLanguage = ref("English");
+const displayLanguage = computed(() => t(`pages.options.${i18next.language}`));
 const selectedLanguage = ref("");
-const availableLanguages = ref(["pt", "en"] as Array<string>);
+const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
 
@@ -34,18 +33,17 @@ onMounted(async () => {
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
-  selectedLanguage.value = i18next.resolvedLanguage;
-  displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
-  storageDescription.value = await getStorageDescription();
+  selectedLanguage.value = i18next.language;
+  storageDescription.value = await getStorageDescription(i18next.language);
 });
 
 watch(displayLanguage, async (value) => {
   // translation not used in vue template so we need to manually refresh
   state.title = t("pages.options.title");
-  storageDescription.value = await getStorageDescription();
+  storageDescription.value = await getStorageDescription(i18next.language);
 });
 
-async function getStorageDescription() {
+async function getStorageDescription(locale: string) {
   if (!navigator.storage || !navigator.storage.estimate) {
     return t("pages.options.storageNotTraceable");
   }
@@ -57,7 +55,7 @@ async function getStorageDescription() {
   }
 
   const remaining = quota.quota - quota.usage;
-  return t("pages.options.storageDescription", { used: humanFileSize(quota.usage), remaining: humanFileSize(remaining) });
+  return t("pages.options.storageDescription", { used: humanFileSize(quota.usage, [locale]), remaining: humanFileSize(remaining, [locale]) });
 }
 
 function reviewReleaseNotes() {
@@ -99,13 +97,12 @@ function updateUseFractions() {
 }
 
 function showChangeLanguageModal() {
-  selectedLanguage.value = i18next.resolvedLanguage;
+  selectedLanguage.value = i18next.language;
   isLanguagesModalOpen.value = true;
 }
 
 async function setSelectedLanguage() {
   i18next.changeLanguage(selectedLanguage.value);
-  displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
   isLanguagesModalOpen.value = false;
 }
 </script>
