@@ -46,7 +46,10 @@
             "language": "Language",
             "languageModalTitle": "Change app language",
             "pt": "Portuguese",
-            "en": "English"
+            "en": "English",
+            "storageStats": "Storage",
+            "storageNotTraceable": "Storage cannot be tracked on this device",
+            "storageDescription": "Space used {{used}} of {{remaining}} available."
         },
         "recipe": {
             "id": {

@@ -46,7 +46,10 @@
             "language": "Língua",
             "languageModalTitle": "Alterar a linguagem do aplicativo",
             "pt": "Português",
-            "en": "Inglês"
+            "en": "Inglês",
+            "storageStats": "Armazenamento",
+            "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
+            "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível."
         },
         "recipe": {
             "id": {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useState } from "../services/store";
 import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
@@ -7,6 +7,7 @@ import Modal from "../components/Modal.vue";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import i18next from "i18next";
+import { humanFileSize } from "../helpers/storageHelper";
 
 const { t } = useTranslation();
 
@@ -21,6 +22,7 @@ const displayLanguage = ref("English");
 const selectedLanguage = ref("");
 const availableLanguages = ref(["pt", "en"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
+const storageDescription = ref("");
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -34,7 +36,29 @@ onMounted(async () => {
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.resolvedLanguage;
   displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
+  storageDescription.value = await getStorageDescription();
 });
+
+watch(displayLanguage, async (value) => {
+  // translation not used in vue template so we need to manually refresh
+  state.title = t("pages.options.title");
+  storageDescription.value = await getStorageDescription();
+});
+
+async function getStorageDescription() {
+  if (!navigator.storage || !navigator.storage.estimate) {
+    return t("pages.options.storageNotTraceable");
+  }
+
+  const quota = await navigator.storage.estimate();
+
+  if (!quota.usage || !quota.quota) {
+    return t("pages.options.storageNotTraceable");
+  }
+
+  const remaining = quota.quota - quota.usage;
+  return t("pages.options.storageDescription", { used: humanFileSize(quota.usage), remaining: humanFileSize(remaining) });
+}
 
 function reviewReleaseNotes() {
   window.open("https://sharpcooking.net/changelog", "Change Log", "noopener")
@@ -79,13 +103,10 @@ function showChangeLanguageModal() {
   isLanguagesModalOpen.value = true;
 }
 
-function setSelectedLanguage() {
+async function setSelectedLanguage() {
   i18next.changeLanguage(selectedLanguage.value);
   displayLanguage.value = t(`pages.options.${i18next.resolvedLanguage}`);
   isLanguagesModalOpen.value = false;
-
-  // translation not used in vue template so we need to manually refresh
-  state.title = t("pages.options.title");
 }
 </script>
 
@@ -139,6 +160,12 @@ function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
+      <div>
+        <span class="text-gray-500 text-sm">{{ storageDescription }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="takeBackup">
@@ -196,31 +223,32 @@ function setSelectedLanguage() {
     </div>
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
       :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
-      {
-        title: t('general.cancel'),
-        action: () => isStepsIntervalModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: updateStepsInterval,
-      },
-    ]">
-      <input v-model.number="stepsIntervalEditing" data-testid="steps-interval-input" class="block my-2 p-2 w-full rounded text-black" />
+        {
+          title: t('general.cancel'),
+          action: () => isStepsIntervalModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: updateStepsInterval,
+        },
+      ]">
+      <input v-model.number="stepsIntervalEditing" data-testid="steps-interval-input"
+        class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <Modal :isOpen="isLanguagesModalOpen" @closed="isLanguagesModalOpen = false"
       :title="t('pages.options.languageModalTitle')" :buttons="[
-      {
-        title: t('general.cancel'),
-        action: () => isLanguagesModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: setSelectedLanguage,
-      },
-    ]">
+        {
+          title: t('general.cancel'),
+          action: () => isLanguagesModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: setSelectedLanguage,
+        },
+      ]">
       <div v-for="language in availableLanguages">
         <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
-        <label :for="`lang_${language}`" class="dark:text-white ml-2">{{t(`pages.options.${language}`)}}</label>
+        <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`)}}</label>
       </div>
     </Modal>
   </div>
