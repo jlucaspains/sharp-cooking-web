@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeImage, initialize } from "../services/dataService";
+import { getRecipes, getRecipeImage, initialize, saveSetting, getSetting } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
@@ -47,6 +47,22 @@ function sortByDate(items: Array<RecipeViewModel>) {
     return 0;
   });
 }
+async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boolean = true) {
+  if (saveSort) {
+    await saveSortOption(type);
+  }
+
+  switch (type) {
+    case "title":
+      return await sortByTitle(items);
+    case "rating":
+      return await sortByRating(items);
+    case "date":
+      return await sortByDate(items);
+    default:
+      return items;
+  }
+}
 
 onMounted(async () => {
   await initialize();
@@ -72,20 +88,20 @@ onMounted(async () => {
       children: [
         {
           text: t("pages.index.sortByTitle"),
-          action: () => {
-            items.value = sortByTitle(items.value);
+          action: async () => {
+            items.value = await sort("title", items.value);
           },
         },
         {
           text: t("pages.index.sortByRating"),
-          action: () => {
-            items.value = sortByRating(items.value);
+          action: async () => {
+            items.value = await sort("rating", items.value);
           },
         },
         {
           text: t("pages.index.sortByRecipeDate"),
-          action: () => {
-            items.value = sortByDate(items.value);
+          action: async () => {
+            items.value = await sort("date", items.value);
           },
         },
         {
@@ -110,7 +126,9 @@ onMounted(async () => {
     recipe.imageAvailable = recipe.image ? true : false;
   }
 
-  items.value = allRecipes;
+  const sortType = await getSetting("AllRecipesSort", "");
+
+  items.value = await sort(sortType, allRecipes, false);
 });
 
 watch(searchText, (currentValue, oldValue) => {
@@ -132,6 +150,9 @@ function goToImportFromBackup() {
 }
 function goToOptions() {
   router.push("/options");
+}
+async function saveSortOption(type: string) {
+  await saveSetting("AllRecipesSort", type);
 }
 </script>
 
@@ -171,7 +192,7 @@ function goToOptions() {
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
-            <span data-testid="recipe-score" class="text-black dark:text-white">{{ item.score }}⭐</span>
+            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score }}⭐</span>
           </div>
         </div>
       </div>
