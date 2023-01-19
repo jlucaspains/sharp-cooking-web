@@ -10,12 +10,11 @@ interface MenuOption {
 interface State {
     title: string;
     menuOptions?: MenuOption[];
-    hideTopBar?: boolean;
-    fullScreen?: boolean;
+    indexScrollY: number;
   }
 
 export const stateSymbol = Symbol('state') as InjectionKey<State>;
-export const createState = () => reactive({ title: "", menuOptions: [] });
+export const createState = () => reactive({ title: "", menuOptions: [], indexScrollY: 0 });
 
 export const useState = () => inject(stateSymbol);
 export const provideState = () => provide(

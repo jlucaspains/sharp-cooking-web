@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
@@ -16,6 +16,7 @@ const items = ref([] as RecipeViewModel[]);
 const searchText = ref("");
 let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
+let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
 
 function sortByTitle(items: Array<RecipeViewModel>) {
@@ -118,6 +119,10 @@ onMounted(async () => {
     );
   }, 200);
 
+  debouncedScroll = debounce((currentValue: number) => {
+    state.indexScrollY = currentValue;
+  }, 200);
+
   allRecipes = (await getRecipes()) as RecipeViewModel[];
 
   for (const recipe of allRecipes) {
@@ -129,11 +134,26 @@ onMounted(async () => {
   const sortType = await getSetting("AllRecipesSort", "");
 
   items.value = await sort(sortType, allRecipes, false);
+
+  window.addEventListener("scroll", onScrol)
+
+  await nextTick();
+  if (state.indexScrollY > 0) {
+    window.scrollTo(0, state.indexScrollY);
+  }
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", onScrol);
 });
 
 watch(searchText, (currentValue, oldValue) => {
   debouncedWatch(currentValue, oldValue);
 });
+
+function onScrol() {
+  debouncedScroll(window.scrollY);
+}
 
 function goToRecipe(id: number) {
   router.push(`/recipe/${id}`);
