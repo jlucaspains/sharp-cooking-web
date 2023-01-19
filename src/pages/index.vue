@@ -54,11 +54,11 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 
   switch (type) {
     case "title":
-      return await sortByTitle(items);
+      return sortByTitle(items);
     case "rating":
-      return await sortByRating(items);
+      return sortByRating(items);
     case "date":
-      return await sortByDate(items);
+      return sortByDate(items);
     default:
       return items;
   }
