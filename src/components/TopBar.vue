@@ -15,7 +15,7 @@ router.afterEach((to) => {
 </script>
 
 <template>
-  <div class="no-print" v-show="!state.hideTopBar">
+  <div class="no-print">
     <nav
       class="
         header

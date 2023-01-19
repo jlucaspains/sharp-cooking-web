@@ -19,8 +19,8 @@ onMounted(async () => {
 
 <template>
   <TopBar />
-  <div :class="{'container mx-auto': !state.fullScreen}">
-    <div :class="{'mt-16 mx-4 mb-10': !state.fullScreen, 'dark:text-white': true}">
+  <div class="container mx-auto">
+    <div class="mt-16 mx-4 mb-10 dark:text-white">
       <router-view v-slot="{ Component }">
         <transition mode="out-in">
           <component :is="Component"></component>
