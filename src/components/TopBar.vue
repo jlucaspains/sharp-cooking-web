@@ -141,7 +141,7 @@ router.afterEach((to) => {
                       v-for="child in menuOption.children"
                     >
                       <button
-                        @click.prevent="child.action"
+                        @click="child.action"
                         :class="[
                           active
                             ? 'bg-theme-secondary text-white'
@@ -185,7 +185,7 @@ router.afterEach((to) => {
                 focus-visible:ring-white
                 focus-visible:ring-opacity-75
               "
-              @click.prevent="menuOption.action"
+              @click="menuOption.action"
             >
               <svg
                 class="h-6 w-6 text-white"
