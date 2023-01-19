@@ -104,7 +104,7 @@ function close() {
             <div class="transition-all duration-1000 ease-in-out w-full" ref="el"
                 :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
 
-                <div v-show="isOpen">
+                <div v-show="isOpen" class="btn-close-section">
                     <a href="#" @click.prevent="toggleImage">
                         <svg class="h-6 w-6 float-right dark:text-white" width="24" height="24" viewBox="0 0 24 24"
                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -116,11 +116,13 @@ function close() {
                     </a>
                 </div>
 
-                <ul class="flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
+                <ul
+                    class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="(image, i) in props.images" :key="image">
                         <li class="w-full flex-shrink-0 snap-start">
                             <a href="#" @click.prevent="toggleImageIfNotOpen">
-                                <img :alt="`Image Gallery ${i}`" :src="image.url" :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen}">
+                                <img :alt="`Image Gallery ${i}`" :src="image.url"
+                                    :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
                         </li>
                     </template>
@@ -128,7 +130,7 @@ function close() {
 
                 <div class="m-auto max-w-full">
                     <div class="flex" v-show="props.images.length > 1">
-                        <a :class="{'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true}"
+                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="prev">
                             <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24"
                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -140,7 +142,7 @@ function close() {
                             </svg>
                         </a>
                         <ul
-                            :class="{'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true}">
+                            :class="{ 'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
                             <template v-for="(image, i) in props.images" :key="image">
                                 <li class="flex-shrink-0 snap-start mx-1">
                                     <a class="inline-block" href="#" @click.prevent="activeImage = i">
@@ -154,17 +156,18 @@ function close() {
                             </template>
                         </ul>
                         <ul
-                            :class="{'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true}">
+                            :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
                             <template v-for="(image, i) in props.images" :key="image">
                                 <li class="w-28 flex-shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
-                                        <img :alt="`Image Gallery ${i}`" :src="image.url" class="" height="150" width="150">
+                                        <img :alt="`Image Gallery ${i}`" :src="image.url" class="" height="150"
+                                            width="150">
                                     </a>
                                 </li>
                             </template>
                         </ul>
-                        <a :class="{'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true}"
+                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="next">
                             <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24"
                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
@@ -235,5 +238,15 @@ body {
 
 .snap-start {
     scroll-snap-align: start;
+}
+
+.btn-close-section {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.list-images {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 </style>
