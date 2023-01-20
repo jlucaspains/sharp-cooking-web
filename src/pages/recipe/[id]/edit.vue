@@ -74,6 +74,7 @@ onMounted(async () => {
     recipe.title = "";
     recipe.steps.push("");
     recipe.ingredients.push("");
+    recipe.score = 3;
   } else {
     recipe = (await getRecipe(id.value)) as RecipeViewModel;
   }

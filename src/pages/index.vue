@@ -48,6 +48,22 @@ function sortByDate(items: Array<RecipeViewModel>) {
     return 0;
   });
 }
+async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boolean = true) {
+  if (saveSort) {
+    await saveSortOption(type);
+  }
+
+  switch (type) {
+    case "title":
+      return sortByTitle(items);
+    case "rating":
+      return sortByRating(items);
+    case "date":
+      return sortByDate(items);
+    default:
+      return items;
+  }
+}
 
 onMounted(async () => {
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
@@ -73,20 +89,20 @@ onMounted(async () => {
       children: [
         {
           text: t("pages.index.sortByTitle"),
-          action: () => {
-            items.value = sortByTitle(items.value);
+          action: async () => {
+            items.value = await sort("title", items.value);
           },
         },
         {
           text: t("pages.index.sortByRating"),
-          action: () => {
-            items.value = sortByRating(items.value);
+          action: async () => {
+            items.value = await sort("rating", items.value);
           },
         },
         {
           text: t("pages.index.sortByRecipeDate"),
-          action: () => {
-            items.value = sortByDate(items.value);
+          action: async () => {
+            items.value = await sort("date", items.value);
           },
         },
         {
@@ -115,7 +131,9 @@ onMounted(async () => {
     recipe.imageAvailable = recipe.image ? true : false;
   }
 
-  items.value = allRecipes;
+  const sortType = await getSetting("AllRecipesSort", "");
+
+  items.value = await sort(sortType, allRecipes, false);
 
   window.addEventListener("scroll", onScrol)
 
@@ -152,6 +170,9 @@ function goToImportFromBackup() {
 }
 function goToOptions() {
   router.push("/options");
+}
+async function saveSortOption(type: string) {
+  await saveSetting("AllRecipesSort", type);
 }
 </script>
 
@@ -191,7 +212,7 @@ function goToOptions() {
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
-            <span data-testid="recipe-score" class="text-black dark:text-white">{{ item.score }}⭐</span>
+            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score }}⭐</span>
           </div>
         </div>
       </div>
