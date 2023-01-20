@@ -66,7 +66,7 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 }
 
 onMounted(async () => {
-  await initialize();
+  await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
     name: "AddManual",
     text: t("pages.index.addManually"),

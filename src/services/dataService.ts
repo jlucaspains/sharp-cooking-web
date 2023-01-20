@@ -83,48 +83,19 @@ export async function saveRecipe(recipe: Recipe): Promise<number> {
     return result;
 }
 
-export async function initialize() {
+export async function initialize(recipes: Array<Recipe>) {
     const count = await db.recipes.count();
 
     if (count > 0) {
         return;
     }
 
-    const id = await getNextRecipeId();
-    const recipes = [
-        {
-            id: id,
-            title: "Sourdough Bread",
-            score: 5,
-            changedOn: new Date().toISOString(),
-            source: "Breadtopia",
-            ingredients: [
-                "142g whole wheat flour",
-                "312g white bread flour",
-                "7.1g salt",
-                "354g purified water",
-                "80g starter"
-            ],
-            steps: [
-                "Mix together the dry ingredients",
-                "Dissolve the starter into water",
-                "Add wet into dry ingredients and stir until incorporated",
-                "Cover with plastic or airtight lid and reserve for 15 minutes",
-                "Perform the first set of folds and reserve for another 15 minutes",
-                "Perform the second set of folds and reserve for another 15 minutes",
-                "Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step",
-                "Ferment for 10-14 hours at room temperature (68 - 72F)",
-                "Shape and proof for about 2 hours",
-                "Bake in covered dutch oven ou La Cloche at 420F for 30 minutes",
-                "Uncover and bake for another 14 minutes",
-                "Let it cool completely on rack before carving"
-            ],
-            notes: "May replace whole wheat flour with rye for added taste",
-            multiplier: 1
-        }
-    ];
-
     for (const recipe of recipes) {
+        const id = await getNextRecipeId();
+        recipe.id = id;
+        recipe.changedOn = new Date().toISOString();
+        recipe.multiplier = 1;
+
         await saveRecipe(recipe);
         await saveRecipeImage({ recipeId: id, image: null, url: "/bread.jpg" })
     }

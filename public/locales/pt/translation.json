@@ -11,8 +11,8 @@
         "save": "Salvar"
     },
     "logic": {
-        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
-        "stepRegex": "(?<Minutes>\\d{1,5}\\,?\\d{0,5})\\s*(minutes|minute|min)\\b|(?<Hours>\\d{1,5}\\,?\\d{0,5})\\s*(hours|hour)\\b|(?<Days>\\d{1,5}\\,?\\d{0,5})\\s*(days|day)\\b"
+        "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
+        "stepRegex": "(?<Minutes>\\d{1,5}\\,?\\d{0,5})\\s*(minutos|minuto|min)\\b|(?<Hours>\\d{1,5}\\,?\\d{0,5})\\s*(horas|hora)\\b|(?<Days>\\d{1,5}\\,?\\d{0,5})\\s*(dias|dia)\\b"
     },
     "pages": {
         "index": {
@@ -116,5 +116,34 @@
                 "processing2": "Ainda processando. Isso pode demorar até 1 minuto..."
             }
         }
-    }
+    },
+    "initialRecipes": [
+        {
+            "title": "Pão de fermentação natural",
+            "score": 5,
+            "source": "Breadtopia",
+            "ingredients": [
+                "142g farinha de trigo integral",
+                "312g farinha de trigo para pães",
+                "7g sal",
+                "354g água",
+                "80g fermento natural"
+            ],
+            "steps": [
+                "Misture os ingredientes secos",
+                "Dissolva o fermento natural na água",
+                "Adicione os ingredientes molhados aos secos e mexa até incorporar",
+                "Cubra com plástico ou tampa hermética e reserve por 15 minutos",
+                "Faça a primeira série de dobras e reserve por mais 15 minutos",
+                "Faça a segunda série de dobras e reserve por mais 15 minutos",
+                "Faça a primeira série de dobras e faça um teste de vidraça. Se o glúten ainda não estiver desenvolvido, repita esta etapa",
+                "Fermente por 10-14 horas em temperatura ambiente (20C - 24C)",
+                "Enrole o pao e deixe crescer por cerca de 2 horas",
+                "Asse em panela alta de barro ou ferro com tampa ou em La Cloche a 215C por 30 minutos",
+                "Retire a tampa e asse por mais 15 minutos",
+                "Deixe esfriar completamente antes de servir"
+            ],
+            "notes": "Pode substituir a farinha de trigo integral por centeio para adicionar sabor"
+        }
+    ]
 }
