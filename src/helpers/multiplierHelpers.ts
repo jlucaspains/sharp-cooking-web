@@ -1,6 +1,16 @@
 import Fraction from "fraction.js";
 
-export function applyMultiplierToString(input: string, multiplier: number, regex: string, useFractionsOverDecimal: boolean): string {
+function localeParseFloat(s: string, locale: string) {
+    // Get the thousands and decimal separator characters used in the locale.
+    let [, thousandsSeparator, , , , decimalSeparator] = 1111.1.toLocaleString(locale);
+
+    const cleanInput = s.replace(thousandsSeparator, "").replace(decimalSeparator, ".");
+
+    // Now it can be parsed
+    return parseFloat(cleanInput);
+}
+
+export function applyMultiplierToString(input: string, multiplier: number, regex: string, useFractionsOverDecimal: boolean, locale: string): string {
     multiplier = multiplier > 0 ? multiplier : 1;
 
     if (multiplier == 1) {
@@ -14,9 +24,15 @@ export function applyMultiplierToString(input: string, multiplier: number, regex
         return input;
     }
 
-    const maybeFraction = new Fraction(match.groups["Quantity"]).mul(multiplier);
+    let quantity: string | number = match.groups["Quantity"];
 
-    const newValue = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString();
+    if (quantity.indexOf("/") < 0) {
+        quantity = localeParseFloat(quantity, locale);
+    }
+
+    const maybeFraction = new Fraction(quantity).mul(multiplier);
+
+    const newValue = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString(locale);
 
     return input.replace(regexp, newValue);
 }

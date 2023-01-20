@@ -21,6 +21,7 @@ import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import { RecipeImage } from "../../../services/recipe";
+import i18next from "i18next";
 
 const route = useRoute();
 const router = useRouter();
@@ -153,6 +154,7 @@ function getDisplayValues(
         recipe.multiplier,
         t("logic.ingredientRegex"),
         useFractionsOverDecimal,
+        i18next.language
       )
     ),
   });
