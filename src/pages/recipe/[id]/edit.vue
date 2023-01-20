@@ -66,6 +66,21 @@ onMounted(async () => {
 
   if (query.value.import == "1") {
     isImportModalOpen.value = true;
+
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .readText()
+        .then((clipText) => {
+          if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
+            importRecipeUrl.value = clipText
+          }
+        })
+        .catch((error) => {
+          console.warn(`Failed to read clipboard: ${error}`);
+        });
+    } else {
+      console.log("navigator.clipboard is not available");
+    }
   }
 
   let recipe: RecipeViewModel;
@@ -92,9 +107,10 @@ onMounted(async () => {
     }
 
     item.value = recipe;
-    nextTick(() => {
-      isDirty = false;
-    });
+
+    await nextTick();
+
+    isDirty = false;
   }
 });
 
@@ -375,29 +391,29 @@ function removeImage() {
     </div>
     <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
       :buttons="[
-  {
-    title: t('pages.recipe.id.edit.dirtyStay'),
-    action: () => isDirtyModalClose(false),
-  },
-  {
-    title: t('pages.recipe.id.edit.dirtyLeave'),
-    danger: true,
-    action: () => isDirtyModalClose(true),
-  },
-]">
+        {
+          title: t('pages.recipe.id.edit.dirtyStay'),
+          action: () => isDirtyModalClose(false),
+        },
+        {
+          title: t('pages.recipe.id.edit.dirtyLeave'),
+          danger: true,
+          action: () => isDirtyModalClose(true),
+        },
+      ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
     <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false"
       :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
-  {
-    title: t('general.cancel'),
-    action: () => isImportModalOpen = false,
-  },
-  {
-    title: t('general.ok'),
-    action: importRecipe,
-  },
-]">
+        {
+          title: t('general.cancel'),
+          action: () => isImportModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipe,
+        },
+      ]">
       <input v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"

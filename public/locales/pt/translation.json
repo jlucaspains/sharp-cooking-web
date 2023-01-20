@@ -57,7 +57,7 @@
                     "newRecipe": "Nova Receita",
                     "savedSuccessfully": "Salvo com sucesso!",
                     "importedSuccessfully": "Importado com sucesso",
-                    "couldNotImport": "Esta receita não podia ser importada",
+                    "couldNotImport": "Esta receita não pode ser importada",
                     "title": "Nome",
                     "recipeImage": "Imagem de Receita",
                     "rating": "Classificação",
