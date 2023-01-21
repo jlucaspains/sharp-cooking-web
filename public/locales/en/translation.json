@@ -71,7 +71,9 @@
                     "dirtyStay": "Keep editing",
                     "importTitle": "Please provide recipe URL",
                     "importContent1": "Loading recipe...",
-                    "importContent2": "Still loading. This may take up to a minute."
+                    "importContent2": "Still loading. This may take up to a minute.",
+                    "ingredientPlaceholder": "1 cup flour",
+                    "stepPlaceholder": "Preheat oven to 350 F"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"

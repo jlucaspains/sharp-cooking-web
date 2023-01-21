@@ -339,7 +339,7 @@ function removeImage() {
         </svg>
       </button>
       <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
-        <input type="text" placeholder="1 cup flour" v-model="item.ingredients[index]"
+        <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')" v-model="item.ingredients[index]"
           @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
           class="block p-2 rounded flex-auto text-black shadow-sm" />
         <button type="button" class="ml-2 align-middle" title="Delete Ingredient"
@@ -363,7 +363,7 @@ function removeImage() {
         </svg>
       </button>
       <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
-        <input type="text" placeholder="Preheat oven to 350 F" v-model="item.steps[index]"
+        <input type="text" :placeholder="t('pages.recipe.id.edit.stepPlaceholder')" v-model="item.steps[index]"
           class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
         <button type="button" class="ml-2" title="Delete Step" @click="item.steps.splice(index, 1)">
           <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"

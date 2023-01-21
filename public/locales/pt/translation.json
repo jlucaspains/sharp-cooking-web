@@ -71,7 +71,9 @@
                     "dirtyStay": "Continuar a editar",
                     "importTitle": "Por favor, forneça URL de receita",
                     "importContent1": "Receita de carregamento...",
-                    "importContent2": "Still loading. This may take up to a minute."
+                    "importContent2": "Still loading. This may take up to a minute.",
+                    "ingredientPlaceholder": "1 copo de farinha de trigo",
+                    "stepPlaceholder": "Pré-aqueça o forno a 180 C"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
