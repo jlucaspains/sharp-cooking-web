@@ -66,21 +66,6 @@ onMounted(async () => {
 
   if (query.value.import == "1") {
     isImportModalOpen.value = true;
-
-    if (navigator.clipboard) {
-      navigator.clipboard
-        .readText()
-        .then((clipText) => {
-          if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
-            importRecipeUrl.value = clipText
-          }
-        })
-        .catch((error) => {
-          console.warn(`Failed to read clipboard: ${error}`);
-        });
-    } else {
-      console.log("navigator.clipboard is not available");
-    }
   }
 
   let recipe: RecipeViewModel;
@@ -257,6 +242,37 @@ async function importRecipe() {
   }
 }
 
+async function fillUrlFromClipboard() {
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .readText()
+      .then((clipText) => {
+        if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
+          importRecipeUrl.value = clipText
+        }
+      })
+      .catch((error) => {
+        notify(
+          {
+            group: "error",
+            title: t("general.error"),
+            text: t("pages.recipe.id.edit.importFromClipboardFailed"),
+          },
+          2000
+        );
+      });
+  } else {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.edit.importFromClipboardNotAccessible"),
+      },
+      2000
+    );
+  }
+}
+
 function removeImage() {
   deletedImages.push(images.value[selectedImage.value]);
   images.value.splice(selectedImage.value, 1);
@@ -339,8 +355,8 @@ function removeImage() {
         </svg>
       </button>
       <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
-        <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')" v-model="item.ingredients[index]"
-          @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
+        <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')"
+          v-model="item.ingredients[index]" @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
           class="block p-2 rounded flex-auto text-black shadow-sm" />
         <button type="button" class="ml-2 align-middle" title="Delete Ingredient"
           @click="item.ingredients.splice(index, 1)">
@@ -405,6 +421,12 @@ function removeImage() {
     </Modal>
     <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false"
       :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
+        {
+          title: t('pages.recipe.id.edit.importFromClipboard'),
+          action: async () => {
+            await fillUrlFromClipboard();
+          }
+        },
         {
           title: t('general.cancel'),
           action: () => isImportModalOpen = false,
