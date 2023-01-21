@@ -71,7 +71,12 @@
                     "dirtyStay": "Keep editing",
                     "importTitle": "Please provide recipe URL",
                     "importContent1": "Loading recipe...",
-                    "importContent2": "Still loading. This may take up to a minute."
+                    "importContent2": "Still loading. This may take up to a minute.",
+                    "importFromClipboard": "Copied URL",
+                    "importFromClipboardNotAccessible": "Apologies, this feature is not available in this browser.",
+                    "importFromClipboardFailed": "Something went wrong. Please try again.",
+                    "ingredientPlaceholder": "1 cup flour",
+                    "stepPlaceholder": "Preheat oven to 350 F"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"

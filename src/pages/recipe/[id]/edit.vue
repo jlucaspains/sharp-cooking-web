@@ -92,9 +92,10 @@ onMounted(async () => {
     }
 
     item.value = recipe;
-    nextTick(() => {
-      isDirty = false;
-    });
+
+    await nextTick();
+
+    isDirty = false;
   }
 });
 
@@ -241,6 +242,37 @@ async function importRecipe() {
   }
 }
 
+async function fillUrlFromClipboard() {
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .readText()
+      .then((clipText) => {
+        if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
+          importRecipeUrl.value = clipText
+        }
+      })
+      .catch((error) => {
+        notify(
+          {
+            group: "error",
+            title: t("general.error"),
+            text: t("pages.recipe.id.edit.importFromClipboardFailed"),
+          },
+          2000
+        );
+      });
+  } else {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.edit.importFromClipboardNotAccessible"),
+      },
+      2000
+    );
+  }
+}
+
 function removeImage() {
   deletedImages.push(images.value[selectedImage.value]);
   images.value.splice(selectedImage.value, 1);
@@ -323,8 +355,8 @@ function removeImage() {
         </svg>
       </button>
       <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
-        <input type="text" placeholder="1 cup flour" v-model="item.ingredients[index]"
-          @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
+        <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')"
+          v-model="item.ingredients[index]" @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
           class="block p-2 rounded flex-auto text-black shadow-sm" />
         <button type="button" class="ml-2 align-middle" title="Delete Ingredient"
           @click="item.ingredients.splice(index, 1)">
@@ -347,7 +379,7 @@ function removeImage() {
         </svg>
       </button>
       <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
-        <input type="text" placeholder="Preheat oven to 350 F" v-model="item.steps[index]"
+        <input type="text" :placeholder="t('pages.recipe.id.edit.stepPlaceholder')" v-model="item.steps[index]"
           class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
         <button type="button" class="ml-2" title="Delete Step" @click="item.steps.splice(index, 1)">
           <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -375,29 +407,35 @@ function removeImage() {
     </div>
     <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
       :buttons="[
-  {
-    title: t('pages.recipe.id.edit.dirtyStay'),
-    action: () => isDirtyModalClose(false),
-  },
-  {
-    title: t('pages.recipe.id.edit.dirtyLeave'),
-    danger: true,
-    action: () => isDirtyModalClose(true),
-  },
-]">
+        {
+          title: t('pages.recipe.id.edit.dirtyStay'),
+          action: () => isDirtyModalClose(false),
+        },
+        {
+          title: t('pages.recipe.id.edit.dirtyLeave'),
+          danger: true,
+          action: () => isDirtyModalClose(true),
+        },
+      ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
     <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false"
       :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
-  {
-    title: t('general.cancel'),
-    action: () => isImportModalOpen = false,
-  },
-  {
-    title: t('general.ok'),
-    action: importRecipe,
-  },
-]">
+        {
+          title: t('pages.recipe.id.edit.importFromClipboard'),
+          action: async () => {
+            await fillUrlFromClipboard();
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isImportModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipe,
+        },
+      ]">
       <input v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
