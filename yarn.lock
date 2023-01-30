@@ -2495,6 +2495,11 @@ minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
   integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
+mitt@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
+  integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -2537,10 +2542,12 @@ nosleep.js@^0.12.0:
   resolved "https://registry.yarnpkg.com/nosleep.js/-/nosleep.js-0.12.0.tgz#a01fddab2c13af357d673928b1f40a9013a4dc08"
   integrity sha512-9d1HbpKLh3sdWlhXMhU6MMH+wQzKkrgfRkYV0EBdvt99YJfj0ilCJrWRDYG2130Tm4GXbEoTCx5b34JSaP+HhA==
 
-notiwind@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/notiwind/-/notiwind-1.2.6.tgz#9796792b4000d31f7b6591779b8f5320ab107cbd"
-  integrity sha512-muU2I95/D97PDf/4dzB/H+C8CMpz2Dn0hZQ7ak7t1uMbe7/h0Hjy5OAHsLLfOgnE7UMrrocgQfXE6q66QW8L7g==
+notiwind@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/notiwind/-/notiwind-2.0.0.tgz#9ee43a2939707fd476643519b5035eb4bc49f7b5"
+  integrity sha512-TRl3vTVnBEqvNQZM15oFtS63S6hGobkRIWTyvcGyNcOzsTPb8WybE6vuXTelUgUbMqQooSae1L25cqOyFMjTMg==
+  dependencies:
+    mitt "^3.0.0"
 
 object-hash@^3.0.0:
   version "3.0.0"
