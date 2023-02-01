@@ -20,7 +20,7 @@
     "jszip": "^3.10.1",
     "lodash.debounce": "^4.0.8",
     "nosleep.js": "^0.12.0",
-    "notiwind": "^1.2.6",
+    "notiwind": "^2.0.0",
     "vue": "^3.2.25",
     "vue-router": "4",
     "workbox-build": "^6.5.4",
