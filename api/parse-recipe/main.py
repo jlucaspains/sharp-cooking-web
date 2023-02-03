@@ -3,7 +3,6 @@ import json
 
 import azure.functions as func
 
-from zipfile import ZipFile
 from recipe_scrapers import scrape_me
 from pint import UnitRegistry
 from uuid import uuid4
