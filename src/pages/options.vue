@@ -83,7 +83,7 @@ function reviewTermsOfUse() {
 }
 
 function reviewPrivacyPolicy() {
-  window.open("https://sharpcooking.net/privacypolicy", "Privacy Policy", "noopener")
+  window.open("https://sharpcooking.net/webprivacypolicy", "Privacy Policy", "noopener")
 }
 
 function updateStepsInterval() {
