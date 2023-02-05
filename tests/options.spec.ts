@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { createRecipe } from './helpers';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("DoNotAskToInstall", "true");
+  });
+});
+
 test('create backup', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
 

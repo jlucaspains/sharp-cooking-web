@@ -3,6 +3,7 @@ import { onMounted } from "vue";
 import TopBar from "./components/TopBar.vue";
 import { useState } from "./services/store";
 import Notification from "./components/Notification.vue";
+import InstallPrompt from "./components/InstallPrompt.vue";
 import { i18nextPromise } from './i18n';
 import i18next from "i18next";
 
@@ -20,6 +21,7 @@ onMounted(async () => {
 <template>
   <TopBar />
   <div class="container mx-auto">
+    <InstallPrompt />
     <div class="mt-16 mx-4 mb-10 dark:text-white">
       <router-view v-slot="{ Component }">
         <transition mode="out-in">

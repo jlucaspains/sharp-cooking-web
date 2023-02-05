@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("DoNotAskToInstall", "true");
+  });
+});
+
 test('title', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();

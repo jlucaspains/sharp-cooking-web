@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { createRecipe } from './helpers';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("DoNotAskToInstall", "true");
+  });
+});
+
 test('edit', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Bread').first().click();
