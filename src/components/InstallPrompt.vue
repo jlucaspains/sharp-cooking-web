@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTranslation } from "i18next-vue";
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import Modal from "./Modal.vue";
 import {
     saveSetting,
@@ -56,7 +56,7 @@ async function promptInstallApp() {
 
     deferredPrompt.prompt();
 
-    const { outcome } = await deferredPrompt.userChoice;
+    await deferredPrompt.userChoice;
 
     deferredPrompt = null;
 
