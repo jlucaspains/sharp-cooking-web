@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+        window.localStorage.setItem("DoNotAskToInstall", "true");
+    });
+});
+
 test('Restore json backup', async ({ page }) => {
     await page.addInitScript(() => {
 
@@ -82,7 +88,7 @@ test('Restore zip backup', async ({ page, browserName }) => {
     await page.route(/.*\/api\/process-backup/, async route => {
         const json = JSON.parse(response);
         await route.fulfill({ json });
-      });
+    });
 
     await page.goto('#/recipe/import-backup');
     await page.getByTestId("import-button").click();

@@ -6,16 +6,25 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+import { DirectiveBinding } from "vue";
 
 const props = defineProps<{
   isOpen: boolean;
-  buttons: Array<{ title: string; danger?: boolean; action: () => void }>;
+  buttons: Array<{ title: string; danger?: boolean; focus?: boolean; action: () => void }>;
   title: string;
 }>();
 
 const emit = defineEmits<{
   (e: "closed"): void;
 }>();
+
+const vFocus = {
+  mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+    if (binding.value) {
+      el.focus()
+    }
+  }
+}
 
 function closeModal() {
   emit("closed");
@@ -45,9 +54,11 @@ function closeModal() {
               </div>
 
               <div class="mt-4 float-right">
-                <button v-for="button in props.buttons" type="button" :class="['inline-flex justify-center rounded-md border border-transparent', 
-                'px-4 py-2 mr-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2', 
-                button.danger ? 'bg-red-500 hover:bg-red-700' : 'bg-gray-200 text-black dark:bg-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900']" @click="button.action">
+                <button v-for="button in props.buttons" type="button"
+                  :class="['inline-flex justify-center rounded-md border border-transparent',
+                  'px-4 py-2 mr-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+                  button.danger ? 'bg-red-500 hover:bg-red-700' : 'bg-gray-200 text-black dark:bg-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900']"
+                  @click="button.action" v-focus="button.focus">
                   {{ button.title }}
                 </button>
               </div>

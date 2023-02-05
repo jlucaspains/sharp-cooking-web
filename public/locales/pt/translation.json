@@ -150,5 +150,11 @@
             ],
             "notes": "Pode substituir a farinha de trigo integral por centeio para adicionar sabor"
         }
-    ]
+    ],
+    "installPrompt": {
+        "installWithPromptMessage": "O Sharp Cooking foi projetado para funcionar melhor quando instalado como um aplicativo independente. Gostaria de instalar?",
+        "installManualMessage": "O Sharp Cooking foi projetado para funcionar melhor quando instalado como um aplicativo independente. No iOS, use o compartilhamento e selecione Adicionar à tela inicial.",
+        "title": "Instalar o Sharp Cooking",
+        "stopAsking": "Não pergunte novamente"
+    }
 }
