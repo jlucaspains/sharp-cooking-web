@@ -54,6 +54,13 @@ jobs:
           api_location: "api" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
 
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        # if: github.event_name == 'push'
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: 'v${{ steps.gitversion.outputs.majorMinorPatch }}'
+
   test:
     needs: [build_and_deploy_job]
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -68,9 +75,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14.x"
-
-      # - name: Install yarn
-      #   run: npm install -g yarn
 
       - name: Install dependencies
         run: yarn
