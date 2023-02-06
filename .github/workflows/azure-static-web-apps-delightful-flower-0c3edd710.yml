@@ -55,7 +55,7 @@ jobs:
           output_location: "dist" # Built app content directory - optional
 
       - uses: "marvinpinto/action-automatic-releases@latest"
-        # if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
