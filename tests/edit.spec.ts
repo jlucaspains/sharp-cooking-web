@@ -61,6 +61,17 @@ test('add image', async ({ page, browserName, isMobile }) => {
     };
   });
 
+  
+  const response = `{
+    "name": "recipe.png",
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+}`;
+
+  await page.route(/.*\/api\/process-image/, async route => {
+    const json = JSON.parse(response);
+    await route.fulfill({ json });
+  });
+
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
