@@ -189,19 +189,21 @@ async function pickImage() {
 
     images.value.push(new RecipeImage(id.value, null, result.image));
     item.value.imageAvailable = images.value.length > 0;
-  } catch (error) {
+  } catch {
     success = false;
-    
-    notify(
-      {
-        group: "error",
-        title: t("general.error"),
-        text: t("pages.recipe.id.edit.failedToProcessImage"),
-      },
-      2000
-    );
   } finally {
     isProcessingImage.value = false;
+
+    if (!success) {
+      notify(
+        {
+          group: "error",
+          title: t("general.error"),
+          text: t("pages.recipe.id.edit.failedToProcessImage"),
+        },
+        2000
+      );
+    }
   }
 }
 
