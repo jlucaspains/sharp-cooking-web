@@ -76,7 +76,10 @@
                     "importFromClipboardNotAccessible": "Apologies, this feature is not available in this browser.",
                     "importFromClipboardFailed": "Something went wrong. Please try again.",
                     "ingredientPlaceholder": "1 cup flour",
-                    "stepPlaceholder": "Preheat oven to 350 F"
+                    "stepPlaceholder": "Preheat oven to 350 F",
+                    "failedToProcessImage": "Failed to process image. Please try again.",
+                    "processImage1": "Compressing image...",
+                    "processImage2": "Still working on the image. This may take a while"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
