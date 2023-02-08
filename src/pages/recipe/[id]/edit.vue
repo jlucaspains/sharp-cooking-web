@@ -41,6 +41,7 @@ const isDirtyModalOpen = ref(false);
 const isImportModalOpen = ref(false);
 const importRecipeUrl = ref("");
 const isImporting = ref(false);
+const isProcessingImage = ref(false);
 const stepRefs = ref<HTMLInputElement[]>([]);
 const ingredientRefs = ref<HTMLInputElement[]>([]);
 const selectedImage = ref<number>(0);
@@ -161,13 +162,49 @@ async function save() {
 }
 
 async function pickImage() {
-  const imagePicked = await fileOpen({
-    mimeTypes: ["image/*"],
-  });
+  let success = true;
 
-  const newImage = await getBase64(imagePicked);
-  images.value.push(new RecipeImage(id.value, null, newImage));
-  item.value.imageAvailable = images.value.length > 0;
+  try {
+    let result;
+    const imagePicked = await fileOpen({
+      mimeTypes: ["image/*"],
+    });
+
+    isProcessingImage.value = true;
+
+    const data = new FormData();
+    data.append('file', imagePicked);
+
+    const response = await fetch("/api/process-image", {
+      method: "POST",
+      body: data
+    });
+
+    success = response.ok;
+    if (!success) {
+      return;
+    }
+
+    result = await response.json();
+
+    images.value.push(new RecipeImage(id.value, null, result.image));
+    item.value.imageAvailable = images.value.length > 0;
+  } catch {
+    success = false;
+  } finally {
+    isProcessingImage.value = false;
+
+    if (!success) {
+      notify(
+        {
+          group: "error",
+          title: t("general.error"),
+          text: t("pages.recipe.id.edit.failedToProcessImage"),
+        },
+        2000
+      );
+    }
+  }
 }
 
 function getBase64(file: File): Promise<string> {
@@ -440,5 +477,8 @@ function removeImage() {
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />
+
+    <BusyIndicator :busy="isProcessingImage" :message1="t('pages.recipe.id.edit.processImage1')"
+      :message2="t('pages.recipe.id.edit.processImage2')" />
   </div>
 </template>

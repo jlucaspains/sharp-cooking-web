@@ -76,7 +76,10 @@
                     "importFromClipboardNotAccessible": "Desculpe, este recurso não está disponível neste navegador.",
                     "importFromClipboardFailed": "Algo deu errado. Por favor, tente novamente.",
                     "ingredientPlaceholder": "1 copo de farinha de trigo",
-                    "stepPlaceholder": "Pré-aqueça o forno a 180 C"
+                    "stepPlaceholder": "Pré-aqueça o forno a 180 C",
+                    "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
+                    "processImage1": "Comprimindo imagem...",
+                    "processImage2": "Ainda processando. Isso pode demorar um pouco..."
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
