@@ -20,7 +20,15 @@ onMounted(async () => {
     }
 
     tryPromptInstallation();
+    await persistData();
 });
+
+async function persistData() {
+    if (navigator.storage && navigator.storage.persist) {
+        const result = await navigator.storage.persist();
+        console.log(`Data persisted: ${result}`);
+    }
+}
 
 function isAppInstalled() {
     return window.matchMedia('(display-mode: standalone)').matches;
