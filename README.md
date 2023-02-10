@@ -15,6 +15,9 @@ Feel free to contribute with issues and pull requests. However, please keep it c
 * [Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/)
 * [Azure Static Web App API](https://learn.microsoft.com/en-us/azure/static-web-apps/apis-overview)
 * [Azure Functions with Python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=asgi%2Capplication-level&pivots=python-mode-configuration)
+* [Rewriting Sharp Cooking - The why and high level how](https://lpains.net/posts/2023-01-01-rewriting-sharp-cooking-app-part-1/)
+* [Rewriting Sharp Cooking - The tech stack](https://lpains.net/posts/2023-01-15-rewriting-sharp-cooking-app-part-2/)
+* [Rewriting Sharp Cooking - The unplanned API](https://lpains.net/posts/2023-01-29-rewriting-sharp-cooking-app-part-3/)
 
 ## Running the web app
 1. If you intend to contribute back to this repository, please fork it before following the next steps.
@@ -41,4 +44,15 @@ yarn dev
 3. See [Microsoft Quickstart](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-python?pivots=python-mode-configuration#run-the-function-locally) for how to run the function locally.
 
 ## Unit tests
-Unit and integration tests are being worked on and will be available in the near future.
+Sharp Cooking leverages [Playwright](https://playwright.dev/) for end to end tests. All major functionality is currently tested and contributors are expected to include reasonable tests for any code changes.
+
+Install playwright browsers:
+```powershell
+npx playwright install chromium firefox webkit
+```
+
+Run tests locally:
+```powershell
+yarn dev
+npx playwright test
+```
