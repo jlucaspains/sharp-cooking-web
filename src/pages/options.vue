@@ -59,7 +59,7 @@ async function getStorageDescription(locale: string) {
 }
 
 function reviewReleaseNotes() {
-  window.open("https://sharpcooking.net/changelog", "Change Log", "noopener")
+  window.open("https://sharpcooking.net/web/release-notes/", "Change Log", "noopener")
 }
 
 function changeStepsInterval() {
