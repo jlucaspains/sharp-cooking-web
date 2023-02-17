@@ -19,7 +19,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         logging.info(f"processing backup request id {correlation_id}")
         
-        if (len(req.files) != 1):
+        if req.files is not None and len(req.files.values()) != 1:
             return func.HttpResponse("A single file is required to process", status_code=400)
         
         for file in req.files.values():
