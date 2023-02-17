@@ -30,6 +30,7 @@ jobs:
       
       - name: Test with pytest
         run: |
+          cd api
           pytest
 
   build_and_deploy_job:
