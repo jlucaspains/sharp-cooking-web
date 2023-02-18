@@ -19,7 +19,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     req_body = req.get_json()
     url: str = req_body.get("url")
-    downloadImage: bool = req_body.get("downloadImage") or False
+    download_image: bool = req_body.get("downloadImage") or False
     try:
         logging.info(f"processing parse request id {correlation_id} for url: {url}")
         scraper = scrape_me(url, wild_mode=True)
@@ -39,7 +39,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "host": scraper.host()
         }
         
-        if downloadImage:
+        if download_image:
             image_uri = parse_recipe_image(result["image"])
             result["image"] = image_uri
 

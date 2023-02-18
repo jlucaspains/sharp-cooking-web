@@ -23,7 +23,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse("A single file is required to process", status_code=400)
         
         for file in req.files.values():
-            filename = file.filename
             contents = file.stream.read()
                 
             if file.content_type != "application/x-zip-compressed" and file.content_type != "application/zip":
