@@ -15,15 +15,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         logging.info(f"processing image request id {correlation_id}")
         
-        if (len(req.files) != 1):
-            return func.HttpResponse("A single file is required to process", status_code=400)
-        
         for file in req.files.values():
             filename = file.filename
             contents = file.stream.read()
             
             if not file.content_type.startswith("image"):
-                return func.HttpResponse("Only image files are acceptted", status_code=400)
+                return func.HttpResponse("Only image files are accepted", status_code=400)
 
             result = {
                 "name": filename,
@@ -32,7 +29,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
             return func.HttpResponse(json.dumps(result), status_code=200, mimetype="application/json")
         
-        return func.HttpResponse("Failed to process", status_code=400)
+        return func.HttpResponse("A single file is required to process", status_code=400)
     except Exception as e:
         logging.error(f"Failed to process image request id {correlation_id}. Error: {e}")
         return func.HttpResponse("The image file is invalid", status_code=400)

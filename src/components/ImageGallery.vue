@@ -71,17 +71,18 @@ function scrollToImage() {
     imageEl.scrollLeft = localActiveImage.offsetLeft - (imageEl.clientWidth / 2);
 }
 
-function toggleImageIfNotOpen() {
+function toggleImageIfNotOpen(index: number) {
     if (!isOpen.value) {
-        toggleImage();
+        toggleImage(index);
     }
 }
 
-function toggleImage() {
+function toggleImage(index: number) {
     isOpen.value ? close() : open();
     // wait for css rendering then scroll to active image
     setTimeout(function () {
         scroll();
+        activeImage.value = index;
     }, 100);
 }
 
@@ -105,7 +106,7 @@ function close() {
                 :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
 
                 <div v-show="isOpen" class="btn-close-section">
-                    <a href="#" @click.prevent="toggleImage">
+                    <a href="#" @click.prevent="toggleImage(activeImage)">
                         <svg class="h-6 w-6 float-right dark:text-white" width="24" height="24" viewBox="0 0 24 24"
                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -120,7 +121,7 @@ function close() {
                     class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="(image, i) in props.images" :key="image">
                         <li class="w-full flex-shrink-0 snap-start">
-                            <a href="#" @click.prevent="toggleImageIfNotOpen">
+                            <a href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
