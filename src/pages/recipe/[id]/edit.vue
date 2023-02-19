@@ -331,6 +331,12 @@ function cropImage() {
   images.value[selectedImage.value].url = croppingCanvas.toDataURL();
   isCropping.value = false;
 }
+
+function cancelCropping() {
+  isCropping.value = false;
+  selectedImage.value = 0;
+  currentImage.value = images.value[0].url;
+}
 </script>
 
 <template>
@@ -394,7 +400,7 @@ function cropImage() {
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
           </svg>
         </button>
-        <button v-if="item.imageAvailable" class="
+        <button v-if="item.imageAvailable && !isCropping" class="
           w-12
           h-12
           m-1
@@ -406,14 +412,28 @@ function cropImage() {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="crop-image-button" @click="isCropping = !isCropping">
-          <svg v-if="!isCropping" class="h-6 w-6 text-white m-auto" viewBox="0 0 24 24" stroke-width="2"
+        " data-testid="crop-button" @click="isCropping = true">
+          <svg class="h-6 w-6 text-white m-auto" viewBox="0 0 24 24" stroke-width="2"
             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <path d="M8 5v10a1 1 0 0 0 1 1h10" />
             <path d="M5 8h10a1 1 0 0 1 1 1v10" />
           </svg>
-          <svg v-else class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+        </button>
+        <button v-if="item.imageAvailable && isCropping" class="
+          w-12
+          h-12
+          m-1
+          rounded-full
+          bg-theme-primary
+          hover:bg-theme-secondary
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
+        " data-testid="cancel-crop-button" @click="cancelCropping">
+          <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <line x1="18" y1="6" x2="6" y2="18" />

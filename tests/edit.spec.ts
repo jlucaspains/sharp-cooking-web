@@ -96,8 +96,8 @@ test('crop image cancel', async ({ page }) => {
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   const original = await page.getByRole("img").first().getAttribute("src");
-  await page.getByTestId('crop-image-button').click();
-  await page.getByTestId('crop-image-button').click();
+  await page.getByTestId('crop-button').click();
+  await page.getByTestId('cancel-crop-button').click();
   expect(await page.getByRole("img").count()).toBe(1);
   const afterCropCancel = await page.getByRole("img").first().getAttribute("src");
   expect(original).toBe(afterCropCancel);
@@ -107,9 +107,9 @@ test('crop image', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
-  await page.getByTestId('crop-image-button').click();
+  await page.getByTestId('crop-button').click();
   await page.waitForTimeout(1000);
   await page.getByTestId('accept-crop-button').click();
   const afterCrop = await page.getByRole("img").first().getAttribute("src");
-  expect(afterCrop).toContain('data:');
+  expect(afterCrop).toContain('data:'); // initial recipe is a file reference
 });
