@@ -203,7 +203,9 @@ async function pickImage() {
     result = await response.json();
 
     images.value.push(new RecipeImage(id.value, null, result.image));
-    item.value.imageAvailable = images.value.length > 0;
+    item.value.imageAvailable = true;
+    selectedImage.value = 0;
+    currentImage.value = images.value[0].url;
   } catch {
     success = false;
   } finally {
