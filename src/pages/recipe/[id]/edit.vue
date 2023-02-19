@@ -190,7 +190,7 @@ async function pickImage() {
     const data = new FormData();
     data.append('file', imagePicked);
 
-    const response = await fetch("/api/process-image", {
+    const response = await fetch("http://localhost:7071/api/process-image", {
       method: "POST",
       body: data
     });
@@ -220,15 +220,6 @@ async function pickImage() {
       );
     }
   }
-}
-
-function getBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 }
 
 function addIngredientAt(index: number) {
@@ -343,7 +334,7 @@ function cropImage() {
 <template>
   <div>
     <div v-if="!isCropping">
-      <ImageGallery v-if="item.imageAvailable" @selection-changed="(value) => selectedImage = value" :images="images" />
+      <ImageGallery v-if="item.imageAvailable" @selectionChanged="selectedImage = $event" :images="images" />
       <div class="
           bg-theme-primary
           rounded-lg
@@ -401,7 +392,7 @@ function cropImage() {
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
           </svg>
         </button>
-        <button class="
+        <button v-if="item.imageAvailable" class="
           w-12
           h-12
           m-1
