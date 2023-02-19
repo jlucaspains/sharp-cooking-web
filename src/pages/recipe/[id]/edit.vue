@@ -190,7 +190,7 @@ async function pickImage() {
     const data = new FormData();
     data.append('file', imagePicked);
 
-    const response = await fetch("http://localhost:7071/api/process-image", {
+    const response = await fetch("/api/process-image", {
       method: "POST",
       body: data
     });
