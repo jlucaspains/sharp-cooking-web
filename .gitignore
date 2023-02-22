@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 dist
+dev-dist
 node_modules
 *.local
 
@@ -24,3 +25,4 @@ node_modules
 
 playwright-report
 test-results
+salt
