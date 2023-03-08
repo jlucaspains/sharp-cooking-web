@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.12",
-    "browser-fs-access": "^0.32.1",
+    "browser-fs-access": "^0.33.0",
     "dexie": "^3.2.3",
     "fraction.js": "^4.2.0",
     "i18next": "^22.4.10",
