@@ -14,7 +14,7 @@
     "fraction.js": "^4.2.0",
     "i18next": "^22.4.11",
     "i18next-browser-languagedetector": "^7.0.1",
-    "i18next-http-backend": "^2.1.1",
+    "i18next-http-backend": "^2.2.0",
     "i18next-vue": "^2.1.1",
     "lodash.debounce": "^4.0.8",
     "nosleep.js": "^0.12.0",
