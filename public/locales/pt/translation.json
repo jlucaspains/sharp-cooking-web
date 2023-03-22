@@ -21,6 +21,7 @@
             "addManually": "Adicionar manualmente...",
             "importFromWebsite": "Importar de website...",
             "importFromBackup": "Importar de backup...",
+            "importFromScan": "Importar de imagem (preview)",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
@@ -70,8 +71,8 @@
                     "dirtyLeave": "Parta de qualquer maneira.",
                     "dirtyStay": "Continuar a editar",
                     "importTitle": "Por favor, forneça URL de receita",
-                    "importContent1": "Receita de carregamento...",
-                    "importContent2": "Still loading. This may take up to a minute.",
+                    "importContent1": "Carregando receita...",
+                    "importContent2": "Ainda carregando. Isso pode demorar até um minuto.",
                     "importFromClipboard": "URL copiada",
                     "importFromClipboardNotAccessible": "Desculpe, este recurso não está disponível neste navegador.",
                     "importFromClipboardFailed": "Algo deu errado. Por favor, tente novamente.",
@@ -122,6 +123,21 @@
                 "importedSuccessfully": "Importado com sucesso",
                 "processing1": "Processando o arquivo de backup...",
                 "processing2": "Ainda processando. Isso pode demorar até 1 minuto..."
+            },
+            "importImage": {
+                "title": "Importar de imagem (preview)",
+                "parsedFailed": "Falha ao processar a imagem",
+                "selectFile": "Selecione um arquivo...",
+                "scanSelection": "Scanear seleção...",
+                "recipeTitle": "Titulo",
+                "recipeIngredients": "Ingredientes",
+                "recipeSteps": "Passos",
+                "recipeNotes": "Notas",
+                "processing1": "Processando a imagem...",
+                "processing2": "Ainda processando. Isso pode demorar até um minuto....",
+                "tip": "DICA: ",
+                "tipContent": "Garanta que pelo menos uma linha em branco existe entre os ingredientes e passos.",
+                "addContentTo": "Adicionar contento em:"
             }
         }
     },

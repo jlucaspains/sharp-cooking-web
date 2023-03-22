@@ -81,6 +81,11 @@ onMounted(async () => {
     name: "ImportFromBackup",
     text: t("pages.index.importFromBackup"),
     action: goToImportFromBackup,
+  },
+  {
+    name: "ImportFromScan",
+    text: t("pages.index.importFromScan"),
+    action: goToImportFromScan,
   }];
   state.title = t("pages.index.title");
   state.menuOptions = [
@@ -167,6 +172,9 @@ function goToImport() {
 }
 function goToImportFromBackup() {
   router.push("/recipe/import-backup");
+}
+function goToImportFromScan() {
+  router.push("/recipe/import-ocr");
 }
 function goToOptions() {
   router.push("/options");

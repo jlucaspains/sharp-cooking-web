@@ -84,7 +84,18 @@ onMounted(async () => {
   }
 
   let recipe: RecipeViewModel;
-  if (id.value === 0) {
+
+  if (query.value.ocr == "1") {
+    recipe = new RecipeViewModel();
+    recipe.title = state.message.title;
+    recipe.ingredients = state.message.ingredients.length == 0
+      ? [""]
+      : state.message.ingredients;
+    recipe.steps = state.message.steps.length == 0
+      ? [""]
+      : state.message.steps;
+    recipe.score = 3;
+  } else if (id.value === 0) {
     recipe = new RecipeViewModel();
     recipe.title = "";
     recipe.steps.push("");
@@ -344,14 +355,14 @@ function cancelCropping() {
     <div v-if="!isCropping">
       <ImageGallery v-if="item.imageAvailable" @selectionChanged="selectedImage = $event" :images="images" />
       <div class="
-          bg-theme-primary
-          rounded-lg
-          grid
-          place-items-center
-          w-full
-          h-80
-          overflow-hidden
-        " v-else>
+            bg-theme-primary
+            rounded-lg
+            grid
+            place-items-center
+            w-full
+            h-80
+            overflow-hidden
+          " v-else>
         <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
@@ -364,18 +375,18 @@ function cancelCropping() {
     <div class="h-14">
       <div class="no-print float-right">
         <button class="
-          w-12
-          h-12
-          m-1
-          rounded-full
-          bg-theme-primary
-          hover:bg-theme-secondary
-          focus:bg-theme-secondary
-          focus:shadow-lg
-          shadow-md
-          hover:shadow-lg
-          transition duration-150 ease-in-out
-        " data-testid="add-image-button" @click="pickImage">
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="add-image-button" @click="pickImage">
           <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor"
@@ -383,76 +394,76 @@ function cancelCropping() {
           </svg>
         </button>
         <button class="
-          w-12
-          h-12
-          m-1
-          rounded-full
-          bg-theme-primary
-          hover:bg-theme-secondary
-          focus:bg-theme-secondary
-          focus:shadow-lg
-          shadow-md
-          hover:shadow-lg
-          transition duration-150 ease-in-out
-        " data-testid="remove-image-button" @click="removeImage">
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="remove-image-button" @click="removeImage">
           <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24">
             <path fill="currentColor"
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
           </svg>
         </button>
         <button v-if="item.imageAvailable && !isCropping" class="
-          w-12
-          h-12
-          m-1
-          rounded-full
-          bg-theme-primary
-          hover:bg-theme-secondary
-          focus:bg-theme-secondary
-          focus:shadow-lg
-          shadow-md
-          hover:shadow-lg
-          transition duration-150 ease-in-out
-        " data-testid="crop-button" @click="isCropping = true">
-          <svg class="h-6 w-6 text-white m-auto" viewBox="0 0 24 24" stroke-width="2"
-            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="crop-button" @click="isCropping = true">
+          <svg class="h-6 w-6 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <path d="M8 5v10a1 1 0 0 0 1 1h10" />
             <path d="M5 8h10a1 1 0 0 1 1 1v10" />
           </svg>
         </button>
         <button v-if="item.imageAvailable && isCropping" class="
-          w-12
-          h-12
-          m-1
-          rounded-full
-          bg-theme-primary
-          hover:bg-theme-secondary
-          focus:bg-theme-secondary
-          focus:shadow-lg
-          shadow-md
-          hover:shadow-lg
-          transition duration-150 ease-in-out
-        " data-testid="cancel-crop-button" @click="cancelCropping">
-          <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            fill="none" stroke-linecap="round" stroke-linejoin="round">
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="cancel-crop-button" @click="cancelCropping">
+          <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
         <button v-if="isCropping" class="
-          w-12
-          h-12
-          m-1
-          rounded-full
-          bg-theme-primary
-          hover:bg-theme-secondary
-          focus:bg-theme-secondary
-          focus:shadow-lg
-          shadow-md
-          hover:shadow-lg
-          transition duration-150 ease-in-out
-        " data-testid="accept-crop-button" @click="cropImage">
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="accept-crop-button" @click="cropImage">
           <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
             stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -515,15 +526,15 @@ function cancelCropping() {
       </div>
       <label for="notes">{{ t("pages.recipe.id.edit.notes") }}</label>
       <textarea id="notes" v-model="item.notes" class="
-        block
-        p-2
-        flex-auto
-        w-full
-        h-20
-        bg-white
-        rounded
-        text-base text-black
-      " />
+          block
+          p-2
+          flex-auto
+          w-full
+          h-20
+          bg-white
+          rounded
+          text-base text-black
+        " />
     </div>
     <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
       :buttons="[
@@ -539,8 +550,8 @@ function cancelCropping() {
       ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
-    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false"
-      :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
+    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" :title="t('pages.recipe.id.edit.importTitle')"
+      :buttons="[
         {
           title: t('pages.recipe.id.edit.importFromClipboard'),
           action: async () => {
