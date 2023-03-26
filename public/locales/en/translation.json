@@ -125,7 +125,7 @@
                 "processing2": "Still processing. This may take up to 1 minute..."
             },
             "importImage": {
-                "title": "Import Image (preview)",
+                "title": "Import from Image (preview)",
                 "parsedFailed": "",
                 "selectFile": "Select a file...",
                 "scanSelection": "Scan selection...",

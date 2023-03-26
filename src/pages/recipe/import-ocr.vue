@@ -10,7 +10,9 @@ import Modal from "../../components/Modal.vue";
 import Tesseract from 'tesseract.js';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import CustomBackgroundWrapper from '../../components/CustomBackgroundWrapper.vue'
 import { useRouter } from "vue-router";
+
 let croppingCanvas: HTMLCanvasElement;
 
 const state = useState()!;
@@ -160,12 +162,13 @@ function acceptScan() {
                         }}</button>
                     <label class="ml-4 align-middle">{{ fileName }}</label>
                 </div>
-                <cropper class="cropper mt-3" @change="cropImagechanged" :src="currentImage" />
+                <cropper :background-wrapper-component="CustomBackgroundWrapper" class="cropper mt-3" @change="cropImagechanged" :src="currentImage" />
             </div>
-            <div>
+            <div v-if="canSave">
                 <div class="mt-3">
                     <div class="flex mt-3">
-                        <button :disabled="!canSave" class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
+                        <button :disabled="!canSave"
+                            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
                             data-testid="crop-image-button" @click="cropImage">{{
                                 t("pages.recipe.importImage.scanSelection") }}</button>
                     </div>
