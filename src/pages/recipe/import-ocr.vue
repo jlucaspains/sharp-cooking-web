@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
 import { notify } from "notiwind";
-import { Recipe, RecipeImage } from "../../services/recipe";
+import { Recipe } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 import Modal from "../../components/Modal.vue";
@@ -58,8 +58,6 @@ function cropImagechanged(changed: any) {
 }
 
 async function cropImage() {
-    const newImage = croppingCanvas;
-
     scanModalText.value = "";
 
     isBusy.value = true;
