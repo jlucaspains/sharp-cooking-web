@@ -94,6 +94,7 @@ onMounted(async () => {
     recipe.steps = state.message.steps.length == 0
       ? [""]
       : state.message.steps;
+    recipe.notes = state.message.notes;
     recipe.score = 3;
   } else if (id.value === 0) {
     recipe = new RecipeViewModel();

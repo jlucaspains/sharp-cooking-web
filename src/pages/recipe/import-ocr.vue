@@ -172,16 +172,16 @@ function acceptScan() {
                             data-testid="crop-image-button" @click="cropImage">{{
                                 t("pages.recipe.importImage.scanSelection") }}</button>
                     </div>
-                    <label>{{ t("pages.recipe.importImage.recipeTitle") }}</label>
-                    <input class="block p-2 w-full rounded text-black shadow-sm" v-model="title" />
-                    <label>{{ t("pages.recipe.importImage.recipeIngredients") }}</label>
-                    <textarea class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <label for="recipeTitle">{{ t("pages.recipe.importImage.recipeTitle") }}</label>
+                    <input id="recipeTitle" class="block p-2 w-full rounded text-black shadow-sm" v-model="title" />
+                    <label for="recipeIngredients">{{ t("pages.recipe.importImage.recipeIngredients") }}</label>
+                    <textarea id="recipeIngredients" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
                         v-model="ingredients"></textarea>
-                    <label>{{ t("pages.recipe.importImage.recipeSteps") }}</label>
-                    <textarea class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <label for="recipeSteps">{{ t("pages.recipe.importImage.recipeSteps") }}</label>
+                    <textarea id="recipeSteps" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
                         v-model="steps"></textarea>
-                    <label>{{ t("pages.recipe.importImage.recipeNotes") }}</label>
-                    <textarea class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <label for="recipeNotes">{{ t("pages.recipe.importImage.recipeNotes") }}</label>
+                    <textarea id="recipeNotes" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
                         v-model="notes"></textarea>
                 </div>
             </div>
