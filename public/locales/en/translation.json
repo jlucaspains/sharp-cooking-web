@@ -21,6 +21,7 @@
             "addManually": "Add manually",
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
+            "importFromScan": "Import from image (preview)",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
             "sortByRecipeDate": "Sort by Changed Date",
@@ -122,6 +123,21 @@
                 "importedSuccessfully": "Imported successfully",
                 "processing1": "Processing the backup file...",
                 "processing2": "Still processing. This may take up to 1 minute..."
+            },
+            "importImage": {
+                "title": "Import from Image (preview)",
+                "parsedFailed": "",
+                "selectFile": "Select a file...",
+                "scanSelection": "Scan selection...",
+                "recipeTitle": "Title",
+                "recipeIngredients": "Ingredients",
+                "recipeSteps": "Steps",
+                "recipeNotes": "Notes",
+                "processing1": "Processing the image file...",
+                "processing2": "Still processing. This may take up to 1 minute...",
+                "tip": "TIP: ",
+                "tipContent": "Ensure to separate individual ingredients and steps with an empty line.",
+                "addContentTo": "Add content to:"
             }
         }
     },
