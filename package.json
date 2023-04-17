@@ -8,7 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.12",
+    "@headlessui/vue": "^1.7.13",
     "browser-fs-access": "^0.33.0",
     "dexie": "^3.2.3",
     "fraction.js": "^4.2.0",
