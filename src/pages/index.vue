@@ -68,6 +68,11 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 onMounted(async () => {
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
+    name: "AddFolder",
+    text: t("pages.index.addFolder"),
+    action: goToFolder,
+  },
+  {
     name: "AddManual",
     text: t("pages.index.addManually"),
     action: goToNew,
@@ -164,6 +169,9 @@ function goToRecipe(id: number) {
   router.push(`/recipe/${id}`);
 }
 
+function goToFolder() {
+  router.push("/folder/0/edit");
+}
 function goToNew() {
   router.push("/recipe/0/edit");
 }

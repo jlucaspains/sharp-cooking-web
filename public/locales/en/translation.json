@@ -18,6 +18,7 @@
         "index": {
             "title": "All Recipes",
             "search": "Search...",
+            "addFolder": "Add Folder",
             "addManually": "Add manually",
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
@@ -138,6 +139,42 @@
                 "tip": "TIP: ",
                 "tipContent": "Ensure to separate individual ingredients and steps with an empty line.",
                 "addContentTo": "Add content to:"
+            }
+        },
+        "folder": {
+            "id": {
+                "edit": {
+                    "newFolder": "New Folder",
+                    "savedSuccessfully": "Saved successfully!",
+                    "title": "Title",
+                    "dirtyTitle": "Leave without saving?",
+                    "dirtyContent": "Changes you made so far will not be saved.",
+                    "dirtyLeave": "Leave anyway",
+                    "dirtyStay": "Keep editing"
+                },
+                "index": {
+                    "more": "More",
+                    "delete": "Delete",
+                    "shareAsText": "Share Folder Text",
+                    "shareAsFile": "Share Folder File",
+                    "enjoy": "Enjoy!",
+                    "toggleScreenOnTitle": "Screen",
+                    "toggleScreenOnDisabled": "Always on disabled",
+                    "toggleScreenOnEnabled": "Always on enabled",
+                    "sharingNotSupported": "Your system does not support Sharing!",
+                    "folderDeleted": "Folder deleted successfully.",
+                    "folderDeleteFailed": "Failed to delete the folder",
+                    "notes": "Notes",
+                    "multiplierTitle": "Multiplier",
+                    "startTimeTitle": "Start Time",
+                    "deleteModalTitle": "Delete this folder?",
+                    "deleteYes": "Yes, delete",
+                    "deleteModalBody": "This action cannot be undone.",
+                    "sharingFailed": "File sharing failed.",
+                    "sharingSucceeded": "File shared successfully.",
+                    "recipes": "Recipes"
+                },
+                "print": {}
             }
         }
     },
