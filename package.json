@@ -18,7 +18,7 @@
     "i18next-vue": "^2.1.1",
     "lodash.debounce": "^4.0.8",
     "nosleep.js": "^0.12.0",
-    "notiwind": "^2.0.0",
+    "notiwind": "^2.0.1",
     "tesseract.js": "^4.0.6",
     "vue": "^3.2.47",
     "vue-advanced-cropper": "^2.8.8",

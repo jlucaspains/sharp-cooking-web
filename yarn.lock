@@ -2713,10 +2713,10 @@ nosleep.js@^0.12.0:
   resolved "https://registry.yarnpkg.com/nosleep.js/-/nosleep.js-0.12.0.tgz#a01fddab2c13af357d673928b1f40a9013a4dc08"
   integrity sha512-9d1HbpKLh3sdWlhXMhU6MMH+wQzKkrgfRkYV0EBdvt99YJfj0ilCJrWRDYG2130Tm4GXbEoTCx5b34JSaP+HhA==
 
-notiwind@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/notiwind/-/notiwind-2.0.0.tgz#9ee43a2939707fd476643519b5035eb4bc49f7b5"
-  integrity sha512-TRl3vTVnBEqvNQZM15oFtS63S6hGobkRIWTyvcGyNcOzsTPb8WybE6vuXTelUgUbMqQooSae1L25cqOyFMjTMg==
+notiwind@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/notiwind/-/notiwind-2.0.1.tgz#ca2de48b980e70a80ff1f10842fb5357001bcf49"
+  integrity sha512-8xNwQUoga7MqrFaqIi5Y9hsq4hFq24KvM5h8w0goZ4O36YFCn5A3p5+Fdl4JV1/z3AtVLdU2GCwvrYt/ThCzoA==
   dependencies:
     mitt "^3.0.0"
 
