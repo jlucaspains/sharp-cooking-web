@@ -22,6 +22,7 @@ import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import { RecipeImage } from "../../../services/recipe";
 import i18next from "i18next";
+import { parseIngredient } from 'sharp-recipe-parser';
 
 const route = useRoute();
 const router = useRouter();
@@ -48,6 +49,7 @@ const isDeleteModalOpen = ref(false);
 const startTime = ref("");
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
+const isIngredientDetailsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -225,7 +227,7 @@ async function applyMultiplier() {
   display.value = getDisplayValues(item.value, currentTime);
 
   isMultiplierModalOpen.value = false;
-  
+
   const recipe = JSON.parse(JSON.stringify(item.value));
   await saveRecipe(recipe);
 }
@@ -263,7 +265,7 @@ async function shareAsText() {
     await navigator
       .share({
         title: item.value.title,
-        text: asText(item.value), 
+        text: asText(item.value),
       })
   } else {
     notify(
@@ -285,7 +287,7 @@ ${item.ingredients.join("\r\n")}
 
 ${t("pages.recipe.id.index.instructions")}:
 ${item.steps.join("\r\n")}`;
-  }
+}
 
 async function shareAsFile() {
   try {
@@ -317,6 +319,18 @@ async function shareAsFile() {
       2000
     );
   }
+}
+
+// replaces parts of a string with html span when matched by regex
+function highlight(text: string ) {
+  return text.replace(/\d+\w/, (match) => `<span class="text-theme-primary">${match}</span>`);
+}
+
+function showIngredientDetails() {
+  for (const item of display.value) {
+    console.log(parseIngredient(item.title, "en"));
+  }
+  isIngredientDetailsModalOpen.value = true;
 }
 </script>
 
@@ -449,8 +463,8 @@ async function shareAsFile() {
           {{ displayItem.time }}
         </div>
         <div class="-ml-3.5 mt-3">
-          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
@@ -460,8 +474,7 @@ async function shareAsFile() {
         <template v-for="subItem in displayItem.subItems">
           <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
           <div class="border-l-4 border-theme-secondary"></div>
-          <div class="lg:col-span-10 sm:col-span-9 col-span-8">
-            {{ subItem }}
+          <div class="lg:col-span-10 sm:col-span-9 col-span-8" @click="showIngredientDetails" v-html="highlight(subItem)">
           </div>
         </template>
       </template>
@@ -472,51 +485,62 @@ async function shareAsFile() {
     </div>
     <Modal :isOpen="isMultiplierModalOpen" @closed="isMultiplierModalOpen = false"
       :title="t('pages.recipe.id.index.multiplierTitle')" :buttons="[
-        {
-          title: t('general.cancel'),
-          action: () => {
-            isMultiplierModalOpen = false;
+          {
+            title: t('general.cancel'),
+            action: () => {
+              isMultiplierModalOpen = false;
+            },
           },
-        },
-        {
-          title: t('general.ok'),
-          action: applyMultiplier,
-        },
-      ]">
+          {
+            title: t('general.ok'),
+            action: applyMultiplier,
+          },
+        ]">
       <span class="dark:text-white">Enter decimal value of quantity. E.g. 0.5 or 2</span>
       <input @keyup.enter="applyMultiplier" data-testid="multiplier-value" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
-    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
-      :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
-        {
-          title: t('general.cancel'),
-          action: () => {
-            isTimeModalOpen = false;
+    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" :title="t('pages.recipe.id.index.startTimeTitle')"
+      :buttons="[
+          {
+            title: t('general.cancel'),
+            action: () => {
+              isTimeModalOpen = false;
+            },
           },
-        },
-        {
-          title: t('general.ok'),
-          action: setDisplayTime,
-        },
-      ]">
+          {
+            title: t('general.ok'),
+            action: setDisplayTime,
+          },
+        ]">
       <TimePicker @keyup.enter="setDisplayTime" data-testid="time-value" v-model="startTime"></TimePicker>
     </Modal>
     <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
       :title="t('pages.recipe.id.index.deleteModalTitle')" :buttons="[
-        {
-          title: t('general.no'),
-          action: () => {
-            isDeleteModalOpen = false;
+          {
+            title: t('general.no'),
+            action: () => {
+              isDeleteModalOpen = false;
+            },
           },
-        },
-        {
-          title: t('pages.recipe.id.index.deleteYes'),
-          danger: true,
-          action: deleteItem,
-        },
-      ]">
+          {
+            title: t('pages.recipe.id.index.deleteYes'),
+            danger: true,
+            action: deleteItem,
+          },
+        ]">
       <span class="dark:text-white">{{ t("pages.recipe.id.index.deleteModalBody") }}</span>
+    </Modal>
+    <Modal :isOpen="isIngredientDetailsModalOpen" @closed="isIngredientDetailsModalOpen = false"
+      :title="t('pages.recipe.id.index.ingredientDetailsModalTitle')" :buttons="[
+          {
+            title: t('general.ok'),
+            action: () => {
+              isIngredientDetailsModalOpen = false;
+            },
+          }
+        ]">
+      <span class="dark:text-white">Detail here</span>
     </Modal>
   </div>
 </template>

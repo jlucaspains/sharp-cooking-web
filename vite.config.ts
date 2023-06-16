@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import Pages from 'vite-plugin-pages'
 import path from 'path'
+// import util from "./src/utilPolyfill";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -44,7 +45,8 @@ export default defineConfig({
   })],
   resolve: {
     alias: {
-      '@/': `${path.resolve(__dirname, 'src')}/`
+      '@/': `${path.resolve(__dirname, 'src')}/`,
+      'util': "./src/util.js"
     }
   }
 })
