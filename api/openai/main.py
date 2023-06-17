@@ -20,7 +20,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         prompt: str = req_body.get("prompt")
 
         # openai.organization = "Personal"
-        openai.api_key = "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"
+        openai.api_key = "Put key here"
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
