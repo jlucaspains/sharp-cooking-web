@@ -13,7 +13,7 @@
     "dexie": "^3.2.3",
     "fraction.js": "^4.2.0",
     "i18next": "^22.4.15",
-    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-browser-languagedetector": "^7.0.2",
     "i18next-http-backend": "^2.2.1",
     "i18next-vue": "^2.1.1",
     "lodash.debounce": "^4.0.8",
