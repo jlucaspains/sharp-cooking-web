@@ -50,7 +50,9 @@
             "en-US": "American English",
             "storageStats": "Storage",
             "storageNotTraceable": "Storage cannot be tracked on this device",
-            "storageDescription": "Space used {{used}} of {{remaining}} available."
+            "storageDescription": "Space used {{used}} of {{remaining}} available.",
+            "enableRecipeHighlighting": "Enable recipe highlighting (preview)",
+            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details"
         },
         "recipe": {
             "id": {
@@ -107,7 +109,8 @@
                     "deleteModalBody": "This action cannot be undone.",
                     "sharingFailed": "File sharing failed.",
                     "sharingSucceeded": "File shared successfully.",
-                    "ingredients": "Ingredients"
+                    "ingredients": "Ingredients",
+                    "ingredientDetailsModalTitle": "Ingredient details (Preview)"
                 },
                 "print": {}
             },

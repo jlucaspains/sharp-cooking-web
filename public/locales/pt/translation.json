@@ -50,7 +50,9 @@
             "en-US": "Inglês Americano",
             "storageStats": "Armazenamento",
             "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
-            "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível."
+            "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
+            "enableRecipeHighlighting": "Ativar o realce da receita (pré-estréia)",
+            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa"
         },
         "recipe": {
             "id": {
@@ -107,7 +109,8 @@
                     "deleteModalBody": "Essa ação não pode ser desfeita.",
                     "sharingFailed": "O compartilhamento de arquivos falhou.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
-                    "ingredients": "Ingredientes"
+                    "ingredients": "Ingredientes",
+                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (pré-estréia)"
                 },
                 "print": {}
             },

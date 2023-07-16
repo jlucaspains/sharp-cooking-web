@@ -14,6 +14,7 @@ const state = useState()!;
 const router = useRouter()!;
 const version = ref("");
 const useFractions = ref(false);
+const enableRecipeHighlighting = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -28,10 +29,12 @@ onMounted(async () => {
   state.menuOptions = [];
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
-  const useFractionsValue = await getSetting("UseFractions", "False");
+  const useFractionsValue = await getSetting("UseFractions", "false");
+  const enableRecipeHighlightingValue = await getSetting("EnableRecipeHighlighting", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
+  enableRecipeHighlighting.value = enableRecipeHighlightingValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -59,7 +62,7 @@ async function getStorageDescription(locale: string) {
 }
 
 function reviewReleaseNotes() {
-  window.open("https://sharpcooking.net/web/release-notes/", "Change Log", "noopener")
+  window.open("https://github.com/jlucaspains/sharp-cooking-web/releases", "Change Log", "noopener")
 }
 
 function changeStepsInterval() {
@@ -96,6 +99,10 @@ function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
 }
 
+function updateEnableRecipeHighlighting() {
+  saveSetting("EnableRecipeHighlighting", `${enableRecipeHighlighting.value}`);
+}
+
 function showChangeLanguageModal() {
   selectedLanguage.value = i18next.language;
   isLanguagesModalOpen.value = true;
@@ -109,7 +116,7 @@ async function setSelectedLanguage() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewReleaseNotes">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewReleaseNotes">
       <span class="dark:text-white">{{ t("appName") }}</span>
       <div class="dark:text-white float-right">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -122,7 +129,7 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.releaseNotes") }} {{ version }}</span>
       </div>
     </div>
-    <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="showChangeLanguageModal">
+    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="showChangeLanguageModal">
       <label class="dark:text-white">{{ t("pages.options.language") }}</label>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -135,7 +142,7 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ displayLanguage }}</span>
       </div>
     </div>
-    <div class="p-2 dark:text-white rounded hover:bg-theme-secondary" @click="changeStepsInterval">
+    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="changeStepsInterval">
       <label class="dark:text-white">{{ t("pages.options.stepsInterval") }}</label>
       <div class="dark:text-white float-right ">
         <button class="mr-2 align-top">{{ stepsInterval }} {{ t("pages.options.minutes") }}</button>
@@ -149,7 +156,7 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.stepsIntervalDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.multiplierType") }}</span>
       <label data-testid="use-fractions-toggle" class="switch float-right align-middle">
         <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
@@ -159,13 +166,23 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableRecipeHighlighting") }}</span>
+      <label data-testid="enable-recipe-highlight-toggle" class="switch float-right align-middle">
+        <input v-model="enableRecipeHighlighting" type="checkbox" @change="updateEnableRecipeHighlighting">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableRecipeHighlightingDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ storageDescription }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="takeBackup">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="takeBackup">
       <span class="dark:text-white">{{ t("pages.options.takeBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -178,7 +195,7 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.takeBackupDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="restoreBackup">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="restoreBackup">
       <span class="dark:text-white">{{ t("pages.options.restoreBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -192,7 +209,7 @@ async function setSelectedLanguage() {
       </div>
     </div>
 
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewTermsOfUse">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewTermsOfUse">
       <span class="dark:text-white">{{ t("pages.options.termsOfUse") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -205,7 +222,7 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.termsOfUseDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded hover:bg-theme-secondary" @click="reviewPrivacyPolicy">
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewPrivacyPolicy">
       <span class="dark:text-white">{{ t("pages.options.privacyPolicy") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

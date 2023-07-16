@@ -1,4 +1,6 @@
 import Fraction from "fraction.js";
+import { parseIngredient, parseInstruction } from '@jlucaspains/sharp-recipe-parser';
+import { ValidLanguages } from "@jlucaspains/sharp-recipe-parser/lib/types";
 
 function localeParseFloat(s: string, locale: string) {
     // Get the thousands and decimal separator characters used in the locale.
@@ -8,6 +10,10 @@ function localeParseFloat(s: string, locale: string) {
 
     // Now it can be parsed
     return parseFloat(cleanInput);
+}
+
+function getBaseLanguage(locale: string): string {
+    return locale.split("-")[0];
 }
 
 export function applyMultiplierToString(input: string, multiplier: number, regex: string, useFractionsOverDecimal: boolean, locale: string): string {
@@ -35,4 +41,71 @@ export function applyMultiplierToString(input: string, multiplier: number, regex
     const newValue = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString(locale);
 
     return input.replace(regexp, newValue);
+}
+
+export type IngredientDisplay = {
+    text: string, quantityValue: number, minQuantity: number, maxQuantity: number,
+    quantityText: string, unit: string, unitText: string, ingredient: string;
+}
+
+export type InstructionDisplay = {
+    text: string, startTime: Date, timeInSeconds: number, temperature: number, temperatureUnit: string;
+}
+
+export function prepareIngredientDisplay(input: string, multiplier: number, useFractionsOverDecimal: boolean, locale: string, highlight: boolean = false): IngredientDisplay {
+    multiplier = multiplier > 0 ? multiplier : 1;
+
+    const lang = getBaseLanguage(locale) as ValidLanguages;
+    const result = parseIngredient(input, lang);
+    console.log(result);
+
+    if (!result) {
+        return { text: input, quantityValue: 0, minQuantity: 0, maxQuantity: 0, quantityText: "", unit: "", unitText: "", ingredient: "" };
+    }
+
+    let quantity: string | number = result.quantity;
+
+    const maybeFraction = new Fraction(quantity).mul(multiplier);
+    const newValue = maybeFraction.valueOf();
+    let newValueText = result.quantityText;
+    if (multiplier != 1) {
+        newValueText = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString(locale);
+    }
+
+    let displayText = input;
+    if (highlight) {
+        const regex = new RegExp(`${result.quantityText}( ?)${result.unitText}`, "i");
+        displayText = input.replace(regex, `<span class="text-theme-primary">${newValueText}$1${result.unitText}</span>`);
+    }
+
+    return {
+        text: displayText, quantityValue: newValue,
+        minQuantity: result.minQuantity, maxQuantity: result.maxQuantity,
+        quantityText: newValueText, unit: result.unit, unitText: result.unitText,
+        ingredient: result.ingredient
+    };
+}
+
+export function prepareStepDisplay(input: string, currentTime: Date, locale: string, highlight: boolean = false): InstructionDisplay {
+    const lang = getBaseLanguage(locale) as ValidLanguages;
+    const result = parseInstruction(input, lang);
+
+    if (!result) {
+        return { text: input, startTime: currentTime, timeInSeconds: 0, temperature: 0, temperatureUnit: "" };
+    }
+
+    let displayText = input;
+    if (highlight && result.temperature > 0) {
+        const regexTemp = new RegExp(`${result.temperature}([ |\\w|°]*?)${result.temperatureUnitText}`, "i");
+        displayText = displayText.replace(regexTemp, `<span class="text-theme-primary">${result.temperatureText}$1${result.temperatureUnitText}</span>`);
+    }
+
+    if (highlight && result.totalTimeInSeconds > 0) {
+        for (const timeItem of result.timeItems) {
+            const regexTimeItem = new RegExp(`${timeItem.timeText}( ?)${timeItem.timeUnitText}`);
+            displayText = displayText.replace(regexTimeItem, `<span class="text-theme-primary">${timeItem.timeText}$1${timeItem.timeUnitText}</span>`);
+        }
+    }
+
+    return { text: displayText, startTime: new Date(currentTime), timeInSeconds: result.totalTimeInSeconds, temperature: result.temperature, temperatureUnit: result.temperatureUnit };
 }
