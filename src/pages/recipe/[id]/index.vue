@@ -525,12 +525,10 @@ function showIngredientDetails(item: IngredientDisplay) {
         <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
           Step
         </div>
-        <!-- <template> -->
         <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
         <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text">
         </div>
-        <!-- </template> -->
       </template>
       <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
 
