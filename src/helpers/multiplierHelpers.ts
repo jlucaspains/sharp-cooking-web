@@ -57,7 +57,6 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
 
     const lang = getBaseLanguage(locale) as ValidLanguages;
     const result = parseIngredient(input, lang);
-    console.log(result);
 
     if (!result) {
         return { text: input, quantityValue: 0, minQuantity: 0, maxQuantity: 0, quantityText: "", unit: "", unitText: "", ingredient: "" };
@@ -73,9 +72,11 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
     }
 
     let displayText = input;
+    const regex = new RegExp(`${result.quantityText}( ?)${result.unitText}`, "i");
     if (highlight) {
-        const regex = new RegExp(`${result.quantityText}( ?)${result.unitText}`, "i");
         displayText = input.replace(regex, `<span class="text-theme-primary">${newValueText}$1${result.unitText}</span>`);
+    } else {
+        displayText = input.replace(regex, `${newValueText}$1${result.unitText}`);
     }
 
     return {

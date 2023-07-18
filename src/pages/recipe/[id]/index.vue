@@ -49,6 +49,7 @@ const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
+const finishTime = ref(new Date());
 const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
@@ -177,6 +178,7 @@ function prepareDisplay(
 
     return result;
   });
+  finishTime.value = new Date(nextTime);
 }
 
 function getDisplayValues(
@@ -531,7 +533,7 @@ function showIngredientDetails(item: IngredientDisplay) {
         </div>
       </template>
       <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
-
+        {{ parseTime(finishTime) }}
       </div>
       <div class="-ml-3.5 mt-3">
         <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
