@@ -505,7 +505,7 @@ function showIngredientDetails(item: IngredientDisplay) {
         </svg>
       </div>
       <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-        Ingredients ({{ item.multiplier }}x)
+        {{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)
       </div>
       <template v-for="subItem in displayIngredients">
         <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
@@ -514,7 +514,7 @@ function showIngredientDetails(item: IngredientDisplay) {
           v-html="subItem.text">
         </div>
       </template>
-      <template v-for="displayItem in displayInstructions">
+      <template v-for="(displayItem, index) in displayInstructions">
         <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
           {{ parseTime(displayItem.startTime) }}
         </div>
@@ -525,7 +525,7 @@ function showIngredientDetails(item: IngredientDisplay) {
           </svg>
         </div>
         <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-          Step
+          {{ t('pages.recipe.id.index.step') }} {{ index + 1 }}
         </div>
         <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
