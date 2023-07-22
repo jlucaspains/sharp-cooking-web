@@ -9,10 +9,11 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.13",
-    "browser-fs-access": "^0.33.1",
+    "@jlucaspains/sharp-recipe-parser": "^1.0.0-beta5",
+    "browser-fs-access": "^0.34.1",
     "dexie": "^3.2.4",
     "fraction.js": "^4.2.0",
-    "i18next": "^22.4.15",
+    "i18next": "^23.2.3",
     "i18next-browser-languagedetector": "^7.0.2",
     "i18next-http-backend": "^2.2.1",
     "i18next-vue": "^2.1.1",
@@ -23,8 +24,8 @@
     "vue": "^3.2.47",
     "vue-advanced-cropper": "^2.8.8",
     "vue-router": "4",
-    "workbox-build": "^6.6.0",
-    "workbox-window": "^6.5.4"
+    "workbox-build": "^7.0.0",
+    "workbox-window": "^7.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.32.3",
@@ -35,9 +36,9 @@
     "postcss-nesting": "^12.0.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
-    "vite": "^4.3.9",
+    "vite": "^4.3.7",
     "vite-plugin-pages": "^0.31.0",
-    "vite-plugin-pwa": "^0.15.2",
+    "vite-plugin-pwa": "^0.16.4",
     "vue-tsc": "^1.6.5"
   }
 }

@@ -15,7 +15,7 @@ import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
 import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
-import { applyMultiplierToString } from "../../../helpers/multiplierHelpers";
+import { IngredientDisplay, InstructionDisplay, prepareIngredientDisplay, prepareStepDisplay, applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
@@ -42,16 +42,23 @@ const item = ref({
   hasNotes: false
 } as RecipeViewModel);
 const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
+const displayIngredients = ref([] as IngredientDisplay[]);
+const selectedIngredient = ref({} as IngredientDisplay);
+const displayInstructions = ref([] as InstructionDisplay[])
 const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 const startTime = ref("");
+const finishTime = ref(new Date());
+const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
+const isIngredientDetailsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
+let enableRecipeHighlighting = false;
 let useFractionsOverDecimal = false;
 
 function confirmDeleteItem() {
@@ -89,10 +96,13 @@ onMounted(async () => {
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
 
   defaultTimeSetting = await getSetting("StepsInterval", "5");
+  const enableRecipeHighlightingSetting = await getSetting("EnableRecipeHighlighting", "false");
+  enableRecipeHighlighting = enableRecipeHighlightingSetting == "true";
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
 
   const currentTime = new Date();
+  prepareDisplay(recipe, currentTime);
   display.value = getDisplayValues(recipe, currentTime);
 
   if (recipe) {
@@ -135,13 +145,47 @@ function setupMenuOptions() {
   ];
 }
 
+function parseTime(date: Date): string {
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function prepareDisplay(
+  recipe: RecipeViewModel,
+  currentTime: Date
+): void {
+  currentStartTime.value = new Date(currentTime);
+  const defaultTime = parseInt(defaultTimeSetting);
+
+  displayIngredients.value = recipe.ingredients.map((ingredient) =>
+    prepareIngredientDisplay(
+      ingredient,
+      recipe.multiplier,
+      useFractionsOverDecimal,
+      i18next.language,
+      enableRecipeHighlighting
+    )
+  );
+  let nextTime = currentTime;
+  nextTime.setTime(nextTime.getTime() + defaultTime * 60 * 1000);
+  displayInstructions.value = recipe.steps.map((step) => {
+    const result = prepareStepDisplay(step, nextTime, i18next.language, enableRecipeHighlighting);
+
+    if (result.timeInSeconds > 0) {
+      nextTime.setTime(nextTime.getTime() + result.timeInSeconds * 1000);
+    } else {
+      nextTime.setTime(nextTime.getTime() + defaultTime * 60 * 1000);
+    }
+
+    return result;
+  });
+  finishTime.value = new Date(nextTime);
+}
+
 function getDisplayValues(
   recipe: RecipeViewModel,
   currentTime: Date
 ): Array<{ time: string; title: string; subItems: string[] }> {
   const result: Array<{ time: string; title: string; subItems: string[] }> = [];
-  const parseTime = (date: Date) =>
-    date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const ingredientTitle = `${t("pages.recipe.id.index.ingredients")} (${recipe.multiplier || 1}x)`;
 
@@ -222,10 +266,11 @@ async function applyMultiplier() {
   item.value.multiplier = newMultiplier.value;
 
   const currentTime = new Date();
+  prepareDisplay(item.value, currentTime);
   display.value = getDisplayValues(item.value, currentTime);
 
   isMultiplierModalOpen.value = false;
-  
+
   const recipe = JSON.parse(JSON.stringify(item.value));
   await saveRecipe(recipe);
 }
@@ -253,6 +298,7 @@ function setDisplayTime() {
 
   const newDate = new Date(`${year}-${month}-${date}T${startTime.value}`);
 
+  prepareDisplay(item.value, newDate);
   display.value = getDisplayValues(item.value, newDate);
 
   isTimeModalOpen.value = false;
@@ -263,7 +309,7 @@ async function shareAsText() {
     await navigator
       .share({
         title: item.value.title,
-        text: asText(item.value), 
+        text: asText(item.value),
       })
   } else {
     notify(
@@ -285,7 +331,7 @@ ${item.ingredients.join("\r\n")}
 
 ${t("pages.recipe.id.index.instructions")}:
 ${item.steps.join("\r\n")}`;
-  }
+}
 
 async function shareAsFile() {
   try {
@@ -317,6 +363,11 @@ async function shareAsFile() {
       2000
     );
   }
+}
+
+function showIngredientDetails(item: IngredientDisplay) {
+  selectedIngredient.value = item;
+  isIngredientDetailsModalOpen.value = true;
 }
 </script>
 
@@ -444,27 +495,55 @@ async function shareAsFile() {
       </button>
     </div>
     <div class="grid grid-cols-12 w-full mt-7">
-      <template v-for="displayItem in display">
+      <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+        {{ parseTime(currentStartTime) }}
+      </div>
+      <div class="-ml-3.5 mt-3">
+        <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+      </div>
+      <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
+        {{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)
+      </div>
+      <template v-for="subItem in displayIngredients">
+        <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div class="border-l-4 border-theme-secondary"></div>
+        <div class="lg:col-span-10 sm:col-span-9 col-span-8" @click="showIngredientDetails(subItem)"
+          v-html="subItem.text">
+        </div>
+      </template>
+      <template v-for="(displayItem, index) in displayInstructions">
         <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
-          {{ displayItem.time }}
+          {{ parseTime(displayItem.startTime) }}
         </div>
         <div class="-ml-3.5 mt-3">
-          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
         <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-          {{ displayItem.title }}
+          {{ t('pages.recipe.id.index.step') }} {{ index + 1 }}
         </div>
-        <template v-for="subItem in displayItem.subItems">
-          <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
-          <div class="border-l-4 border-theme-secondary"></div>
-          <div class="lg:col-span-10 sm:col-span-9 col-span-8">
-            {{ subItem }}
-          </div>
-        </template>
+        <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div class="border-l-4 border-theme-secondary"></div>
+        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text">
+        </div>
       </template>
+      <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+        {{ parseTime(finishTime) }}
+      </div>
+      <div class="-ml-3.5 mt-3">
+        <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+      </div>
+      <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
+        {{ t('pages.recipe.id.index.enjoy') }}
+      </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>
     <div v-if="item.hasNotes" class="steps">
@@ -487,8 +566,8 @@ async function shareAsFile() {
       <input @keyup.enter="applyMultiplier" data-testid="multiplier-value" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
-    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
-      :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
+    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" :title="t('pages.recipe.id.index.startTimeTitle')"
+      :buttons="[
         {
           title: t('general.cancel'),
           action: () => {
@@ -517,6 +596,20 @@ async function shareAsFile() {
         },
       ]">
       <span class="dark:text-white">{{ t("pages.recipe.id.index.deleteModalBody") }}</span>
+    </Modal>
+    <Modal :isOpen="isIngredientDetailsModalOpen" @closed="isIngredientDetailsModalOpen = false"
+      :title="t('pages.recipe.id.index.ingredientDetailsModalTitle')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: () => {
+            isIngredientDetailsModalOpen = false;
+          },
+        }
+      ]">
+      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">Quantity: {{ selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
+      <div class="dark:text-white" v-else>Quantity: {{ selectedIngredient.quantityValue }}</div>
+      <div class="dark:text-white">UOM: {{ selectedIngredient.unit }}</div>
+      <div class="dark:text-white">Ingredient: {{ selectedIngredient.ingredient }}</div>
     </Modal>
   </div>
 </template>

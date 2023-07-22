@@ -8,3 +8,4 @@ recipe-scrapers>=14.24.0
 python-multipart>=0.0.5
 Pillow>=9.2.0
 pytest
+openai
