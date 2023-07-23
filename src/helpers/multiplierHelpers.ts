@@ -67,7 +67,7 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
     const maybeFraction = new Fraction(quantity).mul(multiplier);
     const newValue = maybeFraction.valueOf();
     let newValueText = result.quantityText;
-    if (multiplier != 1) {
+    if (multiplier != 1 && newValueText != "") {
         newValueText = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString(locale);
     }
 
