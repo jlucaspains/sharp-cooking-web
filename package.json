@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.13",
-    "@jlucaspains/sharp-recipe-parser": "^1.0.0-beta5",
+    "@jlucaspains/sharp-recipe-parser": "^1.0.0-beta6",
     "browser-fs-access": "^0.34.1",
     "dexie": "^3.2.4",
     "fraction.js": "^4.2.0",
