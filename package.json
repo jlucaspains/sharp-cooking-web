@@ -28,7 +28,7 @@
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.3",
+    "@playwright/test": "^1.36.2",
     "@types/lodash.debounce": "^4.0.7",
     "@vitejs/plugin-vue": "^4.2.3",
     "autoprefixer": "^10.4.14",
