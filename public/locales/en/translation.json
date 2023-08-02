@@ -110,7 +110,11 @@
                     "sharingFailed": "File sharing failed.",
                     "sharingSucceeded": "File shared successfully.",
                     "ingredients": "Ingredients",
-                    "ingredientDetailsModalTitle": "Ingredient details (Preview)"
+                    "ingredientDetailsModalTitle": "Ingredient details (Preview)",
+                    "ingredientDetailsQuantity": "Quantity:",
+                    "ingredientDetailsUOM": "UOM:",
+                    "ingredientDetailsIngredient": "Ingredient:",
+                    "ingredientDetailsAlternativeUOMs": "Alternative UOMs:"
                 },
                 "print": {}
             },
