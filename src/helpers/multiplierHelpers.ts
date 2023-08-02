@@ -1,6 +1,5 @@
 import Fraction from "fraction.js";
 import { parseIngredient, parseInstruction } from '@jlucaspains/sharp-recipe-parser';
-import { ValidLanguages } from "@jlucaspains/sharp-recipe-parser/lib/types";
 
 function localeParseFloat(s: string, locale: string) {
     // Get the thousands and decimal separator characters used in the locale.

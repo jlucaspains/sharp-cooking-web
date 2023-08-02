@@ -614,7 +614,7 @@ function showIngredientDetails(item: IngredientDisplay) {
       <div v-if="selectedIngredient.alternativeQuantities.length > 0">
         <div class="dark:text-white mt-3">{{ t("pages.recipe.id.index.ingredientDetailsAlternativeUOMs") }}</div>
         <div class="dark:text-white">
-          <table>
+          <table role="presentation" aria-label="{{ t('pages.recipe.id.index.ingredientDetailsModalTitle') }}">
             <tr v-for="item in selectedIngredient.alternativeQuantities">
               <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
               <td>{{ item.unitText }}</td>
