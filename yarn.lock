@@ -1078,9 +1078,9 @@
   integrity sha512-aL9U9Sa7wdOzlrfjx6EjMIYNRCma5mngWcWzQBcHFwznpRZ8g/QZ/AYFtRDrZZUw22Ttttja4D7ZRXFwhONewA==
 
 "@jlucaspains/sharp-recipe-parser@^1.0.0-beta10":
-  version "1.0.0-beta9"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.0-beta9.tgz#3ea4937c13bce25b0571a30e95f9f29f9c3bf7b0"
-  integrity sha512-dVUSzweaQ4GlUDTO8HXyoe5sAoN6/5i7pL87HLnFrPd6u53GYcgW0TJVfoEo/yMo20FE1JPcv9Vc64bURn7TqA==
+  version "1.0.0-beta10"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.0-beta10.tgz#6668fb466aca6a97d727f268112a5ecd12b332a2"
+  integrity sha512-lk8uktdCpaieSkE1pxdpviGMzLLfZ233i20PyKtlbRn0osTI3aN4S/deK63b1HxxRqb4AR1syh457NvGVrfAvQ==
   dependencies:
     fraction.js "^4.2.0"
 
