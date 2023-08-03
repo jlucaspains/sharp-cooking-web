@@ -11,7 +11,7 @@ updates:
       interval: "weekly"
     groups:
       dependencies:
-        patters:
+        patterns:
           - "*"
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/api" # Location of package manifests
@@ -19,5 +19,5 @@ updates:
       interval: "weekly"
     groups:
       dependencies:
-        patters:
+        patterns:
           - "*"
