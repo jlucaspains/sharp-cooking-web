@@ -8,7 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.13",
+    "@headlessui/vue": "^1.7.15",
     "@jlucaspains/sharp-recipe-parser": "^1.0.0-beta10",
     "browser-fs-access": "^0.34.1",
     "dexie": "^3.2.4",

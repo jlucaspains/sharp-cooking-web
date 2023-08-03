@@ -1072,10 +1072,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.18.15.tgz#41ee66253566124cc44bce1b4c760a87d9f5bf1d"
   integrity sha512-imUxH9a3WJARyAvrG7srLyiK73XdX83NXQkjKvQ+7vPh3ZxoLrzvPkQKKw2DwZ+RV2ZB6vBfNHP8XScAmQC3aA==
 
-"@headlessui/vue@^1.7.13":
-  version "1.7.14"
-  resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.7.14.tgz#cc10712044944bc728f5ef8b2df2174c1194a55e"
-  integrity sha512-aL9U9Sa7wdOzlrfjx6EjMIYNRCma5mngWcWzQBcHFwznpRZ8g/QZ/AYFtRDrZZUw22Ttttja4D7ZRXFwhONewA==
+"@headlessui/vue@^1.7.15":
+  version "1.7.15"
+  resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.7.15.tgz#82e25e1649c7687f93c5d50af98ba65bd25be721"
+  integrity sha512-3ozVEgQ8mw09nWvUPN+8S6C8l3SM0lVT1aEN/+oP5Y4LF0WNMM9UrVisVTN9LLQ06v/X3EFA0blyL/vg8XNZlg==
 
 "@jlucaspains/sharp-recipe-parser@^1.0.0-beta10":
   version "1.0.0-beta10"
