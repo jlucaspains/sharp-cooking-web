@@ -110,7 +110,11 @@
                     "sharingFailed": "O compartilhamento de arquivos falhou.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
-                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (pré-estréia)"
+                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (pré-estréia)",
+                    "ingredientDetailsQuantity": "Quntidade:",
+                    "ingredientDetailsUOM": "UDM:",
+                    "ingredientDetailsIngredient": "Ingrediente:",
+                    "ingredientDetailsAlternativeUOMs": "UDMs alternativas:"
                 },
                 "print": {}
             },

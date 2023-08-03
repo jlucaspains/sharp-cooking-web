@@ -606,10 +606,22 @@ function showIngredientDetails(item: IngredientDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">Quantity: {{ selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
-      <div class="dark:text-white" v-else>Quantity: {{ selectedIngredient.quantityValue }}</div>
-      <div class="dark:text-white">UOM: {{ selectedIngredient.unit }}</div>
-      <div class="dark:text-white">Ingredient: {{ selectedIngredient.ingredient }}</div>
+      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
+        selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
+      <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{  }} {{ selectedIngredient.quantityValue }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsIngredient") }} {{ selectedIngredient.ingredient }}</div>
+      <div v-if="selectedIngredient.alternativeQuantities.length > 0">
+        <div class="dark:text-white mt-3">{{ t("pages.recipe.id.index.ingredientDetailsAlternativeUOMs") }}</div>
+        <div class="dark:text-white">
+          <table role="presentation" aria-label="{{ t('pages.recipe.id.index.ingredientDetailsModalTitle') }}">
+            <tr v-for="item in selectedIngredient.alternativeQuantities">
+              <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
+              <td>{{ item.unitText }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </Modal>
   </div>
 </template>

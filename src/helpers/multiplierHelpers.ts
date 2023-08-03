@@ -1,6 +1,5 @@
 import Fraction from "fraction.js";
 import { parseIngredient, parseInstruction } from '@jlucaspains/sharp-recipe-parser';
-import { ValidLanguages } from "@jlucaspains/sharp-recipe-parser/lib/types";
 
 function localeParseFloat(s: string, locale: string) {
     // Get the thousands and decimal separator characters used in the locale.
@@ -10,10 +9,6 @@ function localeParseFloat(s: string, locale: string) {
 
     // Now it can be parsed
     return parseFloat(cleanInput);
-}
-
-function getBaseLanguage(locale: string): string {
-    return locale.split("-")[0];
 }
 
 export function applyMultiplierToString(input: string, multiplier: number, regex: string, useFractionsOverDecimal: boolean, locale: string): string {
@@ -43,9 +38,18 @@ export function applyMultiplierToString(input: string, multiplier: number, regex
     return input.replace(regexp, newValue);
 }
 
+export interface AlternativeQuantity {
+    quantity: number;
+    unit: string;
+    unitText: string;
+    minQuantity: number;
+    maxQuantity: number;
+}
+
 export type IngredientDisplay = {
     text: string, quantityValue: number, minQuantity: number, maxQuantity: number,
-    quantityText: string, unit: string, unitText: string, ingredient: string;
+    quantityText: string, unit: string, unitText: string, ingredient: string,
+    alternativeQuantities: AlternativeQuantity[];
 }
 
 export type InstructionDisplay = {
@@ -55,17 +59,29 @@ export type InstructionDisplay = {
 export function prepareIngredientDisplay(input: string, multiplier: number, useFractionsOverDecimal: boolean, locale: string, highlight: boolean = false): IngredientDisplay {
     multiplier = multiplier > 0 ? multiplier : 1;
 
-    const lang = getBaseLanguage(locale) as ValidLanguages;
-    const result = parseIngredient(input, lang);
+    const result = parseIngredient(input, locale, { includeExtra: true, includeAlternativeUnits: true });
 
     if (!result) {
-        return { text: input, quantityValue: 0, minQuantity: 0, maxQuantity: 0, quantityText: "", unit: "", unitText: "", ingredient: "" };
+        return {
+            text: input, quantityValue: 0, minQuantity: 0, maxQuantity: 0, quantityText: "", unit: "", unitText: "",
+            ingredient: "", alternativeQuantities: []
+        };
     }
 
     let quantity: string | number = result.quantity;
 
     const maybeFraction = new Fraction(quantity).mul(multiplier);
     const newValue = maybeFraction.valueOf();
+    const newMinQuantity = result.minQuantity * multiplier;
+    const newMaxQuantity = result.maxQuantity * multiplier;
+    const newAlternativeQuantities = result.alternativeQuantities
+        .filter(item => item.quantity > 0.1)
+        .map(item => {
+            return {
+                quantity: item.quantity * multiplier, unit: item.unit, unitText: item.unitText,
+                minQuantity: item.minQuantity * multiplier, maxQuantity: item.maxQuantity * multiplier
+            };
+        });
     let newValueText = result.quantityText;
     if (multiplier != 1 && newValueText != "") {
         newValueText = useFractionsOverDecimal ? maybeFraction.toFraction(true) : maybeFraction.valueOf().toLocaleString(locale);
@@ -81,15 +97,14 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
 
     return {
         text: displayText, quantityValue: newValue,
-        minQuantity: result.minQuantity, maxQuantity: result.maxQuantity,
+        minQuantity: newMinQuantity, maxQuantity: newMaxQuantity,
         quantityText: newValueText, unit: result.unit, unitText: result.unitText,
-        ingredient: result.ingredient
+        ingredient: result.ingredient, alternativeQuantities: newAlternativeQuantities
     };
 }
 
 export function prepareStepDisplay(input: string, currentTime: Date, locale: string, highlight: boolean = false): InstructionDisplay {
-    const lang = getBaseLanguage(locale) as ValidLanguages;
-    const result = parseInstruction(input, lang);
+    const result = parseInstruction(input, locale);
 
     if (!result) {
         return { text: input, startTime: currentTime, timeInSeconds: 0, temperature: 0, temperatureUnit: "" };
