@@ -1077,10 +1077,10 @@
   resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.7.15.tgz#82e25e1649c7687f93c5d50af98ba65bd25be721"
   integrity sha512-3ozVEgQ8mw09nWvUPN+8S6C8l3SM0lVT1aEN/+oP5Y4LF0WNMM9UrVisVTN9LLQ06v/X3EFA0blyL/vg8XNZlg==
 
-"@jlucaspains/sharp-recipe-parser@^1.0.0-beta10":
-  version "1.0.0-beta10"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.0-beta10.tgz#6668fb466aca6a97d727f268112a5ecd12b332a2"
-  integrity sha512-lk8uktdCpaieSkE1pxdpviGMzLLfZ233i20PyKtlbRn0osTI3aN4S/deK63b1HxxRqb4AR1syh457NvGVrfAvQ==
+"@jlucaspains/sharp-recipe-parser@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.0.tgz#7fd64e655211b0f865bbb1816d8bf12b27fb92be"
+  integrity sha512-RNF5A7W/NOIHz0D3TK3+MRr+IU3LSrU9GJJuOvawzxRHG6pXpje7wbJlMMvRNNzRjRdaprn5Nyp6XoIQTuMsJw==
   dependencies:
     fraction.js "^4.2.0"
 
@@ -2205,10 +2205,10 @@ i18next-vue@^2.1.1:
   resolved "https://registry.yarnpkg.com/i18next-vue/-/i18next-vue-2.2.1.tgz#409affaabb692cdf9362eab1c0c66f91ab38cae2"
   integrity sha512-C8iotPy4YhhEDSG1QFzn5zGu8Xkpai5O8UFPS9swELccl3qpbkYwBCi8CfcsUCIIgBX7wUIqsG8f0cViGhqScw==
 
-i18next@^23.4.1:
-  version "23.4.1"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.4.1.tgz#11fe0db92ac8a4125934960ebccf6a5f8ed6b9fc"
-  integrity sha512-07ekE7hbUrbxTYj97VnBzyhKcGURTJC9p4iWTwCVC8t63T+YrgqQmb/n1LBQMivZYwR61pqS+PC0G2rtENycyQ==
+i18next@^23.4.2:
+  version "23.4.2"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.4.2.tgz#e68108be82287114e027afc5402bb7830d7f45c9"
+  integrity sha512-hkVPHKFLtn9iewdqHDiU+MGVIBk+bVFn5usw7CIeCn/SBcVKGTItGdjNPm2B8Lnz42CeHUlnSOTgsr5vbITjhA==
   dependencies:
     "@babel/runtime" "^7.22.5"
 
@@ -2786,10 +2786,10 @@ postcss-nested@^6.0.1:
   dependencies:
     postcss-selector-parser "^6.0.11"
 
-postcss-nesting@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-nesting/-/postcss-nesting-12.0.0.tgz#729932293b925ac5bffcb6df1e2620faa0447554"
-  integrity sha512-knqwW65kxssmyIFadRSimaiRyLVRd0MdwfabesKw6XvGLwSOCJ+4zfvNQQCOOYij5obwpZzDpODuGRv2PCyiUw==
+postcss-nesting@^12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-nesting/-/postcss-nesting-12.0.1.tgz#abb76d15dfd59a9f7d03b4464f53b60a4d3795c4"
+  integrity sha512-6LCqCWP9pqwXw/njMvNK0hGY44Fxc4B2EsGbn6xDcxbNRzP8GYoxT7yabVVMLrX3quqOJ9hg2jYMsnkedOf8pA==
   dependencies:
     "@csstools/selector-specificity" "^3.0.0"
     postcss-selector-parser "^6.0.13"
@@ -2807,7 +2807,7 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.2.0:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8.1.10, postcss@^8.4.23, postcss@^8.4.26, postcss@^8.4.27:
+postcss@^8.1.10, postcss@^8.4.23, postcss@^8.4.27:
   version "8.4.27"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.27.tgz#234d7e4b72e34ba5a92c29636734349e0d9c3057"
   integrity sha512-gY/ACJtJPSmUFPDCHtX78+01fHa64FaU4zaaWfuh1MhGJISufJAH4cun6k/8fwsHYeK4UQmENQK+tRLCFJE8JQ==
@@ -2945,10 +2945,10 @@ rollup@^2.43.1:
   optionalDependencies:
     fsevents "~2.3.2"
 
-rollup@^3.25.2:
-  version "3.26.3"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.26.3.tgz#bbc8818cadd0aebca348dbb3d68d296d220967b8"
-  integrity sha512-7Tin0C8l86TkpcMtXvQu6saWH93nhG3dGQ1/+l5V2TDMceTxO7kDiK6GzbfLWNNxqJXm591PcEZUozZm51ogwQ==
+rollup@^3.27.1:
+  version "3.27.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.27.2.tgz#59adc973504408289be89e5978e938ce852c9520"
+  integrity sha512-YGwmHf7h2oUHkVBT248x0yt6vZkYQ3/rvE5iQuVBh3WO8GcJ6BNeOkpoX1yMHIiBm18EMLjBPIoUDkhgnyxGOQ==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -3397,14 +3397,14 @@ vite-plugin-pwa@^0.16.4:
     workbox-build "^7.0.0"
     workbox-window "^7.0.0"
 
-vite@^4.4.8:
-  version "4.4.8"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.8.tgz#31e4a438f8748695c68bd57ffd262ba93540fdf7"
-  integrity sha512-LONawOUUjxQridNWGQlNizfKH89qPigK36XhMI7COMGztz8KNY0JHim7/xDd71CZwGT4HtSRgI7Hy+RlhG0Gvg==
+vite@^4.4.9:
+  version "4.4.9"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.9.tgz#1402423f1a2f8d66fd8d15e351127c7236d29d3d"
+  integrity sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==
   dependencies:
     esbuild "^0.18.10"
-    postcss "^8.4.26"
-    rollup "^3.25.2"
+    postcss "^8.4.27"
+    rollup "^3.27.1"
   optionalDependencies:
     fsevents "~2.3.2"
 
