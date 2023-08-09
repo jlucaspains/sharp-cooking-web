@@ -1,0 +1,63 @@
+// 202 + share code
+POST http://localhost:7071/api/share-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "1",
+    "ingredients": ["1 cup of flour"],
+    "steps": ["bake it"]
+}
+
+###
+
+// 400 + invalid body
+POST http://localhost:7071/api/share-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "1",
+    "ingredients": ["1 cup of flour"]
+}
+
+###
+
+// 400 + invalid body
+POST http://localhost:7071/api/share-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "1",
+    "steps": ["bake it"]
+}
+
+###
+
+// 400 + invalid body
+POST http://localhost:7071/api/share-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "",
+    "ingredients": ["1 cup of flour"],
+    "steps": ["bake it"]
+}
+
+###
+
+// 200 + valid body
+POST http://localhost:7071/api/receive-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "code": "722568"
+}
+
+###
+
+// 404
+POST http://localhost:7071/api/receive-recipe HTTP/1.1
+content-type: application/json
+
+{
+    "code": "YKYKSF"
+}
