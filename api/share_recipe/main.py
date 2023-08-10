@@ -20,8 +20,8 @@ recipeSchema = {
     "type": "object",
     "properties": {
         "title": {"type": "string", "minLength": 1},
-        "notes": {"type": "string", "minLength": 1},
-        "source": {"type": "string", "minLength": 1},
+        "notes": {"type": ["string", "null"], "minLength": 1},
+        "source": {"type": ["string", "null"], "minLength": 1},
         "ingredients": {
             "type": "array",
             "items": {
@@ -30,6 +30,13 @@ recipeSchema = {
             }
         },
         "steps": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "images": {
             "type": "array",
             "items": {
                 "type": "string",
@@ -67,6 +74,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "ingredients": req_body.get("ingredients"),
             "steps": req_body.get("steps"),
             "source": req_body.get("source"),
+            "images": req_body.get("images"),
         }
         operation_result = repository.create_item(new_item)
         logging.debug(operation_result)

@@ -22,6 +22,7 @@
             "importFromWebsite": "Importar de website...",
             "importFromBackup": "Importar de backup...",
             "importFromScan": "Importar de imagem (preview)",
+            "importFromOnlineShare": "Importar de compartilhamento...",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
@@ -82,7 +83,9 @@
                     "stepPlaceholder": "Pré-aqueça o forno a 180 C",
                     "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
                     "processImage1": "Comprimindo imagem...",
-                    "processImage2": "Ainda processando. Isso pode demorar um pouco..."
+                    "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+                    "importFromShareTitle": "Importar from compartilhamento",
+                    "importFromShareFromClipboard": "Código copiado"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"

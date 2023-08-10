@@ -36,6 +36,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "ingredients": item.get("ingredients"),
             "steps": item.get("steps"),
             "source": item.get("source"),
+            "images": item.get("images"),
         }
 
         result = json.dumps(item_clean)

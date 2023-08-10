@@ -21,6 +21,7 @@
             "addManually": "Add manually",
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
+            "importFromOnlineShare": "Import from online share",
             "importFromScan": "Import from image (preview)",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
@@ -82,7 +83,9 @@
                     "stepPlaceholder": "Preheat oven to 350 F",
                     "failedToProcessImage": "Failed to process image. Please try again.",
                     "processImage1": "Compressing image...",
-                    "processImage2": "Still working on the image. This may take a while"
+                    "processImage2": "Still working on the image. This may take a while",
+                    "importFromShareTitle": "Import from share",
+                    "importFromShareFromClipboard": "Copied code"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"

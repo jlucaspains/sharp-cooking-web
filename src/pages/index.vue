@@ -75,7 +75,7 @@ onMounted(async () => {
   {
     name: "ImportFromWebsite",
     text: t("pages.index.importFromWebsite"),
-    action: goToImport,
+    action: goToImportFromUrl,
   },
   {
     name: "ImportFromBackup",
@@ -86,6 +86,11 @@ onMounted(async () => {
     name: "ImportFromScan",
     text: t("pages.index.importFromScan"),
     action: goToImportFromScan,
+  },
+  {
+    name: "ImportFromOnlineShare",
+    text: t("pages.index.importFromOnlineShare"),
+    action: goToImportFromOnlineShare,
   }];
   state.title = t("pages.index.title");
   state.menuOptions = [
@@ -167,20 +172,29 @@ function goToRecipe(id: number) {
 function goToNew() {
   router.push("/recipe/0/edit");
 }
-function goToImport() {
-  router.push("/recipe/0/edit?import=1");
+
+function goToImportFromUrl() {
+  router.push("/recipe/0/edit?importFromUrl=1");
 }
+
 function goToImportFromBackup() {
   router.push("/recipe/import-backup");
 }
+
 function goToImportFromScan() {
   router.push("/recipe/import-ocr");
 }
+
 function goToOptions() {
   router.push("/options");
 }
+
 async function saveSortOption(type: string) {
   await saveSetting("AllRecipesSort", type);
+}
+
+function goToImportFromOnlineShare() {
+  router.push("/recipe/0/edit?importFromShare=1");
 }
 </script>
 

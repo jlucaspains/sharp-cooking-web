@@ -139,6 +139,10 @@ function setupMenuOptions() {
           text: t("pages.recipe.id.index.shareAsFile"),
           action: shareAsFile,
         },
+        {
+          text: t("pages.recipe.id.index.shareOnline"),
+          action: shareOnline,
+        },
       ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
@@ -340,6 +344,55 @@ async function shareAsFile() {
     const stringBackup = JSON.stringify(backup);
     const blob = new Blob([stringBackup]);
     await fileSave(blob, { fileName: "sharp_cooking.json", mimeTypes: ["application/json"] });
+
+    notify(
+      {
+        group: "success",
+        title: t("general.success"),
+        text: t("pages.recipe.id.index.sharingSucceeded"),
+      },
+      2000
+    )
+  } catch (e) {
+    if (e instanceof DOMException && e.ABORT_ERR == DOMException.ABORT_ERR) {
+      return;
+    }
+
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
+  }
+}
+
+async function shareOnline() {
+  try {
+    const model = {
+      id: item.value.id,
+      title: item.value.title,
+      ingredients: item.value.ingredients,
+      notes: item.value.notes,
+      source: item.value.source,
+      steps: item.value.steps,
+      images: images.value.map(item => item.url),
+    };
+
+    console.log(model);
+
+    const response = await fetch("/api/share-recipe", {
+      method: "POST",
+      body: JSON.stringify(model)
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const result = await response.json();
 
     notify(
       {
@@ -606,11 +659,15 @@ function showIngredientDetails(item: IngredientDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
-        selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
-      <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{  }} {{ selectedIngredient.quantityValue }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsIngredient") }} {{ selectedIngredient.ingredient }}</div>
+      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{
+        t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
+    selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
+      <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{ }} {{
+        selectedIngredient.quantityValue }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}
+      </div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsIngredient") }} {{
+        selectedIngredient.ingredient }}</div>
       <div v-if="selectedIngredient.alternativeQuantities.length > 0">
         <div class="dark:text-white mt-3">{{ t("pages.recipe.id.index.ingredientDetailsAlternativeUOMs") }}</div>
         <div class="dark:text-white">

@@ -1,3 +1,4 @@
+import os
 import unittest, json, importlib
 import azure.functions as func
 
@@ -12,7 +13,8 @@ def test_share_recipe_success():
         body=json.dumps({
             "title": "1",
             "ingredients": ["1 cup of flour"],
-            "steps": ["bake it"]
+            "steps": ["bake it"],
+            "images": ["pseudoimage"]
         }).encode('utf8')
     )
 
