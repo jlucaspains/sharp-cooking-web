@@ -21,7 +21,7 @@
             "addManually": "Add manually",
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
-            "importFromOnlineShare": "Import from online share",
+            "importFromOnlineShare": "Import from online share (preview)",
             "importFromScan": "Import from image (preview)",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
@@ -84,7 +84,7 @@
                     "failedToProcessImage": "Failed to process image. Please try again.",
                     "processImage1": "Compressing image...",
                     "processImage2": "Still working on the image. This may take a while",
-                    "importFromShareTitle": "Import from share",
+                    "importFromShareTitle": "Import from share code",
                     "importFromShareFromClipboard": "Copied code"
                 },
                 "gallery": {
@@ -117,7 +117,8 @@
                     "ingredientDetailsQuantity": "Quantity:",
                     "ingredientDetailsUOM": "UOM:",
                     "ingredientDetailsIngredient": "Ingredient:",
-                    "ingredientDetailsAlternativeUOMs": "Alternative UOMs:"
+                    "ingredientDetailsAlternativeUOMs": "Alternative UOMs:",
+                    "shareOnline": "Compartilhar online"
                 },
                 "print": {}
             },

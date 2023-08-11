@@ -18,11 +18,11 @@
         "index": {
             "title": "Todas as Receitas",
             "search": "Buscar...",
-            "addManually": "Adicionar manualmente...",
-            "importFromWebsite": "Importar de website...",
-            "importFromBackup": "Importar de backup...",
+            "addManually": "Adicionar manualmente",
+            "importFromWebsite": "Importar de website",
+            "importFromBackup": "Importar de backup",
             "importFromScan": "Importar de imagem (preview)",
-            "importFromOnlineShare": "Importar de compartilhamento...",
+            "importFromOnlineShare": "Importar de compartilhamento (preview)",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
@@ -117,7 +117,8 @@
                     "ingredientDetailsQuantity": "Quntidade:",
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
-                    "ingredientDetailsAlternativeUOMs": "UDMs alternativas:"
+                    "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
+                    "shareOnline": "Compartilhar online"
                 },
                 "print": {}
             },

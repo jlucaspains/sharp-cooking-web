@@ -381,8 +381,6 @@ async function shareOnline() {
       images: images.value.map(item => item.url),
     };
 
-    console.log(model);
-
     const response = await fetch("/api/share-recipe", {
       method: "POST",
       body: JSON.stringify(model)
@@ -394,6 +392,8 @@ async function shareOnline() {
 
     const result = await response.json();
 
+    await navigator.share({ title: "share", text: result.code, url: `${window.location.origin}/#/recipe/0/edit?importFromShare=1&shareCode=${result.id}` });
+
     notify(
       {
         group: "success",
@@ -403,10 +403,6 @@ async function shareOnline() {
       2000
     )
   } catch (e) {
-    if (e instanceof DOMException && e.ABORT_ERR == DOMException.ABORT_ERR) {
-      return;
-    }
-
     notify(
       {
         group: "error",

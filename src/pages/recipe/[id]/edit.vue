@@ -89,6 +89,10 @@ onMounted(async () => {
     isImportFromShareModalOpen.value = true;
   }
 
+  if (query.value.shareCode) {
+    importRecipeCode.value = query.value.shareCode as string;
+  }
+
   let recipe: RecipeViewModel;
 
   if (query.value.ocr == "1") {
@@ -310,7 +314,7 @@ async function importRecipeFromCode() {
   try {
     isImportFromShareModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetch("http://localhost:7071/api/receive-recipe", {
+    const result = await fetch("/api/receive-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -324,8 +328,6 @@ async function importRecipeFromCode() {
       return;
     }
     
-    console.log(result);
-
     const importRecipe = await result.json();
     item.value.title = importRecipe.title;
     item.value.score = 5;
@@ -333,7 +335,7 @@ async function importRecipeFromCode() {
     item.value.ingredients = importRecipe.ingredients;
     item.value.steps = importRecipe.steps;
     images.value = importRecipe.images.map((item: any) => {
-      return new RecipeImage(id.value, null, item.image);
+      return new RecipeImage(id.value, null, item);
     });
 
     item.value.imageAvailable = images.value.length > 0;
