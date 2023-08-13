@@ -12,9 +12,9 @@ from ..repository import Repository
 
 repository = Repository()
 
-def mock_repository(mockRepository: Repository):
+def mock_repository(mock_repository: Repository):
     global repository
-    repository = mockRepository
+    repository = mock_repository
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()

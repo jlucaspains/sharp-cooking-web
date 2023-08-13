@@ -49,15 +49,15 @@ recipeSchema = {
 
 repository = Repository()
 
-def mock_repository(mockRepository: Repository):
+def mock_repository(mock_repository: Repository):
     global repository
-    repository = mockRepository
+    repository = mock_repository
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
-    id = ''.join(random.choices(string.ascii_uppercase +  string.digits, k=6))
+    share_id = ''.join(random.choices(string.ascii_uppercase +  string.digits, k=6))
 
     try:
         logging.info(f"processing share request id {correlation_id}")
@@ -68,7 +68,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         ttl = 60 * 60
 
         new_item = {
-            "id": id,
+            "id": share_id,
             "title": req_body.get("title"),
             "notes": req_body.get("notes"),
             "ingredients": req_body.get("ingredients"),
@@ -80,7 +80,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.debug(operation_result)
         
 
-        result = json.dumps({ "id": id, "ttl": ttl })
+        result = json.dumps({ "id": share_id, "ttl": ttl })
 
         return func.HttpResponse(result, status_code=202, mimetype="application/json")
     except jsonschema.exceptions.ValidationError as e:

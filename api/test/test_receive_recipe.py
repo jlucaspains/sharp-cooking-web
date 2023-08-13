@@ -7,10 +7,12 @@ from unittest import mock;
 
 from ..receive_recipe.main import main, mock_repository
 
+receive_url = 'api/receive-recipe'
+
 def test_receive_recipe_success():
     request = func.HttpRequest(
         method='POST',
-        url='api/receive-recipe',
+        url=receive_url,
         body=json.dumps({
             "code": "123456"
         }).encode('utf8')
@@ -45,7 +47,7 @@ def test_receive_recipe_success():
 def test_receive_recipe_not_found():
     request = func.HttpRequest(
         method='POST',
-        url='api/receive-recipe',
+        url=receive_url,
         body=json.dumps({
             "code": "123456"
         }).encode('utf8')
@@ -66,7 +68,7 @@ def test_receive_recipe_not_found():
 def test_receive_recipe_exception():
     request = func.HttpRequest(
         method='POST',
-        url='api/receive-recipe',
+        url=receive_url,
         body=json.dumps({
             "code": "1"
         }).encode('utf8')

@@ -6,10 +6,12 @@ from unittest import mock;
 
 from ..share_recipe.main import main, mock_repository
 
+share_url = 'api/share-recipe'
+
 def test_share_recipe_success():
     request = func.HttpRequest(
         method='POST',
-        url='api/share-recipe',
+        url=share_url,
         body=json.dumps({
             "title": "1",
             "ingredients": ["1 cup of flour"],
@@ -31,7 +33,7 @@ def test_share_recipe_success():
 def test_share_recipe_bad_data():
     request = func.HttpRequest(
         method='POST',
-        url='api/share-recipe',
+        url=share_url,
         body=json.dumps({
             "title": "1",
             "ingredients": ["1 cup of flour"]
@@ -48,7 +50,7 @@ def test_share_recipe_bad_data():
 def test_share_recipe_bad_data2():
     request = func.HttpRequest(
         method='POST',
-        url='api/share-recipe',
+        url=share_url,
         body=json.dumps({
             "title": "1",
             "steps": ["bake it"]
@@ -66,7 +68,7 @@ def test_share_recipe_bad_data2():
 def test_share_recipe_internal_error():
     request = func.HttpRequest(
         method='POST',
-        url='api/share-recipe',
+        url=share_url,
         body=json.dumps({
             "title": "1",
             "ingredients": ["1 cup of flour"],
