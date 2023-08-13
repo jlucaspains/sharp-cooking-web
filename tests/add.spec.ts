@@ -34,7 +34,7 @@ test('import from website', async ({ page }) => {
   await page.getByTestId('add-menu-button').click();
   await page.getByRole('menuitem', { name: 'Import from website' }).click();
 
-  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?import=1/));
+  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?importFromUrl=1/));
 });
 
 test('import from url', async ({ page, browserName }) => {

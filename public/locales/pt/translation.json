@@ -21,7 +21,7 @@
             "addManually": "Adicionar manualmente",
             "importFromWebsite": "Importar de website",
             "importFromBackup": "Importar de backup",
-            "importFromScan": "Importar de imagem (preview)",
+            "importFromScan": "Importar de imagem",
             "importFromOnlineShare": "Importar de compartilhamento (preview)",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
@@ -52,7 +52,7 @@
             "storageStats": "Armazenamento",
             "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
             "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
-            "enableRecipeHighlighting": "Ativar o realce da receita (pré-estréia)",
+            "enableRecipeHighlighting": "Ativar o realce da receita (preview)",
             "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa"
         },
         "recipe": {
@@ -113,12 +113,12 @@
                     "sharingFailed": "O compartilhamento de arquivos falhou.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
-                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (pré-estréia)",
+                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (preview)",
                     "ingredientDetailsQuantity": "Quntidade:",
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
-                    "shareOnline": "Compartilhar online",
+                    "shareOnline": "Compartilhar online (preview)",
                     "shareOnline1": "Compartilhando...",
                     "shareOnline2": "Ainda processando. Isso pode demorar um pouco..."
                 },
@@ -138,7 +138,7 @@
                 "processing2": "Ainda processando. Isso pode demorar até 1 minuto..."
             },
             "importImage": {
-                "title": "Importar de imagem (preview)",
+                "title": "Importar de imagem",
                 "parsedFailed": "Falha ao processar a imagem",
                 "selectFile": "Selecione um arquivo...",
                 "scanSelection": "Scanear seleção...",

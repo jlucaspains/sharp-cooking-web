@@ -22,7 +22,7 @@
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
             "importFromOnlineShare": "Import from online share (preview)",
-            "importFromScan": "Import from image (preview)",
+            "importFromScan": "Import from image",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
             "sortByRecipeDate": "Sort by Changed Date",
@@ -118,7 +118,7 @@
                     "ingredientDetailsUOM": "UOM:",
                     "ingredientDetailsIngredient": "Ingredient:",
                     "ingredientDetailsAlternativeUOMs": "Alternative UOMs:",
-                    "shareOnline": "Share Online",
+                    "shareOnline": "Share Online (preview)",
                     "shareOnline1": "Sharing...",
                     "shareOnline2": "Still sharing. This may take up to a minute."
                 },
@@ -138,7 +138,7 @@
                 "processing2": "Still processing. This may take up to 1 minute..."
             },
             "importImage": {
-                "title": "Import from Image (preview)",
+                "title": "Import from Image",
                 "parsedFailed": "",
                 "selectFile": "Select a file...",
                 "scanSelection": "Scan selection...",
