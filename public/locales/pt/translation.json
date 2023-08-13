@@ -118,7 +118,9 @@
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
-                    "shareOnline": "Compartilhar online"
+                    "shareOnline": "Compartilhar online",
+                    "shareOnline1": "Compartilhando...",
+                    "shareOnline2": "Ainda processando. Isso pode demorar um pouco..."
                 },
                 "print": {}
             },

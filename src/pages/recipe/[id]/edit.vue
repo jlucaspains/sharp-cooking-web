@@ -21,6 +21,7 @@ import BusyIndicator from "../../../components/BusyIndicator.vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { fetchWithRetry } from "../../../services/fetchWithRetry";
 
 const state = useState()!;
 const route = useRoute();
@@ -212,7 +213,7 @@ async function pickImage() {
     const data = new FormData();
     data.append('file', imagePicked);
 
-    const response = await fetch("/api/process-image", {
+    const response = await fetchWithRetry("/api/process-image", {
       method: "POST",
       body: data
     });
@@ -265,7 +266,7 @@ async function importRecipeFromUrl() {
   try {
     isImportFromUrlModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetch("/api/parse-recipe", {
+    const result = await fetchWithRetry("/api/parse-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -314,7 +315,7 @@ async function importRecipeFromCode() {
   try {
     isImportFromShareModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetch("/api/receive-recipe", {
+    const result = await fetchWithRetry("/api/receive-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

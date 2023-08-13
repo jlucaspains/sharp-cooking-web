@@ -20,6 +20,7 @@ import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
+import BusyIndicator from "../../../components/BusyIndicator.vue";
 import { RecipeImage } from "../../../services/recipe";
 import i18next from "i18next";
 
@@ -54,6 +55,7 @@ const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
 const isIngredientDetailsModalOpen = ref(false);
+const isBusy = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -371,6 +373,7 @@ async function shareAsFile() {
 
 async function shareOnline() {
   try {
+    isBusy.value = true;
     const model = {
       id: item.value.id,
       title: item.value.title,
@@ -411,6 +414,8 @@ async function shareOnline() {
       },
       2000
     );
+  } finally {
+    isBusy.value = false;
   }
 }
 
@@ -676,6 +681,8 @@ function showIngredientDetails(item: IngredientDisplay) {
         </div>
       </div>
     </Modal>
+    <BusyIndicator :busy="isBusy" :message1="t('pages.recipe.id.index.shareOnline1')"
+      :message2="t('pages.recipe.id.index.shareOnline2')" />
   </div>
 </template>
 

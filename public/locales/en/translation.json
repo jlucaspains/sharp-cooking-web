@@ -118,7 +118,9 @@
                     "ingredientDetailsUOM": "UOM:",
                     "ingredientDetailsIngredient": "Ingredient:",
                     "ingredientDetailsAlternativeUOMs": "Alternative UOMs:",
-                    "shareOnline": "Share Online"
+                    "shareOnline": "Share Online",
+                    "shareOnline1": "Sharing...",
+                    "shareOnline2": "Still sharing. This may take up to a minute."
                 },
                 "print": {}
             },
