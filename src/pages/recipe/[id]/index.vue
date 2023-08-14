@@ -406,6 +406,7 @@ async function shareOnline() {
       2000
     )
   } catch (e) {
+    console.log(e);
     notify(
       {
         group: "error",
