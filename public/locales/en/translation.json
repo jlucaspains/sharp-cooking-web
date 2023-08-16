@@ -110,7 +110,7 @@
                     "deleteModalTitle": "Delete this recipe?",
                     "deleteYes": "Yes, delete",
                     "deleteModalBody": "This action cannot be undone.",
-                    "sharingFailed": "File sharing failed.",
+                    "sharingFailed": "File sharing failed. Please try again.",
                     "sharingSucceeded": "File shared successfully.",
                     "ingredients": "Ingredients",
                     "ingredientDetailsModalTitle": "Ingredient details (Preview)",

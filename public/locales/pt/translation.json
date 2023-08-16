@@ -110,7 +110,7 @@
                     "deleteModalTitle": "Excluir esta receita?",
                     "deleteYes": "Sim, exclua",
                     "deleteModalBody": "Essa ação não pode ser desfeita.",
-                    "sharingFailed": "O compartilhamento de arquivos falhou.",
+                    "sharingFailed": "O compartilhamento de arquivos falhou. Por favor, tente novamente.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
                     "ingredientDetailsModalTitle": "Detalhe de ingrediente (preview)",

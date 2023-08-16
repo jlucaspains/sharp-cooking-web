@@ -56,6 +56,8 @@ const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
 const isIngredientDetailsModalOpen = ref(false);
 const isBusy = ref(false);
+const isShareOptionsModalOpen = ref(false);
+const shareCode = ref("");
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -374,6 +376,8 @@ async function shareAsFile() {
 async function shareOnline() {
   try {
     isBusy.value = true;
+    shareCode.value = "";
+
     const model = {
       id: item.value.id,
       title: item.value.title,
@@ -384,7 +388,7 @@ async function shareOnline() {
       images: images.value.map(item => item.url),
     };
 
-    const response = await fetch("/api/share-recipe", {
+    const response = await fetch("http://localhost:7071/api/share-recipe", {
       method: "POST",
       body: JSON.stringify(model)
     });
@@ -394,19 +398,11 @@ async function shareOnline() {
     }
 
     const result = await response.json();
+    shareCode.value = result.id;
 
-    await navigator.share({ title: "share", text: result.code, url: `${window.location.origin}/#/recipe/0/edit?importFromShare=1&shareCode=${result.id}` });
+    isShareOptionsModalOpen.value = true;
 
-    notify(
-      {
-        group: "success",
-        title: t("general.success"),
-        text: t("pages.recipe.id.index.sharingSucceeded"),
-      },
-      2000
-    )
   } catch (e) {
-    console.log(e);
     notify(
       {
         group: "error",
@@ -417,6 +413,36 @@ async function shareOnline() {
     );
   } finally {
     isBusy.value = false;
+  }
+}
+
+async function shareOnlineAsUrl(code: string) {
+  try {
+    await navigator.share({ title: t("pages.recipe.id.index.shareOnline"), text: code, url: `${window.location.origin}/#/recipe/0/edit?importFromShare=1&shareCode=${code}` });
+  } catch (e) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
+  }
+}
+
+async function shareOnlineAsCode(code: string) {
+  try {
+    await navigator.share({ title: t("pages.recipe.id.index.shareOnline"), text: `Use code ${code} to import recipe into Sharp Cooking app.` });
+  } catch (e) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
   }
 }
 
@@ -680,6 +706,28 @@ function showIngredientDetails(item: IngredientDisplay) {
             </tr>
           </table>
         </div>
+      </div>
+    </Modal>
+    <Modal :isOpen="isShareOptionsModalOpen" @closed="isShareOptionsModalOpen = false" :title="t('pages.recipe.id.index.shareOnline')"
+      :buttons="[
+        {
+          title: 'Share to Android or Windows',
+          action: async () => {
+            await shareOnlineAsUrl(shareCode);
+            isShareOptionsModalOpen = false;
+          },
+        },
+        {
+          title: 'Share to iOS',
+          action: async () => {
+            await shareOnlineAsCode(shareCode);
+            isShareOptionsModalOpen = false;
+          },
+        }
+      ]">
+      <!-- <div class="font-regular relative mb-4 block w-full rounded-lg bg-orange-500 p-4 text-base leading-5 text-white opacity-100">iOS does not support opening a link with a PWA app. Thus, share the code and the import needs to be done manually.</div> -->
+      <div class="text-center my-6">
+        <span class="text-2xl dark:text-white">{{ shareCode }}</span>
       </div>
     </Modal>
     <BusyIndicator :busy="isBusy" :message1="t('pages.recipe.id.index.shareOnline1')"
