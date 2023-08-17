@@ -75,10 +75,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "steps": req_body.get("steps"),
             "source": req_body.get("source"),
             "images": req_body.get("images"),
+            "ttl": ttl
         }
         operation_result = repository.create_item(new_item)
         logging.debug(operation_result)
-        
 
         result = json.dumps({ "id": share_id, "ttl": ttl })
 

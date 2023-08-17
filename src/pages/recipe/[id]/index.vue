@@ -388,7 +388,7 @@ async function shareOnline() {
       images: images.value.map(item => item.url),
     };
 
-    const response = await fetch("http://localhost:7071/api/share-recipe", {
+    const response = await fetch("/api/share-recipe", {
       method: "POST",
       body: JSON.stringify(model)
     });
