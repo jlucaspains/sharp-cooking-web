@@ -127,7 +127,7 @@ export function prepareStepDisplay(input: string, currentTime: Date, locale: str
 }
 
 function round(value: number, decimalPlaces = 0) {
-    var p = Math.pow(10, decimalPlaces);
-    var n = (value * p) * (1 + Number.EPSILON);
+    const p = Math.pow(10, decimalPlaces);
+    const n = (value * p) * (1 + Number.EPSILON);
     return Math.round(n) / p;
 }

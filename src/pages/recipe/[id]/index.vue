@@ -725,7 +725,6 @@ function showIngredientDetails(item: IngredientDisplay) {
           },
         }
       ]">
-      <!-- <div class="font-regular relative mb-4 block w-full rounded-lg bg-orange-500 p-4 text-base leading-5 text-white opacity-100">iOS does not support opening a link with a PWA app. Thus, share the code and the import needs to be done manually.</div> -->
       <div class="text-center my-6">
         <span class="text-2xl dark:text-white">{{ shareCode }}</span>
       </div>
