@@ -116,7 +116,13 @@
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:"
                 },
-                "print": {}
+                "print": {
+                    "action": "Imprimir",
+                    "seconds": "segundos ",
+                    "minutes": "minutos ",
+                    "hours": "horas ",
+                    "days": "dias "
+                }
             },
             "importBackup": {
                 "title": "Importar backup",

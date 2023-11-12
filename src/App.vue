@@ -20,7 +20,7 @@ onMounted(async () => {
 
 <template>
   <TopBar />
-  <div class="container mx-auto">
+  <div :class="{'container mx-auto': state.useContainer}">
     <InstallPrompt />
     <div class="mt-16 mx-4 mb-10 dark:text-white">
       <router-view v-slot="{ Component }">
