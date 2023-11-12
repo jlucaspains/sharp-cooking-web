@@ -118,14 +118,14 @@ function secondsToString(totalSeconds: number) {
   <div class="mx-auto print-page print:-mt-16 print:-mx-4">
     <div class="grid grid-cols-12 w-full">
       <section class="col-span-6">
-        <img :src="item.image" alt="" />
+        <img data-testid="recipe-img" :src="item.image" alt="" />
       </section>
       <section class="col-span-6 mt-4">
-        <h1 class="text-center text-4xl print-title">
+        <h1 data-testid="recipe-title" class="text-center text-4xl print-title">
           {{ item.title }}
         </h1>
         <ul class="my-2 flex flex-wrap items-center justify-center">
-          <li>🕛 {{ displayTime }}</li>
+          <li data-testid="display-time">🕛 {{ displayTime }}</li>
         </ul>
         <hr class="w-60 my-2 mx-auto border-theme-primary">
         <ul class="p-2 text-center">
