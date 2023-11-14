@@ -276,7 +276,7 @@ async function applyMultiplier() {
 }
 
 function printItem() {
-  window.print();
+  router.push(`/recipe/${id.value}/print`);
 }
 
 function changeTime() {
