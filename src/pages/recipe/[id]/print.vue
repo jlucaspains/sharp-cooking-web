@@ -164,4 +164,12 @@ function secondsToString(totalSeconds: number) {
 .print-page {
   width: 8.5in;
 }
+
+@page :footer {
+  display: none
+}
+
+@page :header {
+  display: none
+}
 </style>
