@@ -13,7 +13,7 @@
     "browser-fs-access": "^0.35.0",
     "dexie": "^3.2.4",
     "fraction.js": "^4.3.7",
-    "i18next": "^23.6.0",
+    "i18next": "^23.7.6",
     "i18next-browser-languagedetector": "^7.0.2",
     "i18next-http-backend": "^2.3.1",
     "i18next-vue": "^3.0.0",
