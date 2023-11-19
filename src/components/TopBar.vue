@@ -12,6 +12,14 @@ const canGoBack = ref(false);
 router.afterEach((to) => {
   canGoBack.value = to.path !== "/";
 });
+
+function goBack() {
+  if (router.currentRoute.value.query?.fromShortcut == "1") {
+    router.replace("/");
+  } else {
+    router.back();
+  }
+}
 </script>
 
 <template>
@@ -47,7 +55,7 @@ router.afterEach((to) => {
               focus-visible:ring-opacity-75
             "
             v-show="canGoBack"
-            @click="$router.back()"
+            @click="goBack()"
           >
             <svg
               class="h-6 w-6 text-white"
