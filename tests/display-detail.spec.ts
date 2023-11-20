@@ -49,3 +49,29 @@ test('Show ingredient detail cup', async ({ page, browserName, isMobile }) => {
     expect(await page.getByText('0.25quart').count()).toBe(1);
     expect(await page.getByText('48teaspoon').count()).toBe(1);
 });
+
+test('Show step detail time', async ({ page, browserName, isMobile }) => {
+    await enableHighlighting(page);
+    await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it for 30 min"]);
+    await page.goto('#/recipe/2');
+    await page.getByText('Bake it for 30 min').click();
+    expect(await page.getByText('Time: 30 minutes').count()).toBe(1);
+});
+
+test('Show step detail temperature F', async ({ page, browserName, isMobile }) => {
+    await enableHighlighting(page);
+    await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it at 450F for 30 min"]);
+    await page.goto('#/recipe/2');
+    await page.getByText('Bake it at 450F for 30 min').click();
+    expect(await page.getByText('Time: 30 minutes').count()).toBe(1);
+    expect(await page.getByText('232.2222celsius').count()).toBe(1);
+});
+
+test('Show step detail temperature C', async ({ page, browserName, isMobile }) => {
+    await enableHighlighting(page);
+    await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it at 232C for 30 min"]);
+    await page.goto('#/recipe/2');
+    await page.getByText('Bake it at 232C for 30 min').click();
+    expect(await page.getByText('Time: 30 minutes').count()).toBe(1);
+    expect(await page.getByText('449.6fahrenheit').count()).toBe(1);
+});

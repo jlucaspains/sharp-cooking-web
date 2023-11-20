@@ -14,7 +14,7 @@ import { RecipeViewModel } from "../recipeViewModel";
 import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
-import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
+import { getImpliedTimeFromString, secondsToString } from "../../../helpers/timeHelpers";
 import { IngredientDisplay, InstructionDisplay, prepareIngredientDisplay, prepareStepDisplay, applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
@@ -45,6 +45,7 @@ const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
 const displayIngredients = ref([] as IngredientDisplay[]);
 const selectedIngredient = ref({} as IngredientDisplay);
 const displayInstructions = ref([] as InstructionDisplay[])
+const selectedInstruction = ref({} as InstructionDisplay);
 const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -54,6 +55,7 @@ const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeImage>);
 const isIngredientDetailsModalOpen = ref(false);
+const isInstructionDetailsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -369,6 +371,10 @@ function showIngredientDetails(item: IngredientDisplay) {
   selectedIngredient.value = item;
   isIngredientDetailsModalOpen.value = true;
 }
+function showInstructionDetails(item: InstructionDisplay) {
+  selectedInstruction.value = item;
+  isInstructionDetailsModalOpen.value = true;
+}
 </script>
 
 <template>
@@ -529,7 +535,8 @@ function showIngredientDetails(item: IngredientDisplay) {
         </div>
         <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text">
+        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text"
+          @click="showInstructionDetails(displayItem)">
         </div>
       </template>
       <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
@@ -606,11 +613,15 @@ function showIngredientDetails(item: IngredientDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
-        selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
-      <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{  }} {{ selectedIngredient.quantityValue }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsIngredient") }} {{ selectedIngredient.ingredient }}</div>
+      <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{
+        t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
+    selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
+      <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{ }} {{
+        selectedIngredient.quantityValue }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}
+      </div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsIngredient") }} {{
+        selectedIngredient.ingredient }}</div>
       <div v-if="selectedIngredient.alternativeQuantities.length > 0">
         <div class="dark:text-white mt-3">{{ t("pages.recipe.id.index.ingredientDetailsAlternativeUOMs") }}</div>
         <div class="dark:text-white">
@@ -621,6 +632,27 @@ function showIngredientDetails(item: IngredientDisplay) {
             </tr>
           </table>
         </div>
+      </div>
+    </Modal>
+    <Modal :isOpen="isInstructionDetailsModalOpen" @closed="isInstructionDetailsModalOpen = false"
+      :title="t('pages.recipe.id.index.stepDetailsModalTitle')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: () => {
+            isInstructionDetailsModalOpen = false;
+          },
+        }
+      ]">
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{ selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
+      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{ t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
+      <div class="dark:text-white">
+        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation" aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
+          <tr v-for="item in selectedInstruction.alternativeTemperatures">
+            <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
+            <td>{{ item.unitText }}</td>
+          </tr>
+        </table>
       </div>
     </Modal>
   </div>

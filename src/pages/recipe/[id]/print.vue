@@ -11,6 +11,7 @@ import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
 import { parseInstruction } from "@jlucaspains/sharp-recipe-parser";
 import i18next from "i18next";
+import { secondsToString } from "../../../helpers/timeHelpers";
 
 const { t } = useTranslation();
 const route = useRoute();
@@ -86,32 +87,8 @@ function getRecipeDisplayTime(
     totalTimeInSeconds += time;
   }
 
-  return secondsToString(totalTimeInSeconds);
+  return secondsToString(totalTimeInSeconds, t);
 }
-
-function secondsToString(totalSeconds: number) {
-  const days = Math.floor((totalSeconds % 31536000) / 86400);
-  const hours = Math.floor(((totalSeconds % 31536000) % 86400) / 3600);
-  const minutes = Math.floor((((totalSeconds % 31536000) % 86400) % 3600) / 60);
-  const seconds = (((totalSeconds % 31536000) % 86400) % 3600) % 60;
-
-  let result = "";
-  if (days > 0) {
-    result += `${days} ${t("pages.recipe.id.print.days")} `;
-  }
-  if (hours > 0) {
-    result += `${hours} ${t("pages.recipe.id.print.hours")} `;
-  }
-  if (minutes > 0) {
-    result += `${minutes} ${t("pages.recipe.id.print.minutes")} `;
-  }
-  if (seconds > 0) {
-    result += `${seconds} ${t("pages.recipe.id.print.seconds")}`;
-  }
-
-  return result;
-}
-
 </script>
 
 <template>
