@@ -121,6 +121,7 @@
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
                     "stepDetailsModalTitle": "Detalhe de instrução",
                     "stepDetailsTime": "Tempo:",
+                    "stepDetailsTemperature": "Temperatura:",
                     "stepDetailsAlternativeTemperatures": "Temperatura Alternativa:"
                 },
                 "print": {

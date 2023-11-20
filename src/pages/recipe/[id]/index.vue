@@ -644,8 +644,8 @@ function showInstructionDetails(item: InstructionDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}
-      </div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{ selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
       <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{ t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
       <div class="dark:text-white">
         <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation" aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">

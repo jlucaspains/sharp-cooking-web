@@ -33,5 +33,5 @@ export function secondsToString(totalSeconds: number, t: (input: string) => stri
       result += `${seconds} ${t("general.seconds")}`;
     }
   
-    return result;
+    return result || "0";
   }
