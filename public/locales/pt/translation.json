@@ -8,7 +8,11 @@
         "done": "Pronto",
         "error": "Erro",
         "cancel": "Cancelar",
-        "save": "Salvar"
+        "save": "Salvar",
+        "seconds": "segundos ",
+        "minutes": "minutos ",
+        "hours": "horas ",
+        "days": "dias "
     },
     "logic": {
         "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
@@ -110,18 +114,17 @@
                     "sharingFailed": "O compartilhamento de arquivos falhou.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
-                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (pré-estréia)",
+                    "ingredientDetailsModalTitle": "Detalhe de ingrediente",
                     "ingredientDetailsQuantity": "Quntidade:",
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
-                    "ingredientDetailsAlternativeUOMs": "UDMs alternativas:"
+                    "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
+                    "stepDetailsModalTitle": "Detalhe de instrução",
+                    "stepDetailsTime": "Tempo:",
+                    "stepDetailsAlternativeTemperatures": "Temperatura Alternativa:"
                 },
                 "print": {
-                    "action": "Imprimir",
-                    "seconds": "segundos ",
-                    "minutes": "minutos ",
-                    "hours": "horas ",
-                    "days": "dias "
+                    "action": "Imprimir"
                 }
             },
             "importBackup": {
