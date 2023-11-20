@@ -1076,10 +1076,10 @@
   resolved "https://registry.yarnpkg.com/@headlessui/vue/-/vue-1.7.16.tgz#bdc9d32d329248910325539b99e6abfce0c69f89"
   integrity sha512-nKT+nf/q6x198SsyK54mSszaQl/z+QxtASmgMEJtpxSX2Q0OPJX0upS/9daDyiECpeAsvjkoOrm2O/6PyBQ+Qg==
 
-"@jlucaspains/sharp-recipe-parser@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.4.tgz#ddd6ef9790c493c75f157019c1d105ba4cd16f0c"
-  integrity sha512-hWFVchhnPZ3IvHUzAoO3WRcwV310mKfce+LKWP80eEvXH9KZNqEzcgwGaJEOYuU7OpeLy2xf3GXx8MUxUBzNmQ==
+"@jlucaspains/sharp-recipe-parser@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.5.tgz#89e371de3fe9007371cbfb47c7f941c9e7645c64"
+  integrity sha512-bDQ2S8h2+Wp/6WnDHTQ/O/biF0Xf8oNIGQ9m1Ax6LWY5kUk08dvomunVe/3XLtSCl9rBT3fKirjhVsfD1XDwdA==
   dependencies:
     fraction.js "^4.2.0"
 
