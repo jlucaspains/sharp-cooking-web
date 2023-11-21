@@ -39,9 +39,6 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "20.x"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -88,9 +85,6 @@ jobs:
       BASEURL: https://delightful-flower-0c3edd710-${{github.event.number}}.centralus.2.azurestaticapps.net # sets value for URL to test
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "20.x"
 
       - name: Install dependencies
         run: yarn

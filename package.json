@@ -2,6 +2,9 @@
   "name": "sharp-cooking-pwa",
   "private": true,
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "vue-tsc --noEmit && vite build",
