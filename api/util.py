@@ -41,7 +41,7 @@ def parse_recipe_instructions(text: str):
     
     return result    
 
-def parse_image(name: str, image: bytes, resize: bool = True) -> str:
+def parse_image(name: str, image: bytes, resize: bool = True, mime: str = "") -> str:
     """Extracts an image from a backup file and convert to uri format
     Args:
         name (str): file name
@@ -50,7 +50,9 @@ def parse_image(name: str, image: bytes, resize: bool = True) -> str:
     Returns:
         str: uri formatted base 64 file
     """
-    mime = mimetypes.MimeTypes().guess_type(name)[0]
+    if not mime:
+        mime = mimetypes.MimeTypes().guess_type(name)[0]
+    
     image_open = Image.open(io.BytesIO(image))
     
     format = mime.lower().replace("image/", "")
@@ -142,4 +144,5 @@ def parse_recipe_image(image_url: str):
         str: URI in base64
     """    
     response = requests.get(image_url)
-    return ("data:" +  response.headers['Content-Type'] + ";" + "base64," + base64.b64encode(response.content).decode("utf-8"))
+    parsedImage = parse_image(response.url, response.content, False, response.headers['Content-Type'])
+    return parsedImage
