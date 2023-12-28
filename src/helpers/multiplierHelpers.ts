@@ -117,7 +117,7 @@ export function prepareStepDisplay(input: string, currentTime: Date, locale: str
 
     let displayText = input;
     if (highlight && result.temperature > 0) {
-        const regexTemp = new RegExp(`${result.temperature}([ |\\w|°]*?)${result.temperatureUnitText}`, "i");
+        const regexTemp = new RegExp(`${result.temperature}( ?[\\w|°]* ?)${result.temperatureUnitText}`, "i");
         displayText = displayText.replace(regexTemp, `<span class="text-theme-primary">${result.temperatureText}$1${result.temperatureUnitText}</span>`);
     }
 
