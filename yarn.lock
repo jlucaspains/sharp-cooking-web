@@ -1094,10 +1094,10 @@
     wrap-ansi "^8.1.0"
     wrap-ansi-cjs "npm:wrap-ansi@^7.0.0"
 
-"@jlucaspains/sharp-recipe-parser@^1.0.6":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.0.7.tgz#4c8e70e773047c5c84576bd62963d13465b05686"
-  integrity sha512-8ANtbpEEJ58FSPRia2yAD00PGXBIr3ePCYxoGIoawNKeWg29nE8W62Lk4CKZ5V4dZjnRcoY0BorOcAJRP3OPsw==
+"@jlucaspains/sharp-recipe-parser@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.1.0.tgz#8f5c1afb227a82d9b3e5bc4b99eaaa7164d0e289"
+  integrity sha512-wMUkZIYT+5N2ZTBr52AeGSwIkbn1jaT8WSgQUvT00VFN3r3ZeUYVkOO7XN3sDUvSRL72ZiKBmzOoG5FiEL3iBg==
   dependencies:
     fraction.js "^4.2.0"
 
@@ -3335,6 +3335,7 @@ stop-iteration-iterator@^1.0.0:
     internal-slot "^1.0.4"
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -3404,6 +3405,7 @@ stringify-object@^3.3.0:
     is-regexp "^1.0.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
