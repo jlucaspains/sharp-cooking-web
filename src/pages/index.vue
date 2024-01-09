@@ -90,6 +90,9 @@ onMounted(async () => {
   state.title = t("pages.index.title");
   state.menuOptions = [
     {
+      svg: `<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />`,
+    },
+    {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
       children: [
         {
@@ -189,10 +192,15 @@ async function saveSortOption(type: string) {
     <div class="flex flex-col mb-2 md:hidden">
       <input type="text" data-testid="search-input" :placeholder="t('pages.index.search')" v-model="searchText"
         class="p-2 my-2 rounded text-black" />
+      <div class="flex">
+        <span class="p-2 my-2 rounded bg-white text-black">title:</span>
+        <span class="p-2 m-2 rounded bg-white text-black">ingredients:</span>
+        <span class="p-2 m-2 rounded bg-white text-black">steps:</span>
+      </div>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
-      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
-        tabindex="0" class="
+      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)" tabindex="0"
+        class="
           p-5
           h-60
           rounded-lg
@@ -220,7 +228,8 @@ async function saveSortOption(type: string) {
             }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
-            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score }}⭐</span>
+            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score
+            }}⭐</span>
           </div>
         </div>
       </div>

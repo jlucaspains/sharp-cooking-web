@@ -72,7 +72,7 @@ function goBack() {
             </svg>
           </button>
         </div>
-        <div class="flex truncate">
+        <div class="flex w-full truncate">
           <router-link class="items-center py-2" to="/">
             <span
               class="text-lg font-semibold whitespace-nowrap text-white"
@@ -80,12 +80,11 @@ function goBack() {
             >
           </router-link>
         </div>
-        <div class="flex w-10">
+        <div class="flex">
           <template v-for="menuOption in state.menuOptions">
             <Menu
               v-if="menuOption.children && menuOption.children.length > 0"
               as="div"
-              v-for="menuOption in state.menuOptions"
               class="w-8 relative inline-block text-left"
             >
               <div>
