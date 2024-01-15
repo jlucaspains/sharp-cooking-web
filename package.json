@@ -12,7 +12,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@headlessui/vue": "^1.7.16",
+    "@headlessui/vue": "^1.7.17",
     "@jlucaspains/sharp-recipe-parser": "1.1.0",
     "browser-fs-access": "^0.35.0",
     "dexie": "^3.2.4",
@@ -25,7 +25,7 @@
     "nosleep.js": "^0.12.0",
     "notiwind": "^2.0.1",
     "tesseract.js": "^5.0.4",
-    "vue": "^3.4.5",
+    "vue": "^3.4.13",
     "vue-advanced-cropper": "^2.8.8",
     "vue-router": "4",
     "workbox-build": "^7.0.0",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "@types/lodash.debounce": "^4.0.8",
-    "@vitejs/plugin-vue": "^5.0.2",
+    "@vitejs/plugin-vue": "^5.0.3",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.33",
     "postcss-nesting": "^12.0.2",
