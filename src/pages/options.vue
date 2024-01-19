@@ -185,7 +185,7 @@ async function setSelectedLanguage() {
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.enableAdvancedSearch") }}</span>
-      <label data-testid="enable-recipe-highlight-toggle" class="switch float-right align-middle">
+      <label data-testid="enable-advanced-search-toggle" class="switch float-right align-middle">
         <input v-model="enableAdvancedSearch" type="checkbox" @change="updateEnableAdvancedSearch">
         <span class="slider round"></span>
       </label>

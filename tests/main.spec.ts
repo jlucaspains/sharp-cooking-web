@@ -108,15 +108,99 @@ test('import from backup', async ({ page }) => {
 });
 
 
-test('search', async ({ page, isMobile }) => {
-  if (!isMobile) {
-    test.skip();
-  }
-
+test('search simple', async ({ page, isMobile }) => {
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
   await page.goto('/');
 
+  await page.getByTestId('topbar-single-button').click();
   await page.getByTestId('search-input').fill("Cookie");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+async function enableAdvancedSearch(page: any) {
+    await page.goto('#/options');
+    await page.getByTestId('enable-advanced-search-toggle').click();
+}
+
+test('search advanced by typing title', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-input').fill("title: Cookie");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+test('search advanced by typing ingredient', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-input').fill("ingredients: dough");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+test('search advanced by typing step', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake at 354F it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-input').fill("steps: 354F");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+
+test('search advanced by selecting title', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-by-title').click();
+  await page.getByTestId('search-input').pressSequentially("cookie");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+test('search advanced by selecting ingredient', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-by-ingredients').click();
+  await page.getByTestId('search-input').pressSequentially("dough");
+  await page.waitForTimeout(500);
+  const names = page.getByTestId('recipe-title');
+  expect(await names.count()).toBe(1);
+  await expect(names.first()).toHaveText('Favorite cookie');
+});
+
+test('search advanced by selecting step', async ({ page, isMobile }) => {
+  await enableAdvancedSearch(page);
+  await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake at 354F it!"]);
+  await page.goto('/');
+
+  await page.getByTestId('topbar-single-button').click();
+  await page.getByTestId('search-by-steps').click();
+  await page.getByTestId('search-input').pressSequentially("354F");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
   expect(await names.count()).toBe(1);

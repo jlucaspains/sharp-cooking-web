@@ -245,12 +245,12 @@ function simpleSearchInText(a: string, b: string) {
         <input ref="searchInput" type="search" data-testid="search-input" :placeholder="t('pages.index.search')"
           v-model="searchText" class="p-2 my-2 rounded text-black" />
         <div v-if="enableAdvancedSearch" class="flex">
-          <button type="button" class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
+          <button type="button" data-testid="search-by-title" class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
             @click="setSearchType(t('pages.index.filterByTitle'))">{{t("pages.index.filterByTitle")}}</button>
-          <button type="button"
+          <button type="button" data-testid="search-by-ingredients"
             class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
             @click="setSearchType(t('pages.index.filterByIngredients'))">{{t("pages.index.filterByIngredients")}}</button>
-          <button type="button"
+          <button type="button" data-testid="search-by-steps"
             class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
             @click="setSearchType(t('pages.index.filterBySteps'))">{{t("pages.index.filterBySteps")}}</button>
         </div>
