@@ -7,6 +7,7 @@ import { getRecipes, getRecipeImage, initialize, saveSetting, getSetting } from 
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import { TransitionRoot } from '@headlessui/vue'
 
 const router = useRouter();
 const { t } = useTranslation();
@@ -14,10 +15,13 @@ const state = useState()!;
 
 const items = ref([] as RecipeViewModel[]);
 const searchText = ref("");
+const searchInput = ref(null as HTMLInputElement | null);
+const displaySearch = ref(false);
 let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
+let enableAdvancedSearch = false;
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -66,6 +70,9 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 }
 
 onMounted(async () => {
+  const enableAdvancedSearchSetting = await getSetting("EnableAdvancedSearch", "false");
+  enableAdvancedSearch = enableAdvancedSearchSetting == "true";
+
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
     name: "AddManual",
@@ -91,6 +98,7 @@ onMounted(async () => {
   state.menuOptions = [
     {
       svg: `<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />`,
+      action: activateSearch,
     },
     {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
@@ -122,9 +130,7 @@ onMounted(async () => {
   ];
 
   debouncedWatch = debounce((currentValue: string, oldValue: string) => {
-    items.value = allRecipes.filter((item) =>
-      item.title.toLowerCase().includes(currentValue.toLowerCase())
-    );
+    items.value = allRecipes.filter((item) => filterPredicate(currentValue, item));
   }, 200);
 
   debouncedScroll = debounce((currentValue: number) => {
@@ -185,19 +191,71 @@ function goToOptions() {
 async function saveSortOption(type: string) {
   await saveSetting("AllRecipesSort", type);
 }
+
+function activateSearch() {
+  displaySearch.value = !displaySearch.value;
+  nextTick(() => {
+    searchInput.value?.focus();
+  });
+}
+
+function setSearchType(type: string) {
+  searchText.value = `${type} `;
+  searchInput.value?.focus();
+}
+function filterPredicate(searchValue: string, item: RecipeViewModel): boolean {
+  const filterByIngredients = t("pages.index.filterByIngredients");
+  if (searchValue.startsWith(filterByIngredients)) {
+    return item.ingredients.some(ing => simpleSearchInText(ing, getSearchValue(searchText.value, filterByIngredients)));
+  }
+
+  const filterBySteps = t("pages.index.filterBySteps");
+  if (searchValue.startsWith(filterBySteps)) {
+    return item.steps.some(stp => simpleSearchInText(stp, getSearchValue(searchText.value, filterBySteps)));
+  }
+
+  const filterByTitle = t("pages.index.filterByTitle");
+  if (searchValue.startsWith(filterByTitle)) {
+    return simpleSearchInText(item.title, getSearchValue(searchText.value, filterByTitle));
+  }
+
+  return simpleSearchInText(item.title, getSearchValue(searchText.value, ""));
+}
+
+function getSearchValue(fullValue: string, prefix: string)
+{
+  return fullValue.replace(prefix, "").trim().toLowerCase();
+}
+
+function simpleSearchInText(a: string, b: string) {
+  return a.toLowerCase().includes(b.toLowerCase());
+}
 </script>
 
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
-    <div class="flex flex-col mb-2 md:hidden">
-      <input type="text" data-testid="search-input" :placeholder="t('pages.index.search')" v-model="searchText"
-        class="p-2 my-2 rounded text-black" />
-      <div class="flex">
-        <span class="p-2 my-2 rounded bg-white text-black">title:</span>
-        <span class="p-2 m-2 rounded bg-white text-black">ingredients:</span>
-        <span class="p-2 m-2 rounded bg-white text-black">steps:</span>
+    <TransitionRoot :show="displaySearch"
+      enter="transition-all duration-500"
+      enter-from="opacity-0 scale-90"
+      enter-to="opacity-100 scale-100"
+      leave="transition-all duration-200"
+      leave-from="opacity-100 scale-100"
+      leave-to="opacity-0 scale-90">
+      <div class="flex flex-col mb-2">
+        <input ref="searchInput" type="search" data-testid="search-input" :placeholder="t('pages.index.search')"
+          v-model="searchText" class="p-2 my-2 rounded text-black" />
+        <div v-if="enableAdvancedSearch" class="flex">
+          <button type="button" class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
+            @click="setSearchType(t('pages.index.filterByTitle'))">{{t("pages.index.filterByTitle")}}</button>
+          <button type="button"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
+            @click="setSearchType(t('pages.index.filterByIngredients'))">{{t("pages.index.filterByIngredients")}}</button>
+          <button type="button"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
+            @click="setSearchType(t('pages.index.filterBySteps'))">{{t("pages.index.filterBySteps")}}</button>
+        </div>
       </div>
-    </div>
+    </TransitionRoot>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
       <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)" tabindex="0"
         class="

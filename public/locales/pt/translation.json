@@ -25,11 +25,14 @@
             "addManually": "Adicionar manualmente...",
             "importFromWebsite": "Importar de website...",
             "importFromBackup": "Importar de backup...",
-            "importFromScan": "Importar de imagem (preview)",
+            "importFromScan": "Importar de imagem",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
-            "options": "Opções..."
+            "options": "Opções...",
+            "filterByTitle": "título:",
+            "filterByIngredients": "ingredientes:",
+            "filterBySteps": "passos:"
         },
         "options": {
             "title": "Opções",
@@ -55,8 +58,10 @@
             "storageStats": "Armazenamento",
             "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
             "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
-            "enableRecipeHighlighting": "Ativar o realce da receita (pré-estréia)",
-            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa"
+            "enableRecipeHighlighting": "Ativar o realce da receita",
+            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa",
+            "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
+            "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas"
         },
         "recipe": {
             "id": {
@@ -142,7 +147,7 @@
                 "processing2": "Ainda processando. Isso pode demorar até 1 minuto..."
             },
             "importImage": {
-                "title": "Importar de imagem (preview)",
+                "title": "Importar de imagem",
                 "parsedFailed": "Falha ao processar a imagem",
                 "selectFile": "Selecione um arquivo...",
                 "scanSelection": "Scanear seleção...",
