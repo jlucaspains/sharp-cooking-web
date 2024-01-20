@@ -6,8 +6,7 @@ import { useState } from "../services/store";
 import { getRecipes, getRecipeImage, initialize, saveSetting, getSetting } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import { TransitionRoot } from '@headlessui/vue'
+import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const router = useRouter();
 const { t } = useTranslation();

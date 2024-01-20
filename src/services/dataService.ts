@@ -82,8 +82,6 @@ export async function initialize(recipes: Array<Recipe>) {
 }
 
 export async function saveRecipeImage(recipeImage: RecipeImage) {
-    const sequence = Math.random();
-
     await db.recipeImages.put(recipeImage);
 }
 
@@ -98,8 +96,6 @@ export async function deleteRecipe(id: number) {
 }
 
 export async function deleteRecipeImage(id: number) {
-    const sequence = Math.random();
-
     await db.recipeImages.delete(id);
 }
 
