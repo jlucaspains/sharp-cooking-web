@@ -35,8 +35,9 @@ function goBack() {
         shadow shadow-slate
       ">
       <div class="flex justify-between sm:items-center mx-auto">
-        <div class="flex w-10">
-          <button class="
+        <div class="flex">
+          <transition name="back">
+            <button class="
               p-2
               inline-flex
               w-full
@@ -51,10 +52,11 @@ function goBack() {
               focus-visible:ring-white
               focus-visible:ring-opacity-75
             " v-show="canGoBack" @click="goBack()">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="white">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-          </button>
+              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="white">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </button>
+          </transition>
         </div>
         <div class="flex w-full truncate">
           <router-link class="items-center py-2" to="/">
@@ -150,4 +152,39 @@ function goBack() {
   padding-bottom: 0.3rem;
   z-index: 1;
 }
-</style>
+
+.back-enter-active {
+  animation: back-in 0.2s;
+}
+
+.back-leave-active {
+  animation: back-out 0.2s;
+}
+
+@keyframes back-in {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes back-out {
+  0% {
+    transform: translate(0);
+  }
+
+  50% {
+    transform: translate(-20px);
+  }
+
+  100% {
+    transform: translate(-50px);
+  }
+}</style>
