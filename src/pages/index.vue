@@ -193,7 +193,9 @@ async function saveSortOption(type: string) {
 
 function activateSearch() {
   displaySearch.value = !displaySearch.value;
+
   nextTick(() => {
+    searchInput.value?.scrollTo();
     searchInput.value?.focus();
   });
 }
@@ -221,8 +223,7 @@ function filterPredicate(searchValue: string, item: RecipeViewModel): boolean {
   return simpleSearchInText(item.title, getSearchValue(searchText.value, ""));
 }
 
-function getSearchValue(fullValue: string, prefix: string)
-{
+function getSearchValue(fullValue: string, prefix: string) {
   return fullValue.replace(prefix, "").trim().toLowerCase();
 }
 
@@ -233,25 +234,23 @@ function simpleSearchInText(a: string, b: string) {
 
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
-    <TransitionRoot :show="displaySearch"
-      enter="transition-all duration-500"
-      enter-from="opacity-0 scale-90"
-      enter-to="opacity-100 scale-100"
-      leave="transition-all duration-200"
-      leave-from="opacity-100 scale-100"
+    <TransitionRoot :show="displaySearch" enter="transition-all duration-500" enter-from="opacity-0 scale-90"
+      enter-to="opacity-100 scale-100" leave="transition-all duration-200" leave-from="opacity-100 scale-100"
       leave-to="opacity-0 scale-90">
       <div class="flex flex-col mb-2">
         <input ref="searchInput" type="search" data-testid="search-input" :placeholder="t('pages.index.search')"
           v-model="searchText" class="p-2 my-2 rounded text-black" />
         <div v-if="enableAdvancedSearch" class="flex">
-          <button type="button" data-testid="search-by-title" class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
-            @click="setSearchType(t('pages.index.filterByTitle'))">{{t("pages.index.filterByTitle")}}</button>
+          <button type="button" data-testid="search-by-title"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
+            @click="setSearchType(t('pages.index.filterByTitle'))">{{ t("pages.index.filterByTitle") }}</button>
           <button type="button" data-testid="search-by-ingredients"
             class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
-            @click="setSearchType(t('pages.index.filterByIngredients'))">{{t("pages.index.filterByIngredients")}}</button>
+            @click="setSearchType(t('pages.index.filterByIngredients'))">{{ t("pages.index.filterByIngredients")
+            }}</button>
           <button type="button" data-testid="search-by-steps"
             class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
-            @click="setSearchType(t('pages.index.filterBySteps'))">{{t("pages.index.filterBySteps")}}</button>
+            @click="setSearchType(t('pages.index.filterBySteps'))">{{ t("pages.index.filterBySteps") }}</button>
         </div>
       </div>
     </TransitionRoot>
