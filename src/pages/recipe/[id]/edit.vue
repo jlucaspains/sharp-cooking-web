@@ -568,7 +568,7 @@ function cancelCropping() {
           action: importRecipe,
         },
       ]">
-      <input v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
+      <input type="url" v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

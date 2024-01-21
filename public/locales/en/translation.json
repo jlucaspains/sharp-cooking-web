@@ -25,11 +25,14 @@
             "addManually": "Add manually",
             "importFromWebsite": "Import from website",
             "importFromBackup": "Import from backup file",
-            "importFromScan": "Import from image (preview)",
+            "importFromScan": "Import from image",
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
             "sortByRecipeDate": "Sort by Changed Date",
-            "options": "Options"
+            "options": "Options",
+            "filterByTitle": "title:",
+            "filterByIngredients": "ingredients:",
+            "filterBySteps": "steps:"
         },
         "options": {
             "title": "Options",
@@ -55,8 +58,10 @@
             "storageStats": "Storage",
             "storageNotTraceable": "Storage cannot be tracked on this device",
             "storageDescription": "Space used {{used}} of {{remaining}} available.",
-            "enableRecipeHighlighting": "Enable recipe highlighting (preview)",
-            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details"
+            "enableRecipeHighlighting": "Enable recipe highlighting",
+            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details",
+            "enableAdvancedSearch": "Enable advanced search (preview)",
+            "enableAdvancedSearchDescription": "Allows searching through recipe title, ingredients and steps"
         },
         "recipe": {
             "id": {
@@ -142,7 +147,7 @@
                 "processing2": "Still processing. This may take up to 1 minute..."
             },
             "importImage": {
-                "title": "Import from Image (preview)",
+                "title": "Import from Image",
                 "parsedFailed": "",
                 "selectFile": "Select a file...",
                 "scanSelection": "Scan selection...",

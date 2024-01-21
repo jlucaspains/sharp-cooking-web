@@ -72,6 +72,7 @@ test('delete', async ({ page }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Delete' }).click();
   page.getByRole('button', { name: 'Yes, delete' }).click();
@@ -111,6 +112,7 @@ Bake it for 30 min`;
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
@@ -157,6 +159,7 @@ test('share as file', async ({ page, browserName }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
