@@ -195,8 +195,8 @@ function activateSearch() {
   displaySearch.value = !displaySearch.value;
 
   nextTick(() => {
-    searchInput.value?.scrollTo();
     searchInput.value?.focus();
+    searchInput.value?.scrollTo(0,0);
   });
 }
 
