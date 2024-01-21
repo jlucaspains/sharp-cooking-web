@@ -196,7 +196,7 @@ function activateSearch() {
 
   nextTick(() => {
     searchInput.value?.focus();
-    searchInput.value?.scrollTo(0,0);
+    window.scrollTo(0, 0);
   });
 }
 
