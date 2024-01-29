@@ -124,8 +124,7 @@ function close() {
                             <a href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
-                                <iframe v-else type="text/html" width="100%" height="100%" :src="image.url"
-                                    frameborder="0"></iframe>
+                                <iframe v-else title="Youtube video" type="text/html" width="100%" height="100%" :src="image.url"></iframe>
                             </a>
                         </li>
                     </template>
@@ -166,7 +165,8 @@ function close() {
                                         <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
                                             class="" height="150" width="150">
                                         <div v-else>
-                                            <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24">
                                                 <path fill="currentColor"
                                                     d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.89 20.1 3 19 3M10 16V8L15 12" />
                                             </svg>

@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 test('Restore json backup old format', async ({ page }) => {
     await page.addInitScript(() => {
 
-        var blob = new Blob([`[
+        const blob = new Blob([`[
             {
                 "id": 1,
                 "title": "New Bread Recipe",
@@ -29,7 +29,7 @@ test('Restore json backup old format', async ({ page }) => {
                 "images": []
             }
         ]`], { type: 'application/json' });
-        var file = new File([blob], "file.json", { type: "application/json" });
+        const file = new File([blob], "file.json", { type: "application/json" });
 
         const fileHandle = {
             getFile: async () => { return file; }
@@ -50,7 +50,7 @@ test('Restore json backup old format', async ({ page }) => {
 test('Restore json backup new format', async ({ page }) => {
     await page.addInitScript(() => {
 
-        var blob = new Blob([`[
+        const blob = new Blob([`[
             {
                 "id": 1,
                 "title": "New Bread Recipe",
@@ -68,7 +68,7 @@ test('Restore json backup new format', async ({ page }) => {
                 "media": [{"type":"img", "url":"/bread.jpg"}]
             }
         ]`], { type: 'application/json' });
-        var file = new File([blob], "file.json", { type: "application/json" });
+        const file = new File([blob], "file.json", { type: "application/json" });
 
         const fileHandle = {
             getFile: async () => { return file; }
@@ -89,7 +89,7 @@ test('Restore json backup new format', async ({ page }) => {
 test('Restore json backup with video', async ({ page }) => {
     await page.addInitScript(() => {
 
-        var blob = new Blob([`[
+        const blob = new Blob([`[
             {
                 "id": 1,
                 "title": "New Bread Recipe",
@@ -107,7 +107,7 @@ test('Restore json backup with video', async ({ page }) => {
                 "media": [{"type":"vid", "url":"https://www.youtube.com/embed/0YY7K7Xa5rE"}]
             }
         ]`], { type: 'application/json' });
-        var file = new File([blob], "file.json", { type: "application/json" });
+        const file = new File([blob], "file.json", { type: "application/json" });
 
         const fileHandle = {
             getFile: async () => { return file; }
@@ -133,8 +133,8 @@ test('Restore zip backup', async ({ page, browserName }) => {
 
     await page.addInitScript(() => {
 
-        var blob = new Blob([], { type: 'application/zip' });
-        var file = new File([blob], "file.zip", { type: "application/zip" });
+        const blob = new Blob([], { type: 'application/zip' });
+        const file = new File([blob], "file.zip", { type: "application/zip" });
 
         const fileHandle = {
             getFile: async () => { return file; }

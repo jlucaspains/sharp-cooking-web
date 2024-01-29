@@ -147,23 +147,8 @@ export async function prepareBackup(): Promise<Array<BackupModel>> {
 
     const result = [];
     for (const recipe of allRecipes) {
-        const model = new BackupModel();
-        model.id = recipe.id;
-        model.title = recipe.title;
-        model.ingredients = recipe.ingredients;
-        model.multiplier = recipe.multiplier;
-        model.notes = recipe.notes;
-        model.score = recipe.score;
-        model.changedOn = recipe.changedOn;
-        model.source = recipe.source;
-        model.steps = recipe.steps;
-        model.media = allMedia
-            .filter(item => item.recipeId == model.id)
-            .map(item => {
-                return {
-                    type: item.type, url: item.url
-                };
-            });
+        const model = getBackupModel(recipe, allMedia);
+
         result.push(model);
     }
 
@@ -181,6 +166,13 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
         return result;
     }
 
+    const model = getBackupModel(recipe, allMedia);
+    result.push(model);
+
+    return result;
+}
+
+function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
     const model = new BackupModel();
     model.id = recipe.id;
     model.title = recipe.title;
@@ -198,7 +190,6 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
                 type: item.type, url: item.url
             };
         });
-    result.push(model);
 
-    return result;
+    return model;
 }
