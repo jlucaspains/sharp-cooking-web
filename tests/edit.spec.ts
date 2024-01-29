@@ -79,7 +79,19 @@ test('add image', async ({ page, browserName, isMobile }) => {
   expect(await page.locator('.list-images').getByRole("img").count()).toBe(2);
 });
 
-test('remove image', async ({ page }) => {
+test('add video', async ({ page, browserName, isMobile }) => {
+  await page.goto('/');
+  await page.getByText('Sourdough Bread').first().click();
+  await page.getByTestId('edit-button').click();
+  await page.getByTestId('add-video-button').click();
+  await page.getByTestId('add-video-url').fill("https://www.youtube.com/watch?v=0YY7K7Xa5rE");
+  await page.getByRole("button").getByText("OK").click();
+
+  expect(page.locator("iframe"))
+    .toHaveAttribute("src", "https://www.youtube.com/embed/0YY7K7Xa5rE");
+});
+
+test('remove media', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();

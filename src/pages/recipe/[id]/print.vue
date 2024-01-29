@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute, onBeforeRouteLeave } from "vue-router";
 import {
   getRecipe,
-  getRecipeImage,
+  getRecipeMedia,
   getSetting
 } from "../../../services/dataService";
 import { useTranslation } from "i18next-vue";
@@ -57,7 +57,7 @@ onMounted(async () => {
   ];
 
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
-  const image = await getRecipeImage(id.value);
+  const image = await getRecipeMedia(id.value);
   const defaultTimeSetting = await getSetting("StepsInterval", "5");
 
   if (recipe) {

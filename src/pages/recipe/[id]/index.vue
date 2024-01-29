@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
-  getRecipeImages,
+  getRecipeMediaList,
   deleteRecipe,
   prepareRecipeBackup,
   saveRecipe,
@@ -20,7 +20,7 @@ import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
-import { RecipeImage } from "../../../services/recipe";
+import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 
 const route = useRoute();
@@ -53,7 +53,7 @@ const startTime = ref("");
 const finishTime = ref(new Date());
 const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
-const images = ref([] as Array<RecipeImage>);
+const images = ref([] as Array<RecipeMedia>);
 const isIngredientDetailsModalOpen = ref(false);
 const isInstructionDetailsModalOpen = ref(false);
 const { t } = useTranslation();
@@ -110,7 +110,7 @@ onMounted(async () => {
   if (recipe) {
     state.title = recipe.title;
 
-    const allImages = await getRecipeImages(id.value);
+    const allImages = await getRecipeMediaList(id.value);
 
     if (allImages.length > 0) {
       allImages.forEach((item) => {

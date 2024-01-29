@@ -91,7 +91,9 @@
                     "stepPlaceholder": "Preheat oven to 350 F",
                     "failedToProcessImage": "Failed to process image. Please try again.",
                     "processImage1": "Compressing image...",
-                    "processImage2": "Still working on the image. This may take a while"
+                    "processImage2": "Still working on the image. This may take a while",
+                    "addVideoTitle": "Add YouTube video",
+                    "videoUrlNotSupported": "Only YouTube videos are supported."
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"

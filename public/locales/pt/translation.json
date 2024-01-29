@@ -91,7 +91,9 @@
                     "stepPlaceholder": "Pré-aqueça o forno a 180 C",
                     "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
                     "processImage1": "Comprimindo imagem...",
-                    "processImage2": "Ainda processando. Isso pode demorar um pouco..."
+                    "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+                    "addVideoTitle": "Adicionar vídeo do YouTube",
+                    "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados."
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"

@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from "vue";
 
 const props = defineProps<{
-    images: Array<{ url: string }>;
+    images: Array<{ type: string, url: string }>;
 }>();
 
 const emit = defineEmits<{
@@ -122,8 +122,10 @@ function close() {
                     <template v-for="(image, i) in props.images" :key="image">
                         <li class="w-full flex-shrink-0 snap-start">
                             <a href="#" @click.prevent="toggleImageIfNotOpen(i)">
-                                <img :alt="`Image Gallery ${i}`" :src="image.url"
+                                <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
+                                <iframe v-else type="text/html" width="100%" height="100%" :src="image.url"
+                                    frameborder="0"></iframe>
                             </a>
                         </li>
                     </template>
@@ -133,9 +135,8 @@ function close() {
                     <div class="flex" v-show="props.images.length > 1">
                         <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="prev">
-                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round">
+                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <line x1="5" y1="12" x2="11" y2="18" />
@@ -162,17 +163,22 @@ function close() {
                                 <li class="w-28 flex-shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
-                                        <img :alt="`Image Gallery ${i}`" :src="image.url" class="" height="150"
-                                            width="150">
+                                        <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
+                                            class="" height="150" width="150">
+                                        <div v-else>
+                                            <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.89 20.1 3 19 3M10 16V8L15 12" />
+                                            </svg>
+                                        </div>
                                     </a>
                                 </li>
                             </template>
                         </ul>
                         <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="next">
-                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                stroke-linejoin="round">
+                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
                                 <line x1="5" y1="12" x2="19" y2="12" />
                                 <line x1="13" y1="18" x2="19" y2="12" />

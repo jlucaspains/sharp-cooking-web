@@ -4,12 +4,12 @@ import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
   saveRecipe,
-  saveRecipeImage,
-  deleteRecipeImage,
-  getRecipeImages,
+  saveRecipeMedia,
+  deleteRecipeMedia,
+  getRecipeMediaList,
   getNextRecipeId,
 } from "../../../services/dataService";
-import { RecipeImage } from "../../../services/recipe";
+import { RecipeMedia } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
@@ -21,6 +21,7 @@ import BusyIndicator from "../../../components/BusyIndicator.vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { isVideoUrlSupported, prepareUrlForEmbed } from "../../../helpers/videoHelpers";
 
 const state = useState()!;
 const route = useRoute();
@@ -41,7 +42,7 @@ const item = ref({
   notes: "",
   imageAvailable: false,
 } as RecipeViewModel);
-const images = ref([] as Array<RecipeImage>);
+const images = ref([] as Array<RecipeMedia>);
 const isDirtyModalOpen = ref(false);
 const isImportModalOpen = ref(false);
 const importRecipeUrl = ref("");
@@ -49,10 +50,14 @@ const isImporting = ref(false);
 const isProcessingImage = ref(false);
 const stepRefs = ref<HTMLInputElement[]>([]);
 const ingredientRefs = ref<HTMLInputElement[]>([]);
-const selectedImage = ref<number>(0);
+const selectedImage = ref<number>(-1);
 const currentImage = ref("");
-const deletedImages: Array<RecipeImage> = [];
+const currentMediaIsImage = ref(false);
+const deletedImages: Array<RecipeMedia> = [];
 const isCropping = ref(false);
+const isAddVideoModalOpen = ref(false);
+const addVideoUrl = ref("");
+const addVideoUrlError = ref("");
 
 watch(
   item,
@@ -66,6 +71,7 @@ watch(
   selectedImage,
   (newValue: number) => {
     currentImage.value = images.value[newValue].url;
+    currentMediaIsImage.value = images.value[newValue].type == "img";
   },
   { deep: true }
 );
@@ -109,14 +115,14 @@ onMounted(async () => {
   if (recipe) {
     state.title = recipe.title || t("pages.recipe.id.edit.newRecipe");
 
-    const allImages = await getRecipeImages(id.value);
+    const allImages = await getRecipeMediaList(id.value);
 
     if (allImages.length > 0) {
       allImages.forEach((item) => {
         images.value.push(item);
       });
       recipe.imageAvailable = images.value.length > 0;
-      currentImage.value = images.value[0].url;
+      selectedImage.value = 0;
     }
 
     item.value = recipe;
@@ -161,12 +167,12 @@ async function save() {
 
   for (const image of images.value) {
     const recipeImage = JSON.parse(JSON.stringify(image));
-    await saveRecipeImage(recipeImage);
+    await saveRecipeMedia(recipeImage);
   }
 
   for (const image of deletedImages) {
     if (image.id) {
-      await deleteRecipeImage(image.id);
+      await deleteRecipeMedia(image.id);
     }
   }
 
@@ -214,10 +220,9 @@ async function pickImage() {
 
     result = await response.json();
 
-    images.value.push(new RecipeImage(id.value, null, result.image));
+    const mediaIndex = images.value.push(new RecipeMedia(id.value, "img", result.image));
     item.value.imageAvailable = true;
-    selectedImage.value = 0;
-    currentImage.value = images.value[0].url;
+    selectedImage.value = mediaIndex - 1;
   } catch {
     success = false;
   } finally {
@@ -276,7 +281,7 @@ async function importRecipe() {
     item.value.steps = html.steps.map((x: any) => x.raw);
 
     if (html.image) {
-      images.value.push(new RecipeImage(id.value, null, html.image));
+      images.value.push(new RecipeMedia(id.value, "img", html.image));
     }
 
     item.value.imageAvailable = images.value.length > 0;
@@ -335,6 +340,10 @@ function removeImage() {
   images.value.splice(selectedImage.value, 1);
 }
 
+function pickVideo() {
+  isAddVideoModalOpen.value = true;
+}
+
 function cropImagechanged(changed: any) {
   croppingCanvas = changed.canvas;
 }
@@ -348,6 +357,28 @@ function cancelCropping() {
   isCropping.value = false;
   selectedImage.value = 0;
   currentImage.value = images.value[0].url;
+}
+
+function addVideo() {
+  const isSupported = isVideoUrlSupported(addVideoUrl.value);
+  if (!isSupported) {
+    addVideoUrlError.value = t("pages.recipe.id.edit.videoUrlNotSupported");
+    return;
+  } else {
+    addVideoUrlError.value = "";
+  }
+
+  const videoUrl = prepareUrlForEmbed(addVideoUrl.value);
+
+  if (!videoUrl) {
+    addVideoUrlError.value = t("pages.recipe.id.edit.videoUrlNotSupported");
+  }
+
+  const videoIndex = images.value.push(new RecipeMedia(id.value, "vid", videoUrl));
+  item.value.imageAvailable = true;
+  selectedImage.value = videoIndex - 1;
+
+  isAddVideoModalOpen.value = false;
 }
 </script>
 
@@ -394,6 +425,26 @@ function cancelCropping() {
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M13.96 12.29L11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
           </svg>
         </button>
+
+        <button class="
+            w-12
+            h-12
+            m-1
+            rounded-full
+            bg-theme-primary
+            hover:bg-theme-secondary
+            focus:bg-theme-secondary
+            focus:shadow-lg
+            shadow-md
+            hover:shadow-lg
+            transition duration-150 ease-in-out
+          " data-testid="add-video-button" @click="pickVideo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 text-white m-auto">
+            <path fill="currentColor"
+              d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.9 4 4 4H5L7 8H10L8 4H10L12 8H15L13 4H15L17 8H20L18 4H22V13.81C21.39 13.46 20.72 13.22 20 13.09V10H5.76L4 6.47V18H13.09C13.04 18.33 13 18.66 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
+          </svg>
+        </button>
+
         <button class="
             w-12
             h-12
@@ -412,7 +463,8 @@ function cancelCropping() {
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
           </svg>
         </button>
-        <button v-if="item.imageAvailable && !isCropping" class="
+
+        <button v-if="item.imageAvailable && currentMediaIsImage && !isCropping" class="
             w-12
             h-12
             m-1
@@ -568,7 +620,29 @@ function cancelCropping() {
           action: importRecipe,
         },
       ]">
-      <input type="url" v-model="importRecipeUrl" data-testid="import-url" class="block my-2 p-2 w-full rounded text-black" />
+      <input type="url" v-model="importRecipeUrl" data-testid="import-url"
+        class="block my-2 p-2 w-full rounded text-black" />
+    </Modal>
+    <Modal :isOpen="isAddVideoModalOpen" @closed="isAddVideoModalOpen = false"
+      :title="t('pages.recipe.id.edit.addVideoTitle')" :buttons="[
+        {
+          title: t('pages.recipe.id.edit.importFromClipboard'),
+          action: async () => {
+            await fillUrlFromClipboard();
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isAddVideoModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: addVideo,
+        },
+      ]">
+      <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
+        class="block my-2 p-2 w-full rounded text-black" />
+      <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />
