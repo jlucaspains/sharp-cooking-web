@@ -61,7 +61,9 @@
             "enableRecipeHighlighting": "Enable recipe highlighting",
             "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details",
             "enableAdvancedSearch": "Enable advanced search (preview)",
-            "enableAdvancedSearchDescription": "Allows searching through recipe title, ingredients and steps"
+            "enableAdvancedSearchDescription": "Allows searching through recipe title, ingredients and steps",
+            "enableYoutubeVideos": "Enable YouTube videos (preview)",
+            "enableYoutubeVideosDescription": "Allows for adding YouTube videos to recipes in addition to images"
         },
         "recipe": {
             "id": {
