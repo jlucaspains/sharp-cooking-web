@@ -122,12 +122,19 @@ function close() {
                 <ul
                     class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="(image, i) in props.images" :key="image">
-                        <li  class="w-full flex-shrink-0 snap-start">
+                        <li class="w-full flex-shrink-0 snap-start">
                             <a v-if="image.type == 'img'" href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
-                            <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%" height="100%" allowfullscreen="true" :src="image.url + '?enablejsapi=1&fs=1&origin=' + originUrl"></iframe>
+                            <object v-else>
+                                <param name="movie" :value="image.url + '?enablejsapi=1&fs=1&origin=' + originUrl" />
+                                <embed :src="image.url + '?enablejsapi=1&fs=1&origin=' + originUrl"
+                                    type="application/x-shockwave-flash" />
+                            </object>
+                            <!-- <iframe  title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%"
+                                height="100%" allowfullscreen="true"
+                                :src="image.url + '?enablejsapi=1&fs=1&origin=' + originUrl"></iframe> -->
                         </li>
                     </template>
                 </ul>
