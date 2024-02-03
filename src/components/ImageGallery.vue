@@ -124,7 +124,7 @@ function close() {
                             <a href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
-                                <iframe v-else title="Youtube video" type="text/html" width="100%" height="100%" :src="image.url"></iframe>
+                                <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%" height="100%" :src="image.url"></iframe>
                             </a>
                         </li>
                     </template>
@@ -159,11 +159,11 @@ function close() {
                         <ul
                             :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
                             <template v-for="(image, i) in props.images" :key="image">
-                                <li class="w-28 flex-shrink-0 snap-start  mx-1">
+                                <li class="flex-shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
                                         <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
-                                            class="" height="150" width="150">
+                                            class="w-28" height="150" width="150">
                                         <div v-else>
                                             <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 24 24">
