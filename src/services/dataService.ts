@@ -1,11 +1,12 @@
 import { Dexie, Table } from "dexie";
 import { BackupModel } from "../pages/recipe/backupModel"
-import { Recipe, RecipeImage } from "./recipe";
+import { Recipe, RecipeImage, RecipeMedia } from "./recipe";
 import { Setting } from "./setting";
 
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
     public recipeImages!: Table<RecipeImage, number>;
+    public recipeMedia!: Table<RecipeMedia, number>;
     public settings!: Table<Setting, string>;
 
     public constructor() {
@@ -27,6 +28,28 @@ class RecipeDatabase extends Dexie {
                 image.image = null;
             });
         });
+        this.version(4).stores({
+            recipes: "++id,title,score,changedOn",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name"
+        }).upgrade(async (transaction) => {
+            const imagesTable = transaction.table("recipeImages");
+            const mediaTable = transaction.table("recipeMedia");
+
+            // copy images from recipeImages to recipeMedia
+            await imagesTable.each(async (image: RecipeImage) => {
+                await mediaTable.add(new RecipeMedia(image.recipeId, "img", image.url));
+            });
+
+            // only delete recipeImages if the number of images is 
+            // the same as the number of items in recipeMedia
+            const imagesCount = await imagesTable.count();
+            const mediaCount = await mediaTable.count();
+            if (mediaCount == imagesCount) {
+                await imagesTable.clear();
+            }
+        });
     }
 }
 
@@ -44,14 +67,17 @@ export async function getRecipes(): Promise<Recipe[]> {
     return result;
 }
 
-export async function getRecipeImages(id: number): Promise<RecipeImage[]> {
-    const result = await db.recipeImages.where("recipeId").equals(id).toArray();
+export async function getRecipeMediaList(id: number): Promise<RecipeMedia[]> {
+    const result = await db.recipeMedia.where("recipeId").equals(id).toArray();
 
     return result;
 }
 
-export async function getRecipeImage(id: number): Promise<RecipeImage | undefined> {
-    const result = await db.recipeImages.where("recipeId").equals(id).first();
+export async function getRecipeMedia(id: number): Promise<RecipeMedia | undefined> {
+    const result = await db.recipeMedia
+        .where("recipeId").equals(id)
+        .and(item => item.type == "img")
+        .first();
 
     return result;
 }
@@ -77,26 +103,26 @@ export async function initialize(recipes: Array<Recipe>) {
         recipe.multiplier = 1;
 
         await saveRecipe(recipe);
-        await saveRecipeImage({ recipeId: id, image: null, url: "/bread.jpg" })
+        await saveRecipeMedia({ recipeId: id, type: "img", url: "/bread.jpg" })
     }
 }
 
-export async function saveRecipeImage(recipeImage: RecipeImage) {
-    await db.recipeImages.put(recipeImage);
+export async function saveRecipeMedia(recipeMedia: RecipeMedia) {
+    await db.recipeMedia.put(recipeMedia);
 }
 
 export async function deleteRecipe(id: number) {
-    const images = await db.recipeImages.where("recipeId").equals(id).toArray();
+    const images = await db.recipeMedia.where("recipeId").equals(id).toArray();
 
     for (const item of images) {
-        db.recipeImages.delete(item.id || 0);
+        db.recipeMedia.delete(item.id || 0);
     }
 
     await db.recipes.delete(id);
 }
 
-export async function deleteRecipeImage(id: number) {
-    await db.recipeImages.delete(id);
+export async function deleteRecipeMedia(id: number) {
+    await db.recipeMedia.delete(id);
 }
 
 export async function getNextRecipeId(): Promise<number> {
@@ -120,21 +146,12 @@ export async function getSetting(name: string, defaultValue: string): Promise<st
 
 export async function prepareBackup(): Promise<Array<BackupModel>> {
     const allRecipes = await db.recipes.toArray();
-    const allImages = await db.recipeImages.toArray();
+    const allMedia = await db.recipeMedia.toArray();
 
     const result = [];
     for (const recipe of allRecipes) {
-        const model = new BackupModel();
-        model.id = recipe.id;
-        model.title = recipe.title;
-        model.ingredients = recipe.ingredients;
-        model.multiplier = recipe.multiplier;
-        model.notes = recipe.notes;
-        model.score = recipe.score;
-        model.changedOn = recipe.changedOn;
-        model.source = recipe.source;
-        model.steps = recipe.steps;
-        model.images = allImages.filter(item => item.recipeId == model.id).map(item => item.url);
+        const model = getBackupModel(recipe, allMedia);
+
         result.push(model);
     }
 
@@ -144,7 +161,7 @@ export async function prepareBackup(): Promise<Array<BackupModel>> {
 
 export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel>> {
     const recipe = await db.recipes.get(id);
-    const allImages = await db.recipeImages.where("recipeId").equals(id).toArray();
+    const allMedia = await db.recipeMedia.where("recipeId").equals(id).toArray();
 
     const result: Array<BackupModel> = [];
 
@@ -152,6 +169,13 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
         return result;
     }
 
+    const model = getBackupModel(recipe, allMedia);
+    result.push(model);
+
+    return result;
+}
+
+function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
     const model = new BackupModel();
     model.id = recipe.id;
     model.title = recipe.title;
@@ -162,8 +186,13 @@ export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel
     model.changedOn = recipe.changedOn;
     model.source = recipe.source;
     model.steps = recipe.steps;
-    model.images = allImages.map(item => item.url);
-    result.push(model);
+    model.media = allMedia
+        .filter(item => item.recipeId == model.id)
+        .map(item => {
+            return {
+                type: item.type, url: item.url
+            };
+        });
 
-    return result;
+    return model;
 }

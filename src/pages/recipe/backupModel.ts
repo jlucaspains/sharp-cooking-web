@@ -6,8 +6,8 @@ export class BackupModel extends Recipe {
 
     this.ingredients = [];
     this.steps = [];
-    this.images = [];
+    this.media = [];
   }
 
-  images?: Array<string>;
+  media?: Array<{type: string, url: string}>;
 }

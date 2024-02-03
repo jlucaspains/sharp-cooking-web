@@ -61,7 +61,9 @@
             "enableRecipeHighlighting": "Ativar o realce da receita",
             "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa",
             "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
-            "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas"
+            "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas",
+            "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
+            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas"
         },
         "recipe": {
             "id": {
@@ -91,7 +93,9 @@
                     "stepPlaceholder": "Pré-aqueça o forno a 180 C",
                     "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
                     "processImage1": "Comprimindo imagem...",
-                    "processImage2": "Ainda processando. Isso pode demorar um pouco..."
+                    "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+                    "addVideoTitle": "Adicionar vídeo do YouTube",
+                    "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados."
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"

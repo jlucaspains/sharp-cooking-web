@@ -124,7 +124,7 @@ Bake it for 30 min`;
 test('share as file', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
   await page.addInitScript(() => {
-    const comparer = '[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour",""],"steps":["Bake it for 30 min"],"multiplier":1,"images":[]}]';
+    const comparer = '[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour",""],"steps":["Bake it for 30 min"],"multiplier":1,"media":[]}]';
     const stream = new WritableStream({
       write(chunk) {
         return new Promise(async (resolve, reject) => {

@@ -3,7 +3,7 @@ import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeImage, initialize, saveSetting, getSetting } from "../services/dataService";
+import { getRecipes, getRecipeMedia, initialize, saveSetting, getSetting } from "../services/dataService";
 import { RecipeViewModel } from "./recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
@@ -139,7 +139,7 @@ onMounted(async () => {
   allRecipes = (await getRecipes()) as RecipeViewModel[];
 
   for (const recipe of allRecipes) {
-    const item = await getRecipeImage(recipe.id || 0);
+    const item = await getRecipeMedia(recipe.id || 0);
     recipe.image = (item && item.url) || undefined;
     recipe.imageAvailable = recipe.image ? true : false;
   }
