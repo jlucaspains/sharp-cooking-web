@@ -1,6 +1,7 @@
 export function isVideoUrlSupported(url: string) {
     return !url
         || url.startsWith("https://www.youtube.com/")
+        || url.startsWith("https://m.youtube.com/")
         || url.startsWith("https://youtu.be/");
 }
 
@@ -9,9 +10,14 @@ export function prepareUrlForEmbed(url: string) {
 
     // get the capture group from regexp
     const match = regexp.exec(url);
-    if (!match || match.length < 2) {
+    if (!match) {
         return "";
     }
+    
+    // there are 3 possible matches in the regex
+    // the code below checks for all of them 
+    // and returns the first one that is not null
+    const id = match[1] || match[2] || match[3];
 
-    return `https://www.youtube.com/embed/${match[1]}`;
+    return `https://www.youtube.com/embed/${id}`;
 }

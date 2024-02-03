@@ -13,8 +13,6 @@ const el = ref<HTMLDivElement>();
 const activeImage = ref(0);
 const isOpen = ref(false);
 
-const originUrl = window.location.origin;
-
 watch(activeImage,
     () => {
         emit("selectionChanged", activeImage.value);
@@ -118,7 +116,6 @@ function close() {
                         </svg>
                     </a>
                 </div>
-
                 <ul
                     class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="(image, i) in props.images" :key="image">
@@ -127,14 +124,9 @@ function close() {
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
-                            <!-- <object class="" v-else>
-                                <param name="movie" :value="'https://www.youtube.com/watch?v=GS8jz_ta9vs'" />
-                                <embed :src="'https://www.youtube.com/watch?v=GS8jz_ta9vs'"
-                                    type="application/x-shockwave-flash" />
-                            </object> -->
-                            <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%"
+                            <iframe v-else title="Youtube video" class="youtube-player lg:h-80 h-60" type="text/html" width="100%"
                                 height="100%" allowfullscreen="true"
-                                :src="'http://www.youtube.com/watch?v=GS8jz_ta9vs?enablejsapi=1&fs=1&origin=' + originUrl"></iframe>
+                                :src="image.url"></iframe>
                         </li>
                     </template>
                 </ul>
