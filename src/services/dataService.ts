@@ -74,7 +74,10 @@ export async function getRecipeMediaList(id: number): Promise<RecipeMedia[]> {
 }
 
 export async function getRecipeMedia(id: number): Promise<RecipeMedia | undefined> {
-    const result = await db.recipeMedia.where("recipeId").equals(id).first();
+    const result = await db.recipeMedia
+        .where("recipeId").equals(id)
+        .and(item => item.type == "img")
+        .first();
 
     return result;
 }
