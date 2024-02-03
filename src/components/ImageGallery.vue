@@ -127,14 +127,14 @@ function close() {
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
-                            <object v-else>
+                            <!-- <object class="" v-else>
                                 <param name="movie" :value="'https://www.youtube.com/watch?v=GS8jz_ta9vs'" />
                                 <embed :src="'https://www.youtube.com/watch?v=GS8jz_ta9vs'"
                                     type="application/x-shockwave-flash" />
-                            </object>
-                            <!-- <iframe  title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%"
+                            </object> -->
+                            <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%"
                                 height="100%" allowfullscreen="true"
-                                :src="image.url + '?enablejsapi=1&fs=1&origin=' + originUrl"></iframe> -->
+                                :src="'http://www.youtube.com/watch?v=GS8jz_ta9vs?enablejsapi=1&fs=1&origin=' + originUrl"></iframe>
                         </li>
                     </template>
                 </ul>
