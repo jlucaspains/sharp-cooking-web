@@ -612,7 +612,7 @@ function addVideo() {
         {
           title: t('pages.recipe.id.edit.importFromClipboard'),
           action: async () => {
-            await fillUrlFromClipboard();
+            await fillUrlFromClipboard('recipe');
           }
         },
         {
@@ -632,7 +632,7 @@ function addVideo() {
         {
           title: t('pages.recipe.id.edit.importFromClipboard'),
           action: async () => {
-            await fillUrlFromClipboard();
+            await fillUrlFromClipboard('video');
           }
         },
         {
