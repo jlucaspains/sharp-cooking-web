@@ -304,13 +304,17 @@ async function importRecipe() {
   }
 }
 
-async function fillUrlFromClipboard() {
+async function fillUrlFromClipboard(type: "recipe" | "video") {
   if (navigator.clipboard) {
     navigator.clipboard
       .readText()
       .then((clipText) => {
         if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
-          importRecipeUrl.value = clipText
+          if (type === "recipe") {
+            importRecipeUrl.value = clipText;
+          } else {
+            addVideoUrl.value = clipText;
+          }
         }
       })
       .catch((error) => {

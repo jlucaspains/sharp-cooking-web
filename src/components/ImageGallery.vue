@@ -125,7 +125,7 @@ function close() {
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
                             </a>
                             <iframe v-else title="Youtube video" class="youtube-player lg:h-80 h-60" type="text/html"
-                                width="100%" height="100%" allow="fullscreen;" allowfullscreen
+                                width="100%" height="100%" allow="fullscreen;" allowfullscreen="true" frameborder="0"
                                 :src="image.url"></iframe>
                         </li>
                     </template>
