@@ -124,7 +124,7 @@ function close() {
                             <a href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
-                                <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%" height="100%" :src="image.url"></iframe>
+                                <iframe v-else title="Youtube video" class="lg:h-80 h-60" type="text/html" width="100%" height="100%" :src="image.url + '?enablejsapi=1&origin=https://sharpcooking.net/'"></iframe>
                             </a>
                         </li>
                     </template>
