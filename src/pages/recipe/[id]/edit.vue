@@ -339,7 +339,7 @@ async function importRecipeFromCode() {
     if (!result.ok) {
       return;
     }
-    
+
     const importRecipe = await result.json();
     item.value.title = importRecipe.title;
     item.value.score = 5;
@@ -347,7 +347,7 @@ async function importRecipeFromCode() {
     item.value.ingredients = importRecipe.ingredients;
     item.value.steps = importRecipe.steps;
     images.value = importRecipe.images.map((item: any) => {
-      return new RecipeImage(id.value, null, item);
+      return new RecipeMedia(id.value, "img", item);
     });
 
     item.value.imageAvailable = images.value.length > 0;
@@ -410,9 +410,7 @@ async function fillCodeFromClipboard() {
     navigator.clipboard
       .readText()
       .then((clipText) => {
-        if (clipText.startsWith("https://") || clipText.startsWith("http://")) {
-          importRecipeCode.value = clipText
-        }
+        importRecipeCode.value = clipText;
       })
       .catch((error) => {
         notify(
@@ -704,8 +702,8 @@ function addVideo() {
       ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
-    <Modal :isOpen="isImportFromUrlModalOpen" @closed="isImportFromUrlModalOpen = false" :title="t('pages.recipe.id.edit.importTitle')"
-      :buttons="[
+    <Modal :isOpen="isImportFromUrlModalOpen" @closed="isImportFromUrlModalOpen = false"
+      :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
         {
           title: t('pages.recipe.id.edit.importFromClipboard'),
           action: async () => {
@@ -745,8 +743,8 @@ function addVideo() {
         class="block my-2 p-2 w-full rounded text-black" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
-    <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false" :title="t('pages.recipe.id.edit.importFromShareTitle')"
-      :buttons="[
+    <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
+      :title="t('pages.recipe.id.edit.importFromShareTitle')" :buttons="[
         {
           title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
           action: async () => {
