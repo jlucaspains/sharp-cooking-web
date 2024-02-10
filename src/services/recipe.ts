@@ -25,3 +25,9 @@ export class RecipeImage {
 
     id?: number;
 }
+
+export class RecipeMedia {
+    constructor(public recipeId: number, public type: string, public url: string) { }
+
+    id?: number;
+}

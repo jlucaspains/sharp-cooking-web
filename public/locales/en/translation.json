@@ -8,7 +8,11 @@
         "done": "Done",
         "error": "Error",
         "cancel": "Cancel",
-        "save": "Save"
+        "save": "Save",
+        "seconds": "seconds ",
+        "minutes": "minutes ",
+        "hours": "hours ",
+        "days": "days "
     },
     "logic": {
         "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\/\\d{1,5}|\\d{1,5}\/\\d{1,5}|\\d{1,5}\\.?\\d{0,5})",
@@ -26,7 +30,10 @@
             "sortByTitle": "Sort by Title",
             "sortByRating": "Sort by Rating",
             "sortByRecipeDate": "Sort by Changed Date",
-            "options": "Options"
+            "options": "Options",
+            "filterByTitle": "title:",
+            "filterByIngredients": "ingredients:",
+            "filterBySteps": "steps:"
         },
         "options": {
             "title": "Options",
@@ -52,8 +59,12 @@
             "storageStats": "Storage",
             "storageNotTraceable": "Storage cannot be tracked on this device",
             "storageDescription": "Space used {{used}} of {{remaining}} available.",
-            "enableRecipeHighlighting": "Enable recipe highlighting (preview)",
-            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details"
+            "enableRecipeHighlighting": "Enable recipe highlighting",
+            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details",
+            "enableAdvancedSearch": "Enable advanced search (preview)",
+            "enableAdvancedSearchDescription": "Allows searching through recipe title, ingredients and steps",
+            "enableYoutubeVideos": "Enable YouTube videos (preview)",
+            "enableYoutubeVideosDescription": "Allows for adding YouTube videos to recipes in addition to images"
         },
         "recipe": {
             "id": {
@@ -85,7 +96,9 @@
                     "processImage1": "Compressing image...",
                     "processImage2": "Still working on the image. This may take a while",
                     "importFromShareTitle": "Import from share code",
-                    "importFromShareFromClipboard": "Copied code"
+                    "importFromShareFromClipboard": "Copied code",
+                    "addVideoTitle": "Add YouTube video",
+                    "videoUrlNotSupported": "Only YouTube videos are supported."
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -120,9 +133,15 @@
                     "ingredientDetailsAlternativeUOMs": "Alternative UOMs:",
                     "shareOnline": "Share Online (preview)",
                     "shareOnline1": "Sharing...",
-                    "shareOnline2": "Still sharing. This may take up to a minute."
+                    "shareOnline2": "Still sharing. This may take up to a minute.",
+                    "stepDetailsModalTitle": "Step details (Preview)",
+                    "stepDetailsTime": "Time:",
+                    "stepDetailsTemperature": "Temperature:",
+                    "stepDetailsAlternativeTemperatures": "Alternative Temperature:"
                 },
-                "print": {}
+                "print": {
+                    "action": "Print"
+                }
             },
             "importBackup": {
                 "title": "Import Backup",

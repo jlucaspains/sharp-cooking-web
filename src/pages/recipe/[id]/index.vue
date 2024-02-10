@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
-  getRecipeImages,
+  getRecipeMediaList,
   deleteRecipe,
   prepareRecipeBackup,
   saveRecipe,
@@ -14,14 +14,14 @@ import { RecipeViewModel } from "../recipeViewModel";
 import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
 import { notify } from "notiwind";
-import { getImpliedTimeFromString } from "../../../helpers/timeHelpers";
+import { getImpliedTimeFromString, secondsToString } from "../../../helpers/timeHelpers";
 import { IngredientDisplay, InstructionDisplay, prepareIngredientDisplay, prepareStepDisplay, applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
-import { RecipeImage } from "../../../services/recipe";
+import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 
 const route = useRoute();
@@ -46,6 +46,7 @@ const display = ref([{ time: "", title: "", subItems: [] as string[] }]);
 const displayIngredients = ref([] as IngredientDisplay[]);
 const selectedIngredient = ref({} as IngredientDisplay);
 const displayInstructions = ref([] as InstructionDisplay[])
+const selectedInstruction = ref({} as InstructionDisplay);
 const isMultiplierModalOpen = ref(false);
 const isTimeModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -53,11 +54,12 @@ const startTime = ref("");
 const finishTime = ref(new Date());
 const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
-const images = ref([] as Array<RecipeImage>);
+const images = ref([] as Array<RecipeMedia>);
 const isIngredientDetailsModalOpen = ref(false);
 const isBusy = ref(false);
 const isShareOptionsModalOpen = ref(false);
 const shareCode = ref("");
+const isInstructionDetailsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -112,7 +114,7 @@ onMounted(async () => {
   if (recipe) {
     state.title = recipe.title;
 
-    const allImages = await getRecipeImages(id.value);
+    const allImages = await getRecipeMediaList(id.value);
 
     if (allImages.length > 0) {
       allImages.forEach((item) => {
@@ -284,7 +286,7 @@ async function applyMultiplier() {
 }
 
 function printItem() {
-  window.print();
+  router.push(`/recipe/${id.value}/print`);
 }
 
 function changeTime() {
@@ -450,6 +452,10 @@ function showIngredientDetails(item: IngredientDisplay) {
   selectedIngredient.value = item;
   isIngredientDetailsModalOpen.value = true;
 }
+function showInstructionDetails(item: InstructionDisplay) {
+  selectedInstruction.value = item;
+  isInstructionDetailsModalOpen.value = true;
+}
 </script>
 
 <template>
@@ -610,7 +616,8 @@ function showIngredientDetails(item: IngredientDisplay) {
         </div>
         <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text">
+        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text"
+          @click="showInstructionDetails(displayItem)">
         </div>
       </template>
       <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
@@ -731,6 +738,27 @@ function showIngredientDetails(item: IngredientDisplay) {
     </Modal>
     <BusyIndicator :busy="isBusy" :message1="t('pages.recipe.id.index.shareOnline1')"
       :message2="t('pages.recipe.id.index.shareOnline2')" />
+    <Modal :isOpen="isInstructionDetailsModalOpen" @closed="isInstructionDetailsModalOpen = false"
+      :title="t('pages.recipe.id.index.stepDetailsModalTitle')" :buttons="[
+        {
+          title: t('general.ok'),
+          action: () => {
+            isInstructionDetailsModalOpen = false;
+          },
+        }
+      ]">
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{ selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
+      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{ t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
+      <div class="dark:text-white">
+        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation" aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
+          <tr v-for="item in selectedInstruction.alternativeTemperatures">
+            <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
+            <td>{{ item.unitText }}</td>
+          </tr>
+        </table>
+      </div>
+    </Modal>
   </div>
 </template>
 

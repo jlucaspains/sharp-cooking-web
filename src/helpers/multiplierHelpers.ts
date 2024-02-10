@@ -53,7 +53,12 @@ export type IngredientDisplay = {
 }
 
 export type InstructionDisplay = {
-    text: string, startTime: Date, timeInSeconds: number, temperature: number, temperatureUnit: string;
+    text: string,
+    startTime: Date,
+    timeInSeconds: number,
+    temperature: number,
+    temperatureUnit: string,
+    alternativeTemperatures: AlternativeQuantity[]
 }
 
 export function prepareIngredientDisplay(input: string, multiplier: number, useFractionsOverDecimal: boolean, locale: string, highlight: boolean = false): IngredientDisplay {
@@ -104,15 +109,15 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
 }
 
 export function prepareStepDisplay(input: string, currentTime: Date, locale: string, highlight: boolean = false): InstructionDisplay {
-    const result = parseInstruction(input, locale);
+    const result = parseInstruction(input, locale, { includeAlternativeTemperatureUnit: true });
 
     if (!result) {
-        return { text: input, startTime: currentTime, timeInSeconds: 0, temperature: 0, temperatureUnit: "" };
+        return { text: input, startTime: currentTime, timeInSeconds: 0, temperature: 0, temperatureUnit: "", alternativeTemperatures: [] };
     }
 
     let displayText = input;
     if (highlight && result.temperature > 0) {
-        const regexTemp = new RegExp(`${result.temperature}([ |\\w|°]*?)${result.temperatureUnitText}`, "i");
+        const regexTemp = new RegExp(`${result.temperature}( ?[\\w|°]* ?)${result.temperatureUnitText}`, "i");
         displayText = displayText.replace(regexTemp, `<span class="text-theme-primary">${result.temperatureText}$1${result.temperatureUnitText}</span>`);
     }
 
@@ -123,7 +128,14 @@ export function prepareStepDisplay(input: string, currentTime: Date, locale: str
         }
     }
 
-    return { text: displayText, startTime: new Date(currentTime), timeInSeconds: result.totalTimeInSeconds, temperature: result.temperature, temperatureUnit: result.temperatureUnit };
+    return {
+        text: displayText,
+        startTime: new Date(currentTime),
+        timeInSeconds: result.totalTimeInSeconds,
+        temperature: result.temperature,
+        temperatureUnit: result.temperatureUnit,
+        alternativeTemperatures: result.alternativeTemperatures
+    };
 }
 
 function round(value: number, decimalPlaces = 0) {

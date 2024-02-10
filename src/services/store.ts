@@ -12,10 +12,11 @@ interface State {
     menuOptions?: MenuOption[];
     indexScrollY: number;
     message: any;
+    useContainer: boolean;
   }
 
 export const stateSymbol = Symbol('state') as InjectionKey<State>;
-export const createState = () => reactive({ title: "", menuOptions: [], indexScrollY: 0, message: null });
+export const createState = () => reactive({ title: "", menuOptions: [], indexScrollY: 0, message: null, useContainer: true });
 
 export const useState = () => inject(stateSymbol);
 export const provideState = () => provide(

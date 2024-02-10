@@ -20,7 +20,7 @@ onMounted(async () => {
 
 <template>
   <TopBar />
-  <div class="container mx-auto">
+  <div :class="{'container mx-auto': state.useContainer}">
     <InstallPrompt />
     <div class="mt-16 mx-4 mb-10 dark:text-white">
       <router-view v-slot="{ Component }">
@@ -36,7 +36,7 @@ onMounted(async () => {
 <style>
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.2s ease;
 }
 
 .v-enter-from,

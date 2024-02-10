@@ -36,6 +36,25 @@ test('change time', async ({ page, browserName }) => {
   expect(await page.getByText('10:35 AM').textContent()).toMatch(/10:35.*/);
 });
 
+test('print recipe', async ({ page }) => {
+  await createRecipe(page, 2, "Print Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
+  
+  page.on("load", (pg) => {
+    pg.evaluate("window.print = function() { console.log('Print was triggered'); };")
+  });
+
+  await page.goto('/');
+  await page.getByText('Print Bread').first().click();
+  await page.getByTestId('print-button').click();
+
+  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/2\/print/));
+  await expect(page.getByTestId('recipe-title')).toHaveText('Print Bread');
+  await expect(page.getByTestId('display-time')).toContainText('30 minutes');
+  await expect(page.getByText('100g flour')).toHaveText('100g flour');
+  await expect(page.getByText('Bake it for 30 min')).toHaveText('Bake it for 30 min');
+  await page.waitForEvent("console", item => item.text() == "Print was triggered")
+});
+
 // test('change time webkit', async ({ page, browserName }) => {
 //   test.skip(browserName !== 'webkit', 'not applicable');
 
@@ -53,6 +72,7 @@ test('delete', async ({ page }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Delete' }).click();
   page.getByRole('button', { name: 'Yes, delete' }).click();
@@ -92,6 +112,7 @@ Bake it for 30 min`;
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
@@ -100,10 +121,10 @@ Bake it for 30 min`;
   await consoleWaiter;
 });
 
-test('share as file', async ({ page, browserName  }) => {
+test('share as file', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
   await page.addInitScript(() => {
-    const comparer = '[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour",""],"steps":["Bake it for 30 min"],"multiplier":1,"images":[]}]';
+    const comparer = '[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour",""],"steps":["Bake it for 30 min"],"multiplier":1,"media":[]}]';
     const stream = new WritableStream({
       write(chunk) {
         return new Promise(async (resolve, reject) => {
@@ -112,7 +133,7 @@ test('share as file', async ({ page, browserName  }) => {
           const json = JSON.parse(result);
           delete json[0].changedOn;
 
-          if(JSON.stringify(json) !== comparer) {
+          if (JSON.stringify(json) !== comparer) {
             console.error("File doesn't match expectation");
           } else {
             console.info("All good");
@@ -138,6 +159,7 @@ test('share as file', async ({ page, browserName  }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")

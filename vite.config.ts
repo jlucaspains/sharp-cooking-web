@@ -11,7 +11,7 @@ export default defineConfig({
     includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
     devOptions: {
       enabled: true
-      /* other options */  
+      /* other options */
     },
     registerType: 'autoUpdate',
     manifest: {
@@ -30,6 +30,29 @@ export default defineConfig({
           src: 'android-chrome-512x512.png',
           sizes: '512x512',
           type: 'image/png',
+        }
+      ],
+      "shortcuts": [
+        {
+          "name": "New Manual Recipe",
+          "short_name": "New Manual Recipe",
+          "description": "Create a new recipe manually",
+          "url": "/#/recipe/0/edit?fromShortcut=1",
+          "icons": [{ "src": "/shortcut-add-manual.png", "sizes": "192x192" }]
+        },
+        {
+          "name": "Import From URL",
+          "short_name": "New Recipe",
+          "description": "Create a new recipe from a URL",
+          "url": "/#/recipe/0/edit?import=1&fromShortcut=1",
+          "icons": [{ "src": "/shortcut-add-url.png", "sizes": "192x192" }]
+        },
+        {
+          "name": "Scan a Recipe",
+          "short_name": "New Recipe",
+          "description": "Create a new recipe by scanning from an image",
+          "url": "/#/recipe/import-ocr?fromShortcut=1",
+          "icons": [{ "src": "/shortcut-add-scan.png", "sizes": "192x192" }]
         }
       ]
     }

@@ -2,9 +2,9 @@
 import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
-import { saveRecipe, saveRecipeImage } from "../../services/dataService";
+import { saveRecipe, saveRecipeMedia } from "../../services/dataService";
 import { notify } from "notiwind";
-import { Recipe, RecipeImage } from "../../services/recipe";
+import { Recipe, RecipeMedia } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 import { fetchWithRetry } from "../../services/fetchWithRetry";
@@ -37,10 +37,12 @@ function saveRecipes() {
 
         const id = await saveRecipe(parsedRecipe);
 
-        const images = recipe.images || [recipe.image];
-        for (const image of images) {
-            const recipeImage = new RecipeImage(id, null, image);
-            await saveRecipeImage(recipeImage);
+        const media = recipe.images || recipe.media || [recipe.image];
+        for (const item of media) {
+            const url = item.url || item;
+            const type = item.type || "img";
+            const recipeImage = new RecipeMedia(id, type, url);
+            await saveRecipeMedia(recipeImage);
         }
     });
 
@@ -103,6 +105,7 @@ async function pickFile() {
     }
     catch (error) {
         success = false;
+        throw error;
     }
     finally {
         isBusy.value = false;

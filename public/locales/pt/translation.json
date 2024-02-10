@@ -8,7 +8,11 @@
         "done": "Pronto",
         "error": "Erro",
         "cancel": "Cancelar",
-        "save": "Salvar"
+        "save": "Salvar",
+        "seconds": "segundos ",
+        "minutes": "minutos ",
+        "hours": "horas ",
+        "days": "dias "
     },
     "logic": {
         "ingredientRegex": "^(?<Quantity>\\d{1,5}\\s\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\/\\d{1,5}|\\d{1,5}\\,?\\d{0,5})",
@@ -26,7 +30,10 @@
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
-            "options": "Opções..."
+            "options": "Opções...",
+            "filterByTitle": "título:",
+            "filterByIngredients": "ingredientes:",
+            "filterBySteps": "passos:"
         },
         "options": {
             "title": "Opções",
@@ -52,8 +59,12 @@
             "storageStats": "Armazenamento",
             "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
             "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
-            "enableRecipeHighlighting": "Ativar o realce da receita (preview)",
-            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa"
+            "enableRecipeHighlighting": "Ativar o realce da receita",
+            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa",
+            "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
+            "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas",
+            "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
+            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas"
         },
         "recipe": {
             "id": {
@@ -85,7 +96,9 @@
                     "processImage1": "Comprimindo imagem...",
                     "processImage2": "Ainda processando. Isso pode demorar um pouco...",
                     "importFromShareTitle": "Importar from compartilhamento",
-                    "importFromShareFromClipboard": "Código copiado"
+                    "importFromShareFromClipboard": "Código copiado",
+                    "addVideoTitle": "Adicionar vídeo do YouTube",
+                    "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados."
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
@@ -113,16 +126,22 @@
                     "sharingFailed": "O compartilhamento de arquivos falhou. Por favor, tente novamente.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
-                    "ingredientDetailsModalTitle": "Detalhe de ingrediente (preview)",
+                    "ingredientDetailsModalTitle": "Detalhe de ingrediente",
                     "ingredientDetailsQuantity": "Quntidade:",
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
                     "shareOnline": "Compartilhar online (preview)",
                     "shareOnline1": "Compartilhando...",
-                    "shareOnline2": "Ainda processando. Isso pode demorar um pouco..."
+                    "shareOnline2": "Ainda processando. Isso pode demorar um pouco...",
+                    "stepDetailsModalTitle": "Detalhe de instrução",
+                    "stepDetailsTime": "Tempo:",
+                    "stepDetailsTemperature": "Temperatura:",
+                    "stepDetailsAlternativeTemperatures": "Temperatura Alternativa:"
                 },
-                "print": {}
+                "print": {
+                    "action": "Imprimir"
+                }
             },
             "importBackup": {
                 "title": "Importar backup",

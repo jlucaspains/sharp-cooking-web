@@ -15,6 +15,8 @@ const router = useRouter()!;
 const version = ref("");
 const useFractions = ref(false);
 const enableRecipeHighlighting = ref(false);
+const enableAdvancedSearch = ref(false);
+const enableYoutubeVideos = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -31,10 +33,14 @@ onMounted(async () => {
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
   const enableRecipeHighlightingValue = await getSetting("EnableRecipeHighlighting", "false");
+  const enableAdvancedSearchValue = await getSetting("EnableAdvancedSearch", "false");
+  const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   enableRecipeHighlighting.value = enableRecipeHighlightingValue === "true";
+  enableAdvancedSearch.value = enableAdvancedSearchValue === "true";
+  enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -101,6 +107,14 @@ function updateUseFractions() {
 
 function updateEnableRecipeHighlighting() {
   saveSetting("EnableRecipeHighlighting", `${enableRecipeHighlighting.value}`);
+}
+
+function updateEnableAdvancedSearch() {
+  saveSetting("EnableAdvancedSearch", `${enableAdvancedSearch.value}`);
+}
+
+function updateEnableYoutubeVideos() {
+  saveSetting("EnableYoutubeVideos", `${enableYoutubeVideos.value}`);
 }
 
 function showChangeLanguageModal() {
@@ -174,6 +188,26 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.enableRecipeHighlightingDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableAdvancedSearch") }}</span>
+      <label data-testid="enable-advanced-search-toggle" class="switch float-right align-middle">
+        <input v-model="enableAdvancedSearch" type="checkbox" @change="updateEnableAdvancedSearch">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableAdvancedSearchDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableYoutubeVideos") }}</span>
+      <label data-testid="enable-youtube-videos-toggle" class="switch float-right align-middle">
+        <input v-model="enableYoutubeVideos" type="checkbox" @change="updateEnableYoutubeVideos">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableYoutubeVideosDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
