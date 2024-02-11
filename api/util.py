@@ -8,6 +8,7 @@ import base64
 import mimetypes
 from PIL import Image
 from pint import UnitRegistry
+import pillow_avif
 
 def parse_recipe_ingredients(text: str, ureg: UnitRegistry):
     """Parses a recipe collection of ingredientes that are formatted in a single string separated by \n
@@ -51,7 +52,7 @@ def parse_image(name: str, image: bytes, resize: bool = True, mime: str = "") ->
         str: uri formatted base 64 file
     """
     if not mime:
-        mime = mimetypes.MimeTypes().guess_type(name)[0]
+        mime = guess_mime(name)
     
     image_open = Image.open(io.BytesIO(image))
     
@@ -65,6 +66,23 @@ def parse_image(name: str, image: bytes, resize: bool = True, mime: str = "") ->
         image_open.save(buffered, format=format)
         
     return ("data:" +  mime + ";" + "base64," + base64.b64encode(buffered.getvalue()).decode())
+
+def guess_mime(file_name: str) -> str:
+    """Guesses the mime type of a file
+    Args:
+        file_name (str): file name
+    Returns:
+        str: mime type
+    """
+
+    result = mimetypes.MimeTypes().guess_type(file_name)[0]
+
+    # avif does not show in the mime types until python 3.11
+    # we will upgrade soon, but this is enough for now.
+    if not result and file_name.endswith(".avif"):
+        result = "image/avif"
+    
+    return result
 
 def parse_recipe_ingredient(text: str, lang: str, ureg: UnitRegistry):
     """Parses a single recipe ingredient
