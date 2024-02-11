@@ -16,7 +16,7 @@ def test_share_recipe_success():
             "title": "1",
             "ingredients": ["1 cup of flour"],
             "steps": ["bake it"],
-            "images": ["pseudoimage"]
+            "media": [{"type": "img", "url": "pseudoimage"}]
         }).encode('utf8')
     )
 

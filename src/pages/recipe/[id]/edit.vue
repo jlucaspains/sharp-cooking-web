@@ -346,8 +346,8 @@ async function importRecipeFromCode() {
     item.value.notes = importRecipe.notes;
     item.value.ingredients = importRecipe.ingredients;
     item.value.steps = importRecipe.steps;
-    images.value = importRecipe.images.map((item: any) => {
-      return new RecipeMedia(id.value, "img", item);
+    images.value = importRecipe.media.map((item: any) => {
+      return new RecipeMedia(id.value, item.type, item.url);
     });
 
     item.value.imageAvailable = images.value.length > 0;

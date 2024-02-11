@@ -15,37 +15,7 @@ from uuid import uuid4
 from time import perf_counter
 
 from ..repository import Repository
-
-recipeSchema = {
-    "type": "object",
-    "properties": {
-        "title": {"type": "string", "minLength": 1},
-        "notes": {"type": ["string", "null"], "minLength": 1},
-        "source": {"type": ["string", "null"], "minLength": 1},
-        "ingredients": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "minLength": 1
-            }
-        },
-        "steps": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "minLength": 1
-            }
-        },
-        "images": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "minLength": 1
-            }
-        },
-    },
-    "required": ["title", "ingredients", "steps"],
-}
+from ..models import recipeSchema
 
 repository = Repository()
 
@@ -57,7 +27,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
-    share_id = ''.join(random.choices(string.ascii_uppercase +  string.digits, k=6))
+    rand = random.SystemRandom()
+    share_id = ''.join(rand.choices(population=string.ascii_uppercase +  string.digits, k=6))
 
     try:
         logging.info(f"processing share request id {correlation_id}")
@@ -74,7 +45,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "ingredients": req_body.get("ingredients"),
             "steps": req_body.get("steps"),
             "source": req_body.get("source"),
-            "images": req_body.get("images"),
+            "media": req_body.get("media"),
             "ttl": ttl
         }
         operation_result = repository.create_item(new_item)

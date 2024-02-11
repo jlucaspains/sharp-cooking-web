@@ -26,7 +26,7 @@ def test_receive_recipe_success():
             "ingredients": ["1 cup of flour"],
             "steps": ["bake it"],
             "source": "source",
-            "images": ["pseudoimage"]
+            "media": [{"type": "img", "url": "pseudoimage"}]
         }
     
     mock_repository(repository)
@@ -42,7 +42,7 @@ def test_receive_recipe_success():
     assert parsed_response["ingredients"] == ["1 cup of flour"]
     assert parsed_response["steps"] == ["bake it"]
     assert parsed_response["source"] == "source"
-    assert parsed_response["images"] == ["pseudoimage"]
+    assert parsed_response["media"] == [{"type": "img", "url": "pseudoimage"}]
 
 def test_receive_recipe_not_found():
     request = func.HttpRequest(

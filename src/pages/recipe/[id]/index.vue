@@ -387,7 +387,9 @@ async function shareOnline() {
       notes: item.value.notes,
       source: item.value.source,
       steps: item.value.steps,
-      images: images.value.map(item => item.url),
+      media: images.value.map(item => {
+        return { "type": item.type, "url": item.url };
+      }),
     };
 
     const response = await fetch("/api/share-recipe", {
@@ -715,8 +717,8 @@ function showInstructionDetails(item: InstructionDisplay) {
         </div>
       </div>
     </Modal>
-    <Modal :isOpen="isShareOptionsModalOpen" @closed="isShareOptionsModalOpen = false" :title="t('pages.recipe.id.index.shareOnline')"
-      :buttons="[
+    <Modal :isOpen="isShareOptionsModalOpen" @closed="isShareOptionsModalOpen = false"
+      :title="t('pages.recipe.id.index.shareOnline')" :buttons="[
         {
           title: 'Share to Android or Windows',
           action: async () => {
@@ -733,7 +735,7 @@ function showInstructionDetails(item: InstructionDisplay) {
         }
       ]">
       <div class="text-center my-6">
-        <span class="text-2xl dark:text-white">{{ shareCode }}</span>
+        <span class="text-2xl dark:text-white" data-testid="actual-share-code">{{ shareCode }}</span>
       </div>
     </Modal>
     <BusyIndicator :busy="isBusy" :message1="t('pages.recipe.id.index.shareOnline1')"
@@ -747,11 +749,15 @@ function showInstructionDetails(item: InstructionDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{ selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
-      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{ t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{
+        secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{
+        selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
+      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{
+        t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
       <div class="dark:text-white">
-        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation" aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
+        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation"
+          aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
           <tr v-for="item in selectedInstruction.alternativeTemperatures">
             <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
             <td>{{ item.unitText }}</td>

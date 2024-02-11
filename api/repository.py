@@ -3,7 +3,7 @@ from typing import Any, Dict
 from azure.cosmos import CosmosClient
 
 DATABASE_NAME = "sharp-cooking"
-CONTAINER_NAME = "Items"
+CONTAINER_NAME = "ShareItems"
 
 class Repository:
     def __init__(self):

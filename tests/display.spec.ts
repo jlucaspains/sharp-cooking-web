@@ -167,3 +167,24 @@ test('share as file', async ({ page, browserName }) => {
 
   await consoleWaiter;
 });
+
+
+test('share as code', async ({ page, browserName }) => {
+  test.skip(browserName === 'webkit', 'not applicable');
+
+  const response = `{"id": "123456", "ttl": 3600}`;
+
+  await page.route('**/api/share-recipe', async route => {
+    const json = JSON.parse(response);
+    await route.fulfill({ json });
+  });
+
+  await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
+  await page.goto('/');
+  await page.getByText('New Bread').first().click();
+  await page.waitForTimeout(500);
+  await page.getByTestId('topbar-options').click();
+
+  await page.getByRole('menuitem', { name: 'Share Online (preview)' }).click();
+  await expect( page.getByTestId("actual-share-code")).toHaveText("123456");
+});
