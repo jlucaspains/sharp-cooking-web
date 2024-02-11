@@ -69,9 +69,13 @@ test('import from url', async ({ page, browserName }) => {
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
 });
 
-
+async function enableCloudShare(page: any) {
+  await page.goto('#/options');
+  await page.getByTestId('enable-cloud-share-toggle').click();
+}
 test('import from code', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
+  
   const response = `
     {
         "title": "New Bread Recipe",
@@ -84,11 +88,12 @@ test('import from code', async ({ page, browserName }) => {
     const json = JSON.parse(response);
     await route.fulfill({ json });
   });
-
+  
+  await enableCloudShare(page);
   await page.goto('/');
 
   await page.getByTestId('add-menu-button').click();
-  await page.getByRole('menuitem', { name: 'Import from code (preview)' }).click();
+  await page.getByRole('menuitem', { name: 'Import from share code' }).click();
   await page.getByTestId("import-code").fill("123456");
 
   await page.getByRole("button").getByText("OK").click();

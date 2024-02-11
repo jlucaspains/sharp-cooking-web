@@ -168,6 +168,10 @@ test('share as file', async ({ page, browserName }) => {
   await consoleWaiter;
 });
 
+async function enableCloudShare(page: any) {
+  await page.goto('#/options');
+  await page.getByTestId('enable-cloud-share-toggle').click();
+}
 
 test('share as code', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
@@ -179,12 +183,13 @@ test('share as code', async ({ page, browserName }) => {
     await route.fulfill({ json });
   });
 
+  await enableCloudShare(page);
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
   await page.getByText('New Bread').first().click();
   await page.waitForTimeout(500);
   await page.getByTestId('topbar-options').click();
 
-  await page.getByRole('menuitem', { name: 'Share Online (preview)' }).click();
+  await page.getByRole('menuitem', { name: 'Share via share code' }).click();
   await expect( page.getByTestId("actual-share-code")).toHaveText("123456");
 });

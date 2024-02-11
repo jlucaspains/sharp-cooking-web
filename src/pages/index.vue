@@ -21,6 +21,7 @@ let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
 let enableAdvancedSearch = false;
+let enableCloudShare = false;
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -71,6 +72,8 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 onMounted(async () => {
   const enableAdvancedSearchSetting = await getSetting("EnableAdvancedSearch", "false");
   enableAdvancedSearch = enableAdvancedSearchSetting == "true";
+  const enableCloudShareSetting = await getSetting("EnableCloudShare", "false");
+  enableCloudShare = enableCloudShareSetting == "true";
 
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
@@ -92,12 +95,16 @@ onMounted(async () => {
     name: "ImportFromScan",
     text: t("pages.index.importFromScan"),
     action: goToImportFromScan,
-  },
-  {
-    name: "ImportFromOnlineShare",
-    text: t("pages.index.importFromOnlineShare"),
-    action: goToImportFromOnlineShare,
   }];
+
+  if (enableCloudShare) {
+    addOptions.value.push({
+      name: "ImportFromCloud",
+      text: t("pages.index.importFromCloud"),
+      action: goToImportFromCloud,
+    });
+  }
+
   state.title = t("pages.index.title");
   state.menuOptions = [
     {
@@ -201,7 +208,7 @@ async function saveSortOption(type: string) {
   await saveSetting("AllRecipesSort", type);
 }
 
-function goToImportFromOnlineShare() {
+function goToImportFromCloud() {
   router.push("/recipe/0/edit?importFromShare=1");
 }
 

@@ -17,6 +17,7 @@ const useFractions = ref(false);
 const enableRecipeHighlighting = ref(false);
 const enableAdvancedSearch = ref(false);
 const enableYoutubeVideos = ref(false);
+const enableCloudShare = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -35,12 +36,14 @@ onMounted(async () => {
   const enableRecipeHighlightingValue = await getSetting("EnableRecipeHighlighting", "false");
   const enableAdvancedSearchValue = await getSetting("EnableAdvancedSearch", "false");
   const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
+  const enableCloudShareValue = await getSetting("EnableCloudShare", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   enableRecipeHighlighting.value = enableRecipeHighlightingValue === "true";
   enableAdvancedSearch.value = enableAdvancedSearchValue === "true";
   enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
+  enableCloudShare.value = enableCloudShareValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -115,6 +118,10 @@ function updateEnableAdvancedSearch() {
 
 function updateEnableYoutubeVideos() {
   saveSetting("EnableYoutubeVideos", `${enableYoutubeVideos.value}`);
+}
+
+function updateEnableCloudShare() {
+  saveSetting("EnableCloudShare", `${enableCloudShare.value}`);
 }
 
 function showChangeLanguageModal() {
@@ -208,6 +215,16 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.enableYoutubeVideosDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableCloudShare") }}</span>
+      <label data-testid="enable-cloud-share-toggle" class="switch float-right align-middle">
+        <input v-model="enableCloudShare" type="checkbox" @change="updateEnableCloudShare">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableCloudShareDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">

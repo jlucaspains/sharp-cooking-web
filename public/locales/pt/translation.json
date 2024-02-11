@@ -26,7 +26,7 @@
             "importFromWebsite": "Importar de website",
             "importFromBackup": "Importar de backup",
             "importFromScan": "Importar de imagem",
-            "importFromOnlineShare": "Importar via cloud (preview)",
+            "importFromCloud": "Importar via nuvem",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
@@ -64,7 +64,9 @@
             "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
             "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas",
             "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
-            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas"
+            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas",
+            "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",
+            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com os termos de uso do Sharp Cooking."
         },
         "recipe": {
             "id": {
@@ -95,7 +97,7 @@
                     "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
                     "processImage1": "Comprimindo imagem...",
                     "processImage2": "Ainda processando. Isso pode demorar um pouco...",
-                    "importFromShareTitle": "Importar via cloud (preview)",
+                    "importFromShareTitle": "Importar via nuvem",
                     "importFromShareFromClipboard": "Código copiado",
                     "addVideoTitle": "Adicionar vídeo do YouTube",
                     "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados."
@@ -131,7 +133,7 @@
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
-                    "shareOnline": "Compartilhar via cloud (preview)",
+                    "shareOnline": "Compartilhar via nuvem",
                     "shareOnline1": "Compartilhando...",
                     "shareOnline2": "Ainda processando. Isso pode demorar um pouco...",
                     "stepDetailsModalTitle": "Detalhe de instrução",
