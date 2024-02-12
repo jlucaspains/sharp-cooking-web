@@ -122,3 +122,8 @@ def test_parse_image_no_resize():
         image = zip.read("e99653943ef24ce18ae140c83d42349f.jpeg")
         result = parse_image("e99653943ef24ce18ae140c83d42349f.jpeg", image, False)
         assert result.startswith("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD")
+
+def test_parse_image_avif():
+    avif_file = open("test/test_image.avif", "rb")
+    result = parse_image("test_image.avif", avif_file.read(), True)
+    assert result.startswith("data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWY")
