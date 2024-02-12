@@ -79,7 +79,10 @@
                     "recipeImage": "Recipe Image",
                     "rating": "Rating",
                     "ingredients": "Ingredients",
-                    "addIngredient": "Add Ingredient",
+                    "addIngredient": "Add ingredient",
+                    "deleteIngredient": "Remove ingredient",
+                    "addStep": "Add step",
+                    "deleteStep": "Remove step",
                     "steps": "Steps",
                     "notes": "Notes",
                     "dirtyTitle": "Leave without saving?",
@@ -100,7 +103,13 @@
                     "importFromShareTitle": "Import from share code",
                     "importFromShareFromClipboard": "Copied code",
                     "addVideoTitle": "Add YouTube video",
-                    "videoUrlNotSupported": "Only YouTube videos are supported."
+                    "videoUrlNotSupported": "Only YouTube videos are supported.",
+                    "acceptCropTooltip": "Accept crop",
+                    "cancelCropTooltip": "Cancel crop",
+                    "cropTooltip": "Crop image",
+                    "removeImageTooltip": "Remove media",
+                    "addImageTooltip": "Add image",
+                    "addVideoTooltip": "Add video"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -139,7 +148,12 @@
                     "stepDetailsModalTitle": "Step details",
                     "stepDetailsTime": "Time:",
                     "stepDetailsTemperature": "Temperature:",
-                    "stepDetailsAlternativeTemperatures": "Alternative Temperature:"
+                    "stepDetailsAlternativeTemperatures": "Alternative Temperature:",
+                    "editTooltip": "Edit",
+                    "keepScreenOnTooltip": "Toggle keep screen on/off",
+                    "multiplierTooltip": "Set multiplier",
+                    "startTimeTooltip": "Set start time",
+                    "printTooltip": "Print"
                 },
                 "print": {
                     "action": "Print"
