@@ -412,7 +412,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="edit-button" @click="editItem">
+        " :title="t('pages.recipe.id.index.editTooltip')" data-testid="edit-button" @click="editItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
@@ -431,7 +431,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="toggle-screen-button" @click="toggleScreenLight">
+        " :title="t('pages.recipe.id.index.keepScreenOnTooltip')" data-testid="toggle-screen-button" @click="toggleScreenLight">
         <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -449,7 +449,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="multiplier-button" @click="changeMultiplier">
+        " :title="t('pages.recipe.id.index.multiplierTooltip')" data-testid="multiplier-button" @click="changeMultiplier">
         <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 3 21 3 21 9" />
@@ -470,7 +470,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="time-button" @click="changeTime">
+        " :title="t('pages.recipe.id.index.startTimeTooltip')" data-testid="time-button" @click="changeTime">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
@@ -490,7 +490,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " data-testid="print-button" @click="printItem">
+        " :title="t('pages.recipe.id.index.printTooltip')" data-testid="print-button" @click="printItem">
         <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
           stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" />
