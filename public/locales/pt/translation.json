@@ -77,6 +77,9 @@
                     "rating": "Classificação",
                     "ingredients": "Ingredientes",
                     "addIngredient": "Adicionar ingrediente",
+                    "deleteIngredient": "Remover ingrediente",
+                    "addStep": "Adicionar passo",
+                    "deleteStep": "Remover passo",
                     "steps": "Passos",
                     "notes": "Notas",
                     "dirtyTitle": "Sair sem poupar?",
@@ -95,7 +98,13 @@
                     "processImage1": "Comprimindo imagem...",
                     "processImage2": "Ainda processando. Isso pode demorar um pouco...",
                     "addVideoTitle": "Adicionar vídeo do YouTube",
-                    "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados."
+                    "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados.",
+                    "acceptCropTooltip": "Aceitar crop",
+                    "cancelCropTooltip": "Cancelar crop",
+                    "cropTooltip": "Crop imagem",
+                    "removeImageTooltip": "Remover media",
+                    "addImageTooltip": "Adicionar imagem",
+                    "addVideoTooltip": "Adicionar video"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
@@ -131,7 +140,12 @@
                     "stepDetailsModalTitle": "Detalhe de instrução",
                     "stepDetailsTime": "Tempo:",
                     "stepDetailsTemperature": "Temperatura:",
-                    "stepDetailsAlternativeTemperatures": "Temperatura Alternativa:"
+                    "stepDetailsAlternativeTemperatures": "Temperatura Alternativa:",
+                    "editTooltip": "Editar",
+                    "keepScreenOnTooltip": "Ativar/Desativar tela always on",
+                    "multiplierTooltip": "Aplicar multiplicador",
+                    "startTimeTooltip": "Aplicar hora de início",
+                    "printTooltip": "Imprimir"
                 },
                 "print": {
                     "action": "Imprimir"
