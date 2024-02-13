@@ -64,7 +64,6 @@ const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
-let enableRecipeHighlighting = false;
 let useFractionsOverDecimal = false;
 
 function confirmDeleteItem() {
@@ -102,8 +101,6 @@ onMounted(async () => {
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
 
   defaultTimeSetting = await getSetting("StepsInterval", "5");
-  const enableRecipeHighlightingSetting = await getSetting("EnableRecipeHighlighting", "false");
-  enableRecipeHighlighting = enableRecipeHighlightingSetting == "true";
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
 
@@ -172,13 +169,13 @@ function prepareDisplay(
       recipe.multiplier,
       useFractionsOverDecimal,
       i18next.language,
-      enableRecipeHighlighting
+      true
     )
   );
   let nextTime = currentTime;
   nextTime.setTime(nextTime.getTime() + defaultTime * 60 * 1000);
   displayInstructions.value = recipe.steps.map((step) => {
-    const result = prepareStepDisplay(step, nextTime, i18next.language, enableRecipeHighlighting);
+    const result = prepareStepDisplay(step, nextTime, i18next.language, true);
 
     if (result.timeInSeconds > 0) {
       nextTime.setTime(nextTime.getTime() + result.timeInSeconds * 1000);
