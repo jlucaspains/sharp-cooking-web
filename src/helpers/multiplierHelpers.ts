@@ -83,8 +83,8 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
         .filter(item => item.quantity > 0.1)
         .map(item => {
             return {
-                quantity: item.quantity * multiplier, unit: item.unit, unitText: item.unitText,
-                minQuantity: item.minQuantity * multiplier, maxQuantity: item.maxQuantity * multiplier
+                quantity: round(item.quantity * multiplier), unit: item.unit, unitText: item.unitText,
+                minQuantity: round(item.minQuantity * multiplier), maxQuantity: round(item.maxQuantity * multiplier)
             };
         });
     let newValueText = result.quantityText;
@@ -102,7 +102,7 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
 
     return {
         text: displayText, quantityValue: newValue,
-        minQuantity: newMinQuantity, maxQuantity: newMaxQuantity,
+        minQuantity: round(newMinQuantity), maxQuantity: round(newMaxQuantity),
         quantityText: newValueText, unit: result.unit, unitText: result.unitText,
         ingredient: result.ingredient, alternativeQuantities: newAlternativeQuantities
     };
@@ -136,4 +136,10 @@ export function prepareStepDisplay(input: string, currentTime: Date, locale: str
         temperatureUnit: result.temperatureUnit,
         alternativeTemperatures: result.alternativeTemperatures
     };
+}
+
+function round(value: number, decimalPlaces = 2) {
+    const p = Math.pow(10, decimalPlaces);
+    const n = (value * p) * (1 + Number.EPSILON);
+    return Math.round(n) / p;
 }

@@ -7,6 +7,7 @@ import { notify } from "notiwind";
 import { Recipe, RecipeMedia } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
+import { fetchWithRetry } from "../../services/fetchWithRetry";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
@@ -74,7 +75,7 @@ async function pickFile() {
             const data = new FormData();
             data.append('file', filePicked);
 
-            const response = await fetch("/api/process-backup", {
+            const response = await fetchWithRetry("/api/process-backup", {
                 method: "POST",
                 body: data
             });

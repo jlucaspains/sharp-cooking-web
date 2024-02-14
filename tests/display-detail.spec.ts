@@ -7,27 +7,19 @@ test.beforeEach(async ({ page }) => {
     });
 });
 
-async function enableHighlighting(page: any) {
-    await page.goto('#/options');
-    await page.getByTestId('enable-recipe-highlight-toggle').click();
-}
-
 test('Highligh ingredient quantity and UOM', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
     await page.goto('#/recipe/2');
     expect(await page.getByText('100g').innerHTML(), "<span class=\"text-theme-primary\">100g</span>");
 });
 
 test('Highligh step time', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
     await page.goto('#/recipe/2');
     expect(await page.getByText('30 min').innerHTML(), "<span class=\"text-theme-primary\">30 min</span>");
 });
 
 test('Show ingredient detail gram', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
     await page.goto('#/recipe/2');
     await page.getByText('100g flour').click();
@@ -38,7 +30,6 @@ test('Show ingredient detail gram', async ({ page, browserName, isMobile }) => {
 });
 
 test('Show ingredient detail cup', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it for 30 min"]);
     await page.goto('#/recipe/2');
     await page.getByText('1 cup flour').click();
@@ -51,7 +42,6 @@ test('Show ingredient detail cup', async ({ page, browserName, isMobile }) => {
 });
 
 test('Show step detail time', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it for 30 min"]);
     await page.goto('#/recipe/2');
     await page.getByText('Bake it for 30 min').click();
@@ -59,7 +49,6 @@ test('Show step detail time', async ({ page, browserName, isMobile }) => {
 });
 
 test('Show step detail temperature F', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it at 450F for 30 min"]);
     await page.goto('#/recipe/2');
     await page.getByText('Bake it at 450F for 30 min').click();
@@ -68,7 +57,6 @@ test('Show step detail temperature F', async ({ page, browserName, isMobile }) =
 });
 
 test('Show step detail temperature C', async ({ page, browserName, isMobile }) => {
-    await enableHighlighting(page);
     await createRecipe(page, 2, "New Bread", 5, ["1 cup flour"], ["Bake it at 232C for 30 min"]);
     await page.goto('#/recipe/2');
     await page.getByText('Bake it at 232C for 30 min').click();

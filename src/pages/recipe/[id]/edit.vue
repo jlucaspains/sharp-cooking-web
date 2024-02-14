@@ -22,6 +22,7 @@ import BusyIndicator from "../../../components/BusyIndicator.vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import { fetchWithRetry } from "../../../services/fetchWithRetry";
 import { isVideoUrlSupported, prepareUrlForEmbed } from "../../../helpers/videoHelpers";
 
 const state = useState()!;
@@ -45,8 +46,10 @@ const item = ref({
 } as RecipeViewModel);
 const images = ref([] as Array<RecipeMedia>);
 const isDirtyModalOpen = ref(false);
-const isImportModalOpen = ref(false);
+const isImportFromUrlModalOpen = ref(false);
+const isImportFromShareModalOpen = ref(false);
 const importRecipeUrl = ref("");
+const importRecipeCode = ref("");
 const isImporting = ref(false);
 const isProcessingImage = ref(false);
 const stepRefs = ref<HTMLInputElement[]>([]);
@@ -91,8 +94,16 @@ onMounted(async () => {
   const enableYoutubeVideosSetting = await getSetting("EnableYoutubeVideos", "false");
   enableYoutubeVideos = enableYoutubeVideosSetting == "true";
 
-  if (query.value.import == "1") {
-    isImportModalOpen.value = true;
+  if (query.value.importFromUrl == "1") {
+    isImportFromUrlModalOpen.value = true;
+  }
+
+  if (query.value.importFromShare == "1") {
+    isImportFromShareModalOpen.value = true;
+  }
+
+  if (query.value.shareCode) {
+    importRecipeCode.value = query.value.shareCode as string;
   }
 
   let recipe: RecipeViewModel;
@@ -214,7 +225,7 @@ async function pickImage() {
     const data = new FormData();
     data.append('file', imagePicked);
 
-    const response = await fetch("/api/process-image", {
+    const response = await fetchWithRetry("/api/process-image", {
       method: "POST",
       body: data
     });
@@ -261,12 +272,12 @@ function addStepAt(index: number) {
   });
 }
 
-async function importRecipe() {
+async function importRecipeFromUrl() {
   let success = true;
   try {
-    isImportModalOpen.value = false;
+    isImportFromUrlModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetch("/api/parse-recipe", {
+    const result = await fetchWithRetry("/api/parse-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -293,7 +304,56 @@ async function importRecipe() {
     item.value.imageAvailable = images.value.length > 0;
   }
   catch {
-    isImportModalOpen.value = true;
+    isImportFromUrlModalOpen.value = true;
+    success = false;
+  }
+  finally {
+    isImporting.value = false;
+
+    notify(
+      {
+        group: success ? "success" : "error",
+        title: success ? t("general.done") : t("general.error"),
+        text: success ? t("pages.recipe.id.edit.importedSuccessfully") : t("pages.recipe.id.edit.couldNotImport"),
+      },
+      2000
+    );
+  }
+}
+
+async function importRecipeFromCode() {
+  let success = true;
+  try {
+    isImportFromShareModalOpen.value = false;
+    isImporting.value = true;
+    const result = await fetchWithRetry("/api/receive-recipe", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: `{"code": "${importRecipeCode.value}"}`
+    });
+
+
+    success = result.ok;
+    if (!result.ok) {
+      return;
+    }
+
+    const importRecipe = await result.json();
+    item.value.title = importRecipe.title;
+    item.value.score = 5;
+    item.value.notes = importRecipe.notes;
+    item.value.ingredients = importRecipe.ingredients;
+    item.value.steps = importRecipe.steps;
+    images.value = importRecipe.media.map((item: any) => {
+      return new RecipeMedia(id.value, item.type, item.url);
+    });
+
+    item.value.imageAvailable = images.value.length > 0;
+  }
+  catch {
+    isImportFromUrlModalOpen.value = true;
     success = false;
   }
   finally {
@@ -322,6 +382,35 @@ async function fillUrlFromClipboard(type: "recipe" | "video") {
             addVideoUrl.value = clipText;
           }
         }
+      })
+      .catch((error) => {
+        notify(
+          {
+            group: "error",
+            title: t("general.error"),
+            text: t("pages.recipe.id.edit.importFromClipboardFailed"),
+          },
+          2000
+        );
+      });
+  } else {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.edit.importFromClipboardNotAccessible"),
+      },
+      2000
+    );
+  }
+}
+
+async function fillCodeFromClipboard() {
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .readText()
+      .then((clipText) => {
+        importRecipeCode.value = clipText;
       })
       .catch((error) => {
         notify(
@@ -613,8 +702,8 @@ function addVideo() {
       ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
-    <Modal :isOpen="isImportModalOpen" @closed="isImportModalOpen = false" :title="t('pages.recipe.id.edit.importTitle')"
-      :buttons="[
+    <Modal :isOpen="isImportFromUrlModalOpen" @closed="isImportFromUrlModalOpen = false"
+      :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
         {
           title: t('pages.recipe.id.edit.importFromClipboard'),
           action: async () => {
@@ -623,11 +712,11 @@ function addVideo() {
         },
         {
           title: t('general.cancel'),
-          action: () => isImportModalOpen = false,
+          action: () => isImportFromUrlModalOpen = false,
         },
         {
           title: t('general.ok'),
-          action: importRecipe,
+          action: importRecipeFromUrl,
         },
       ]">
       <input type="url" v-model="importRecipeUrl" data-testid="import-url"
@@ -653,6 +742,25 @@ function addVideo() {
       <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
         class="block my-2 p-2 w-full rounded text-black" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
+    </Modal>
+    <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
+      :title="t('pages.recipe.id.edit.importFromShareTitle')" :buttons="[
+        {
+          title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
+          action: async () => {
+            await fillCodeFromClipboard();
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isImportFromShareModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipeFromCode,
+        },
+      ]">
+      <input v-model="importRecipeCode" data-testid="import-code" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

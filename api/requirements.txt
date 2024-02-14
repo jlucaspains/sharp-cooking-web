@@ -10,3 +10,5 @@ Pillow>=9.2.0
 pillow-avif-plugin>=1.4.3
 pytest
 openai
+azure-cosmos
+jsonschema

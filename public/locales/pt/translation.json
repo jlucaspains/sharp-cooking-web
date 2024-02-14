@@ -22,10 +22,11 @@
         "index": {
             "title": "Todas as Receitas",
             "search": "Buscar...",
-            "addManually": "Adicionar manualmente...",
-            "importFromWebsite": "Importar de website...",
-            "importFromBackup": "Importar de backup...",
+            "addManually": "Adicionar manualmente",
+            "importFromWebsite": "Importar de website",
+            "importFromBackup": "Importar de backup",
             "importFromScan": "Importar de imagem",
+            "importFromCloud": "Importar via nuvem",
             "sortByTitle": "Classificar por título",
             "sortByRating": "Classificar por nota",
             "sortByRecipeDate": "Classificar por data",
@@ -63,7 +64,9 @@
             "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
             "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas",
             "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
-            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas"
+            "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas",
+            "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",
+            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com a Política de privacidade do Sharp Cooking."
         },
         "recipe": {
             "id": {
@@ -97,6 +100,8 @@
                     "failedToProcessImage": "Falha ao processar a imagem. Por favor, tente novamente.",
                     "processImage1": "Comprimindo imagem...",
                     "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+                    "importFromShareTitle": "Importar via nuvem",
+                    "importFromShareFromClipboard": "Código copiado",
                     "addVideoTitle": "Adicionar vídeo do YouTube",
                     "videoUrlNotSupported": "Apenas vídeos do YouTube são suportados.",
                     "acceptCropTooltip": "Aceitar crop",
@@ -129,7 +134,7 @@
                     "deleteModalTitle": "Excluir esta receita?",
                     "deleteYes": "Sim, exclua",
                     "deleteModalBody": "Essa ação não pode ser desfeita.",
-                    "sharingFailed": "O compartilhamento de arquivos falhou.",
+                    "sharingFailed": "O compartilhamento de arquivos falhou. Por favor, tente novamente.",
                     "sharingSucceeded": "Arquivo compartilhado com sucesso.",
                     "ingredients": "Ingredientes",
                     "ingredientDetailsModalTitle": "Detalhe de ingrediente",
@@ -137,6 +142,9 @@
                     "ingredientDetailsUOM": "UDM:",
                     "ingredientDetailsIngredient": "Ingrediente:",
                     "ingredientDetailsAlternativeUOMs": "UDMs alternativas:",
+                    "shareOnline": "Compartilhar via nuvem",
+                    "shareOnline1": "Compartilhando...",
+                    "shareOnline2": "Ainda processando. Isso pode demorar um pouco...",
                     "stepDetailsModalTitle": "Detalhe de instrução",
                     "stepDetailsTime": "Tempo:",
                     "stepDetailsTemperature": "Temperatura:",

@@ -34,7 +34,7 @@ test('import from website', async ({ page }) => {
   await page.getByTestId('add-menu-button').click();
   await page.getByRole('menuitem', { name: 'Import from website' }).click();
 
-  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?import=1/));
+  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?importFromUrl=1/));
 });
 
 test('import from url', async ({ page, browserName }) => {
@@ -67,4 +67,39 @@ test('import from url', async ({ page, browserName }) => {
   await expect(page.getByLabel('Title')).toHaveValue("New Bread Recipe");
   await expect(page.getByPlaceholder('1 cup flour')).toHaveValue("142g whole wheat flour");
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
+});
+
+async function enableCloudShare(page: any) {
+  await page.goto('#/options');
+  await page.getByTestId('enable-cloud-share-toggle').click();
+}
+test('import from code', async ({ page, browserName }) => {
+  test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
+  
+  const response = `
+    {
+        "title": "New Bread Recipe",
+        "ingredients": ["142g whole wheat flour"],
+        "steps": ["Mix together the dry ingredients"],
+        "media": [{"type": "img", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"}]
+    }`;
+
+  await page.route('**/api/receive-recipe', async route => {
+    const json = JSON.parse(response);
+    await route.fulfill({ json });
+  });
+  
+  await enableCloudShare(page);
+  await page.goto('/');
+
+  await page.getByTestId('add-menu-button').click();
+  await page.getByRole('menuitem', { name: 'Import from share code' }).click();
+  await page.getByTestId("import-code").fill("123456");
+
+  await page.getByRole("button").getByText("OK").click();
+  await page.waitForTimeout(1000);
+  await expect(page.getByLabel('Title')).toHaveValue("New Bread Recipe");
+  await expect(page.getByPlaceholder('1 cup flour')).toHaveValue("142g whole wheat flour");
+  await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
+  expect(await page.locator('.list-images').getByRole("img").count()).toBe(1);
 });

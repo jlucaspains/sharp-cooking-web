@@ -20,6 +20,7 @@ import NoSleep from "nosleep.js";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import ImageGallery from "../../../components/ImageGallery.vue";
+import BusyIndicator from "../../../components/BusyIndicator.vue";
 import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 
@@ -55,12 +56,14 @@ const currentStartTime = ref(new Date());
 const newMultiplier = ref(1);
 const images = ref([] as Array<RecipeMedia>);
 const isIngredientDetailsModalOpen = ref(false);
+const isBusy = ref(false);
+const isShareOptionsModalOpen = ref(false);
+const shareCode = ref("");
 const isInstructionDetailsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
-let enableRecipeHighlighting = false;
 let useFractionsOverDecimal = false;
 
 function confirmDeleteItem() {
@@ -98,8 +101,6 @@ onMounted(async () => {
   const recipe = (await getRecipe(id.value)) as RecipeViewModel;
 
   defaultTimeSetting = await getSetting("StepsInterval", "5");
-  const enableRecipeHighlightingSetting = await getSetting("EnableRecipeHighlighting", "false");
-  enableRecipeHighlighting = enableRecipeHighlightingSetting == "true";
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
 
@@ -141,6 +142,10 @@ function setupMenuOptions() {
           text: t("pages.recipe.id.index.shareAsFile"),
           action: shareAsFile,
         },
+        {
+          text: t("pages.recipe.id.index.shareOnline"),
+          action: shareOnline,
+        },
       ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
@@ -164,13 +169,13 @@ function prepareDisplay(
       recipe.multiplier,
       useFractionsOverDecimal,
       i18next.language,
-      enableRecipeHighlighting
+      true
     )
   );
   let nextTime = currentTime;
   nextTime.setTime(nextTime.getTime() + defaultTime * 60 * 1000);
   displayInstructions.value = recipe.steps.map((step) => {
-    const result = prepareStepDisplay(step, nextTime, i18next.language, enableRecipeHighlighting);
+    const result = prepareStepDisplay(step, nextTime, i18next.language, true);
 
     if (result.timeInSeconds > 0) {
       nextTime.setTime(nextTime.getTime() + result.timeInSeconds * 1000);
@@ -356,6 +361,81 @@ async function shareAsFile() {
       return;
     }
 
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
+  }
+}
+
+async function shareOnline() {
+  try {
+    isBusy.value = true;
+    shareCode.value = "";
+
+    const model = {
+      id: item.value.id,
+      title: item.value.title,
+      ingredients: item.value.ingredients,
+      notes: item.value.notes,
+      source: item.value.source,
+      steps: item.value.steps,
+      media: images.value.map(item => {
+        return { "type": item.type, "url": item.url };
+      }),
+    };
+
+    const response = await fetch("/api/share-recipe", {
+      method: "POST",
+      body: JSON.stringify(model)
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const result = await response.json();
+    shareCode.value = result.id;
+
+    isShareOptionsModalOpen.value = true;
+
+  } catch (e) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
+  } finally {
+    isBusy.value = false;
+  }
+}
+
+async function shareOnlineAsUrl(code: string) {
+  try {
+    await navigator.share({ title: t("pages.recipe.id.index.shareOnline"), text: code, url: `${window.location.origin}/#/recipe/0/edit?importFromShare=1&shareCode=${code}` });
+  } catch (e) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.index.sharingFailed"),
+      },
+      2000
+    );
+  }
+}
+
+async function shareOnlineAsCode(code: string) {
+  try {
+    await navigator.share({ title: t("pages.recipe.id.index.shareOnline"), text: `Use code ${code} to import recipe into Sharp Cooking app.` });
+  } catch (e) {
     notify(
       {
         group: "error",
@@ -634,6 +714,29 @@ function showInstructionDetails(item: InstructionDisplay) {
         </div>
       </div>
     </Modal>
+    <Modal :isOpen="isShareOptionsModalOpen" @closed="isShareOptionsModalOpen = false"
+      :title="t('pages.recipe.id.index.shareOnline')" :buttons="[
+        {
+          title: 'Share to Android or Windows',
+          action: async () => {
+            await shareOnlineAsUrl(shareCode);
+            isShareOptionsModalOpen = false;
+          },
+        },
+        {
+          title: 'Share to iOS',
+          action: async () => {
+            await shareOnlineAsCode(shareCode);
+            isShareOptionsModalOpen = false;
+          },
+        }
+      ]">
+      <div class="text-center my-6">
+        <span class="text-2xl dark:text-white" data-testid="actual-share-code">{{ shareCode }}</span>
+      </div>
+    </Modal>
+    <BusyIndicator :busy="isBusy" :message1="t('pages.recipe.id.index.shareOnline1')"
+      :message2="t('pages.recipe.id.index.shareOnline2')" />
     <Modal :isOpen="isInstructionDetailsModalOpen" @closed="isInstructionDetailsModalOpen = false"
       :title="t('pages.recipe.id.index.stepDetailsModalTitle')" :buttons="[
         {
@@ -643,11 +746,15 @@ function showInstructionDetails(item: InstructionDisplay) {
           },
         }
       ]">
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{ secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
-      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{ selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
-      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{ t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTime") }} {{
+        secondsToString(selectedInstruction.timeInSeconds, t) }}</div>
+      <div class="dark:text-white">{{ t("pages.recipe.id.index.stepDetailsTemperature") }} {{
+        selectedInstruction.temperature }} {{ selectedInstruction.temperatureUnit }}</div>
+      <div v-if="selectedInstruction.alternativeTemperatures.length > 0" class="dark:text-white mt-3">{{
+        t("pages.recipe.id.index.stepDetailsAlternativeTemperatures") }}</div>
       <div class="dark:text-white">
-        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation" aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
+        <table v-if="selectedInstruction.alternativeTemperatures.length > 0" role="presentation"
+          aria-label="{{ t('pages.recipe.id.index.stepDetailsModalTitle') }}">
           <tr v-for="item in selectedInstruction.alternativeTemperatures">
             <td class="float-right my-1 mx-2">{{ item.quantity }}</td>
             <td>{{ item.unitText }}</td>

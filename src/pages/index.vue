@@ -21,6 +21,7 @@ let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
 let enableAdvancedSearch = false;
+let enableCloudShare = false;
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -71,6 +72,8 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 onMounted(async () => {
   const enableAdvancedSearchSetting = await getSetting("EnableAdvancedSearch", "false");
   enableAdvancedSearch = enableAdvancedSearchSetting == "true";
+  const enableCloudShareSetting = await getSetting("EnableCloudShare", "false");
+  enableCloudShare = enableCloudShareSetting == "true";
 
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
@@ -81,7 +84,7 @@ onMounted(async () => {
   {
     name: "ImportFromWebsite",
     text: t("pages.index.importFromWebsite"),
-    action: goToImport,
+    action: goToImportFromUrl,
   },
   {
     name: "ImportFromBackup",
@@ -93,6 +96,15 @@ onMounted(async () => {
     text: t("pages.index.importFromScan"),
     action: goToImportFromScan,
   }];
+
+  if (enableCloudShare) {
+    addOptions.value.push({
+      name: "ImportFromCloud",
+      text: t("pages.index.importFromCloud"),
+      action: goToImportFromCloud,
+    });
+  }
+
   state.title = t("pages.index.title");
   state.menuOptions = [
     {
@@ -175,20 +187,29 @@ function goToRecipe(id: number) {
 function goToNew() {
   router.push("/recipe/0/edit");
 }
-function goToImport() {
-  router.push("/recipe/0/edit?import=1");
+
+function goToImportFromUrl() {
+  router.push("/recipe/0/edit?importFromUrl=1");
 }
+
 function goToImportFromBackup() {
   router.push("/recipe/import-backup");
 }
+
 function goToImportFromScan() {
   router.push("/recipe/import-ocr");
 }
+
 function goToOptions() {
   router.push("/options");
 }
+
 async function saveSortOption(type: string) {
   await saveSetting("AllRecipesSort", type);
+}
+
+function goToImportFromCloud() {
+  router.push("/recipe/0/edit?importFromShare=1");
 }
 
 function activateSearch() {

@@ -29,3 +29,37 @@ class ParseRequest(BaseModel):
 class ImageResult(BaseModel):
     name: str
     image: str
+
+recipeSchema = {
+    "type": "object",
+    "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "notes": {"type": ["string", "null"], "minLength": 1},
+        "source": {"type": ["string", "null"], "minLength": 1},
+        "ingredients": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "steps": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "media": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {"type": "string", "minLength": 1},
+                    "url": {"type": "string", "minLength": 1}
+                },
+            }
+        },
+    },
+    "required": ["title", "ingredients", "steps"],
+}
