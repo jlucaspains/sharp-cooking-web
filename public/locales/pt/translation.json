@@ -66,7 +66,7 @@
             "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
             "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas",
             "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",
-            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com os termos de uso do Sharp Cooking."
+            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com a Política de privacidade do Sharp Cooking."
         },
         "recipe": {
             "id": {

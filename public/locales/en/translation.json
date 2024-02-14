@@ -66,7 +66,7 @@
             "enableYoutubeVideos": "Enable YouTube videos (preview)",
             "enableYoutubeVideosDescription": "Allows for adding YouTube videos to recipes in addition to images",
             "enableCloudShare": "Enable cloud share (preview)",
-            "enableCloudShareDescription": "Allows for sharing recipes via cloud with a code. Shared recipes are available for 1 hour for free. By enabling this feature, you agree to the Sharp Cooking terms of use."
+            "enableCloudShareDescription": "Allows for sharing recipes via cloud with a code. Shared recipes are available for 1 hour for free. By enabling this feature, you agree to the Sharp Cooking Privacy Policy."
         },
         "recipe": {
             "id": {
