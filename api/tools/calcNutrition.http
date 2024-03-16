@@ -1,0 +1,13 @@
+// 200
+POST http://localhost:7071/api/calc-nutrition HTTP/1.1
+content-type: application/json
+
+[
+    {"quantity": 100, "unit": "gram", "id": "748967"}
+]
+
+###
+{"quantity": 100, "unit": "gram", "id": "2% milk"},
+    {"quantity": 100, "unit": "gram", "id": "bread flour"},
+    {"quantity": 100, "unit": "gram", "id": "table salt"},
+    {"quantity": 100, "unit": "gram", "id": "sugar"}

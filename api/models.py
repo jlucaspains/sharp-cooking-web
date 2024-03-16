@@ -63,3 +63,24 @@ recipeSchema = {
     },
     "required": ["title", "ingredients", "steps"],
 }
+
+
+calcNutritionSchema = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {"type": "string", "minLength": 1},
+            "quantity": {"type": "number", "minimum": 0},
+            "unit": {"type": "string", "minLength": 1},
+        },
+        "required": ["id", "quantity", "unit"],
+    }
+}
+
+lookupIngredientsSchema = {
+    "type": "array",
+    "items": {
+        "type": "string",
+    }
+}

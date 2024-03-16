@@ -11,9 +11,7 @@ export class Recipe {
     title!: string;
     score!: number;
     ingredients!: string[];
-    // parsedIngredients?: Ingredient[];
     steps!: string[];
-    // parsedSteps?: Step[];
     notes!: string;
     multiplier: number = 1;
     changedOn!: string;

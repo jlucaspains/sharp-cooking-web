@@ -12,3 +12,4 @@ pytest
 openai
 azure-cosmos
 jsonschema
+azure-search-documents
