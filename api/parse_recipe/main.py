@@ -4,12 +4,16 @@ import json
 import azure.functions as func
 from contextlib import suppress
 
-from recipe_scrapers import scrape_me
+from recipe_scrapers import scrape_me, _abstract
 from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
 from ..util import parse_recipe_ingredient, parse_recipe_instruction, parse_recipe_image
+
+_abstract.HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/123.0"
+}
 
 ureg = UnitRegistry()
 
