@@ -1,5 +1,6 @@
 import logging
 import json
+import re
 
 import azure.functions as func
 from contextlib import suppress
@@ -87,4 +88,7 @@ def parse_nutrient_value(value: str) -> float:
     if not value:
         return 0
     
-    return float(value.split(" ")[0]) if value else 0
+    qty_re = re.search(r"^(?P<Value>\d{1,5})", value)
+    qty = qty_re.group("Value")
+
+    return float(qty) if qty else 0
