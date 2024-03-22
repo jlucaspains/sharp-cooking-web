@@ -281,7 +281,7 @@ async function importRecipeFromUrl() {
   try {
     isImportFromUrlModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetchWithRetry("http://localhost:7071/api/parse-recipe", {
+    const result = await fetchWithRetry("/api/parse-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
