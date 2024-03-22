@@ -1,6 +1,6 @@
 import { Dexie, Table } from "dexie";
 import { BackupModel } from "../pages/recipe/backupModel"
-import { Recipe, RecipeImage, RecipeMedia } from "./recipe";
+import { Recipe, RecipeImage, RecipeMedia, RecipeNutrition } from "./recipe";
 import { Setting } from "./setting";
 
 class RecipeDatabase extends Dexie {
@@ -49,6 +49,16 @@ class RecipeDatabase extends Dexie {
             if (mediaCount == imagesCount) {
                 await imagesTable.clear();
             }
+        });
+        this.version(5).stores({
+            recipes: "++id,title,score,changedOn",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name"
+        }).upgrade(async (transaction) => {
+            transaction.table("recipes").toCollection().modify((recipe: Recipe) => {
+                recipe.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            });
         });
     }
 }
@@ -101,6 +111,7 @@ export async function initialize(recipes: Array<Recipe>) {
         recipe.id = id;
         recipe.changedOn = new Date().toISOString();
         recipe.multiplier = 1;
+        recipe.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
         await saveRecipe(recipe);
         await saveRecipeMedia({ recipeId: id, type: "img", url: "/bread.jpg" })

@@ -1,0 +1,7 @@
+POST http://localhost:7071/api/parse-recipe
+Content-Type: application/json
+
+{
+    "url": "https://www.allrecipes.com/recipe/98554/brazilian-cheese-bread-pao-de-queijo/",
+    "downloadImage": false
+}

@@ -36,13 +36,23 @@ let croppingCanvas: HTMLCanvasElement;
 const id = computed(() => parseInt(route.params.id as string));
 const query = computed(() => route.query);
 const item = ref({
-  id: 1,
+  id: 0,
   title: "",
   score: 3,
-  ingredients: [] as string[],
-  steps: [] as string[],
+  ingredients: [""] as string[],
+  steps: [""] as string[],
   notes: "",
   imageAvailable: false,
+  nutrition: {
+    servingSize: 0,
+    totalFat: 0,
+    saturatedFat: 0,
+    sodium: 0,
+    protein: 0,
+    cholesterol: 0,
+    calories: 0,
+    carbohydrates: 0,
+  }
 } as RecipeViewModel);
 const images = ref([] as Array<RecipeMedia>);
 const isDirtyModalOpen = ref(false);
@@ -106,7 +116,7 @@ onMounted(async () => {
     importRecipeCode.value = query.value.shareCode as string;
   }
 
-  let recipe: RecipeViewModel;
+  let recipe: RecipeViewModel | null = null;
 
   if (query.value.ocr == "1") {
     recipe = new RecipeViewModel();
@@ -119,13 +129,7 @@ onMounted(async () => {
       : state.message.steps;
     recipe.notes = state.message.notes;
     recipe.score = 3;
-  } else if (id.value === 0) {
-    recipe = new RecipeViewModel();
-    recipe.title = "";
-    recipe.steps.push("");
-    recipe.ingredients.push("");
-    recipe.score = 3;
-  } else {
+  } else if (id.value > 0) {
     recipe = (await getRecipe(id.value)) as RecipeViewModel;
   }
 
@@ -277,7 +281,7 @@ async function importRecipeFromUrl() {
   try {
     isImportFromUrlModalOpen.value = false;
     isImporting.value = true;
-    const result = await fetchWithRetry("/api/parse-recipe", {
+    const result = await fetchWithRetry("http://localhost:7071/api/parse-recipe", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -296,6 +300,8 @@ async function importRecipeFromUrl() {
     item.value.score = 5;
     item.value.ingredients = html.ingredients.map((x: any) => x.raw);
     item.value.steps = html.steps.map((x: any) => x.raw);
+    item.value.nutrition = html.nutrients;
+    item.value.nutrition.servingSize = html.yields;
 
     if (html.image) {
       images.value.push(new RecipeMedia(id.value, "img", html.image));
@@ -537,7 +543,8 @@ function addVideo() {
             shadow-md
             hover:shadow-lg
             transition duration-150 ease-in-out
-          " :title="t('pages.recipe.id.edit.addVideoTooltip')" data-testid="add-video-button" v-if="enableYoutubeVideos" @click="pickVideo">
+          " :title="t('pages.recipe.id.edit.addVideoTooltip')" data-testid="add-video-button"
+          v-if="enableYoutubeVideos" @click="pickVideo">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 text-white m-auto">
             <path fill="currentColor"
               d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.9 4 4 4H5L7 8H10L8 4H10L12 8H15L13 4H15L17 8H20L18 4H22V13.81C21.39 13.46 20.72 13.22 20 13.09V10H5.76L4 6.47V18H13.09C13.04 18.33 13 18.66 13 19M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z" />
@@ -556,7 +563,8 @@ function addVideo() {
             shadow-md
             hover:shadow-lg
             transition duration-150 ease-in-out
-          " :title="t('pages.recipe.id.edit.removeImageTooltip')" data-testid="remove-image-button" @click="removeImage">
+          " :title="t('pages.recipe.id.edit.removeImageTooltip')" data-testid="remove-image-button"
+          @click="removeImage">
           <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24">
             <path fill="currentColor"
               d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29L11.21 15.83M22.54 16.88L21.12 15.47L19 17.59L16.88 15.47L15.47 16.88L17.59 19L15.47 21.12L16.88 22.54L19 20.41L21.12 22.54L22.54 21.12L20.41 19L22.54 16.88Z" />
@@ -595,7 +603,8 @@ function addVideo() {
             shadow-md
             hover:shadow-lg
             transition duration-150 ease-in-out
-          " :title="t('pages.recipe.id.edit.cancelCropTooltip')" data-testid="cancel-crop-button" @click="cancelCropping">
+          " :title="t('pages.recipe.id.edit.cancelCropTooltip')" data-testid="cancel-crop-button"
+          @click="cancelCropping">
           <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
             stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -655,7 +664,8 @@ function addVideo() {
         </button>
       </div>
       <label>{{ t("pages.recipe.id.edit.steps") }}</label>
-      <button class="ml-2" type="button" :title="t('pages.recipe.id.edit.addStep')" @click="addStepAt(item.steps.length - 1)">
+      <button class="ml-2" type="button" :title="t('pages.recipe.id.edit.addStep')"
+        @click="addStepAt(item.steps.length - 1)">
         <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -664,7 +674,8 @@ function addVideo() {
       <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
         <input type="text" :placeholder="t('pages.recipe.id.edit.stepPlaceholder')" v-model="item.steps[index]"
           class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
-        <button type="button" class="ml-2" :title="t('pages.recipe.id.edit.deleteStep')" @click="item.steps.splice(index, 1)">
+        <button type="button" class="ml-2" :title="t('pages.recipe.id.edit.deleteStep')"
+          @click="item.steps.splice(index, 1)">
           <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
@@ -680,6 +691,7 @@ function addVideo() {
       <textarea id="notes" v-model="item.notes" class="
           block
           p-2
+          mb-3
           flex-auto
           w-full
           h-20
@@ -687,79 +699,114 @@ function addVideo() {
           rounded
           text-base text-black
         " />
+      <label for="notes">{{ t("pages.recipe.id.edit.nutrition") }}</label>
+      <div class="my-3 w-full">
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Serving Size</label>
+          <input type="text" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.servingSize" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Calories (KCal)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.calories" />
+        </div>
+        <div class="flex flex-row my-3">
+          <label class="block p-2 w-40 rounded text-white">Total fat (g)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.totalFat" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Saturated fat (g)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.saturatedFat" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Cholesterol (mg)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.cholesterol" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Sodium (mg)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sodium" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Carbohydrates (g)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.carbohydrates" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-white">Protein (g)</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.protein" />
+        </div>
+      </div>
     </div>
     <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
       :buttons="[
-        {
-          title: t('pages.recipe.id.edit.dirtyStay'),
-          action: () => isDirtyModalClose(false),
-        },
-        {
-          title: t('pages.recipe.id.edit.dirtyLeave'),
-          danger: true,
-          action: () => isDirtyModalClose(true),
-        },
-      ]">
+      {
+        title: t('pages.recipe.id.edit.dirtyStay'),
+        action: () => isDirtyModalClose(false),
+      },
+      {
+        title: t('pages.recipe.id.edit.dirtyLeave'),
+        danger: true,
+        action: () => isDirtyModalClose(true),
+      },
+    ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
     <Modal :isOpen="isImportFromUrlModalOpen" @closed="isImportFromUrlModalOpen = false"
       :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
-        {
-          title: t('pages.recipe.id.edit.importFromClipboard'),
-          action: async () => {
-            await fillUrlFromClipboard('recipe');
-          }
-        },
-        {
-          title: t('general.cancel'),
-          action: () => isImportFromUrlModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: importRecipeFromUrl,
-        },
-      ]">
+      {
+        title: t('pages.recipe.id.edit.importFromClipboard'),
+        action: async () => {
+          await fillUrlFromClipboard('recipe');
+        }
+      },
+      {
+        title: t('general.cancel'),
+        action: () => isImportFromUrlModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: importRecipeFromUrl,
+      },
+    ]">
       <input type="url" v-model="importRecipeUrl" data-testid="import-url"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <Modal :isOpen="isAddVideoModalOpen" @closed="isAddVideoModalOpen = false"
       :title="t('pages.recipe.id.edit.addVideoTitle')" :buttons="[
-        {
-          title: t('pages.recipe.id.edit.importFromClipboard'),
-          action: async () => {
-            await fillUrlFromClipboard('video');
-          }
-        },
-        {
-          title: t('general.cancel'),
-          action: () => isAddVideoModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: addVideo,
-        },
-      ]">
+      {
+        title: t('pages.recipe.id.edit.importFromClipboard'),
+        action: async () => {
+          await fillUrlFromClipboard('video');
+        }
+      },
+      {
+        title: t('general.cancel'),
+        action: () => isAddVideoModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: addVideo,
+      },
+    ]">
       <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
         class="block my-2 p-2 w-full rounded text-black" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
     <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
       :title="t('pages.recipe.id.edit.importFromShareTitle')" :buttons="[
-        {
-          title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
-          action: async () => {
-            await fillCodeFromClipboard();
-          }
-        },
-        {
-          title: t('general.cancel'),
-          action: () => isImportFromShareModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: importRecipeFromCode,
-        },
-      ]">
+      {
+        title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
+        action: async () => {
+          await fillCodeFromClipboard();
+        }
+      },
+      {
+        title: t('general.cancel'),
+        action: () => isImportFromShareModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: importRecipeFromCode,
+      },
+    ]">
       <input v-model="importRecipeCode" data-testid="import-code" class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"

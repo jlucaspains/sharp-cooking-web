@@ -1,33 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
 import { useTranslation } from "i18next-vue";
-import { useState } from "../../../services/store";
-import i18next from "i18next";
 
 const { t } = useTranslation();
-const route = useRoute();
-const state = useState()!;
 
 interface Dictionary<T> {
   [Key: string]: T;
 }
 
-const id = computed(() => parseInt(route.params.id as string));
-const isLoaded = ref(false);
-const value = ref({
-  nutrition: {} as Dictionary<number>
-});
+const props = defineProps<{
+  nutrition: Dictionary<number>,
+  servingPerContainer: number,
+  itemName: string
+}>();
+
 const ingredientStatement = ref("");
 const serving = ref(1);
 const settings = {
-  width: "300px", useFdaRounding: true, readOnly: true, multipleItems: false,
-  showServingWeight: false, staticServingAndUnitText: "", showCalories: true
+  width: "300px", useFdaRounding: true
 };
-const servingUnitName = "Serving";
-const servingPerContainer = 0;
-const servingWeight = 0;
-const itemName = "";
+
 const calories = computed(() => {
   let n = 'calories';
 
@@ -79,6 +71,14 @@ const monounsaturatedFat = computed(() => {
   };
 });
 
+const unsaturatedFat = computed(() => {
+  let n = 'monounsaturatedFat';
+
+  return {
+    value: unitValue(n),
+  };
+});
+
 const cholesterol = computed(() => {
   let n = 'cholesterol';
 
@@ -97,8 +97,8 @@ const sodium = computed(() => {
   };
 });
 
-const totalCarb = computed(() => {
-  let n = 'totalCarb';
+const carbohydrates = computed(() => {
+  let n = 'carbohydrates';
 
   return {
     value: unitValue(n),
@@ -115,8 +115,8 @@ const fiber = computed(() => {
   };
 });
 
-const sugars = computed(() => {
-  let n = 'sugars';
+const sugar = computed(() => {
+  let n = 'sugar';
 
   return {
     value: unitValue(n),
@@ -124,8 +124,8 @@ const sugars = computed(() => {
   };
 });
 
-const addedSugars = computed(() => {
-  let n = 'addedSugars';
+const addedSugar = computed(() => {
+  let n = 'addedSugar';
 
   return {
     value: unitValue(n),
@@ -196,15 +196,14 @@ const potassium = computed(() => {
   };
 });
 
-
 const rdiValues: Dictionary<number> = {
   "totalFat": 78,
   "saturatedFat": 20,
   "cholesterol": 300,
   "sodium": 2300,
-  "totalCarb": 275,
+  "carbohydrates": 275,
   "fiber": 28,
-  "addedSugars": 50,
+  "addedSugar": 50,
   "protein": 50,
   "vitaminD": 20,
   "calcium": 1300,
@@ -214,55 +213,11 @@ const rdiValues: Dictionary<number> = {
   "vitaminC": 60,
   "kilojoules": 8400,
   "calories": 2000,
-  "sugars": 100
+  "sugar": 100
 };
-
-const nutritionCodeMap: Dictionary<string> = {
-  "298": "totalFat",
-  "606": "saturatedFat",
-  "646": "polyunsaturatedFat",
-  "645": "monounsaturatedFat",
-  "601": "cholesterol",
-  "307": "sodium",
-  "205": "totalCarb",
-  "291": "fiber",
-  "AddedSugar": "addedSugars",
-  "203": "protein",
-  "328": "vitaminD",
-  "301": "calcium",
-  "303": "iron",
-  "306": "potassium",
-  "vitaminA": "vitaminA",
-  "vitaminC": "vitaminC",
-  "kilojoules": "kilojoules",
-  "208": "calories",
-  "269.3": "sugars"
-};
-
-onMounted(async () => {
-  state.menuOptions = [];
-  state.title = "Recipe Nutrition"
-
-  const response = await fetch("http://localhost:7071/api/calc-nutrition", {
-    method: "POST",
-    body: JSON.stringify([
-      { quantity: 100, unit: "gram", name: "eggs" },
-      { quantity: 100, unit: "gram", name: "2% milk" },
-      { quantity: 100, unit: "gram", name: "whole wheat flour" },
-      { quantity: 100, unit: "gram", name: "sugar" },
-      { quantity: 100, unit: "gram", name: "salt" },
-      { quantity: 100, unit: "gram", name: "chicken breast" }
-    ])
-  });
-
-  const fetchResult = await response.json();
-  value.value.nutrition = fetchResult.nutrition.reduce((acc: any, cur: any) => ({ ...acc, [nutritionCodeMap[cur.nutrientNumber]]: cur.value }), {});
-  ingredientStatement.value = fetchResult.ingredients.join("<br>");
-  isLoaded.value = true;
-});
 
 function percentDailyValue(nutrient: string) {
-  let rawValue = value.value.nutrition[nutrient];
+  let rawValue = props.nutrition[nutrient];
   let rdi = 0;
   rdi = rdiValues[nutrient];
 
@@ -282,9 +237,9 @@ function percentDailyValue(nutrient: string) {
       dv = roundToSpecificDecimalPlace(dv, 0);
       break;
 
-    case 'totalCarb':
+    case 'carbohydrates':
     case 'fiber':
-    case 'sugars':
+    case 'sugar':
     case 'addedSugar':
     case 'protein':
       if (unitValue(nutrient) === '< 1') {
@@ -338,7 +293,7 @@ function percentDailyValue(nutrient: string) {
 }
 
 function unitValue(nutrient: string): number | string {
-  let nutrientValue = value.value.nutrition[nutrient];
+  let nutrientValue = props.nutrition[nutrient];
 
   switch (nutrient) {
     case 'calories':
@@ -372,26 +327,19 @@ function unitValue(nutrient: string): number | string {
       return roundVitaminDIron(multiplier(nutrientValue));
 
     // Essentials
-    case 'totalCarb':
+    case 'carbohydrates':
     case 'fiber':
-    case 'sugars':
-    case 'addedSugars':
+    case 'sugar':
+    case 'addedSugar':
     case 'protein':
       return roundEssentials(multiplier(nutrientValue));
-
-    case 'servingWeight':
-      return servingUnitName.toLowerCase() === 'serving'
-        ? roundToSpecificDecimalPlace(byServing(nutrientValue), 0)
-        : roundToSpecificDecimalPlace(byWeight(nutrientValue), 0);
   }
 
   return 0;
 }
 
 function multiplier(value: number) {
-  return servingUnitName.toLowerCase() === 'serving'
-    ? byServing(value)
-    : byWeight(value);
+  return byServing(value);
 }
 
 function byServing(value: number) {
@@ -461,21 +409,21 @@ function roundSodium(value: number) {
   return roundToNearestNum(value, 10);
 }
 
-function roundPotassium(value: number) {
-  if (!settings.useFdaRounding) {
-    return roundToSpecificDecimalPlace(value, 0);
-  }
+// function roundPotassium(value: number) {
+//   if (!settings.useFdaRounding) {
+//     return roundToSpecificDecimalPlace(value, 0);
+//   }
 
-  if (value < 5) {
-    return 0;
-  } else if (value <= 140) {
-    // 5 - 140 mg - express to nearest 5 mg increment
-    return roundToNearestNum(value, 5);
-  } else {
-    // >= 5 g - express to nearest 10 g increment
-    return roundToNearestNum(value, 10);
-  }
-}
+//   if (value < 5) {
+//     return 0;
+//   } else if (value <= 140) {
+//     // 5 - 140 mg - express to nearest 5 mg increment
+//     return roundToNearestNum(value, 5);
+//   } else {
+//     // >= 5 g - express to nearest 10 g increment
+//     return roundToNearestNum(value, 10);
+//   }
+// }
 
 // Total Carb, Fiber, Sugar, Sugar Alcohol and Protein
 function roundEssentials(value: number) {
@@ -546,70 +494,62 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
 </script>
 
 <template>
-  <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" v-if="isLoaded" class="nf"
+  <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" class="nf"
     :class="{ us: true }" :style="{ width: settings.width }">
-    <div class="nf-title">Nutrition Facts
+    <div class="nf-title">{{ t('pages.recipe.id.nutrition.title') }}
     </div>
     <div class="nf-line">
       <div class="nf-serving">
         <div class="nf-serving-per-container" v-if="servingPerContainer > 0">
-          {{ servingPerContainer }} <span>Serving per container</span>
+          {{ servingPerContainer }} <span>{{ t('pages.recipe.id.nutrition.servingsPerRecipe') }}</span>
         </div>
-        <template v-if="!settings.readOnly">
-          <input type="text" class="nf-modifier-field" data-role="none" aria-label="Change the Quantity Textbox"
-            v-model.number.lazy="serving">
-        </template>
-        <div class="nf-item-name" :class="{ 'read-only': settings.readOnly }">
-          <div v-if="!settings.readOnly">
-            {{ servingUnitName }}
-            <template v-if="settings.showServingWeight">
-              ({{ servingWeight }}g)
-            </template>
-          </div>
-          <template v-if="settings.readOnly">
-            <span class="text-serving-size">Serving Size
-            </span>
-            <span class="text-serving-item" v-if="!settings.multipleItems && settings.staticServingAndUnitText === ''">
-              {{ serving + ' ' + itemName }}
-            </span>
-            <!-- <span class="text-serving-item" v-if="settings.staticServingAndUnitText !== '' && !settings.multipleItems"
-                v-html="settings.staticServingAndUnitText">
-              </span>
-              <span class="nf-pr" v-if="settings.multipleItems" v-html="text.multipleItems || 'Multiple items'">
-              </span> -->
-          </template>
+        <div class="nf-item-name read-only">
+          <span class="text-serving-size">{{ t('pages.recipe.id.nutrition.servingSize') }}
+          </span>
+          <span class="text-serving-item">
+            {{ serving + ' ' + (props.itemName ? props.itemName : "") }}
+          </span>
         </div>
       </div>
     </div>
     <div class="nf-bar2"></div>
-    <div class="nf-amount-per-serving" v-html="'Amount per serving'">
-    </div>
+    <div class="nf-amount-per-serving">{{ t('pages.recipe.id.nutrition.amountPerServing') }}</div>
     <div class="nf-calories" v-if="calories.value">
-      <span>Calories</span>
+      <span>{{ t('pages.recipe.id.nutrition.calories') }}</span>
       <span class="nf-pr" itemprop="calories">{{ calories.value }}</span>
     </div>
     <div class="nf-bar1"></div>
     <div class="nf-line nf-text-right">
-      <span class="nf-highlight nf-percent-dv">% <span>Daily Value</span>*</span>
+      <span class="nf-highlight nf-percent-dv">% <span>{{ t('pages.recipe.id.nutrition.dailyValue') }}</span>*</span>
     </div>
     <div class="nf-line" v-if="totalFat.value">
       <span class="nf-highlight nf-pr" aria-hidden="true">{{ totalFat.dv }}%</span>
-      <span class="nf-highlight">Total Fat </span>
+      <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.totalFat') }} </span>
       <span itemprop="fatContent">
-        {{ totalFat.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ totalFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="saturatedFat.value">
       <span class="nf-highlight nf-pr" aria-hidden="true">{{ saturatedFat.dv }}%</span>
-      <span>Saturated Fat </span>
+      <span>{{ t('pages.recipe.id.nutrition.saturatedFat') }} </span>
       <span itemprop="saturatedFatContent">
-        {{ saturatedFat.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ saturatedFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="transFat.value">
-      <span><em>Trans</em> Fat </span>
+      <span><em>{{ t('pages.recipe.id.nutrition.trans') }}</em> {{ t('pages.recipe.id.nutrition.fat') }} </span>
       <span itemprop="transFatContent">
-        {{ transFat.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ transFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
+      </span>
+    </div>
+    <div class="nf-line nf-indent" v-if="unsaturatedFat.value">
+      <span>{{ t('pages.recipe.id.nutrition.unsaturatedFat') }}</span>
+      <span itemprop="unsaturatedFatContent">
+        {{ unsaturatedFat.value }}<span aria-hidden="true">g</span><span class="sr-only">{{
+      t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="polyunsaturatedFat.value">
@@ -626,57 +566,64 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     </div>
     <div class="nf-line" v-if="cholesterol.value">
       <span class="nf-highlight nf-pr" aria-hidden="true">{{ cholesterol.dv }}%</span>
-      <span class="nf-highlight">Cholesterol </span>
+      <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.cholesterol') }} </span>
       <span itemprop="cholesterolContent">
-        {{ cholesterol.value }}<span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+        {{ cholesterol.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym')
+          }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
       </span>
     </div>
     <div class="nf-line" v-if="sodium.value">
       <span class="nf-highlight nf-pr" aria-hidden="true">{{ sodium.dv }}%</span>
-      <span class="nf-highlight">Sodium </span>
+      <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.sodium') }} </span>
       <span itemprop="sodiumContent">
-        {{ sodium.value }}<span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+        {{ sodium.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
       </span>
     </div>
-    <div class="nf-line" v-if="totalCarb.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ totalCarb.dv
-      }}%</span>
-      <span class="nf-highlight">Total Carbohydrates </span>
+    <div class="nf-line" v-if="carbohydrates.value">
+      <span class="nf-highlight nf-pr" aria-hidden="true">{{ carbohydrates.dv
+        }}%</span>
+      <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.totalCarbohydrates') }} </span>
       <span itemprop="carbohydrateContent">
-        {{ totalCarb.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ carbohydrates.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="fiber.value">
       <span class="nf-highlight nf-pr" aria-hidden="true">{{ fiber.dv }}%</span>
-      <span>Dietary Fiber </span>
+      <span>{{ t('pages.recipe.id.nutrition.dietaryFiber') }} </span>
       <span itemprop="fiberContent">
-        {{ fiber.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ fiber.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
-    <div class="nf-line nf-indent" v-if="sugars.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ sugars.dv }}%</span>
-      <span>Sugars </span>
+    <div class="nf-line nf-indent" v-if="sugar.value">
+      <span class="nf-highlight nf-pr" aria-hidden="true">{{ sugar.dv }}%</span>
+      <span>{{ t('pages.recipe.id.nutrition.sugars') }} </span>
       <span itemprop="sugarContent">
-        {{ sugars.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ sugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
-    <div class="nf-line nf-indent2" v-if="addedSugars.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ addedSugars.dv }}%</span>
+    <div class="nf-line nf-indent2" v-if="addedSugar.value">
+      <span class="nf-highlight nf-pr" aria-hidden="true">{{ addedSugar.dv }}%</span>
       <span>
-        <span>Includes </span>
-        <span itemprop="">{{ addedSugars.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        <span>{{ t('pages.recipe.id.nutrition.includes') }} </span>
+        <span itemprop="">{{ addedSugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym')
+            }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
         </span>
-        <span> Added Sugars</span>
+        <span> {{ t('pages.recipe.id.nutrition.addedSugars') }}</span>
       </span>
     </div>
     <div class="nf-line" v-if="protein.value">
-      <span class="nf-highlight">Protein </span>
+      <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.protein') }} </span>
       <span itemprop="proteinContent">
-        {{ protein.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+        {{ protein.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
+          class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-bar2"></div>
-    <div class="nf-vitamins">
+    <!--<div class="nf-vitamins">
       <div class="nf-vitamins">
         <div class="nf-vitamin-column" v-if="vitaminA.value">
           <span>Vitamin A</span> {{ vitaminA.value }}<span aria-hidden="true">IU</span>
@@ -684,41 +631,40 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
           <span class="nf-pr" aria-hidden="true">{{ vitaminA.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="vitaminC.value">
-          <span>Vitamin C</span> {{ vitaminC.value }}<span aria-hidden="true">mg</span>
-          <span class="sr-only"> milligrams</span>
+          <span>Vitamin C</span> {{ vitaminC.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ vitaminC.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="vitaminD.value">
-          <span>Vitamin D</span> {{ roundToSpecificDecimalPlace(vitaminD.value, 1) }}<span aria-hidden="true">mcg</span>
-          <span class="sr-only"> micrograms</span>
+          <span>Vitamin D</span> {{ roundToSpecificDecimalPlace(vitaminD.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.microgramAcronym') }}</span>
+          <span class="sr-only">{{ t('pages.recipe.id.nutrition.micrograms') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ vitaminD.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="calcium.value">
-          <span>Calcium</span> {{ roundToSpecificDecimalPlace(calcium.value, 1) }}<span aria-hidden="true">mg</span>
-          <span class="sr-only"> milligrams</span>
+          <span>Calcium</span> {{ roundToSpecificDecimalPlace(calcium.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ calcium.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="iron.value">
-          <span>Iron</span> {{ roundToSpecificDecimalPlace(iron.value, 1) }}<span aria-hidden="true">mg</span>
-          <span class="sr-only"> milligrams</span>
+          <span>Iron</span> {{ roundToSpecificDecimalPlace(iron.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ iron.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="potassium.value">
           <span>Potassium</span> {{ roundToSpecificDecimalPlace(potassium.value, 1)
-          }}<span aria-hidden="true">mg</span>
-          <span class="sr-only"> milligrams</span>
+          }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ potassium.dv }}%</span>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="nf-bar2"></div>
     <div class="nf-footnote">
       <span>
-        The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2000
-        calories a day is used for general nutrition advice.
+        {{ t('pages.recipe.id.nutrition.footNote') }}
       </span>
-      <div class="nf-ingredient-statement">
-        <strong>INGREDIENTS:</strong>
+      <div class="nf-ingredient-statement" v-if="ingredientStatement">
+        <strong>{{ t('pages.recipe.id.nutrition.ingredient') }}</strong>
         <div v-html="ingredientStatement"></div>
       </div>
     </div>
