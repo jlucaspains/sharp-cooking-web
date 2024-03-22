@@ -79,8 +79,8 @@ def parse_yields(yields: str):
     
     return float(parts[0]), parts[1] if len(parts) > 1 else ""
 
-def parse_nutrient_value(value: str | None) -> float:
+def parse_nutrient_value(value: str) -> float:
     if not value:
-        return None
+        return 0
     
     return float(value.split(" ")[0]) if value else 0
