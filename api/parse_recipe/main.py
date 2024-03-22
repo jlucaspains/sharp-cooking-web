@@ -1,15 +1,20 @@
 import logging
 import json
+import re
 
 import azure.functions as func
 from contextlib import suppress
 
-from recipe_scrapers import scrape_me
+from recipe_scrapers import scrape_me, _abstract
 from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
 from ..util import parse_recipe_ingredient, parse_recipe_instruction, parse_recipe_image
+
+_abstract.HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/123.0"
+}
 
 ureg = UnitRegistry()
 
@@ -83,4 +88,7 @@ def parse_nutrient_value(value: str | None) -> float:
     if not value:
         return None
     
-    return float(value.split(" ")[0]) if value else 0
+    qty_re = re.search(r"^(?P<Value>\d{1,5})", value)
+    qty = qty_re.group("Value")
+    
+    return float(qty) if qty else 0

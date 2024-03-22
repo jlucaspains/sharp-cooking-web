@@ -9,6 +9,7 @@ python-multipart>=0.0.5
 Pillow>=9.2.0
 pillow-avif-plugin>=1.4.3
 pytest
+pytest-cov
 openai
 azure-cosmos
 jsonschema
