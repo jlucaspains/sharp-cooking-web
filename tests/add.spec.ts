@@ -83,6 +83,8 @@ test('import from code', async ({ page, browserName }) => {
         "ingredients": ["142g whole wheat flour"],
         "steps": ["Mix together the dry ingredients"],
         "media": [{"type": "img", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"}],
+        "yields": 1,
+        "nutrients": {"calories": 0}
     }`;
 
   await page.route('**/api/receive-recipe', async route => {

@@ -162,7 +162,8 @@ test('Restore zip backup', async ({ page, browserName }) => {
             "multiplier": 1,
             "image": "/bread.jpg",
             "imageAvailable": true,
-            "images": []
+            "images": [],
+            "mutrition": {"servingSize": 1, "calories": 0}
         }
     ]`;
 
