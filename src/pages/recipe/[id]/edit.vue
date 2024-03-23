@@ -43,6 +43,7 @@ const item = ref({
   steps: [""] as string[],
   notes: "",
   imageAvailable: false,
+  multiplier: 1,
   nutrition: {
     servingSize: 0,
     totalFat: 0,

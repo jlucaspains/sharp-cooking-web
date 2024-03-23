@@ -23,7 +23,10 @@ export async function createRecipe(page: Page, id: number, title: string, rating
 
     for (const item of ingredients) {
         await page.getByPlaceholder('1 cup flour').last().fill(item);
-        await page.getByPlaceholder('1 cup flour').last().press("Enter");
+
+        if (ingredients.indexOf(item) + 1 != ingredients.length) {
+            await page.getByPlaceholder('1 cup flour').last().press("Enter");
+        }
     }
 
     for (const item of steps) {
