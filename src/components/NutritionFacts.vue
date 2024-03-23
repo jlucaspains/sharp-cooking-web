@@ -409,21 +409,21 @@ function roundSodium(value: number) {
   return roundToNearestNum(value, 10);
 }
 
-// function roundPotassium(value: number) {
-//   if (!settings.useFdaRounding) {
-//     return roundToSpecificDecimalPlace(value, 0);
-//   }
+function roundPotassium(value: number) {
+  if (!settings.useFdaRounding) {
+    return roundToSpecificDecimalPlace(value, 0);
+  }
 
-//   if (value < 5) {
-//     return 0;
-//   } else if (value <= 140) {
-//     // 5 - 140 mg - express to nearest 5 mg increment
-//     return roundToNearestNum(value, 5);
-//   } else {
-//     // >= 5 g - express to nearest 10 g increment
-//     return roundToNearestNum(value, 10);
-//   }
-// }
+  if (value < 5) {
+    return 0;
+  } else if (value <= 140) {
+    // 5 - 140 mg - express to nearest 5 mg increment
+    return roundToNearestNum(value, 5);
+  } else {
+    // >= 5 g - express to nearest 10 g increment
+    return roundToNearestNum(value, 10);
+  }
+}
 
 // Total Carb, Fiber, Sugar, Sugar Alcohol and Protein
 function roundEssentials(value: number) {
@@ -623,7 +623,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
       </span>
     </div>
     <div class="nf-bar2"></div>
-    <!--<div class="nf-vitamins">
+    <div class="nf-vitamins">
       <div class="nf-vitamins">
         <div class="nf-vitamin-column" v-if="vitaminA.value">
           <span>Vitamin A</span> {{ vitaminA.value }}<span aria-hidden="true">IU</span>
@@ -657,7 +657,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
           <span class="nf-pr" aria-hidden="true">{{ potassium.dv }}%</span>
         </div>
       </div>
-    </div>-->
+    </div>
     <div class="nf-bar2"></div>
     <div class="nf-footnote">
       <span>

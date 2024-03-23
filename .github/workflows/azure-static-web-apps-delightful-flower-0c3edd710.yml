@@ -28,7 +28,7 @@ jobs:
       - name: Test with pytest
         run: |
           cd api
-          pytest
+          pytest --cov
 
   build_and_deploy_job:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
