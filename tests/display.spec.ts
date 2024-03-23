@@ -93,7 +93,6 @@ test('share as text', async ({ page }) => {
 Ingredients:
 100g flour
 
-
 Instructions:
 Bake it for 30 min`;
 
