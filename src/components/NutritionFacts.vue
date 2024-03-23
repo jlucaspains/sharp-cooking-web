@@ -500,7 +500,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     </div>
     <div class="nf-line">
       <div class="nf-serving">
-        <div class="nf-serving-per-container" v-if="servingPerContainer > 0">
+        <div class="nf-serving-per-container" data-testid="servingsPerRecipe" v-if="servingPerContainer > 0">
           {{ servingPerContainer }} <span>{{ t('pages.recipe.id.nutrition.servingsPerRecipe') }}</span>
         </div>
         <div class="nf-item-name read-only">
@@ -516,100 +516,100 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     <div class="nf-amount-per-serving">{{ t('pages.recipe.id.nutrition.amountPerServing') }}</div>
     <div class="nf-calories" v-if="calories.value">
       <span>{{ t('pages.recipe.id.nutrition.calories') }}</span>
-      <span class="nf-pr" itemprop="calories">{{ calories.value }}</span>
+      <span class="nf-pr" itemprop="calories" data-testid="caloriesValue">{{ calories.value }}</span>
     </div>
     <div class="nf-bar1"></div>
     <div class="nf-line nf-text-right">
       <span class="nf-highlight nf-percent-dv">% <span>{{ t('pages.recipe.id.nutrition.dailyValue') }}</span>*</span>
     </div>
     <div class="nf-line" v-if="totalFat.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ totalFat.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="totalFatDv">{{ totalFat.dv }}%</span>
       <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.totalFat') }} </span>
-      <span itemprop="fatContent">
+      <span itemprop="fatContent" data-testid="totalFatValue">
         {{ totalFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="saturatedFat.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ saturatedFat.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="saturatedFatDv">{{ saturatedFat.dv }}%</span>
       <span>{{ t('pages.recipe.id.nutrition.saturatedFat') }} </span>
-      <span itemprop="saturatedFatContent">
+      <span itemprop="saturatedFatContent" data-testid="saturatedFatValue">
         {{ saturatedFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="transFat.value">
       <span><em>{{ t('pages.recipe.id.nutrition.trans') }}</em> {{ t('pages.recipe.id.nutrition.fat') }} </span>
-      <span itemprop="transFatContent">
+      <span itemprop="transFatContent" data-testid="transFatValue">
         {{ transFat.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="unsaturatedFat.value">
       <span>{{ t('pages.recipe.id.nutrition.unsaturatedFat') }}</span>
-      <span itemprop="unsaturatedFatContent">
+      <span itemprop="unsaturatedFatContent" data-testid="unsaturatedFatValue">
         {{ unsaturatedFat.value }}<span aria-hidden="true">g</span><span class="sr-only">{{
       t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="polyunsaturatedFat.value">
       <span>Polyunsaturated Fat </span>
-      <span itemprop="unsaturatedFatContent">
+      <span itemprop="unsaturatedFatContent" data-testid="polyunsaturatedFatValue">
         {{ polyunsaturatedFat.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="monounsaturatedFat.value">
       <span>Monounsaturated Fat </span>
-      <span itemprop="unsaturatedFatContent">
+      <span itemprop="unsaturatedFatContent" data-testid="monounsaturatedFatValue">
         {{ monounsaturatedFat.value }}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
       </span>
     </div>
     <div class="nf-line" v-if="cholesterol.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ cholesterol.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="cholesterolDv">{{ cholesterol.dv }}%</span>
       <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.cholesterol') }} </span>
-      <span itemprop="cholesterolContent">
+      <span itemprop="cholesterolContent" data-testid="cholesterolValue">
         {{ cholesterol.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym')
           }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
       </span>
     </div>
     <div class="nf-line" v-if="sodium.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ sodium.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="sodiumDv">{{ sodium.dv }}%</span>
       <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.sodium') }} </span>
-      <span itemprop="sodiumContent">
+      <span itemprop="sodiumContent" data-testid="sodiumValue">
         {{ sodium.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
       </span>
     </div>
     <div class="nf-line" v-if="carbohydrates.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ carbohydrates.dv
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="carbohydratesDv">{{ carbohydrates.dv
         }}%</span>
       <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.totalCarbohydrates') }} </span>
-      <span itemprop="carbohydrateContent">
+      <span itemprop="carbohydrateContent" data-testid="carbohydratesValue">
         {{ carbohydrates.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="fiber.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ fiber.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="fiberDv">{{ fiber.dv }}%</span>
       <span>{{ t('pages.recipe.id.nutrition.dietaryFiber') }} </span>
-      <span itemprop="fiberContent">
+      <span itemprop="fiberContent" data-testid="fiberValue">
         {{ fiber.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent" v-if="sugar.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ sugar.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="sugarDv">{{ sugar.dv }}%</span>
       <span>{{ t('pages.recipe.id.nutrition.sugars') }} </span>
-      <span itemprop="sugarContent">
+      <span itemprop="sugarContent" data-testid="sugarValue">
         {{ sugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
     <div class="nf-line nf-indent2" v-if="addedSugar.value">
-      <span class="nf-highlight nf-pr" aria-hidden="true">{{ addedSugar.dv }}%</span>
+      <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="addedSugarDv">{{ addedSugar.dv }}%</span>
       <span>
         <span>{{ t('pages.recipe.id.nutrition.includes') }} </span>
-        <span itemprop="">{{ addedSugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym')
+        <span itemprop="" data-testid="addedSugarValue">{{ addedSugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym')
             }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
         </span>
         <span> {{ t('pages.recipe.id.nutrition.addedSugars') }}</span>
@@ -617,7 +617,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     </div>
     <div class="nf-line" v-if="protein.value">
       <span class="nf-highlight">{{ t('pages.recipe.id.nutrition.protein') }} </span>
-      <span itemprop="proteinContent">
+      <span itemprop="proteinContent" data-testid="proteinValue">
         {{ protein.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym') }}</span><span
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>

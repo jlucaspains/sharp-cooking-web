@@ -800,7 +800,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           },
         }
       ]">
-      <NutritionFacts :nutrition="item.nutrition" :serving-per-container="item.nutrition.servingSize" item-name=""></NutritionFacts>
+      <NutritionFacts class="mx-auto" :nutrition="item.nutrition" :serving-per-container="item.nutrition.servingSize" item-name=""></NutritionFacts>
     </Modal>
   </div>
 </template>

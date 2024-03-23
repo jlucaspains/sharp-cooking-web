@@ -14,6 +14,14 @@ export async function createRecipe(page: Page, id: number, title: string, rating
     "Preheat oven at 420F",
     "Bake for 30 minutes with lid on"
 ]) {
+    await createRecipeWithoutSaving(page, title, rating, ingredients, steps);
+
+    await page.getByTestId("topbar-single-button").click();
+    await expect(page).toHaveURL(new RegExp(`.*/recipe/${id}/edit`));
+}
+
+
+export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[]) {
     await page.goto('/');
     await page.locator('#headlessui-menu-button-1').click();
     await page.getByRole('menuitem', { name: 'Add manually' }).click();
@@ -36,7 +44,4 @@ export async function createRecipe(page: Page, id: number, title: string, rating
             await page.getByPlaceholder('Preheat oven to 350 F').last().press("Enter");
         }
     }
-
-    await page.getByTestId("topbar-single-button").click();
-    await expect(page).toHaveURL(new RegExp(`.*/recipe/${id}/edit`));
 }

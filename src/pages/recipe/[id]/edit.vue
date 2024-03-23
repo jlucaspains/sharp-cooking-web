@@ -703,35 +703,47 @@ function addVideo() {
       <label for="notes">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Serving Size</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.servingSize") }}</label>
           <input type="text" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.servingSize" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Calories (KCal)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.calories") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.calories" />
         </div>
         <div class="flex flex-row my-3">
-          <label class="block p-2 w-40 rounded text-white">Total fat (g)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.totalFat") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.totalFat" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Saturated fat (g)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.saturatedFat") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.saturatedFat" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Cholesterol (mg)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.transFat") }}</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.transFat" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.cholesterol") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.cholesterol" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Sodium (mg)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sodium") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sodium" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Carbohydrates (g)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.carbohydrates") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.carbohydrates" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-white">Protein (g)</label>
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.fiber") }}</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.fiber" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sugar") }}</label>
+          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sugar" />
+        </div>
+        <div class="flex my-3">
+          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.protein") }}</label>
           <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.protein" />
         </div>
       </div>

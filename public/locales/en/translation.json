@@ -109,7 +109,18 @@
                     "cropTooltip": "Crop image",
                     "removeImageTooltip": "Remove media",
                     "addImageTooltip": "Add image",
-                    "addVideoTooltip": "Add video"
+                    "addVideoTooltip": "Add video",
+                    "nutrition": "Nutrition Facts",
+                    "calories": "Calories (KCal)",
+                    "totalFat": "Total fat (g)",
+                    "saturatedFat": "Saturated fat (g)",
+                    "transFat": "Trans fat (g)",
+                    "cholesterol": "Cholesterol (mg)",
+                    "sodium": "Sodium (mg)",
+                    "carbohydrates": "Carbohydrates (g)",
+                    "fiber": "Fiber (g)",
+                    "sugar": "Sugar (g)",
+                    "protein": "Protein (g)"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -159,22 +170,6 @@
                     "action": "Print"
                 },
                 "nutrition": {
-                    "codes": {
-                        "208": "Calories",
-                        "298": "Total Fat",
-                        "606": "Saturated Fat",
-                        "605": "Trans Fat",
-                        "601": "Cholesterol",
-                        "307": "Sodium",
-                        "205": "Total carbohidrates",
-                        "291": "Fiber",
-                        "269.3": "Total Sugar",
-                        "203": "Protein",
-                        "328": "Vitamin D",
-                        "301": "Calcium",
-                        "303": "Iron",
-                        "306": "Potassium"
-                    },
                     "title": "Nutrition Facts",
                     "servingsPerRecipe": "Servings per recipe",
                     "amountPerServing": "Amount per serving",
