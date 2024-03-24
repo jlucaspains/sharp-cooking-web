@@ -1,0 +1,4 @@
+POST http://localhost:7071/api/lookup-ingredients
+Content-Type: application/json
+
+["bread flour", "eggs"]

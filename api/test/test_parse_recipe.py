@@ -28,6 +28,15 @@ def test_recipe_parse():
     
     assert parsed_response["image"].startswith("http")
 
+    assert parsed_response["language"] == "en"
+
+    assert parsed_response["nutrients"]["calories"] == 423
+    assert parsed_response["nutrients"]["totalFat"] == 19
+    assert parsed_response["nutrients"]["saturatedFat"] == 6
+    assert parsed_response["nutrients"]["carbohydrates"] == 39
+    assert parsed_response["nutrients"]["protein"] == 26
+    assert parsed_response["nutrients"]["cholesterol"] == 83
+    assert parsed_response["nutrients"]["sodium"] == 832
 
 def test_recipe_parse_download_image():
     request = func.HttpRequest(

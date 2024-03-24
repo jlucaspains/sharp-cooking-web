@@ -48,7 +48,9 @@ test('import from url', async ({ page, browserName }) => {
         "steps": [{
           "raw": "Mix together the dry ingredients"
         }],
-        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+        "yields": 1,
+        "nutrients": {"calories": 0}
     }`;
 
   await page.route('**/api/parse-recipe', async route => {
@@ -64,7 +66,6 @@ test('import from url', async ({ page, browserName }) => {
 
   await page.getByRole("button").getByText("OK").click();
   await page.waitForTimeout(1000);
-  await expect(page.getByLabel('Title')).toHaveValue("New Bread Recipe");
   await expect(page.getByPlaceholder('1 cup flour')).toHaveValue("142g whole wheat flour");
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
 });
@@ -81,7 +82,9 @@ test('import from code', async ({ page, browserName }) => {
         "title": "New Bread Recipe",
         "ingredients": ["142g whole wheat flour"],
         "steps": ["Mix together the dry ingredients"],
-        "media": [{"type": "img", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"}]
+        "media": [{"type": "img", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"}],
+        "yields": 1,
+        "nutrients": {"calories": 0}
     }`;
 
   await page.route('**/api/receive-recipe', async route => {

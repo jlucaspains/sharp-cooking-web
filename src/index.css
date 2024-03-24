@@ -22,6 +22,6 @@ body {
   }
 }
 
-input[type="text"], input[type="number"], textarea {
+input[type="text"], input[type="number"], input[type="url"],input[type="search"], textarea {
   border-width: 1px;
 }

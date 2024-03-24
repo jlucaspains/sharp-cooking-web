@@ -66,7 +66,9 @@
             "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
             "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas",
             "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",
-            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com a Política de privacidade do Sharp Cooking."
+            "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com a Política de privacidade do Sharp Cooking.",
+            "enableNutritionFacts": "Ativar informações nutricionais (preview)",
+            "enableNutritionFactsDescription": "Permite que receitas importadas ou inseridas com informações nutricionais exibam um rótulo de informações nutricionais."
         },
         "recipe": {
             "id": {
@@ -109,7 +111,19 @@
                     "cropTooltip": "Crop imagem",
                     "removeImageTooltip": "Remover media",
                     "addImageTooltip": "Adicionar imagem",
-                    "addVideoTooltip": "Adicionar video"
+                    "addVideoTooltip": "Adicionar video",
+                    "nutrition": "Informação Nutricional",
+                    "servingSize": "Porção",
+                    "calories": "Valor Energético (KCal)",
+                    "totalFat": "Gorduras totais (g)",
+                    "saturatedFat": "Gorduras saturadas (g)",
+                    "transFat": "Gorduras trans (g)",
+                    "cholesterol": "Colesterol (mg)",
+                    "sodium": "Sódio (mg)",
+                    "carbohydrates": "Carboidratos (g)",
+                    "fiber": "Fibra alimentar (g)",
+                    "sugar": "Açúcares (g)",
+                    "protein": "Proteínas (g)"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
@@ -153,10 +167,40 @@
                     "keepScreenOnTooltip": "Ativar/Desativar tela always on",
                     "multiplierTooltip": "Aplicar multiplicador",
                     "startTimeTooltip": "Aplicar hora de início",
-                    "printTooltip": "Imprimir"
+                    "printTooltip": "Imprimir",
+                    "noNutritionFacts": "Esta receita não contém informações nutricionais disponíveis."
                 },
                 "print": {
                     "action": "Imprimir"
+                },
+                "nutrition": {
+                    "title": "Informação Nutricional",
+                    "servingsPerRecipe": "Porções por receita",
+                    "amountPerServing": "Quantidade por porção",
+                    "calories": "Valor Energético",
+                    "dailyValue": "Valor Diário",
+                    "totalFat": "Gorduras totais ",
+                    "saturatedFat": "Gorduras saturadas ",
+                    "trans": "Gorduras trans",
+                    "fat": "",
+                    "cholesterol": "Colesterol ",
+                    "sodium": "Sódio ",
+                    "totalCarbohydrates": "Carboidratos totais ",
+                    "dietaryFiber": "Fibra alimentar ",
+                    "sugars": "Açúcares totais ",
+                    "includes": "Inclui",
+                    "addedSugars": "Açúcares adicionados ",
+                    "protein": "Proteínas ",
+                    "gramsAcronym": "g",
+                    "grams": " gramas",
+                    "miligramsAcronym": "mg",
+                    "miligrams": " miligramas",
+                    "microgramAcronym": "mcg",
+                    "micrograms": " microgramas",
+                    "servingSize": "Porção",
+                    "unsaturatedFat": "Gorduras insaturadas ",
+                    "footNote": "A % do valor diário (DV) informa quanto um nutriente em uma porção de alimento contribui para uma dieta diária. 2.000 calorias por dia são usadas para aconselhamento nutricional geral.",
+                    "ingredient": "INGREDIENTES:"
                 }
             },
             "importBackup": {

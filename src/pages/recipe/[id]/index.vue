@@ -23,6 +23,7 @@ import ImageGallery from "../../../components/ImageGallery.vue";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
 import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
+import NutritionFacts from "../../../components/NutritionFacts.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -60,11 +61,13 @@ const isBusy = ref(false);
 const isShareOptionsModalOpen = ref(false);
 const shareCode = ref("");
 const isInstructionDetailsModalOpen = ref(false);
+const isNutritionFactsModalOpen = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
+let enableNutritionFacts = false;
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -103,6 +106,8 @@ onMounted(async () => {
   defaultTimeSetting = await getSetting("StepsInterval", "5");
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
+  const enableNutritionFactsString = await getSetting("EnableNutritionFacts", "false");
+  enableNutritionFacts = enableNutritionFactsString == "true";
 
   const currentTime = new Date();
   prepareDisplay(recipe, currentTime);
@@ -286,6 +291,10 @@ function printItem() {
   router.push(`/recipe/${id.value}/print`);
 }
 
+function showNutrition() {
+  isNutritionFactsModalOpen.value = true;
+}
+
 function changeTime() {
   const date = new Date();
   const hours = date.getHours().toString().padStart(2, "0");
@@ -451,9 +460,24 @@ function showIngredientDetails(item: IngredientDisplay) {
   selectedIngredient.value = item;
   isIngredientDetailsModalOpen.value = true;
 }
+
 function showInstructionDetails(item: InstructionDisplay) {
   selectedInstruction.value = item;
   isInstructionDetailsModalOpen.value = true;
+}
+
+function nutritionHasValues(): boolean {
+  return item.value.nutrition.calories > 0
+    || item.value.nutrition.totalFat > 0
+    || item.value.nutrition.saturatedFat > 0
+    || item.value.nutrition.unsaturatedFat > 0
+    || item.value.nutrition.transFat > 0
+    || item.value.nutrition.carbohydrates > 0
+    || item.value.nutrition.sugar > 0
+    || item.value.nutrition.cholesterol > 0
+    || item.value.nutrition.sodium > 0
+    || item.value.nutrition.protein > 0
+    || item.value.nutrition.fiber > 0;
 }
 </script>
 
@@ -511,7 +535,8 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " :title="t('pages.recipe.id.index.keepScreenOnTooltip')" data-testid="toggle-screen-button" @click="toggleScreenLight">
+        " :title="t('pages.recipe.id.index.keepScreenOnTooltip')" data-testid="toggle-screen-button"
+        @click="toggleScreenLight">
         <svg class="h-5 w-5 text-white m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -529,7 +554,8 @@ function showInstructionDetails(item: InstructionDisplay) {
           shadow-md
           hover:shadow-lg
           transition duration-150 ease-in-out
-        " :title="t('pages.recipe.id.index.multiplierTooltip')" data-testid="multiplier-button" @click="changeMultiplier">
+        " :title="t('pages.recipe.id.index.multiplierTooltip')" data-testid="multiplier-button"
+        @click="changeMultiplier">
         <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 3 21 3 21 9" />
@@ -579,6 +605,27 @@ function showInstructionDetails(item: InstructionDisplay) {
           <rect x="7" y="13" width="10" height="8" rx="2" />
         </svg>
       </button>
+      <button v-if="enableNutritionFacts" class="
+          w-12
+          h-12
+          m-1
+          rounded-full
+          bg-theme-primary
+          hover:bg-theme-secondary
+          focus:bg-theme-secondary
+          focus:shadow-lg
+          shadow-md
+          hover:shadow-lg
+          transition duration-150 ease-in-out
+        " :title="t('pages.recipe.id.index.printTooltip')" data-testid="nutrition-button" @click="showNutrition">
+
+        <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M20,10C22,13 17,22 15,22C13,22 13,21 12,21C11,21 11,22 9,22C7,22 2,13 4,10C6,7 9,7 11,8V5C5.38,8.07 4.11,3.78 4.11,3.78C4.11,3.78 6.77,0.19 11,5V3H13V8C15,7 18,7 20,10Z" />
+        </svg>
+
+      </button>
     </div>
     <div class="grid grid-cols-12 w-full mt-7">
       <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
@@ -605,8 +652,8 @@ function showInstructionDetails(item: InstructionDisplay) {
           {{ parseTime(displayItem.startTime) }}
         </div>
         <div class="-ml-3.5 mt-3">
-          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
+          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
@@ -653,8 +700,8 @@ function showInstructionDetails(item: InstructionDisplay) {
       <input @keyup.enter="applyMultiplier" data-testid="multiplier-value" type="number" v-model="newMultiplier"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
-    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false" :title="t('pages.recipe.id.index.startTimeTitle')"
-      :buttons="[
+    <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
+      :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
         {
           title: t('general.cancel'),
           action: () => {
@@ -695,7 +742,7 @@ function showInstructionDetails(item: InstructionDisplay) {
       ]">
       <div class="dark:text-white" v-if="selectedIngredient.minQuantity != selectedIngredient.maxQuantity">{{
         t("pages.recipe.id.index.ingredientDetailsQuantity") }} {{
-    selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
+        selectedIngredient.minQuantity }} - {{ selectedIngredient.maxQuantity }}</div>
       <div class="dark:text-white" v-else>{{ t("pages.recipe.id.index.ingredientDetailsQuantity") }}{{ }} {{
         selectedIngredient.quantityValue }}</div>
       <div class="dark:text-white">{{ t("pages.recipe.id.index.ingredientDetailsUOM") }} {{ selectedIngredient.unit }}
@@ -761,6 +808,18 @@ function showInstructionDetails(item: InstructionDisplay) {
           </tr>
         </table>
       </div>
+    </Modal>
+    <Modal :isOpen="isNutritionFactsModalOpen" @closed="isNutritionFactsModalOpen = false" title="" :buttons="[
+        {
+          title: t('general.ok'),
+          action: () => {
+            isNutritionFactsModalOpen = false;
+          },
+        }
+      ]">
+      <NutritionFacts v-if="nutritionHasValues()" class="mx-auto" :nutrition="item.nutrition"
+        :serving-per-container="item.nutrition.servingSize" item-name=""></NutritionFacts>
+      <span class="dark:text-white text-black" v-else>{{ t("pages.recipe.id.index.noNutritionFacts") }}</span>
     </Modal>
   </div>
 </template>

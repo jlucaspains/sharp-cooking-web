@@ -11,13 +11,12 @@ export class Recipe {
     title!: string;
     score!: number;
     ingredients!: string[];
-    // parsedIngredients?: Ingredient[];
     steps!: string[];
-    // parsedSteps?: Step[];
     notes!: string;
     multiplier: number = 1;
     changedOn!: string;
     source!: string;
+    nutrition!: RecipeNutrition;
 }
 
 export class RecipeImage {
@@ -30,4 +29,11 @@ export class RecipeMedia {
     constructor(public recipeId: number, public type: string, public url: string) { }
 
     id?: number;
+}
+
+export class RecipeNutrition {
+    constructor(public servingSize: number, public calories: number, public totalFat: number, public saturatedFat: number,
+        public unsaturatedFat: number, public transFat: number, public carbohydrates: number,
+        public sugar: number, public cholesterol: number, public sodium: number,
+        public protein: number, public fiber: number) { }
 }

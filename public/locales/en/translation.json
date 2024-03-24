@@ -66,7 +66,9 @@
             "enableYoutubeVideos": "Enable YouTube videos (preview)",
             "enableYoutubeVideosDescription": "Allows for adding YouTube videos to recipes in addition to images",
             "enableCloudShare": "Enable cloud share (preview)",
-            "enableCloudShareDescription": "Allows for sharing recipes via cloud with a code. Shared recipes are available for 1 hour for free. By enabling this feature, you agree to the Sharp Cooking Privacy Policy."
+            "enableCloudShareDescription": "Allows for sharing recipes via cloud with a code. Shared recipes are available for 1 hour for free. By enabling this feature, you agree to the Sharp Cooking Privacy Policy.",
+            "enableNutritionFacts": "Enable nutrition labels (preview)",
+            "enableNutritionFactsDescription": "Allows for recipes imported or inputted with nutrition facts to display a nutrition facts label."
         },
         "recipe": {
             "id": {
@@ -109,7 +111,19 @@
                     "cropTooltip": "Crop image",
                     "removeImageTooltip": "Remove media",
                     "addImageTooltip": "Add image",
-                    "addVideoTooltip": "Add video"
+                    "addVideoTooltip": "Add video",
+                    "nutrition": "Nutrition Facts",
+                    "servingSize": "Servings",
+                    "calories": "Calories (KCal)",
+                    "totalFat": "Total fat (g)",
+                    "saturatedFat": "Saturated fat (g)",
+                    "transFat": "Trans fat (g)",
+                    "cholesterol": "Cholesterol (mg)",
+                    "sodium": "Sodium (mg)",
+                    "carbohydrates": "Carbohydrates (g)",
+                    "fiber": "Fiber (g)",
+                    "sugar": "Sugar (g)",
+                    "protein": "Protein (g)"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -153,10 +167,40 @@
                     "keepScreenOnTooltip": "Toggle keep screen on/off",
                     "multiplierTooltip": "Set multiplier",
                     "startTimeTooltip": "Set start time",
-                    "printTooltip": "Print"
+                    "printTooltip": "Print",
+                    "noNutritionFacts": "This recipe does not have nutrition facts available."
                 },
                 "print": {
                     "action": "Print"
+                },
+                "nutrition": {
+                    "title": "Nutrition Facts",
+                    "servingsPerRecipe": "Servings per recipe",
+                    "amountPerServing": "Amount per serving",
+                    "calories": "Calories",
+                    "dailyValue": "Daily Value",
+                    "totalFat": "Total Fat ",
+                    "saturatedFat": "Saturated Fat ",
+                    "trans": "Trans",
+                    "fat": "fat ",
+                    "cholesterol": "Cholesterol ",
+                    "sodium": "Sodium ",
+                    "totalCarbohydrates": "Total Carbohydrates ",
+                    "dietaryFiber": "Dietary Fiber ",
+                    "sugars": "Sugars ",
+                    "includes": "Includes",
+                    "addedSugars": "Added Sugars ",
+                    "protein": "Protein ",
+                    "gramsAcronym": "g",
+                    "grams": " grams",
+                    "miligramsAcronym": "mg",
+                    "miligrams": " milligrams",
+                    "microgramAcronym": "mcg",
+                    "micrograms": " micrograms",
+                    "servingSize": "Serving Size",
+                    "unsaturatedFat": "Unsaturated Fat ",
+                    "footNote": "The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2000 calories a day is used for general nutrition advice.",
+                    "ingredient": "INGREDIENTS:"
                 }
             },
             "importBackup": {
