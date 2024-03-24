@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { createRecipeWithoutSaving } from './helpers';
 
+test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+        window.localStorage.setItem("DoNotAskToInstall", "true");
+    });
+});
+
 async function enableNutritionFacts(page: any) {
     await page.goto('#/options');
     await page.getByTestId('enable-nutrition-facts-toggle').click();
@@ -52,7 +58,7 @@ test('import from url with nutrition facts', async ({ page, browserName }) => {
 
 test('add new recipe with nutrition facts', async ({ page }) => {
     await enableNutritionFacts(page);
-    
+
     await createRecipeWithoutSaving(page, "Bread 1", 5, [
         "1000g flour",
         "700g water",
