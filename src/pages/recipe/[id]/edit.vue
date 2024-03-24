@@ -784,7 +784,7 @@ function addVideo() {
       },
     ]">
       <input type="url" v-model="importRecipeUrl" data-testid="import-url"
-        class="block my-2 p-2 w-full rounded text-black" />
+        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
     </Modal>
     <Modal :isOpen="isAddVideoModalOpen" @closed="isAddVideoModalOpen = false"
       :title="t('pages.recipe.id.edit.addVideoTitle')" :buttons="[
@@ -804,7 +804,7 @@ function addVideo() {
       },
     ]">
       <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
-        class="block my-2 p-2 w-full rounded text-black" />
+        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
     <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
@@ -824,7 +824,7 @@ function addVideo() {
         action: importRecipeFromCode,
       },
     ]">
-      <input v-model="importRecipeCode" data-testid="import-code" class="block my-2 p-2 w-full rounded text-black" />
+      <input v-model="importRecipeCode" data-testid="import-code" class="block my-2 p-2 w-full rounded text-black shadow-sm" />
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

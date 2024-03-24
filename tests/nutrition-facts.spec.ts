@@ -109,3 +109,29 @@ test('add new recipe with nutrition facts', async ({ page }) => {
     await expect(page.getByTestId('sugarDv')).toHaveText("16%");
     await expect(page.getByTestId('proteinValue')).toHaveText("17g grams");
 });
+
+test('add new recipe without nutrition facts', async ({ page }) => {
+    await enableNutritionFacts(page);
+
+    await createRecipeWithoutSaving(page, "Bread 1", 5, [
+        "1000g flour",
+        "700g water",
+        "15g salt",
+    ], [
+        "Perform first set of folds and wait 15 minutes",
+        "Perform second set of folds and wait 15 minutes",
+        "Perform third set of folds",
+        "Ferment for 12 hours",
+        "Prepare boule and set in basket",
+        "Ferment for 2 hours",
+        "Preheat oven at 420F",
+        "Bake for 30 minutes with lid on"
+    ]);
+
+    await page.getByTestId("topbar-single-button").click();
+    await expect(page).toHaveURL(new RegExp(`.*/recipe/${2}/edit`));
+
+    await page.goto('#/recipe/2');
+    await page.getByTestId('nutrition-button').click();
+    await expect(page.getByText('This recipe does not have')).toHaveText('This recipe does not have nutrition facts available.');
+});

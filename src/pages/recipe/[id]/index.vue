@@ -460,9 +460,24 @@ function showIngredientDetails(item: IngredientDisplay) {
   selectedIngredient.value = item;
   isIngredientDetailsModalOpen.value = true;
 }
+
 function showInstructionDetails(item: InstructionDisplay) {
   selectedInstruction.value = item;
   isInstructionDetailsModalOpen.value = true;
+}
+
+function nutritionHasValues(): boolean {
+  return item.value.nutrition.calories > 0
+    || item.value.nutrition.totalFat > 0
+    || item.value.nutrition.saturatedFat > 0
+    || item.value.nutrition.unsaturatedFat > 0
+    || item.value.nutrition.transFat > 0
+    || item.value.nutrition.carbohydrates > 0
+    || item.value.nutrition.sugar > 0
+    || item.value.nutrition.cholesterol > 0
+    || item.value.nutrition.sodium > 0
+    || item.value.nutrition.protein > 0
+    || item.value.nutrition.fiber > 0;
 }
 </script>
 
@@ -794,8 +809,7 @@ function showInstructionDetails(item: InstructionDisplay) {
         </table>
       </div>
     </Modal>
-    <Modal :isOpen="isNutritionFactsModalOpen" @closed="isNutritionFactsModalOpen = false"
-      title="" :buttons="[
+    <Modal :isOpen="isNutritionFactsModalOpen" @closed="isNutritionFactsModalOpen = false" title="" :buttons="[
         {
           title: t('general.ok'),
           action: () => {
@@ -803,7 +817,9 @@ function showInstructionDetails(item: InstructionDisplay) {
           },
         }
       ]">
-      <NutritionFacts class="mx-auto" :nutrition="item.nutrition" :serving-per-container="item.nutrition.servingSize" item-name=""></NutritionFacts>
+      <NutritionFacts v-if="nutritionHasValues()" class="mx-auto" :nutrition="item.nutrition"
+        :serving-per-container="item.nutrition.servingSize" item-name=""></NutritionFacts>
+      <span class="dark:text-white text-black" v-else>{{ t("pages.recipe.id.index.noNutritionFacts") }}</span>
     </Modal>
   </div>
 </template>

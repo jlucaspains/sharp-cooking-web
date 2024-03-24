@@ -167,7 +167,8 @@
                     "keepScreenOnTooltip": "Ativar/Desativar tela always on",
                     "multiplierTooltip": "Aplicar multiplicador",
                     "startTimeTooltip": "Aplicar hora de início",
-                    "printTooltip": "Imprimir"
+                    "printTooltip": "Imprimir",
+                    "noNutritionFacts": "Esta receita não contém informações nutricionais disponíveis."
                 },
                 "print": {
                     "action": "Imprimir"

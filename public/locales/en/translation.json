@@ -167,7 +167,8 @@
                     "keepScreenOnTooltip": "Toggle keep screen on/off",
                     "multiplierTooltip": "Set multiplier",
                     "startTimeTooltip": "Set start time",
-                    "printTooltip": "Print"
+                    "printTooltip": "Print",
+                    "noNutritionFacts": "This recipe does not have nutrition facts available."
                 },
                 "print": {
                     "action": "Print"
