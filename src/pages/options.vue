@@ -17,6 +17,7 @@ const useFractions = ref(false);
 const enableAdvancedSearch = ref(false);
 const enableYoutubeVideos = ref(false);
 const enableCloudShare = ref(false);
+const enableNutritionFacts = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -35,12 +36,14 @@ onMounted(async () => {
   const enableAdvancedSearchValue = await getSetting("EnableAdvancedSearch", "false");
   const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
   const enableCloudShareValue = await getSetting("EnableCloudShare", "false");
+  const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   enableAdvancedSearch.value = enableAdvancedSearchValue === "true";
   enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
   enableCloudShare.value = enableCloudShareValue === "true";
+  enableNutritionFacts.value = enableNutritionFactsValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -115,6 +118,10 @@ function updateEnableYoutubeVideos() {
 
 function updateEnableCloudShare() {
   saveSetting("EnableCloudShare", `${enableCloudShare.value}`);
+}
+
+function updateEnableNutritionFacts() {
+  saveSetting("EnableNutritionFacts", `${enableNutritionFacts.value}`);
 }
 
 function showChangeLanguageModal() {
@@ -208,6 +215,16 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.enableCloudShareDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableNutritionFacts") }}</span>
+      <label data-testid="enable-nutrition-facts-toggle" class="switch float-right align-middle">
+        <input v-model="enableNutritionFacts" type="checkbox" @change="updateEnableNutritionFacts">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableNutritionFactsDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">

@@ -75,6 +75,7 @@ const addVideoUrl = ref("");
 const addVideoUrlError = ref("");
 
 let enableYoutubeVideos = false;
+let enableNutritionFacts = false;
 
 watch(
   item,
@@ -104,6 +105,9 @@ onMounted(async () => {
 
   const enableYoutubeVideosSetting = await getSetting("EnableYoutubeVideos", "false");
   enableYoutubeVideos = enableYoutubeVideosSetting == "true";
+
+  const enableNutritionFactsSetting = await getSetting("EnableNutritionFacts", "false");
+  enableNutritionFacts = enableNutritionFactsSetting == "true";
 
   if (query.value.importFromUrl == "1") {
     isImportFromUrlModalOpen.value = true;
@@ -700,51 +704,51 @@ function addVideo() {
           rounded
           text-base text-black
         " />
-      <label for="notes">{{ t("pages.recipe.id.edit.nutrition") }}</label>
-      <div class="my-3 w-full">
+      <label for="nutritionFacts" v-if="enableNutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
+      <div class="my-3 w-full" v-if="enableNutritionFacts">
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.servingSize") }}</label>
-          <input type="text" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.servingSize" />
+          <label for="servingSize" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.servingSize") }}</label>
+          <input id="servingSize" type="text" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.servingSize" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.calories") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.calories" />
+          <label for="calories" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.calories") }}</label>
+          <input id="calories" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.calories" />
         </div>
         <div class="flex flex-row my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.totalFat") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.totalFat" />
+          <label for="totalFat" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.totalFat") }}</label>
+          <input id="totalFat" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.totalFat" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.saturatedFat") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.saturatedFat" />
+          <label for="saturatedFat" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.saturatedFat") }}</label>
+          <input id="saturatedFat" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.saturatedFat" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.transFat") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.transFat" />
+          <label for="transFat" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.transFat") }}</label>
+          <input id="transFat" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.transFat" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.cholesterol") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.cholesterol" />
+          <label for="cholesterol" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.cholesterol") }}</label>
+          <input id="cholesterol" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.cholesterol" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sodium") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sodium" />
+          <label for="sodium" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sodium") }}</label>
+          <input id="sodium" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sodium" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.carbohydrates") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.carbohydrates" />
+          <label for="carbohydrates" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.carbohydrates") }}</label>
+          <input id="carbohydrates" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.carbohydrates" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.fiber") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.fiber" />
+          <label for="fiber" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.fiber") }}</label>
+          <input id="fiber" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.fiber" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sugar") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sugar" />
+          <label for="sugar" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.sugar") }}</label>
+          <input id="sugar" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.sugar" />
         </div>
         <div class="flex my-3">
-          <label class="block p-2 w-40 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.protein") }}</label>
-          <input type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.protein" />
+          <label for="protein" class="block p-2 w-52 rounded text-black dark:text-white">{{ t("pages.recipe.id.edit.protein") }}</label>
+          <input id="protein" type="number" class="block p-2 grow rounded text-black shadow-sm" v-model="item.nutrition.protein" />
         </div>
       </div>
     </div>

@@ -1,7 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { createRecipeWithoutSaving } from './helpers';
 
+async function enableNutritionFacts(page: any) {
+    await page.goto('#/options');
+    await page.getByTestId('enable-nutrition-facts-toggle').click();
+}
+
 test('import from url with nutrition facts', async ({ page, browserName }) => {
+    await enableNutritionFacts(page);
+
     test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
     const response = `
       {
@@ -30,8 +37,8 @@ test('import from url with nutrition facts', async ({ page, browserName }) => {
 
     await page.getByRole("button").getByText("OK").click();
     await page.waitForTimeout(1000);
-    
-    await expect(page.locator('div').filter({ hasText: /^Serving Size$/ }).getByRole('textbox')).toHaveValue("1");
+
+    await expect(page.locator('div').filter({ hasText: /^Servings$/ }).getByRole('textbox')).toHaveValue("1");
     await expect(page.locator('div').filter({ hasText: /^Calories \(KCal\)$/ }).getByRole('spinbutton')).toHaveValue("5");
     await expect(page.locator('div').filter({ hasText: /^Total fat \(g\)$/ }).getByRole('spinbutton')).toHaveValue("6");
     await expect(page.locator('div').filter({ hasText: /^Saturated fat \(g\)$/ }).getByRole('spinbutton')).toHaveValue("7");
@@ -44,6 +51,8 @@ test('import from url with nutrition facts', async ({ page, browserName }) => {
 });
 
 test('add new recipe with nutrition facts', async ({ page }) => {
+    await enableNutritionFacts(page);
+    
     await createRecipeWithoutSaving(page, "Bread 1", 5, [
         "1000g flour",
         "700g water",
@@ -59,7 +68,7 @@ test('add new recipe with nutrition facts', async ({ page }) => {
         "Bake for 30 minutes with lid on"
     ]);
 
-    await page.locator('div').filter({ hasText: /^Serving Size$/ }).getByRole('textbox').fill("1");
+    await page.locator('div').filter({ hasText: /^Servings$/ }).getByRole('textbox').fill("1");
     await page.locator('div').filter({ hasText: /^Calories \(KCal\)$/ }).getByRole('spinbutton').fill("10");
     await page.locator('div').filter({ hasText: /^Total fat \(g\)$/ }).getByRole('spinbutton').fill("11");
     await page.locator('div').filter({ hasText: /^Saturated fat \(g\)$/ }).getByRole('spinbutton').fill("12");
@@ -69,7 +78,7 @@ test('add new recipe with nutrition facts', async ({ page }) => {
     await page.locator('div').filter({ hasText: /^Fiber \(g\)$/ }).getByRole('spinbutton').fill("15");
     await page.locator('div').filter({ hasText: /^Sugar \(g\)$/ }).getByRole('spinbutton').fill("16");
     await page.locator('div').filter({ hasText: /^Protein \(g\)$/ }).getByRole('spinbutton').fill("17");
-    
+
     await page.getByTestId("topbar-single-button").click();
     await expect(page).toHaveURL(new RegExp(`.*/recipe/${2}/edit`));
 

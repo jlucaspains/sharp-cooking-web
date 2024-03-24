@@ -622,8 +622,8 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
           class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
       </span>
     </div>
-    <div class="nf-bar2"></div>
-    <div class="nf-vitamins">
+    <div class="nf-bar2" v-if="false"></div>
+    <div class="nf-vitamins" v-if="false">
       <div class="nf-vitamins">
         <div class="nf-vitamin-column" v-if="vitaminA.value">
           <span>Vitamin A</span> {{ vitaminA.value }}<span aria-hidden="true">IU</span>

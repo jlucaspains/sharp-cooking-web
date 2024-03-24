@@ -67,6 +67,7 @@ const { t } = useTranslation();
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
+let enableNutritionFacts = false;
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -105,6 +106,8 @@ onMounted(async () => {
   defaultTimeSetting = await getSetting("StepsInterval", "5");
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
+  const enableNutritionFactsString = await getSetting("EnableNutritionFacts", "false");
+  enableNutritionFacts = enableNutritionFactsString == "true";
 
   const currentTime = new Date();
   prepareDisplay(recipe, currentTime);
@@ -587,7 +590,7 @@ function showInstructionDetails(item: InstructionDisplay) {
           <rect x="7" y="13" width="10" height="8" rx="2" />
         </svg>
       </button>
-      <button class="
+      <button v-if="enableNutritionFacts" class="
           w-12
           h-12
           m-1
