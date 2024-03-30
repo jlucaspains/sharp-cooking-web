@@ -2,14 +2,12 @@
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
 
-azure-functions
-pint>=0.20.1
-recipe-scrapers>=14.24.0
-python-multipart>=0.0.5
-Pillow>=9.2.0
-pillow-avif-plugin>=1.4.3
-pytest
-openai
-azure-cosmos
-jsonschema
-azure-search-documents
+azure-functions~=1.18.0
+pint~=0.20.1
+recipe-scrapers~=14.24.0
+python-multipart~=0.0.5
+Pillow~=9.2.0
+pillow-avif-plugin~=1.4.3
+pytest~=8.1.1
+azure-cosmos~=4.6.0
+jsonschema~=4.21.1
