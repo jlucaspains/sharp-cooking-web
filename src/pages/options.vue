@@ -14,7 +14,6 @@ const state = useState()!;
 const router = useRouter()!;
 const version = ref("");
 const useFractions = ref(false);
-const enableAdvancedSearch = ref(false);
 const enableYoutubeVideos = ref(false);
 const enableCloudShare = ref(false);
 const enableNutritionFacts = ref(false);
@@ -33,14 +32,12 @@ onMounted(async () => {
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
-  const enableAdvancedSearchValue = await getSetting("EnableAdvancedSearch", "false");
   const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
   const enableCloudShareValue = await getSetting("EnableCloudShare", "false");
   const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
-  enableAdvancedSearch.value = enableAdvancedSearchValue === "true";
   enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
   enableCloudShare.value = enableCloudShareValue === "true";
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
@@ -106,10 +103,6 @@ function updateStepsInterval() {
 
 function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
-}
-
-function updateEnableAdvancedSearch() {
-  saveSetting("EnableAdvancedSearch", `${enableAdvancedSearch.value}`);
 }
 
 function updateEnableYoutubeVideos() {
@@ -185,16 +178,6 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.enableAdvancedSearch") }}</span>
-      <label data-testid="enable-advanced-search-toggle" class="switch float-right align-middle">
-        <input v-model="enableAdvancedSearch" type="checkbox" @change="updateEnableAdvancedSearch">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.enableAdvancedSearchDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">

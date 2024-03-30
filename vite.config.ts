@@ -15,6 +15,7 @@ export default defineConfig({
     },
     registerType: 'autoUpdate',
     manifest: {
+      id: 'lpains.sharpcooking',
       name: 'Sharp Cooking',
       short_name: 'Sharp Cooking',
       description: 'Your recipe book app',
@@ -32,29 +33,35 @@ export default defineConfig({
           type: 'image/png',
         }
       ],
-      "shortcuts": [
+      shortcuts: [
         {
-          "name": "New Manual Recipe",
-          "short_name": "New Manual Recipe",
-          "description": "Create a new recipe manually",
-          "url": "/#/recipe/0/edit?fromShortcut=1",
-          "icons": [{ "src": "/shortcut-add-manual.png", "sizes": "192x192" }]
+          name: "New Manual Recipe",
+          short_name: "New Manual Recipe",
+          description: "Create a new recipe manually",
+          url: "/#/recipe/0/edit?fromShortcut=1",
+          icons: [{ "src": "/shortcut-add-manual.png", "sizes": "192x192" }]
         },
         {
-          "name": "Import From URL",
-          "short_name": "New Recipe",
-          "description": "Create a new recipe from a URL",
-          "url": "/#/recipe/0/edit?import=1&fromShortcut=1",
-          "icons": [{ "src": "/shortcut-add-url.png", "sizes": "192x192" }]
+          name: "Import From URL",
+          short_name: "New Recipe",
+          description: "Create a new recipe from a URL",
+          url: "/#/recipe/0/edit?import=1&fromShortcut=1",
+          icons: [{ "src": "/shortcut-add-url.png", "sizes": "192x192" }]
         },
         {
-          "name": "Scan a Recipe",
-          "short_name": "New Recipe",
-          "description": "Create a new recipe by scanning from an image",
-          "url": "/#/recipe/import-ocr?fromShortcut=1",
-          "icons": [{ "src": "/shortcut-add-scan.png", "sizes": "192x192" }]
+          name: "Scan a Recipe",
+          short_name: "New Recipe",
+          description: "Create a new recipe by scanning from an image",
+          url: "/#/recipe/import-ocr?fromShortcut=1",
+          icons: [{ "src": "/shortcut-add-scan.png", "sizes": "192x192" }]
         }
-      ]
+      ],
+      launch_handler: {
+        client_mode: "focus-existing"
+      },
+      orientation: "portrait-primary",
+      categories: ["food_and_drink"],
+      dir: "ltr",
     }
   }),
   Pages({

@@ -20,7 +20,6 @@ let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
-let enableAdvancedSearch = false;
 let enableCloudShare = false;
 
 function sortByTitle(items: Array<RecipeViewModel>) {
@@ -70,8 +69,6 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 }
 
 onMounted(async () => {
-  const enableAdvancedSearchSetting = await getSetting("EnableAdvancedSearch", "false");
-  enableAdvancedSearch = enableAdvancedSearchSetting == "true";
   const enableCloudShareSetting = await getSetting("EnableCloudShare", "false");
   enableCloudShare = enableCloudShareSetting == "true";
 
@@ -261,7 +258,7 @@ function simpleSearchInText(a: string, b: string) {
       <div class="flex flex-col mb-2">
         <input ref="searchInput" type="search" data-testid="search-input" :placeholder="t('pages.index.search')"
           v-model="searchText" class="p-2 my-2 rounded text-black" />
-        <div v-if="enableAdvancedSearch" class="flex">
+        <div class="flex">
           <button type="button" data-testid="search-by-title"
             class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
             @click="setSearchType(t('pages.index.filterByTitle'))">{{ t("pages.index.filterByTitle") }}</button>
