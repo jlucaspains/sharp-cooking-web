@@ -61,8 +61,6 @@
             "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
             "enableRecipeHighlighting": "Ativar o realce da receita",
             "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa",
-            "enableAdvancedSearch": "Ativar pesquisa avançada (preview)",
-            "enableAdvancedSearchDescription": "Permite pesquisar pelo título da receita, ingredientes e etapas",
             "enableYoutubeVideos": "Ativar videos do YouTube (preview)",
             "enableYoutubeVideosDescription": "Permite adicionar vídeos do YouTube em receitas",
             "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",

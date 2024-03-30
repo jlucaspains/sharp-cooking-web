@@ -120,13 +120,7 @@ test('search simple', async ({ page, isMobile }) => {
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
-async function enableAdvancedSearch(page: any) {
-    await page.goto('#/options');
-    await page.getByTestId('enable-advanced-search-toggle').click();
-}
-
 test('search advanced by typing title', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
   await page.goto('/');
 
@@ -139,7 +133,6 @@ test('search advanced by typing title', async ({ page, isMobile }) => {
 });
 
 test('search advanced by typing ingredient', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
   await page.goto('/');
 
@@ -152,7 +145,6 @@ test('search advanced by typing ingredient', async ({ page, isMobile }) => {
 });
 
 test('search advanced by typing step', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake at 354F it!"]);
   await page.goto('/');
 
@@ -166,7 +158,6 @@ test('search advanced by typing step', async ({ page, isMobile }) => {
 
 
 test('search advanced by selecting title', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
   await page.goto('/');
 
@@ -180,7 +171,6 @@ test('search advanced by selecting title', async ({ page, isMobile }) => {
 });
 
 test('search advanced by selecting ingredient', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake it!"]);
   await page.goto('/');
 
@@ -194,7 +184,6 @@ test('search advanced by selecting ingredient', async ({ page, isMobile }) => {
 });
 
 test('search advanced by selecting step', async ({ page, isMobile }) => {
-  await enableAdvancedSearch(page);
   await createRecipe(page, 2, "Favorite cookie", 5, ["1 cookie dough"], ["Bake at 354F it!"]);
   await page.goto('/');
 
