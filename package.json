@@ -12,12 +12,12 @@
   },
   "type": "module",
   "dependencies": {
-    "@headlessui/vue": "^1.7.20",
+    "@headlessui/vue": "^1.7.21",
     "@jlucaspains/sharp-recipe-parser": "1.2.0",
     "browser-fs-access": "^0.35.0",
     "dexie": "^4.0.4",
     "fraction.js": "^4.3.7",
-    "i18next": "^23.11.2",
+    "i18next": "^23.11.3",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-http-backend": "^2.5.1",
     "i18next-vue": "^4.0.0",
@@ -25,10 +25,10 @@
     "nosleep.js": "^0.12.0",
     "notiwind": "^2.0.1",
     "tesseract.js": "^5.0.5",
-    "vue": "^3.4.23",
+    "vue": "^3.4.26",
     "vue-advanced-cropper": "^2.8.8",
     "vue-router": "4",
-    "workbox-build": "^7.0.0",
+    "workbox-build": "^7.1.0",
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
