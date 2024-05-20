@@ -18,7 +18,7 @@ body:
       value: "A bug happened!"
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: version
     attributes:
       label: Version
@@ -49,10 +49,13 @@ body:
         - MacOS
         - Windows
     validations:
-      required: true  
-  - type: checkboxes
+      required: true
+  - type: dropdown
     id: pwa
     attributes:
       label: Are you running as PWA?
       options:
-        - label: Yes
+        - Yes
+        - No
+    validations:
+      required: true
