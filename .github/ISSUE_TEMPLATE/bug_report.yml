@@ -2,14 +2,13 @@ name: Bug Report
 description: File a bug report.
 title: "[Bug]: "
 labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - octocat
+  - jlucaspains
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        Please provide the following information for us to better assist you.
   - type: textarea
     id: what-happened
     attributes:
@@ -37,6 +36,8 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
+    validations:
+      required: true
   - type: dropdown
     id: os
     attributes:
@@ -47,6 +48,8 @@ body:
         - iOS
         - MacOS
         - Windows
+    validations:
+      required: true  
   - type: checkboxes
     id: pwa
     attributes:
