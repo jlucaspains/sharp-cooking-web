@@ -68,6 +68,10 @@ const db = new RecipeDatabase();
 export async function getRecipe(id: number): Promise<Recipe | undefined> {
     const result = await db.recipes.get(id);
 
+    if (result && !result.nutrition) {
+        result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+
     return result;
 }
 
