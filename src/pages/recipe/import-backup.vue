@@ -4,10 +4,11 @@ import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
 import { saveRecipe, saveRecipeMedia } from "../../services/dataService";
 import { notify } from "notiwind";
-import { Recipe, RecipeMedia } from "../../services/recipe";
+import { Recipe, RecipeMedia, RecipeNutrition } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 import { fetchWithRetry } from "../../services/fetchWithRetry";
+import i18next from "i18next";
 
 const state = useState()!;
 const importItemsDisplay = ref([] as Array<{ isSelected: boolean, title: string }>);
@@ -34,6 +35,11 @@ function saveRecipes() {
         parsedRecipe.notes = recipe.notes;
         parsedRecipe.ingredients = recipe.ingredients.map((x: any) => x.raw || x);
         parsedRecipe.steps = recipe.steps.map((x: any) => x.raw || x);
+        parsedRecipe.multiplier = recipe.multiplier ?? 1;
+        parsedRecipe.nutrition = recipe.nutrition
+            ?? new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        parsedRecipe.language = recipe.language
+            ?? i18next.language;
 
         const id = await saveRecipe(parsedRecipe);
 
@@ -146,7 +152,7 @@ function selectAll() {
                         for="importAll">{{ t("pages.recipe.importBackup.selectFile") }}</label></li>
                 <li class="mt-1" v-for="(item, idx) in importItemsDisplay" v-bind:key="idx"><input type="checkbox"
                         :id="`import-${idx}`" v-model="item.isSelected" /> <label :for="`import-${idx}`">{{ item.title
-}}</label></li>
+                        }}</label></li>
             </ul>
         </div>
         <div class="flex mt-3" v-if="canSave">
