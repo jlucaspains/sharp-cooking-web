@@ -5,6 +5,11 @@ async function enableYoutubeVideos(page: any) {
   await page.getByTestId('enable-youtube-videos-toggle').click();
 }
 
+async function enableChangingRecipeLanguage(page: any) {
+  await page.goto('#/options');
+  await page.getByTestId('enable-recipe-language-toggle').click();
+}
+
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem("DoNotAskToInstall", "true");
@@ -126,4 +131,26 @@ test('crop image', async ({ page }) => {
   await page.getByTestId('accept-crop-button').click();
   const afterCrop = await page.locator('.list-images').getByRole("img").first().getAttribute("src");
   expect(afterCrop).toContain('data:'); // initial recipe is a file reference
+});
+
+test('change language', async ({ page }) => {
+  await enableChangingRecipeLanguage(page);
+  await page.goto('/');
+  await page.getByText('Sourdough Bread').first().click();
+  await page.getByTestId('edit-button').click();
+  await page.getByTestId('change-lang-button').click();
+  
+  expect(page.getByLabel('American English')).toBeChecked();
+
+  await page.getByLabel('Brazilian Portuguese').check();
+  await page.getByRole('button', { name: 'OK' }).click();
+  
+  await page.getByTestId("topbar-single-button").click();
+  
+  await page.goto('/');
+  await page.getByText('Sourdough Bread').first().click();
+  await page.getByTestId('edit-button').click();
+  await page.getByTestId('change-lang-button').click();
+
+  expect(page.getByLabel('Brazilian Portuguese')).toBeChecked();
 });

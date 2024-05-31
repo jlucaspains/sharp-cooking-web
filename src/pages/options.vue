@@ -219,7 +219,7 @@ async function setSelectedLanguage() {
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.enableRecipeLanguageSwitcher") }}</span>
-      <label data-testid="enable-nutrition-facts-toggle" class="switch float-right align-middle">
+      <label data-testid="enable-recipe-language-toggle" class="switch float-right align-middle">
         <input v-model="enableRecipeLanguageSwitcher" type="checkbox" @change="updateEnableRecipeLanguageSwitcher">
         <span class="slider round"></span>
       </label>
