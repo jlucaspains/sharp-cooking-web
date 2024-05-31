@@ -64,7 +64,7 @@ test('change language', async ({ page }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
-  await page.getByText('Language').click();
+  await page.getByTestId('change-lang-button').click();
   await page.getByText('Portuguese').click();
   await page.getByRole('button').getByText("OK").click();
   await page.waitForTimeout(1000);
