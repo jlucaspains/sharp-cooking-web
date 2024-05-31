@@ -167,20 +167,21 @@ function prepareDisplay(
 ): void {
   currentStartTime.value = new Date(currentTime);
   const defaultTime = parseInt(defaultTimeSetting);
+  const language = recipe.language ?? i18next.language;
 
   displayIngredients.value = recipe.ingredients.map((ingredient) =>
     prepareIngredientDisplay(
       ingredient,
       recipe.multiplier,
       useFractionsOverDecimal,
-      i18next.language,
+      language,
       true
     )
   );
   let nextTime = currentTime;
   nextTime.setTime(nextTime.getTime() + defaultTime * 60 * 1000);
   displayInstructions.value = recipe.steps.map((step) => {
-    const result = prepareStepDisplay(step, nextTime, i18next.language, true);
+    const result = prepareStepDisplay(step, nextTime, language, true);
 
     if (result.timeInSeconds > 0) {
       nextTime.setTime(nextTime.getTime() + result.timeInSeconds * 1000);
@@ -210,7 +211,7 @@ function getDisplayValues(
         recipe.multiplier,
         t("logic.ingredientRegex"),
         useFractionsOverDecimal,
-        i18next.language
+        recipe.language ?? i18next.language
       )
     ),
   });

@@ -17,6 +17,7 @@ export class Recipe {
     changedOn!: string;
     source!: string;
     nutrition!: RecipeNutrition;
+    language?: string;
 }
 
 export class RecipeImage {
