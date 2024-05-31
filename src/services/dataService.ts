@@ -201,6 +201,7 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
     model.changedOn = recipe.changedOn;
     model.source = recipe.source;
     model.steps = recipe.steps;
+    model.nutrition = recipe.nutrition;
     model.media = allMedia
         .filter(item => item.recipeId == model.id)
         .map(item => {
