@@ -68,6 +68,10 @@ const db = new RecipeDatabase();
 export async function getRecipe(id: number): Promise<Recipe | undefined> {
     const result = await db.recipes.get(id);
 
+    if (result && !result.nutrition) {
+        result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+
     return result;
 }
 
@@ -197,6 +201,7 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
     model.changedOn = recipe.changedOn;
     model.source = recipe.source;
     model.steps = recipe.steps;
+    model.nutrition = recipe.nutrition;
     model.media = allMedia
         .filter(item => item.recipeId == model.id)
         .map(item => {

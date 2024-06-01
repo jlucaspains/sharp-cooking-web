@@ -66,7 +66,9 @@
             "enableCloudShare": "Ativar compartilhamento na nuvem (preview)",
             "enableCloudShareDescription": "Permite compartilhar receitas via nuvem com código. Receitas compartilhadas estão disponíveis gratuitamente por 1 hora. Ao ativar este recurso, você concorda com a Política de privacidade do Sharp Cooking.",
             "enableNutritionFacts": "Ativar informações nutricionais (preview)",
-            "enableNutritionFactsDescription": "Permite que receitas importadas ou inseridas com informações nutricionais exibam um rótulo de informações nutricionais."
+            "enableNutritionFactsDescription": "Permite que receitas importadas ou inseridas com informações nutricionais exibam um rótulo de informações nutricionais.",
+            "enableRecipeLanguageSwitcher": "Ativar alternador de idioma da receita",
+            "enableRecipeLanguageSwitcherDescription": "Permite selecionar em qual idioma a receita está escrita. Isso influencia diretamente a análise dos ingredientes e passos da receita."
         },
         "recipe": {
             "id": {
@@ -121,7 +123,9 @@
                     "carbohydrates": "Carboidratos (g)",
                     "fiber": "Fibra alimentar (g)",
                     "sugar": "Açúcares (g)",
-                    "protein": "Proteínas (g)"
+                    "protein": "Proteínas (g)",
+                    "changeLanguage": "Alterar idioma",
+                    "changeLanguageTitle": "Alterar idioma da receita"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"

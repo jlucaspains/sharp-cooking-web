@@ -17,6 +17,7 @@ const useFractions = ref(false);
 const enableYoutubeVideos = ref(false);
 const enableCloudShare = ref(false);
 const enableNutritionFacts = ref(false);
+const enableRecipeLanguageSwitcher = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -35,12 +36,14 @@ onMounted(async () => {
   const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
   const enableCloudShareValue = await getSetting("EnableCloudShare", "false");
   const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
+  const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
   enableCloudShare.value = enableCloudShareValue === "true";
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
+  enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -117,6 +120,10 @@ function updateEnableNutritionFacts() {
   saveSetting("EnableNutritionFacts", `${enableNutritionFacts.value}`);
 }
 
+function updateEnableRecipeLanguageSwitcher() {
+  saveSetting("EnableRecipeLanguageSwitcher", `${enableRecipeLanguageSwitcher.value}`);
+}
+
 function showChangeLanguageModal() {
   selectedLanguage.value = i18next.language;
   isLanguagesModalOpen.value = true;
@@ -146,7 +153,7 @@ async function setSelectedLanguage() {
     <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="showChangeLanguageModal">
       <label class="dark:text-white">{{ t("pages.options.language") }}</label>
       <div class="dark:text-white float-right ">
-        <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+        <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <polyline points="9 6 15 12 9 18" />
@@ -208,6 +215,16 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.enableNutritionFactsDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.options.enableRecipeLanguageSwitcher") }}</span>
+      <label data-testid="enable-recipe-language-toggle" class="switch float-right align-middle">
+        <input v-model="enableRecipeLanguageSwitcher" type="checkbox" @change="updateEnableRecipeLanguageSwitcher">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.enableRecipeLanguageSwitcherDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">

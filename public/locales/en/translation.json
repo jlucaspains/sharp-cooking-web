@@ -66,7 +66,9 @@
             "enableCloudShare": "Enable cloud share (preview)",
             "enableCloudShareDescription": "Allows for sharing recipes via cloud with a code. Shared recipes are available for 1 hour for free. By enabling this feature, you agree to the Sharp Cooking Privacy Policy.",
             "enableNutritionFacts": "Enable nutrition labels (preview)",
-            "enableNutritionFactsDescription": "Allows for recipes imported or inputted with nutrition facts to display a nutrition facts label."
+            "enableNutritionFactsDescription": "Allows for recipes imported or inputted with nutrition facts to display a nutrition facts label.",
+            "enableRecipeLanguageSwitcher": "Enable recipe language switcher",
+            "enableRecipeLanguageSwitcherDescription": "Allows for selecting which language a recipe is written in. This directly influences the parsing of recipe ingredients and steps."
         },
         "recipe": {
             "id": {
@@ -121,7 +123,9 @@
                     "carbohydrates": "Carbohydrates (g)",
                     "fiber": "Fiber (g)",
                     "sugar": "Sugar (g)",
-                    "protein": "Protein (g)"
+                    "protein": "Protein (g)",
+                    "changeLanguage": "Change Language",
+                    "changeLanguageTitle": "Change recipe language"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
