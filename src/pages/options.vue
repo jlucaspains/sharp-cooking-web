@@ -14,8 +14,6 @@ const state = useState()!;
 const router = useRouter()!;
 const version = ref("");
 const useFractions = ref(false);
-const enableYoutubeVideos = ref(false);
-const enableCloudShare = ref(false);
 const enableNutritionFacts = ref(false);
 const enableRecipeLanguageSwitcher = ref(false);
 const stepsInterval = ref(5);
@@ -33,15 +31,11 @@ onMounted(async () => {
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
-  const enableYoutubeVideosValue = await getSetting("EnableYoutubeVideos", "false");
-  const enableCloudShareValue = await getSetting("EnableCloudShare", "false");
   const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
   const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
-  enableYoutubeVideos.value = enableYoutubeVideosValue === "true";
-  enableCloudShare.value = enableCloudShareValue === "true";
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
   enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
@@ -91,11 +85,11 @@ function restoreBackup() {
 }
 
 function reviewTermsOfUse() {
-  window.open("https://sharpcooking.net/termsofuse", "Terms of Use", "noopener")
+  window.open("https://sharpcookingdocs.lpains.net/termsofuse", "Terms of Use", "noopener")
 }
 
 function reviewPrivacyPolicy() {
-  window.open("https://sharpcooking.net/webprivacypolicy", "Privacy Policy", "noopener")
+  window.open("https://sharpcookingdocs.lpains.net/webprivacypolicy", "Privacy Policy", "noopener")
 }
 
 function updateStepsInterval() {
@@ -106,14 +100,6 @@ function updateStepsInterval() {
 
 function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
-}
-
-function updateEnableYoutubeVideos() {
-  saveSetting("EnableYoutubeVideos", `${enableYoutubeVideos.value}`);
-}
-
-function updateEnableCloudShare() {
-  saveSetting("EnableCloudShare", `${enableCloudShare.value}`);
 }
 
 function updateEnableNutritionFacts() {
@@ -185,26 +171,6 @@ async function setSelectedLanguage() {
       </label>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.enableYoutubeVideos") }}</span>
-      <label data-testid="enable-youtube-videos-toggle" class="switch float-right align-middle">
-        <input v-model="enableYoutubeVideos" type="checkbox" @change="updateEnableYoutubeVideos">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.enableYoutubeVideosDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.enableCloudShare") }}</span>
-      <label data-testid="enable-cloud-share-toggle" class="switch float-right align-middle">
-        <input v-model="enableCloudShare" type="checkbox" @change="updateEnableCloudShare">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.enableCloudShareDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">

@@ -20,7 +20,6 @@ let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
-let enableCloudShare = false;
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -69,9 +68,6 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 }
 
 onMounted(async () => {
-  const enableCloudShareSetting = await getSetting("EnableCloudShare", "false");
-  enableCloudShare = enableCloudShareSetting == "true";
-
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
   addOptions.value = [{
     name: "AddManual",
@@ -92,15 +88,12 @@ onMounted(async () => {
     name: "ImportFromScan",
     text: t("pages.index.importFromScan"),
     action: goToImportFromScan,
+  },
+  {
+    name: "ImportFromCloud",
+    text: t("pages.index.importFromCloud"),
+    action: goToImportFromCloud,
   }];
-
-  if (enableCloudShare) {
-    addOptions.value.push({
-      name: "ImportFromCloud",
-      text: t("pages.index.importFromCloud"),
-      action: goToImportFromCloud,
-    });
-  }
 
   state.title = t("pages.index.title");
   state.menuOptions = [
@@ -273,8 +266,8 @@ function simpleSearchInText(a: string, b: string) {
       </div>
     </TransitionRoot>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
-      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)" tabindex="0"
-        class="
+      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
+        tabindex="0" class="
           p-5
           h-60
           rounded-lg
@@ -298,12 +291,12 @@ function simpleSearchInText(a: string, b: string) {
         <div class="h-full pt-2">
           <div class="truncate inline-block" style="width: calc(100% - 35px)">
             <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
-              item.title
-            }}</span>
+      item.title
+    }}</span>
           </div>
           <div class="truncate inline-block" syle="width: 30px">
             <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score
-            }}⭐</span>
+              }}⭐</span>
           </div>
         </div>
       </div>
@@ -352,9 +345,9 @@ function simpleSearchInText(a: string, b: string) {
           <div class="px-1 py-1">
             <MenuItem :key="child.name" v-for="child in addOptions" v-slot="{ active }">
             <button @click="child.action" :class="[
-              active ? 'bg-theme-secondary text-white' : 'text-gray-900',
-              'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-            ]">
+      active ? 'bg-theme-secondary text-white' : 'text-gray-900',
+      'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+    ]">
               {{ child.text }}
             </button>
             </MenuItem>
