@@ -1,10 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-async function enableYoutubeVideos(page: any) {
-  await page.goto('#/options');
-  await page.getByTestId('enable-youtube-videos-toggle').click();
-}
-
 async function enableChangingRecipeLanguage(page: any) {
   await page.goto('#/options');
   await page.getByTestId('enable-recipe-language-toggle').click();
@@ -90,7 +85,6 @@ test('add image', async ({ page, browserName, isMobile }) => {
 });
 
 test('add video', async ({ page, browserName, isMobile }) => {
-  await enableYoutubeVideos(page);
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
