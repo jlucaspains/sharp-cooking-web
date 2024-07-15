@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getRecipe,
@@ -128,6 +128,9 @@ onMounted(async () => {
 
     item.value = recipe;
   }
+
+  await nextTick();
+  window.scrollTo(0, 0)
 });
 
 function setupMenuOptions() {
