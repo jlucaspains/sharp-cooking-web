@@ -128,6 +128,7 @@ onMounted(async () => {
 
     item.value = recipe;
   }
+
 });
 
 function setupMenuOptions() {
