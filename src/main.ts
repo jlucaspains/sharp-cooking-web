@@ -16,6 +16,15 @@ registerSW({ immediate: true, onOfflineReady() { } });
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (to.name === "recipe-id") {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({ left: 0, top: 0 })
+                }, 100)
+            })
+        }
+    }
 });
 
 const app = createApp(Suspenser);

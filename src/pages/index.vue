@@ -152,10 +152,9 @@ onMounted(async () => {
 
   window.addEventListener("scroll", onScrol)
 
-  await nextTick();
   if (state.indexScrollY > 0) {
-    window.scrollTo(0, state.indexScrollY);
-  }
+      window.scrollTo(0, state.indexScrollY);
+    }
 });
 
 onBeforeUnmount(() => {

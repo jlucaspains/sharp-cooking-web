@@ -129,8 +129,6 @@ onMounted(async () => {
     item.value = recipe;
   }
 
-  await nextTick();
-  window.scrollTo(0, 0)
 });
 
 function setupMenuOptions() {

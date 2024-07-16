@@ -15,18 +15,19 @@ onMounted(async () => {
   await i18nextPromise;
   document.body.classList.add("dark:bg-theme-gray");
   document.documentElement.lang = i18next.resolvedLanguage ?? "en";
+  window.history.scrollRestoration = "manual"
 });
 </script>
 
 <template>
   <TopBar />
-  <div :class="{'container mx-auto': state.useContainer}">
+  <div :class="{ 'container mx-auto': state.useContainer }">
     <InstallPrompt />
     <div class="mt-16 mx-4 mb-10 dark:text-white">
       <router-view v-slot="{ Component }">
         <transition mode="out-in">
-          <component :is="Component"></component>
-        </transition>
+            <component :is="Component"></component>
+          </transition>
       </router-view>
     </div>
   </div>
