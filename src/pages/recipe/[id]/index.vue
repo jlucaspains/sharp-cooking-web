@@ -152,6 +152,10 @@ function setupMenuOptions() {
           text: t("pages.recipe.id.index.shareOnline"),
           action: shareOnline,
         },
+        {
+          text: t("pages.recipe.id.index.chatWithAssistant"),
+          action: goToChat,
+        },
       ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
@@ -295,6 +299,10 @@ function printItem() {
 
 function showNutrition() {
   isNutritionFactsModalOpen.value = true;
+}
+
+function goToChat() {
+  router.push(`/recipe/${id.value}/chat`);
 }
 
 function changeTime() {

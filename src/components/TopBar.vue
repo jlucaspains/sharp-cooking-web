@@ -68,7 +68,7 @@ function goBack() {
             <Menu v-if="menuOption.children && menuOption.children.length > 0" as="div"
               class="w-8 relative inline-block text-left">
               <div>
-                <MenuButton data-testid="topbar-options" class="py-2
+                <MenuButton v-if="!menuOption.hidden" data-testid="topbar-options" class="py-2
                     inline-flex
                     w-full
                     justify-center
@@ -105,7 +105,7 @@ function goBack() {
                     focus:outline-none
                   ">
                   <div class="px-1 py-1">
-                    <MenuItem v-slot="{ active }" v-for="child in menuOption.children">
+                    <MenuItem v-slot="{ active }" v-if="!menuOption.hidden" v-for="child in menuOption.children">
                     <button @click="child.action" :class="[
                       active
                         ? 'bg-theme-secondary text-white'
