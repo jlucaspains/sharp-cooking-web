@@ -68,7 +68,7 @@ function goBack() {
             <Menu v-if="menuOption.children && menuOption.children.length > 0" as="div"
               class="w-8 relative inline-block text-left">
               <div>
-                <MenuButton v-if="!menuOption.hidden" data-testid="topbar-options" class="py-2
+                <MenuButton data-testid="topbar-options" class="py-2
                     inline-flex
                     w-full
                     justify-center
@@ -105,13 +105,13 @@ function goBack() {
                     focus:outline-none
                   ">
                   <div class="px-1 py-1">
-                    <MenuItem v-slot="{ active }" v-if="!menuOption.hidden" v-for="child in menuOption.children">
+                    <MenuItem v-slot="{ active }" v-for="child in menuOption.children">
                     <button @click="child.action" :class="[
-                      active
-                        ? 'bg-theme-secondary text-white'
-                        : 'text-gray-900',
-                      'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                    ]">
+              active
+                ? 'bg-theme-secondary text-white'
+                : 'text-gray-900',
+              'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+            ]">
                       <svg v-if="child.svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         v-html="child.svg"></svg>
@@ -187,4 +187,5 @@ function goBack() {
   100% {
     transform: translate(-50px);
   }
-}</style>
+}
+</style>

@@ -24,6 +24,7 @@ import BusyIndicator from "../../../components/BusyIndicator.vue";
 import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 import NutritionFacts from "../../../components/NutritionFacts.vue";
+import { recipeAsText } from "../../../helpers/shareHelpers";
 
 const route = useRoute();
 const router = useRouter();
@@ -335,7 +336,7 @@ async function shareAsText() {
     await navigator
       .share({
         title: item.value.title,
-        text: asText(item.value),
+        text: recipeAsText(item.value),
       })
   } else {
     notify(
@@ -347,16 +348,6 @@ async function shareAsText() {
       2000
     );
   }
-}
-
-function asText(item: RecipeViewModel) {
-  return `${item.title}
-
-${t("pages.recipe.id.index.ingredients")}:
-${item.ingredients.join("\r\n")}
-
-${t("pages.recipe.id.index.instructions")}:
-${item.steps.join("\r\n")}`;
 }
 
 async function shareAsFile() {

@@ -5,7 +5,6 @@ interface MenuOption {
     svg?: string;
     action?: (() => void) | (() => Promise<void>);
     children?: MenuOption[];
-    hidden?: boolean;
 }
 
 interface State {

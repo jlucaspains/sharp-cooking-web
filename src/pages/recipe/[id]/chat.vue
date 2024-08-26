@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, onBeforeRouteLeave } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../../../services/store";
 import {
   getRecipe,
   getSetting,
 } from "../../../services/dataService";
+import { recipeAsText } from "../../../helpers/shareHelpers";
 
 const { t } = useTranslation();
 const route = useRoute();
@@ -14,51 +15,25 @@ const state = useState()!;
 
 const scrollBox = ref(null as HTMLDivElement | null);
 
-const messages = ref([
-  {
-    role: "user",
-    content: `
-You are a helpful chef's assistant. 
+const promptTemplate = `You are a helpful chef's assistant. 
 
 You answer any questions about cooking, baking, and food. Do not answer questions that are not related to cooking, baking, and food.
 
 When you provide answers, keep them as short as possible and without explanation.
 
-The following recipe is the current users recipe:
+The following recipe is the current recipe:
 
-Sourdough Bread
+{RecipeText}`;
 
-Ingredients:
-142g whole wheat flour
-312g white bread flour
-7.1g salt
-354g purified water
-80g starter
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+  hiddenFromAssistant: boolean;
+  hiddenFromUser: boolean;
+  thinking?: boolean;
+};
 
-Instructions:
-Mix together the dry ingredients
-Dissolve the starter into water
-Add wet into dry ingredients and stir until incorporated
-Cover with plastic or airtight lid and reserve for 15 minutes
-Perform the first set of folds and reserve for another 15 minutes
-Perform the second set of folds and reserve for another 15 minutes
-Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step
-Ferment for 10-14 hours at room temperature (68F - 72F)
-Shape and proof for about 2 hours
-Bake in covered dutch oven ou La Cloche at 420F for 30 minutes
-Uncover and bake for another 15 minutes
-Let it cool completely on cooling rack before carving`,
-    hiddenFromAssistant: false,
-    hiddenFromUser: true
-  },
-  {
-    role: "assistant",
-    content: "What can I help you with?",
-    hiddenFromAssistant: true,
-    hiddenFromUser: false,
-    thinking: false
-  },
-]);
+const messages = ref([] as Message[]);
 const userQuery = ref("");
 
 const id = computed(() => parseInt(route.params.id as string));
@@ -67,9 +42,8 @@ const stopMenu = {
   svg: `<path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />`,
   action: () => {
     cancellationRequested = true;
-    controller?.abort();
-  },
-  hidden: true
+    controller?.abort("AbortError");
+  }
 };
 
 let openAIBaseApiUrl = "";
@@ -82,22 +56,50 @@ let controller: AbortController;
 onMounted(async () => {
   state.title = "Chat";
   state.useContainer = false;
-  state.menuOptions = [];
+  setMenuOptions(false);
 
-  openAIBaseApiUrl = await getSetting("OpenAIBaseApiUrl", "http://raspberrypi:11434");
+  openAIBaseApiUrl = await getSetting("OpenAIBaseApiUrl", "");
   openAIAuthorizationHeader = await getSetting("OpenAIAuthorizationHeader", "");
-  openAIModel = await getSetting("OpenAIModelName", "recipe-assistant");
+  openAIModel = await getSetting("OpenAIModelName", "");
+
+  const recipe = await getRecipe(id.value);
+
+  if (recipe != undefined) {
+    var prompt = promptTemplate.replace("{RecipeText}", recipeAsText(recipe));
+
+    messages.value = [
+      {
+        role: "user",
+        content: prompt,
+        hiddenFromAssistant: false,
+        hiddenFromUser: true
+      },
+      {
+        role: "assistant",
+        content: "What can I help you with?",
+        hiddenFromAssistant: true,
+        hiddenFromUser: false,
+        thinking: false
+      },
+    ];
+  }
 });
 
-async function askAssistant(query: string) {
-  state.menuOptions = [stopMenu];
+onBeforeRouteLeave((to, from, next) => {
+  state.useContainer = true;
+  next();
+});
+
+async function askAssistant() {
+  setMenuOptions(true);
+
   var message = {
     role: "assistant",
     content: "...",
     hiddenFromUser: false,
-    hiddenFromAssistant: false,
+    hiddenFromAssistant: true,
     thinking: true
-  };
+  } as Message;
   const newMessageIndex = messages.value.push(message) - 1;
 
   controller = new AbortController();
@@ -128,7 +130,7 @@ async function askAssistant(query: string) {
       messages.value[newMessageIndex].thinking = false;
 
       if (!response.ok) {
-        messages.value[newMessageIndex].content = "Sorry, I am unable to answer your question at the moment.";
+        messages.value[newMessageIndex].content = t("pages.chat.unableToAnswer");
         return;
       }
 
@@ -157,18 +159,27 @@ async function askAssistant(query: string) {
         }
         scrollBox.value?.scrollIntoView({ behavior: "smooth" });
       }
+      setMenuOptions(false);
     }).catch((error) => {
-      console.error('Error:', error);
-      if (error.name === 'AbortError') {
-        messages.value[newMessageIndex].content = "Ok. I won't answer that.";
+      setMenuOptions(false);
+      messages.value[newMessageIndex].thinking = false;
+      if (error === 'AbortError' || error.name === 'AbortError') {
+        messages.value[newMessageIndex].content = t("pages.chat.abortError");
       } else {
-        throw error;
+        messages.value[newMessageIndex].content = t("pages.chat.unableToAnswer");
       }
     });
-  } catch (error) {
-    console.error('Error:', error);
-    messages.value[newMessageIndex].content = "Sorry, I am unable to answer your question at the moment.";
-  } finally {
+  } catch {
+    messages.value[newMessageIndex].thinking = false;
+    messages.value[newMessageIndex].content = t("pages.chat.unableToAnswer");
+    setMenuOptions(false);
+  }
+}
+
+function setMenuOptions(isQuerying: boolean) {
+  if (isQuerying) {
+    state.menuOptions = [stopMenu];
+  } else {
     state.menuOptions = [];
   }
 }
@@ -183,7 +194,7 @@ async function sendMessage() {
   });
   userQuery.value = "";
 
-  await askAssistant(query);
+  await askAssistant();
 }
 </script>
 

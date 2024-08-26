@@ -14,8 +14,6 @@ const state = useState()!;
 const router = useRouter()!;
 const version = ref("");
 const useFractions = ref(false);
-const enableNutritionFacts = ref(false);
-const enableRecipeLanguageSwitcher = ref(false);
 const stepsInterval = ref(5);
 const stepsIntervalEditing = ref(5);
 const isStepsIntervalModalOpen = ref(false);
@@ -31,13 +29,9 @@ onMounted(async () => {
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
-  const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
-  const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
-  enableNutritionFacts.value = enableNutritionFactsValue === "true";
-  enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
@@ -102,14 +96,6 @@ function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
 }
 
-function updateEnableNutritionFacts() {
-  saveSetting("EnableNutritionFacts", `${enableNutritionFacts.value}`);
-}
-
-function updateEnableRecipeLanguageSwitcher() {
-  saveSetting("EnableRecipeLanguageSwitcher", `${enableRecipeLanguageSwitcher.value}`);
-}
-
 function showChangeLanguageModal() {
   selectedLanguage.value = i18next.language;
   isLanguagesModalOpen.value = true;
@@ -118,6 +104,10 @@ function showChangeLanguageModal() {
 async function setSelectedLanguage() {
   i18next.changeLanguage(selectedLanguage.value);
   isLanguagesModalOpen.value = false;
+}
+
+function goToPreviewFeatures() {
+  router.push("/preview-features");
 }
 </script>
 
@@ -139,8 +129,8 @@ async function setSelectedLanguage() {
     <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="showChangeLanguageModal">
       <label class="dark:text-white">{{ t("pages.options.language") }}</label>
       <div class="dark:text-white float-right ">
-        <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <polyline points="9 6 15 12 9 18" />
           </svg></button>
@@ -173,30 +163,24 @@ async function setSelectedLanguage() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.enableNutritionFacts") }}</span>
-      <label data-testid="enable-nutrition-facts-toggle" class="switch float-right align-middle">
-        <input v-model="enableNutritionFacts" type="checkbox" @change="updateEnableNutritionFacts">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.enableNutritionFactsDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.enableRecipeLanguageSwitcher") }}</span>
-      <label data-testid="enable-recipe-language-toggle" class="switch float-right align-middle">
-        <input v-model="enableRecipeLanguageSwitcher" type="checkbox" @change="updateEnableRecipeLanguageSwitcher">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.enableRecipeLanguageSwitcherDescription") }}</span>
-      </div>
-    </div>
+    
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ storageDescription }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="goToPreviewFeatures">
+      <span class="dark:text-white">{{ t("pages.options.previewFeatures") }}</span>
+      <div class="dark:text-white float-right ">
+        <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.previewFeaturesDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="takeBackup">
@@ -254,32 +238,32 @@ async function setSelectedLanguage() {
     </div>
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
       :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
-        {
-          title: t('general.cancel'),
-          action: () => isStepsIntervalModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: updateStepsInterval,
-        },
-      ]">
+      {
+        title: t('general.cancel'),
+        action: () => isStepsIntervalModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: updateStepsInterval,
+      },
+    ]">
       <input v-model.number="stepsIntervalEditing" data-testid="steps-interval-input"
         class="block my-2 p-2 w-full rounded text-black" />
     </Modal>
     <Modal :isOpen="isLanguagesModalOpen" @closed="isLanguagesModalOpen = false"
       :title="t('pages.options.languageModalTitle')" :buttons="[
-        {
-          title: t('general.cancel'),
-          action: () => isLanguagesModalOpen = false,
-        },
-        {
-          title: t('general.ok'),
-          action: setSelectedLanguage,
-        },
-      ]">
+      {
+        title: t('general.cancel'),
+        action: () => isLanguagesModalOpen = false,
+      },
+      {
+        title: t('general.ok'),
+        action: setSelectedLanguage,
+      },
+    ]">
       <div v-for="language in availableLanguages">
         <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
-        <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`)}}</label>
+        <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`) }}</label>
       </div>
     </Modal>
   </div>
