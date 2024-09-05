@@ -1,6 +1,5 @@
 import io
 from zipfile import ZipFile
-from recipe_scrapers import scrape_me
 from fractions import Fraction
 import re
 import requests
