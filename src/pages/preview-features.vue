@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useState } from "../services/store";
-import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
+import { saveSetting, getSetting } from "../services/dataService";
 import { useTranslation } from "i18next-vue";
 
 const { t, i18next } = useTranslation();
@@ -80,7 +80,7 @@ function updateOpenAIModelName() {
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.enableAiChat") }}</span>
-      <label data-testid="enable-nutrition-facts-toggle" class="switch float-right align-middle">
+      <label data-testid="enable-ai-chat-toggle" class="switch float-right align-middle">
         <input v-model="enableAiChat" type="checkbox" @change="updateEnableAiChat">
         <span class="slider round"></span>
       </label>
@@ -107,7 +107,7 @@ function updateOpenAIModelName() {
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiModelNameDescription") }}</span>
       </div>
-      <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Bearer token" class="block p-2 w-full rounded text-black shadow-sm">
+      <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name" class="block p-2 w-full rounded text-black shadow-sm">
     </div>
   </div>
 </template>

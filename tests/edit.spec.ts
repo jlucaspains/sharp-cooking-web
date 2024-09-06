@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 async function enableChangingRecipeLanguage(page: any) {
-  await page.goto('#/options');
+  await page.goto('#/preview-features');
   await page.getByTestId('enable-recipe-language-toggle').click();
 }
 

@@ -65,7 +65,7 @@ onMounted(async () => {
   const recipe = await getRecipe(id.value);
 
   if (recipe != undefined) {
-    var prompt = promptTemplate.replace("{RecipeText}", recipeAsText(recipe));
+    const prompt = promptTemplate.replace("{RecipeText}", recipeAsText(recipe));
 
     messages.value = [
       {
@@ -93,7 +93,7 @@ onBeforeRouteLeave((to, from, next) => {
 async function askAssistant() {
   setMenuOptions(true);
 
-  var message = {
+  const message = {
     role: "assistant",
     content: "...",
     hiddenFromUser: false,
