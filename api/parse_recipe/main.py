@@ -6,12 +6,11 @@ import requests
 import azure.functions as func
 from contextlib import suppress
 
-from recipe_scrapers import scrape_html, AbstractScraper
 from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
-from ..util import parse_recipe_ingredient, parse_recipe_instruction, parse_recipe_image
+from ..util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_image, get_html
 
 ureg = UnitRegistry()
 
@@ -24,7 +23,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     download_image: bool = req_body.get("downloadImage") or False
     try:
         logging.info(f"processing parse request id {correlation_id} for url: {url}")
-        scraper = get_html_from_url(url)
+        scraper = get_html(url)
         
         lang = scraper.language() or "en"
         
@@ -47,7 +46,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         with suppress(NotImplementedError):
             result["nutrients"] = parse_nutrients(scraper.nutrients())
 
-        result["image"] = parse_recipe_image(result["image"]) if download_image else result["image"]
+        result["image"] = get_recipe_image(result["image"]) if download_image else result["image"]
 
         return func.HttpResponse(json.dumps(result), status_code=200, mimetype="application/json")
     except Exception as e:
@@ -89,25 +88,3 @@ def parse_nutrient_value(value: str) -> float:
     qty = qty_re.group("Value")
 
     return float(qty) if qty else 0
-
-def get_html_from_url(url: str) -> AbstractScraper:
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "Accept-Encoding": "gzip, deflate, br, zstd",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-        "Priority": "u=0;i",
-        "Sec-Fetch-Ua": '"Microsoft Edge";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": "Linux",
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "Upgrade-Insecure-Requests": "1"
-    }
-
-    html = requests.get(url, headers=headers).content
-
-    return scrape_html(html, url, wild_mode=True)

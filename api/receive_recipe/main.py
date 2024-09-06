@@ -3,7 +3,7 @@ import json
 import json
 
 import azure.functions as func
-from azure.cosmos import errors
+from azure.cosmos import exceptions
 
 from uuid import uuid4
 from time import perf_counter
@@ -42,7 +42,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         result = json.dumps(item_clean)
 
         return func.HttpResponse(result, status_code=200, mimetype="application/json")
-    except errors.CosmosResourceNotFoundError as e:
+    except exceptions.CosmosResourceNotFoundError as e:
         logging.error(f"Failed to process share request id {correlation_id}. The id provided does not exist.")
         
         return func.HttpResponse("Could not receive the recipe because it does not exist.", status_code=404)

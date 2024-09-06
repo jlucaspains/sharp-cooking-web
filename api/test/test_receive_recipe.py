@@ -1,7 +1,7 @@
 import json
 import os
 import azure.functions as func
-from azure.cosmos import errors
+from azure.cosmos import exceptions
 
 from unittest import mock;
 
@@ -54,7 +54,7 @@ def test_receive_recipe_not_found():
     )
 
     repository = mock.MagicMock()
-    repository.read_item.side_effect = mock.Mock(side_effect=errors.CosmosResourceNotFoundError(404))
+    repository.read_item.side_effect = mock.Mock(side_effect=exceptions.CosmosResourceNotFoundError(404))
     
     mock_repository(repository)
     
