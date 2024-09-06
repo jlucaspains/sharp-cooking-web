@@ -69,6 +69,7 @@ const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
 let enableNutritionFacts = false;
+let enableAiChat = false;
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -100,16 +101,18 @@ async function deleteItem() {
 }
 
 onMounted(async () => {
-  setupMenuOptions();
-
-  const recipe = (await getRecipe(id.value)) as RecipeViewModel;
-
   defaultTimeSetting = await getSetting("StepsInterval", "5");
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
   const enableNutritionFactsString = await getSetting("EnableNutritionFacts", "false");
   enableNutritionFacts = enableNutritionFactsString == "true";
 
+  const enableAiChatString = await getSetting("EnableAiChat", "false");
+  enableAiChat = enableAiChatString == "true";
+
+  setupMenuOptions();
+
+  const recipe = (await getRecipe(id.value)) as RecipeViewModel;
   const currentTime = new Date();
   prepareDisplay(recipe, currentTime);
   display.value = getDisplayValues(recipe, currentTime);
@@ -133,7 +136,7 @@ onMounted(async () => {
 });
 
 function setupMenuOptions() {
-  state.menuOptions = [
+  let menuOptions = [
     {
       text: t("pages.recipe.id.index.more"),
       children: [
@@ -152,15 +155,18 @@ function setupMenuOptions() {
         {
           text: t("pages.recipe.id.index.shareOnline"),
           action: shareOnline,
-        },
-        {
-          text: t("pages.recipe.id.index.chatWithAssistant"),
-          action: goToChat,
-        },
+        }
       ],
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
     },
   ];
+  if (enableAiChat) {
+    menuOptions[0].children.push({
+      text: t("pages.recipe.id.index.chatWithAssistant"),
+      action: goToChat,
+    });
+  }
+  state.menuOptions = menuOptions;
 }
 
 function parseTime(date: Date): string {
