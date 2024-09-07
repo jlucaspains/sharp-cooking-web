@@ -59,12 +59,22 @@
             "storageStats": "Armazenamento",
             "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
             "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
-            "enableRecipeHighlighting": "Ativar o realce da receita",
-            "enableRecipeHighlightingDescription": "Realce quantidades de ingredientes, unidades de medida e detalhes da etapa",
+            "previewFeatures": "Recursos de visualização",
+            "previewFeaturesDescription": "Revisar e habilitar recursos que ainda estão em desenvolvimento e podem não funcionar como esperado."
+        },
+        "preview-features": {
             "enableNutritionFacts": "Ativar informações nutricionais (preview)",
             "enableNutritionFactsDescription": "Permite que receitas importadas ou inseridas com informações nutricionais exibam um rótulo de informações nutricionais.",
             "enableRecipeLanguageSwitcher": "Ativar alternador de idioma da receita",
-            "enableRecipeLanguageSwitcherDescription": "Permite selecionar em qual idioma a receita está escrita. Isso influencia diretamente a análise dos ingredientes e passos da receita."
+            "enableRecipeLanguageSwitcherDescription": "Permite selecionar em qual idioma a receita está escrita. Isso influencia diretamente a análise dos ingredientes e passos da receita.",
+            "enableAiChat": "Ativar Chat de IA",
+            "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
+            "aiChatBaseUrl": "URL Base do Chat de IA",
+            "aiChatBaseUrlDescription": "A URL base para o serviço de Chat de IA. Deve suportar a API HTTP no estilo Open AI.",
+            "aiAuthorizationHeader": "Cabeçalho de Autorização do Chat de IA",
+            "aiAuthorizationHeaderDescription": "O cabeçalho de autorização para o serviço de Chat de IA. Normalmente: Bearer <token>",
+            "aiModelName": "Nome do Modelo de IA",
+            "aiModelNameDescription": "O nome do modelo OpenAI a ser usado para o serviço de Chat de IA."
         },
         "recipe": {
             "id": {
@@ -229,6 +239,10 @@
                 "tipContent": "Garanta que pelo menos uma linha em branco existe entre os ingredientes e passos.",
                 "addContentTo": "Adicionar contento em:"
             }
+        },
+        "chat": {
+            "abortError": "Ok. Eu não vou responder essa pergunta.",
+            "unableToAnswer": "Desculpe, eu não consigo responder sua pergunta no momento."
         }
     },
     "initialRecipes": [

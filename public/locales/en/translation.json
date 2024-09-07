@@ -59,12 +59,23 @@
             "storageStats": "Storage",
             "storageNotTraceable": "Storage cannot be tracked on this device",
             "storageDescription": "Space used {{used}} of {{remaining}} available.",
-            "enableRecipeHighlighting": "Enable recipe highlighting",
-            "enableRecipeHighlightingDescription": "Highlight ingredient quantities and UOMs and step details",
-            "enableNutritionFacts": "Enable nutrition labels (preview)",
+            "previewFeatures": "Preview features",
+            "previewFeaturesDescription": "Review and enable features that are still in development and may not work as expected."
+        },
+        "preview-features": {
+            "title": "Preview Features",
+            "enableNutritionFacts": "Enable nutrition labels",
             "enableNutritionFactsDescription": "Allows for recipes imported or inputted with nutrition facts to display a nutrition facts label.",
             "enableRecipeLanguageSwitcher": "Enable recipe language switcher",
-            "enableRecipeLanguageSwitcherDescription": "Allows for selecting which language a recipe is written in. This directly influences the parsing of recipe ingredients and steps."
+            "enableRecipeLanguageSwitcherDescription": "Allows for selecting which language a recipe is written in. This directly influences the parsing of recipe ingredients and steps.",
+            "enableAiChat": "Enable AI Chat",
+            "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
+            "aiChatBaseUrl": "AI Chat Base URL",
+            "aiChatBaseUrlDescription": "The base URL for the AI Chat service. Must support Open AI style HTTP API.",
+            "aiAuthorizationHeader": "AI Chat Authorization Header",
+            "aiAuthorizationHeaderDescription": "The authorization header for the AI Chat service. Typically: Bearer <token>",
+            "aiModelName": "AI Model Name",
+            "aiModelNameDescription": "The name of the OpenAI model to use for the AI Chat service."
         },
         "recipe": {
             "id": {
@@ -166,7 +177,8 @@
                     "multiplierTooltip": "Set multiplier",
                     "startTimeTooltip": "Set start time",
                     "printTooltip": "Print",
-                    "noNutritionFacts": "This recipe does not have nutrition facts available."
+                    "noNutritionFacts": "This recipe does not have nutrition facts available.",
+                    "chatWithAssistant": "Chat with Assistant"
                 },
                 "print": {
                     "action": "Print"
@@ -229,6 +241,10 @@
                 "tipContent": "Ensure to separate individual ingredients and steps with an empty line.",
                 "addContentTo": "Add content to:"
             }
+        },
+        "chat": {
+            "abortError": "Ok. I won't answer that question.",
+            "unableToAnswer": "I'm sorry, I'm unable to answer that question right now."
         }
     },
     "initialRecipes": [

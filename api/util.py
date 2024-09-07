@@ -1,6 +1,5 @@
 import io
 from zipfile import ZipFile
-from recipe_scrapers import scrape_me
 from fractions import Fraction
 import re
 import requests
@@ -9,6 +8,7 @@ import mimetypes
 from PIL import Image
 from pint import UnitRegistry
 import pillow_avif
+from recipe_scrapers import scrape_html, AbstractScraper
 
 def parse_recipe_ingredients(text: str, ureg: UnitRegistry):
     """Parses a recipe collection of ingredientes that are formatted in a single string separated by \n
@@ -154,13 +154,36 @@ def parse_recipe_instruction(text: str, lang: str):
     
     return { "raw": text, "minutes": minutes }
 
-def parse_recipe_image(image_url: str):
+request_headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+    "Priority": "u=0;i",
+    "Sec-Fetch-Ua": '"Microsoft Edge";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Sec-Ch-Ua-Platform": "Linux",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Upgrade-Insecure-Requests": "1"
+}
+
+def get_recipe_image(image_url: str):
     """Pulls an image from a web server and formats the result in URI and base64
     Args:
         image_url (str): URL of the image to pull
     Returns:
         str: URI in base64
     """    
-    response = requests.get(image_url)
+    response = requests.get(image_url, headers=request_headers)
     parsedImage = parse_image(response.url, response.content, False, response.headers['Content-Type'])
     return parsedImage
+
+
+def get_html(url: str) -> AbstractScraper:
+    html = requests.get(url, headers=request_headers).content
+
+    return scrape_html(html, url, wild_mode=True)

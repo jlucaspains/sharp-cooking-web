@@ -107,11 +107,11 @@ function goBack() {
                   <div class="px-1 py-1">
                     <MenuItem v-slot="{ active }" v-for="child in menuOption.children">
                     <button @click="child.action" :class="[
-                      active
-                        ? 'bg-theme-secondary text-white'
-                        : 'text-gray-900',
-                      'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                    ]">
+              active
+                ? 'bg-theme-secondary text-white'
+                : 'text-gray-900',
+              'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+            ]">
                       <svg v-if="child.svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         v-html="child.svg"></svg>
@@ -187,4 +187,5 @@ function goBack() {
   100% {
     transform: translate(-50px);
   }
-}</style>
+}
+</style>

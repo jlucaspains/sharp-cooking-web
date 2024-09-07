@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 async function enableNutritionFacts(page: any) {
-    await page.goto('#/options');
+    await page.goto('#/preview-features');
     await page.getByTestId('enable-nutrition-facts-toggle').click();
 }
 
