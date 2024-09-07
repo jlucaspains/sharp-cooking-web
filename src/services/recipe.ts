@@ -32,9 +32,14 @@ export class RecipeMedia {
     id?: number;
 }
 
-export class RecipeNutrition {
+export interface Dictionary<T> {
+    [Key: string]: T;
+  }
+  
+export class RecipeNutrition implements Dictionary<number> {
     constructor(public servingSize: number, public calories: number, public totalFat: number, public saturatedFat: number,
         public unsaturatedFat: number, public transFat: number, public carbohydrates: number,
         public sugar: number, public cholesterol: number, public sodium: number,
         public protein: number, public fiber: number) { }
+    [Key: string]: number;
 }

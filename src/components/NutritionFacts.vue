@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useTranslation } from "i18next-vue";
+import { Dictionary } from "../services/recipe";
 
 const { t } = useTranslation();
-
-interface Dictionary<T> {
-  [Key: string]: T;
-}
 
 const props = defineProps<{
   nutrition: Dictionary<number>,
@@ -609,8 +606,9 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
       <span class="nf-highlight nf-pr" aria-hidden="true" data-testid="addedSugarDv">{{ addedSugar.dv }}%</span>
       <span>
         <span>{{ t('pages.recipe.id.nutrition.includes') }} </span>
-        <span itemprop="" data-testid="addedSugarValue">{{ addedSugar.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.gramsAcronym')
-            }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
+        <span itemprop="" data-testid="addedSugarValue">{{ addedSugar.value }}<span aria-hidden="true">{{
+      t('pages.recipe.id.nutrition.gramsAcronym')
+    }}</span><span class="sr-only">{{ t('pages.recipe.id.nutrition.grams') }}</span>
         </span>
         <span> {{ t('pages.recipe.id.nutrition.addedSugars') }}</span>
       </span>
@@ -631,22 +629,26 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
           <span class="nf-pr" aria-hidden="true">{{ vitaminA.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="vitaminC.value">
-          <span>Vitamin C</span> {{ vitaminC.value }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span>Vitamin C</span> {{ vitaminC.value }}<span aria-hidden="true">{{
+      t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
           <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ vitaminC.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="vitaminD.value">
-          <span>Vitamin D</span> {{ roundToSpecificDecimalPlace(vitaminD.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.microgramAcronym') }}</span>
+          <span>Vitamin D</span> {{ roundToSpecificDecimalPlace(vitaminD.value, 1) }}<span aria-hidden="true">{{
+      t('pages.recipe.id.nutrition.microgramAcronym') }}</span>
           <span class="sr-only">{{ t('pages.recipe.id.nutrition.micrograms') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ vitaminD.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="calcium.value">
-          <span>Calcium</span> {{ roundToSpecificDecimalPlace(calcium.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span>Calcium</span> {{ roundToSpecificDecimalPlace(calcium.value, 1) }}<span aria-hidden="true">{{
+      t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
           <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ calcium.dv }}%</span>
         </div>
         <div class="nf-vitamin-column" v-if="iron.value">
-          <span>Iron</span> {{ roundToSpecificDecimalPlace(iron.value, 1) }}<span aria-hidden="true">{{ t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
+          <span>Iron</span> {{ roundToSpecificDecimalPlace(iron.value, 1) }}<span aria-hidden="true">{{
+      t('pages.recipe.id.nutrition.miligramsAcronym') }}</span>
           <span class="sr-only">{{ t('pages.recipe.id.nutrition.miligrams') }}</span>
           <span class="nf-pr" aria-hidden="true">{{ iron.dv }}%</span>
         </div>
