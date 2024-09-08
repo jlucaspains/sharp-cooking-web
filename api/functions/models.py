@@ -34,7 +34,7 @@ recipeSchema = {
     "type": "object",
     "properties": {
         "title": {"type": "string", "minLength": 1},
-        "notes": {"type": ["string", "null"], "minLength": 1},
+        "notes": {"type": ["string", "null"], "minLength": 0},
         "source": {"type": ["string", "null"], "minLength": 1},
         "ingredients": {
             "type": "array",
