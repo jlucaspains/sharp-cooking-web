@@ -30,3 +30,4 @@ salt
 notebooks/**/*.csv
 notebooks/**/*.json
 notebooks/**/*.zip
+.venv
