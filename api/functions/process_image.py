@@ -7,7 +7,8 @@ from zipfile import ZipFile
 from uuid import uuid4
 from time import perf_counter
 
-from ..util import parse_image
+from .util import parse_image
+
 bp = func.Blueprint()
 
 @bp.route(route="process-image", methods=["POST"]) 

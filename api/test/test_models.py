@@ -1,5 +1,5 @@
 from jsonschema import validate
-from ..models import recipeSchema
+from ..functions.models import recipeSchema
 
 def test_recipe_schema():
     req_body = {
