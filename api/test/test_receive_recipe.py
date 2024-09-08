@@ -1,11 +1,10 @@
 import json
-import os
 import azure.functions as func
 from azure.cosmos import exceptions
 
 from unittest import mock;
 
-from ..receive_recipe.main import main, mock_repository
+from ..functions.receive_recipe import receive_recipe, mock_repository
 
 receive_url = 'api/receive-recipe'
 
@@ -31,7 +30,8 @@ def test_receive_recipe_success():
     
     mock_repository(repository)
     
-    response = main(request)
+    func_call = receive_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 200
     parsed_response = json.loads(response.get_body().decode())
@@ -58,7 +58,8 @@ def test_receive_recipe_not_found():
     
     mock_repository(repository)
     
-    response = main(request)
+    func_call = receive_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 404
 
@@ -79,7 +80,8 @@ def test_receive_recipe_exception():
     
     mock_repository(repository)
     
-    response = main(request)
+    func_call = receive_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 400
 

@@ -7,7 +7,7 @@ from azure.cosmos import exceptions
 from uuid import uuid4
 from time import perf_counter
 
-from repository import Repository
+from ..repository import Repository
 
 repository = Repository()
 bp = func.Blueprint()

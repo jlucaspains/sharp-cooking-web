@@ -11,8 +11,8 @@ from jsonschema import validate
 from uuid import uuid4
 from time import perf_counter
 
-from repository import Repository
-from models import recipeSchema
+from ..repository import Repository
+from ..models import recipeSchema
 
 repository = Repository()
 bp = func.Blueprint()

@@ -1,10 +1,9 @@
-import os
-import unittest, json, importlib
+import json
 import azure.functions as func
 
 from unittest import mock;
 
-from ..share_recipe.main import main, mock_repository
+from ..functions.share_recipe import share_recipe, mock_repository
 
 share_url = 'api/share-recipe'
 
@@ -22,7 +21,8 @@ def test_share_recipe_success():
 
     mock_repository(mock.MagicMock())
     
-    response = main(request)
+    func_call = share_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 202
     parsed_response = json.loads(response.get_body().decode())
@@ -42,7 +42,8 @@ def test_share_recipe_bad_data():
 
     mock_repository(mock.MagicMock())
     
-    response = main(request)
+    func_call = share_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 400
     assert response.get_body().decode() == "Could not share recipe because the data provided is invalid. Please try again."
@@ -59,7 +60,8 @@ def test_share_recipe_bad_data2():
 
     mock_repository(mock.MagicMock())
     
-    response = main(request)
+    func_call = share_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 400
     assert response.get_body().decode() == "Could not share recipe because the data provided is invalid. Please try again."
@@ -80,7 +82,8 @@ def test_share_recipe_internal_error():
     repository.create_item.side_effect = mock.Mock(side_effect=Exception('Test'))
     mock_repository(repository)
     
-    response = main(request)
+    func_call = share_recipe.build().get_user_function()
+    response = func_call(request)
     
     assert response.status_code == 400
     assert response.get_body().decode() == "Could share the recipe due to an internal issue. Please try again."

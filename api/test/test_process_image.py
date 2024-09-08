@@ -1,9 +1,8 @@
-import unittest, json, importlib
-import azure.functions as func
+import json
 
 from unittest import mock;
 
-from ..process_image.main import main
+from ..functions.process_image import process_image
 
 def test_process_image():
     mock_request = mock.MagicMock()
@@ -13,7 +12,8 @@ def test_process_image():
     files_mock.values.return_value = [type('',(object,),{"filename": "test_image.jpeg","stream": open("test/test_image.jpeg", "rb"),"content_type": "image/jpeg"})()]
     type(mock_request).files = mock.PropertyMock(return_value=files_mock)
     
-    response = main(mock_request)
+    func_call = process_image.build().get_user_function()
+    response = func_call(mock_request)
     
     assert response.status_code == 200
     parsed_response = json.loads(response.get_body().decode())
@@ -29,7 +29,8 @@ def test_process_image_bad_mime():
     files_mock.values.return_value = [type('',(object,),{"filename": "test_image.jpeg","stream": open("test/test_image.jpeg", "rb"),"content_type": "application/jpeg"})()]
     type(mock_request).files = mock.PropertyMock(return_value=files_mock)
     
-    response = main(mock_request)
+    func_call = process_image.build().get_user_function()
+    response = func_call(mock_request)
     
     assert response.status_code == 400
     parsed_response = response.get_body().decode()
@@ -42,7 +43,8 @@ def test_process_image_no_file():
     mock_request.method='POST'
     mock_request.url='api/process-image'
     
-    response = main(mock_request)
+    func_call = process_image.build().get_user_function()
+    response = func_call(mock_request)
     
     assert response.status_code == 400
     parsed_response = response.get_body().decode()

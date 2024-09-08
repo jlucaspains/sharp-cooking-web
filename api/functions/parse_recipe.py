@@ -10,7 +10,7 @@ from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
-from util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_image, get_html
+from ..util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_image, get_html
 
 ureg = UnitRegistry()
 bp = func.Blueprint()

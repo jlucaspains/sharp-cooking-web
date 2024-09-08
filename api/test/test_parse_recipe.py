@@ -1,7 +1,7 @@
-import unittest, json, importlib
+import json
 import azure.functions as func
 
-from ..parse_recipe.main import main
+from ..functions.parse_recipe import parse_recipe
 
 # parse recipe post method
 def test_recipe_parse():
@@ -12,9 +12,10 @@ def test_recipe_parse():
             'url': 'https://www.foodnetwork.com/recipes/rachael-ray/pork-chops-with-golden-apple-sauce-recipe-1915826',
         }).encode('utf8')
     )
-    
-    response = main(request)
 
+    func_call = parse_recipe.build().get_user_function()
+    response = func_call(request)
+    
     assert response.status_code == 200
     parsed_response = json.loads(response.get_body().decode())
     assert parsed_response["title"] == "Pork Chops with Golden Apple Sauce"
@@ -47,7 +48,9 @@ def test_recipe_parse_download_image():
             "downloadImage": True
         }).encode('utf8')
     )
-    response = main(request)
+    
+    func_call = parse_recipe.build().get_user_function()
+    response = func_call(request)
 
     assert response.status_code == 200
     parsed_response = json.loads(response.get_body().decode())
@@ -70,7 +73,9 @@ def test_recipe_parse_exception():
             "url": "https://www.foodnk.com/recipes/rachael-ray/pork-chops-with-golden-apple-sauce-recipe-1915826",
         }).encode('utf8')
     )
-    response = main(request)
+    
+    func_call = parse_recipe.build().get_user_function()
+    response = func_call(request)
 
     assert response.status_code == 400
     parsed_response = response.get_body().decode()
