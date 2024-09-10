@@ -1,5 +1,5 @@
 {
     "platform": {
-        "apiRuntime": "python:3.9"
+        "apiRuntime": "python:3.10"
       }
 }

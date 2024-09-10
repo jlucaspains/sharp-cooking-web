@@ -1,9 +1,8 @@
-import unittest, json, importlib
-import azure.functions as func
+import json
 
 from unittest import mock;
 
-from ..process_backup.main import main
+from ..functions.process_backup import process_backup
 
 def test_parse_backup():
     mock_request = mock.MagicMock()
@@ -13,7 +12,8 @@ def test_parse_backup():
     files_mock.values.return_value = [type('',(object,),{"filename": "test_backup.zip","stream": open("test/test_backup.zip", "rb"),"content_type": "application/x-zip-compressed"})()]
     type(mock_request).files = mock.PropertyMock(return_value=files_mock)
     
-    response = main(mock_request)
+    func_call = process_backup.build().get_user_function()
+    response = func_call(mock_request)
     
     assert response.status_code == 200
     parsed_response = json.loads(response.get_body().decode())
@@ -44,7 +44,8 @@ def test_parse_backup_bad_mime():
     files_mock.values.return_value = [type('',(object,),{"filename": "test_backup.zip","stream": open("test/test_backup.zip", "rb"),"content_type": "application/not-zip"})()]
     type(mock_request).files = mock.PropertyMock(return_value=files_mock)
     
-    response = main(mock_request)
+    func_call = process_backup.build().get_user_function()
+    response = func_call(mock_request)
 
     assert response.status_code == 400
     parsed_response = response.get_body().decode()
@@ -56,7 +57,8 @@ def test_parse_backup_no_file():
     mock_request.method='POST'
     mock_request.url='api/process-backup'
     
-    response = main(mock_request)
+    func_call = process_backup.build().get_user_function()
+    response = func_call(mock_request)
 
     assert response.status_code == 400
     parsed_response = response.get_body().decode()

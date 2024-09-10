@@ -1,6 +1,5 @@
 import logging
 import json
-import json
 
 import azure.functions as func
 from azure.cosmos import exceptions
@@ -8,15 +7,17 @@ from azure.cosmos import exceptions
 from uuid import uuid4
 from time import perf_counter
 
-from ..repository import Repository
+from .repository import Repository
 
 repository = Repository()
+bp = func.Blueprint()
 
 def mock_repository(mock_repository: Repository):
     global repository
     repository = mock_repository
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="receive-recipe", methods=["POST"]) 
+def receive_recipe(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 

@@ -9,11 +9,13 @@ from uuid import uuid4
 from time import perf_counter
 from pint import UnitRegistry
 
-from ..util import parse_recipe_ingredients, parse_recipe_instructions, parse_image
+from .util import parse_recipe_ingredients, parse_recipe_instructions, parse_image
 
 ureg = UnitRegistry()
+bp = func.Blueprint()
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="process-backup", methods=["POST"]) 
+def process_backup(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
     try:

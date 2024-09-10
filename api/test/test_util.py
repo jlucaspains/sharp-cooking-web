@@ -1,6 +1,6 @@
 from zipfile import ZipFile
-from ..util import parse_recipe_ingredient, parse_recipe_ingredients, parse_recipe_instruction
-from ..util import parse_recipe_instructions, replace_unicode_fractions, parse_image
+from ..functions.util import parse_recipe_ingredient, parse_recipe_ingredients, parse_recipe_instruction
+from ..functions.util import parse_recipe_instructions, replace_unicode_fractions, parse_image
 from pint import UnitRegistry
 
 test_url = "/recipe/parse"

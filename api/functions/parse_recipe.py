@@ -1,7 +1,6 @@
 import logging
 import json
 import re
-import requests
 
 import azure.functions as func
 from contextlib import suppress
@@ -10,11 +9,13 @@ from pint import UnitRegistry
 from uuid import uuid4
 from time import perf_counter
 
-from ..util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_image, get_html
+from .util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_image, get_html
 
 ureg = UnitRegistry()
+bp = func.Blueprint()
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="parse-recipe", methods=["POST"]) 
+def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
