@@ -84,8 +84,8 @@ jobs:
     env:
       BASEURL: https://delightful-flower-0c3edd710-${{github.event.number}}.centralus.2.azurestaticapps.net # sets value for URL to test
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "18"
 
@@ -104,7 +104,7 @@ jobs:
           paths: test-results/junit.xml
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
