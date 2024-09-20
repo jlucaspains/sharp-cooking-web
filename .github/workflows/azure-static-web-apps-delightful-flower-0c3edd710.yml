@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     name: API Unit Tests
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
@@ -84,8 +84,8 @@ jobs:
     env:
       BASEURL: https://delightful-flower-0c3edd710-${{github.event.number}}.centralus.2.azurestaticapps.net # sets value for URL to test
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "18"
 
