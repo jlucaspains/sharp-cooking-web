@@ -23,7 +23,7 @@ export async function createRecipe(page: Page, id: number, title: string, rating
 
 export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[]) {
     await page.goto('/');
-    await page.locator('#headlessui-menu-button-1').click();
+    await page.getByTestId('add-menu-button').click();
     await page.getByRole('menuitem', { name: 'Add manually' }).click();
     await expect(page).toHaveURL('/#/recipe/0/edit');
     await page.getByLabel('Title').fill(title);
