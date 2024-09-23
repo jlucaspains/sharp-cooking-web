@@ -14,10 +14,8 @@ Feel free to contribute with issues and pull requests. However, please keep it c
 * [Python](https://www.python.org/)
 * [Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/)
 * [Azure Static Web App API](https://learn.microsoft.com/en-us/azure/static-web-apps/apis-overview)
-* [Azure Functions with Python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=asgi%2Capplication-level&pivots=python-mode-configuration)
-* [Rewriting Sharp Cooking - The why and high level how](https://lpains.net/posts/2023-01-01-rewriting-sharp-cooking-app-part-1/)
-* [Rewriting Sharp Cooking - The tech stack](https://lpains.net/posts/2023-01-15-rewriting-sharp-cooking-app-part-2/)
-* [Rewriting Sharp Cooking - The unplanned API](https://lpains.net/posts/2023-01-29-rewriting-sharp-cooking-app-part-3/)
+* [Azure Functions with Python](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python?tabs=get-started%2Casgi%2Capplication-level&pivots=python-mode-decorators)
+* [Sharp Cooking blog posts](https://blog.lpains.net/categories/sharpcooking/)
 
 ## Running the web app
 1. If you intend to contribute back to this repository, please fork it before following the next steps.
@@ -40,7 +38,7 @@ yarn dev
 
 ## Running the API with VS Code
 1. Install the recommended extensions from ``.vscode/extensions.json``
-2. Ensure you have installed Python ``3.9.13``. You should install the version from Python's web site and not from the windows store or other alternate sources.
+2. Ensure you have installed Python ``3.10`` or later. You should install the version from Python's web site and not from the windows store or other alternate sources.
 3. See [Microsoft Quickstart](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-python?pivots=python-mode-configuration#run-the-function-locally) for how to run the function locally.
 
 ## Unit tests
