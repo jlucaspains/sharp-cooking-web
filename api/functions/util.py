@@ -186,4 +186,4 @@ def get_recipe_image(image_url: str):
 def get_html(url: str) -> AbstractScraper:
     html = requests.get(url, headers=request_headers).content
 
-    return scrape_html(html, url, wild_mode=True)
+    return scrape_html(html, url, supported_only=False)

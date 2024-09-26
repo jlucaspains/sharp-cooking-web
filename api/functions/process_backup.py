@@ -3,6 +3,7 @@ import json
 import io
 
 import azure.functions as func
+from azurefunctions.extensions.http.fastapi import Request, Response
 
 from zipfile import ZipFile
 from uuid import uuid4
@@ -15,7 +16,7 @@ ureg = UnitRegistry()
 bp = func.Blueprint()
 
 @bp.route(route="process-backup", methods=["POST"]) 
-def process_backup(req: func.HttpRequest) -> func.HttpResponse:
+def process_backup(req: Request) -> Response:
     start = perf_counter()
     correlation_id = uuid4()
     try:

@@ -84,3 +84,10 @@ lookupIngredientsSchema = {
         "type": "string",
     }
 }
+
+assistantSchema = {
+    "type": "array",
+    "items": {
+        "type": "string",
+    }
+}
