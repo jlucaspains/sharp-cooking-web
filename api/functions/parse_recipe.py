@@ -4,7 +4,6 @@ import re
 
 import azure.functions as func
 from contextlib import suppress
-from azurefunctions.extensions.http.fastapi import Response, Request, JSONResponse
 
 from pint import UnitRegistry
 from uuid import uuid4
@@ -15,12 +14,12 @@ from .util import parse_recipe_ingredient, parse_recipe_instruction, get_recipe_
 ureg = UnitRegistry()
 bp = func.Blueprint()
 
-@bp.route(route="parse-recipe", methods=[func.HttpMethod.POST]) 
-async def parse_recipe(req: Request) -> JSONResponse:
+@bp.route(route="parse-recipe", methods=["POST"]) 
+def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
-    req_body = await req.json()
+    req_body = req.get_json()
     url: str = req_body.get("url")
     download_image: bool = req_body.get("downloadImage") or False
     try:
@@ -50,11 +49,11 @@ async def parse_recipe(req: Request) -> JSONResponse:
 
         result["image"] = get_recipe_image(result["image"]) if download_image else result["image"]
 
-        return JSONResponse(content=result, status_code=200)
+        return func.HttpResponse(json.dumps(result), status_code=200, mimetype="application/json")
     except Exception as e:
         logging.error(f"Failed to process parse request id {correlation_id}. Error: {e}")
         
-        return JSONResponse(content={"errorMessage": "Could not find a recipe in the web page"}, status_code=400)
+        return func.HttpResponse("Could not find a recipe in the web page", status_code=400)
     finally:
         end = perf_counter()
         logging.info(f"Finished processing parse request id {correlation_id}. Time taken: {end - start:0.4f}s")
