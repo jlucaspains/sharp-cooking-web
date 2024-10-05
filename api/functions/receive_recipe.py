@@ -2,6 +2,7 @@ import logging
 import json
 
 import azure.functions as func
+from azurefunctions.extensions.http.fastapi import Request, Response
 from azure.cosmos import exceptions
 
 from uuid import uuid4
@@ -17,7 +18,7 @@ def mock_repository(mock_repository: Repository):
     repository = mock_repository
 
 @bp.route(route="receive-recipe", methods=["POST"]) 
-def receive_recipe(req: func.HttpRequest) -> func.HttpResponse:
+def receive_recipe(req: Request) -> Response:
     start = perf_counter()
     correlation_id = uuid4()
 
