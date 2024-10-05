@@ -6,7 +6,6 @@ import string
 import jsonschema
 
 import azure.functions as func
-from azurefunctions.extensions.http.fastapi import Request, Response
 from jsonschema import validate
 
 from uuid import uuid4
@@ -23,7 +22,7 @@ def mock_repository(mock_repository: Repository):
     repository = mock_repository
 
 @bp.route(route="share-recipe", methods=["POST"]) 
-def share_recipe(req: Request) -> Response:
+def share_recipe(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 

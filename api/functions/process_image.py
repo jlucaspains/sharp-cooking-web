@@ -2,7 +2,6 @@ import logging
 import json
 
 import azure.functions as func
-from azurefunctions.extensions.http.fastapi import Request, Response
 
 from zipfile import ZipFile
 from uuid import uuid4
@@ -13,7 +12,7 @@ from .util import parse_image
 bp = func.Blueprint()
 
 @bp.route(route="process-image", methods=["POST"]) 
-def process_image(req: Request) -> Response:
+def process_image(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
     try:
