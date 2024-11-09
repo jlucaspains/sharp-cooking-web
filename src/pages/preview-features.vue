@@ -86,6 +86,16 @@ function updateEditInSingleTextArea() {
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.preview-features.editInSingleTextArea") }}</span>
+      <label data-testid="edit-in-single-text-area-toggle" class="switch float-right align-middle">
+        <input v-model="editInSingleTextArea" type="checkbox" @change="updateEditInSingleTextArea">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.editInSingleTextAreaDescription") }}</span>
+      </div>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.enableAiChat") }}</span>
       <label data-testid="enable-ai-chat-toggle" class="switch float-right align-middle">
         <input v-model="enableAiChat" type="checkbox" @change="updateEnableAiChat">
@@ -115,16 +125,6 @@ function updateEditInSingleTextArea() {
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiModelNameDescription") }}</span>
       </div>
       <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name" class="block p-2 w-full rounded text-black shadow-sm">
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.preview-features.editInSingleTextArea") }}</span>
-      <label data-testid="edit-in-single-text-area-toggle" class="switch float-right align-middle">
-        <input v-model="editInSingleTextArea" type="checkbox" @change="updateEditInSingleTextArea">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.editInSingleTextAreaDescription") }}</span>
-      </div>
     </div>
   </div>
 </template>
