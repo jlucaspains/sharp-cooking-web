@@ -83,6 +83,9 @@ const addVideoUrl = ref("");
 const addVideoUrlError = ref("");
 const selectedLanguage = ref("");
 const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
+const editInSingleTextArea = ref(false);
+const ingredientsText = ref("");
+const stepsText = ref("");
 
 let enableNutritionFacts = false;
 let enableRecipeLanguageSwitcher = false;
@@ -118,6 +121,8 @@ onMounted(async () => {
 
   const enableRecipeLanguageSwitcherSetting = await getSetting("EnableRecipeLanguageSwitcher", "false");
   enableRecipeLanguageSwitcher = enableRecipeLanguageSwitcherSetting == "true";
+
+  editInSingleTextArea.value = (await getSetting("EditInSingleTextArea", "false")) === "true";
 
   if (query.value.importFromUrl == "1") {
     isImportFromUrlModalOpen.value = true;
@@ -168,6 +173,11 @@ onMounted(async () => {
     isDirty = false;
   }
 
+  if (editInSingleTextArea.value && recipe) {
+    ingredientsText.value = recipe.ingredients.join("\n");
+    stepsText.value = recipe.steps.join("\n");
+  }
+
   selectedLanguage.value = item.value.language ?? i18next.language;
 });
 
@@ -197,6 +207,11 @@ async function save() {
     for (const image of images.value) {
       image.recipeId = item.value.id;
     }
+  }
+
+  if (editInSingleTextArea.value) {
+    item.value.ingredients = ingredientsText.value.split("\n");
+    item.value.steps = stepsText.value.split("\n");
   }
 
   // remove proxy stuff
@@ -671,14 +686,22 @@ function changeLanguage() {
       <label>{{ t("pages.recipe.id.edit.rating") }}</label>
       <RatingPicker class="mb-2" v-model="item.score" />
       <label>{{ t("pages.recipe.id.edit.ingredients") }}</label>
-      <button class="ml-2 align-middle" type="button" :title="t('pages.recipe.id.edit.addIngredient')"
-        @click="addIngredientAt(item.ingredients.length - 1)">
+      <button v-if="!editInSingleTextArea" class="ml-2 align-middle" type="button"
+        :title="t('pages.recipe.id.edit.addIngredient')" @click="addIngredientAt(item.ingredients.length - 1)">
         <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
-      <div class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
+      <textarea v-if="editInSingleTextArea" v-model="ingredientsText" name="ingredients" id="ingredients" class="block
+          p-2
+          mb-3
+          flex-auto
+          w-full
+          bg-white
+          rounded
+          text-base text-black" rows="10"></textarea>
+      <div v-else class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
         <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')"
           v-model="item.ingredients[index]" @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
           class="block p-2 rounded flex-auto text-black shadow-sm" />
@@ -696,14 +719,22 @@ function changeLanguage() {
         </button>
       </div>
       <label>{{ t("pages.recipe.id.edit.steps") }}</label>
-      <button class="ml-2" type="button" :title="t('pages.recipe.id.edit.addStep')"
+      <button v-if="!editInSingleTextArea" class="ml-2" type="button" :title="t('pages.recipe.id.edit.addStep')"
         @click="addStepAt(item.steps.length - 1)">
         <svg class="h-4 w-4 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
-      <div class="flex my-3 w-full" v-for="(step, index) in item.steps">
+      <textarea v-if="editInSingleTextArea" v-model="stepsText" name="steps" id="steps" class="block
+          p-2
+          mb-3
+          flex-auto
+          w-full
+          bg-white
+          rounded
+          text-base text-black" rows="10"></textarea>
+      <div v-else class="flex my-3 w-full" v-for="(step, index) in item.steps">
         <input type="text" :placeholder="t('pages.recipe.id.edit.stepPlaceholder')" v-model="item.steps[index]"
           class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
         <button type="button" class="ml-2" :title="t('pages.recipe.id.edit.deleteStep')"
@@ -735,67 +766,67 @@ function changeLanguage() {
       <div class="my-3 w-full" v-if="enableNutritionFacts">
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.servingSize") }}</label>
+            t("pages.recipe.id.edit.servingSize") }}</label>
           <input id="servingSize" type="text" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.servingSize" />
         </div>
         <div class="flex my-3">
           <label for="calories" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.calories") }}</label>
+            t("pages.recipe.id.edit.calories") }}</label>
           <input id="calories" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.calories" />
         </div>
         <div class="flex flex-row my-3">
           <label for="totalFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.totalFat") }}</label>
+            t("pages.recipe.id.edit.totalFat") }}</label>
           <input id="totalFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.totalFat" />
         </div>
         <div class="flex my-3">
           <label for="saturatedFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.saturatedFat") }}</label>
+            t("pages.recipe.id.edit.saturatedFat") }}</label>
           <input id="saturatedFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.saturatedFat" />
         </div>
         <div class="flex my-3">
           <label for="transFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.transFat") }}</label>
+            t("pages.recipe.id.edit.transFat") }}</label>
           <input id="transFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.transFat" />
         </div>
         <div class="flex my-3">
           <label for="cholesterol" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.cholesterol") }}</label>
+            t("pages.recipe.id.edit.cholesterol") }}</label>
           <input id="cholesterol" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.cholesterol" />
         </div>
         <div class="flex my-3">
           <label for="sodium" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.sodium") }}</label>
+            t("pages.recipe.id.edit.sodium") }}</label>
           <input id="sodium" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.sodium" />
         </div>
         <div class="flex my-3">
           <label for="carbohydrates" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.carbohydrates") }}</label>
+            t("pages.recipe.id.edit.carbohydrates") }}</label>
           <input id="carbohydrates" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.carbohydrates" />
         </div>
         <div class="flex my-3">
           <label for="fiber" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.fiber") }}</label>
+            t("pages.recipe.id.edit.fiber") }}</label>
           <input id="fiber" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.fiber" />
         </div>
         <div class="flex my-3">
           <label for="sugar" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.sugar") }}</label>
+            t("pages.recipe.id.edit.sugar") }}</label>
           <input id="sugar" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.sugar" />
         </div>
         <div class="flex my-3">
           <label for="protein" class="block p-2 w-52 rounded text-black dark:text-white">{{
-      t("pages.recipe.id.edit.protein") }}</label>
+            t("pages.recipe.id.edit.protein") }}</label>
           <input id="protein" type="number" class="block p-2 grow rounded text-black shadow-sm"
             v-model="item.nutrition.protein" />
         </div>
@@ -803,90 +834,90 @@ function changeLanguage() {
     </div>
     <Modal :isOpen="isDirtyModalOpen" @closed="isDirtyModalOpen = false" :title="t('pages.recipe.id.edit.dirtyTitle')"
       :buttons="[
-      {
-        title: t('pages.recipe.id.edit.dirtyStay'),
-        action: () => isDirtyModalClose(false),
-      },
-      {
-        title: t('pages.recipe.id.edit.dirtyLeave'),
-        danger: true,
-        action: () => isDirtyModalClose(true),
-      },
-    ]">
+        {
+          title: t('pages.recipe.id.edit.dirtyStay'),
+          action: () => isDirtyModalClose(false),
+        },
+        {
+          title: t('pages.recipe.id.edit.dirtyLeave'),
+          danger: true,
+          action: () => isDirtyModalClose(true),
+        },
+      ]">
       <span class="dark:text-white">{{ t('pages.recipe.id.edit.dirtyContent') }}</span>
     </Modal>
     <Modal :isOpen="isImportFromUrlModalOpen" @closed="isImportFromUrlModalOpen = false"
       :title="t('pages.recipe.id.edit.importTitle')" :buttons="[
-      {
-        title: t('pages.recipe.id.edit.importFromClipboard'),
-        action: async () => {
-          await fillUrlFromClipboard('recipe');
-        }
-      },
-      {
-        title: t('general.cancel'),
-        action: () => isImportFromUrlModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: importRecipeFromUrl,
-      },
-    ]">
+        {
+          title: t('pages.recipe.id.edit.importFromClipboard'),
+          action: async () => {
+            await fillUrlFromClipboard('recipe');
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isImportFromUrlModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipeFromUrl,
+        },
+      ]">
       <input type="url" v-model="importRecipeUrl" data-testid="import-url"
         class="block my-2 p-2 w-full rounded text-black shadow-sm" />
     </Modal>
     <Modal :isOpen="isAddVideoModalOpen" @closed="isAddVideoModalOpen = false"
       :title="t('pages.recipe.id.edit.addVideoTitle')" :buttons="[
-      {
-        title: t('pages.recipe.id.edit.importFromClipboard'),
-        action: async () => {
-          await fillUrlFromClipboard('video');
-        }
-      },
-      {
-        title: t('general.cancel'),
-        action: () => isAddVideoModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: addVideo,
-      },
-    ]">
+        {
+          title: t('pages.recipe.id.edit.importFromClipboard'),
+          action: async () => {
+            await fillUrlFromClipboard('video');
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isAddVideoModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: addVideo,
+        },
+      ]">
       <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
         class="block my-2 p-2 w-full rounded text-black shadow-sm" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
     <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
       :title="t('pages.recipe.id.edit.importFromShareTitle')" :buttons="[
-      {
-        title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
-        action: async () => {
-          await fillCodeFromClipboard();
-        }
-      },
-      {
-        title: t('general.cancel'),
-        action: () => isImportFromShareModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: importRecipeFromCode,
-      },
-    ]">
+        {
+          title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
+          action: async () => {
+            await fillCodeFromClipboard();
+          }
+        },
+        {
+          title: t('general.cancel'),
+          action: () => isImportFromShareModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: importRecipeFromCode,
+        },
+      ]">
       <input v-model="importRecipeCode" data-testid="import-code"
         class="block my-2 p-2 w-full rounded text-black shadow-sm" />
     </Modal>
     <Modal :isOpen="isLanguageModalOpen" @closed="isLanguageModalOpen = false"
       :title="t('pages.recipe.id.edit.changeLanguageTitle')" :buttons="[
-      {
-        title: t('general.cancel'),
-        action: () => isLanguageModalOpen = false,
-      },
-      {
-        title: t('general.ok'),
-        action: changeLanguage,
-      },
-    ]">
+        {
+          title: t('general.cancel'),
+          action: () => isLanguageModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: changeLanguage,
+        },
+      ]">
       <div v-for="language in availableLanguages">
         <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
         <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`) }}</label>

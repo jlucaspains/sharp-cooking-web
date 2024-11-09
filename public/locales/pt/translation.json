@@ -74,7 +74,9 @@
             "aiAuthorizationHeader": "Cabeçalho de Autorização do Chat de IA",
             "aiAuthorizationHeaderDescription": "O cabeçalho de autorização para o serviço de Chat de IA. Normalmente: Bearer <token>",
             "aiModelName": "Nome do Modelo de IA",
-            "aiModelNameDescription": "O nome do modelo OpenAI a ser usado para o serviço de Chat de IA."
+            "aiModelNameDescription": "O nome do modelo OpenAI a ser usado para o serviço de Chat de IA.",
+            "editInSingleTextArea": "Habilitar editor de receitas simplificado",
+            "editInSingleTextAreaDescription": "Use uma área de texto para editar os ingredientes e outra para os passos."
         },
         "recipe": {
             "id": {
