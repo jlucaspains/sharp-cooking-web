@@ -8,6 +8,7 @@ class RecipeDatabase extends Dexie {
     public recipeImages!: Table<RecipeImage, number>;
     public recipeMedia!: Table<RecipeMedia, number>;
     public settings!: Table<Setting, string>;
+    public folders!: Table<Folder, number>;
 
     public constructor() {
         super("RecipeDatabase");
@@ -60,6 +61,13 @@ class RecipeDatabase extends Dexie {
                 recipe.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             });
         });
+        this.version(6).stores({
+            recipes: "++id,title,score,changedOn,folderId",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            folders: "++id,name,color"
+        });
     }
 }
 
@@ -75,8 +83,13 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
     return result;
 }
 
-export async function getRecipes(): Promise<Recipe[]> {
-    const result = await db.recipes.toArray();
+export async function getRecipes(folderId?: number): Promise<Recipe[]> {
+    let result;
+    if (folderId) {
+        result = await db.recipes.where("folderId").equals(folderId).toArray();
+    } else {
+        result = await db.recipes.toArray();
+    }
 
     return result;
 }
@@ -211,4 +224,30 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
         });
 
     return model;
+}
+
+export async function createFolder(name: string, color: string): Promise<number> {
+    const result = await db.folders.add({ name, color });
+    return result;
+}
+
+export async function getFolders(): Promise<Array<{ name: string, image: string }>> {
+    const folders = await db.folders.toArray();
+    const result = [];
+    for (const folder of folders) {
+        const recipe = await db.recipes.where("folderId").equals(folder.id).first();
+        if (recipe) {
+            const media = await getRecipeMedia(recipe.id || 0);
+            result.push({ name: folder.name, image: media?.url || "" });
+        }
+    }
+    return result;
+}
+
+export async function moveRecipeToFolder(recipeId: number, folderId: number): Promise<void> {
+    const recipe = await db.recipes.get(recipeId);
+    if (recipe) {
+        recipe.folderId = folderId;
+        await saveRecipe(recipe);
+    }
 }

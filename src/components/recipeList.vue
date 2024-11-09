@@ -3,11 +3,14 @@ import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeMedia, initialize, saveSetting, getSetting, getFolders } from "../services/dataService";
-import { RecipeViewModel } from "./recipe/recipeViewModel";
+import { getRecipes, getRecipeMedia, initialize, saveSetting, getSetting } from "../services/dataService";
+import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import RecipeList from "../components/recipeList.vue";
+
+const props = defineProps<{
+  folderName: string | null;
+}>();
 
 const router = useRouter();
 const { t } = useTranslation();
@@ -21,8 +24,6 @@ let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
-const foldersEnabled = ref(false);
-const folders = ref([] as Array<{ name: string, image: string }>);
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -141,7 +142,7 @@ onMounted(async () => {
     state.indexScrollY = currentValue;
   }, 200);
 
-  allRecipes = (await getRecipes()) as RecipeViewModel[];
+  allRecipes = (await getRecipes(props.folderName)) as RecipeViewModel[];
 
   for (const recipe of allRecipes) {
     const item = await getRecipeMedia(recipe.id || 0);
@@ -152,13 +153,6 @@ onMounted(async () => {
   const sortType = await getSetting("AllRecipesSort", "");
 
   items.value = await sort(sortType, allRecipes, false);
-
-  const foldersEnabledSetting = await getSetting("FoldersEnabled", "false");
-  foldersEnabled.value = foldersEnabledSetting === "true";
-
-  if (foldersEnabled.value) {
-    folders.value = await getFolders();
-  }
 
   window.addEventListener("scroll", onScrol)
 
@@ -250,10 +244,6 @@ function getSearchValue(fullValue: string, prefix: string) {
 function simpleSearchInText(a: string, b: string) {
   return a.toLowerCase().includes(b.toLowerCase());
 }
-
-function goToFolder(folderName: string) {
-  router.push(`/folder/${folderName}`);
-}
 </script>
 
 <template>
@@ -278,16 +268,41 @@ function goToFolder(folderName: string) {
         </div>
       </div>
     </TransitionRoot>
-    <div v-if="foldersEnabled">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div v-for="folder in folders" @click="goToFolder(folder.name)" class="cursor-pointer">
-          <img :src="folder.image" alt="Folder image" class="w-full h-32 object-cover rounded-lg" />
-          <div class="text-center mt-2">{{ folder.name }}</div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
+      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
+        tabindex="0" class="
+          p-5
+          h-60
+          rounded-lg
+          shadow
+          bg-white
+          dark:bg-theme-secondary-gray
+          overflow-hidden
+        ">
+        <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
+          <img alt="Recipe image" @error="item.imageAvailable = false" v-if="item.imageAvailable" :src="item.image"
+            class="object-contain" />
+          <div v-else class="bg-theme-primary h-full grid place-items-center">
+            <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          </div>
+        </div>
+        <div class="h-full pt-2">
+          <div class="truncate inline-block" style="width: calc(100% - 35px)">
+            <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
+      item.title
+    }}</span>
+          </div>
+          <div class="truncate inline-block" syle="width: 30px">
+            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score
+              }}⭐</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <RecipeList :folderName="null" />
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>

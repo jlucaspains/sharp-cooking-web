@@ -22,6 +22,7 @@ const selectedLanguage = ref("");
 const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
+const foldersEnabled = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -163,7 +164,6 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
       </div>
     </div>
-    
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
       <div>
