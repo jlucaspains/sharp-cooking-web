@@ -3,5 +3,9 @@
   "features": {
     "ghcr.io/devcontainers/features/hugo:1": {},
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {}
+  },
+  "tasks": {
+    "test": "yarn && npx playwright install chromium firefox webkit && yarn dev && npx playwright test",
+    "launch": "yarn && yarn dev"
   }
 }

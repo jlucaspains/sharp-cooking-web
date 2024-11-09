@@ -148,3 +148,41 @@ test('change language', async ({ page }) => {
 
   expect(page.getByLabel('Brazilian Portuguese')).toBeChecked();
 });
+
+test('edit ingredients and steps in single text area', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('topbar-options').click();
+  await page.getByRole('menuitem', { name: 'Options' }).click();
+  await page.getByTestId('edit-in-single-text-area-toggle').click();
+  await page.goto('/');
+  await page.getByText('Sourdough Bread').first().click();
+  await page.getByTestId('edit-button').click();
+  await page.getByLabel('Ingredients').fill('New Ingredient 1\nNew Ingredient 2');
+  await page.getByLabel('Steps').fill('New Step 1\nNew Step 2');
+  await page.getByTestId("topbar-single-button").click();
+  await page.waitForTimeout(500);
+  await page.goto('#/recipe/1');
+  expect(await page.getByText('New Ingredient 1').textContent()).toEqual("New Ingredient 1");
+  expect(await page.getByText('New Ingredient 2').textContent()).toEqual("New Ingredient 2");
+  expect(await page.getByText('New Step 1').textContent()).toEqual("New Step 1");
+  expect(await page.getByText('New Step 2').textContent()).toEqual("New Step 2");
+});
+
+test('edit ingredients and steps in multiple text boxes', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('topbar-options').click();
+  await page.getByRole('menuitem', { name: 'Options' }).click();
+  await page.getByTestId('edit-in-single-text-area-toggle').click();
+  await page.goto('/');
+  await page.getByText('Sourdough Bread').first().click();
+  await page.getByTestId('edit-button').click();
+  await page.getByPlaceholder('1 cup flour').last().press("Enter");
+  await page.getByPlaceholder('1 cup flour').last().fill("New Ingredient");
+  await page.getByPlaceholder('Preheat oven to 350 F').last().press("Enter");
+  await page.getByPlaceholder('Preheat oven to 350 F').last().fill("New Step");
+  await page.getByTestId("topbar-single-button").click();
+  await page.waitForTimeout(500);
+  await page.goto('#/recipe/1');
+  expect(await page.getByText('New Ingredient').textContent()).toEqual("New Ingredient");
+  expect(await page.getByText('New Step').textContent()).toEqual("New Step");
+});

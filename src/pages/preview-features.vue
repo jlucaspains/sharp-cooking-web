@@ -15,6 +15,7 @@ const enableAiChat = ref(false);
 const aiChatBaseUrl = ref("");
 const aiAuthorizationHeader = ref("");
 const openAIModelName = ref("");
+const editInSingleTextArea = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.preview-features.title");
@@ -23,12 +24,14 @@ onMounted(async () => {
   const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
   const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
+  const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
   
   aiChatBaseUrl.value = await getSetting("OpenAIBaseApiUrl", "");
   aiAuthorizationHeader.value = await getSetting("OpenAIAuthorizationHeader", "");
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
   enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
+  editInSingleTextArea.value = editInSingleTextAreaValue === "true";
 });
 
 function updateEnableNutritionFacts() {
@@ -53,6 +56,10 @@ function updateAiAuthorizationHeader() {
 
 function updateOpenAIModelName() {
   saveSetting("OpenAIModelName", `${openAIModelName.value}`);
+}
+
+function updateEditInSingleTextArea() {
+  saveSetting("EditInSingleTextArea", `${editInSingleTextArea.value}`);
 }
 </script>
 
@@ -108,6 +115,16 @@ function updateOpenAIModelName() {
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiModelNameDescription") }}</span>
       </div>
       <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name" class="block p-2 w-full rounded text-black shadow-sm">
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <span class="dark:text-white">{{ t("pages.preview-features.editInSingleTextArea") }}</span>
+      <label data-testid="edit-in-single-text-area-toggle" class="switch float-right align-middle">
+        <input v-model="editInSingleTextArea" type="checkbox" @change="updateEditInSingleTextArea">
+        <span class="slider round"></span>
+      </label>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.editInSingleTextAreaDescription") }}</span>
+      </div>
     </div>
   </div>
 </template>
