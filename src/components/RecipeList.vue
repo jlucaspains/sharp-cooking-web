@@ -3,14 +3,24 @@ import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeMedia, initialize, saveSetting, getSetting } from "../services/dataService";
+import { getRecipesByCategory, getRecipeMedia, initialize, saveSetting, getSetting, getRecipes } from "../services/dataService";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import RecipeCard from "./RecipeCard.vue";
 
 const props = defineProps<{
-  folderName: string | null;
+  categoryId?: number;
 }>();
+
+
+watch(
+  () => props.categoryId,
+  (newValue: number | undefined) => {
+    loadCategory();
+  }
+);
+
 
 const router = useRouter();
 const { t } = useTranslation();
@@ -99,7 +109,7 @@ onMounted(async () => {
     action: goToImportFromCloud,
   }];
 
-  state.title = t("pages.index.title");
+  // state.title = t("pages.index.title");
   state.menuOptions = [
     {
       svg: `<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />`,
@@ -142,7 +152,15 @@ onMounted(async () => {
     state.indexScrollY = currentValue;
   }, 200);
 
-  allRecipes = (await getRecipes(props.folderName)) as RecipeViewModel[];
+  loadCategory();
+});
+
+async function loadCategory() {
+  if (props.categoryId){
+    allRecipes = (await getRecipesByCategory(props.categoryId)) as RecipeViewModel[];
+  } else {
+    allRecipes = (await getRecipes()) as RecipeViewModel[];
+  }
 
   for (const recipe of allRecipes) {
     const item = await getRecipeMedia(recipe.id || 0);
@@ -157,9 +175,9 @@ onMounted(async () => {
   window.addEventListener("scroll", onScrol)
 
   if (state.indexScrollY > 0) {
-      window.scrollTo(0, state.indexScrollY);
-    }
-});
+    window.scrollTo(0, state.indexScrollY);
+  }
+};
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScrol);
@@ -269,40 +287,8 @@ function simpleSearchInText(a: string, b: string) {
       </div>
     </TransitionRoot>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
-      <div v-for="item in items" @click="goToRecipe(item.id || 0)" @keydown.enter="goToRecipe(item.id || 0)"
-        tabindex="0" class="
-          p-5
-          h-60
-          rounded-lg
-          shadow
-          bg-white
-          dark:bg-theme-secondary-gray
-          overflow-hidden
-        ">
-        <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
-          <img alt="Recipe image" @error="item.imageAvailable = false" v-if="item.imageAvailable" :src="item.image"
-            class="object-contain" />
-          <div v-else class="bg-theme-primary h-full grid place-items-center">
-            <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-          </div>
-        </div>
-        <div class="h-full pt-2">
-          <div class="truncate inline-block" style="width: calc(100% - 35px)">
-            <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
-      item.title
-    }}</span>
-          </div>
-          <div class="truncate inline-block" syle="width: 30px">
-            <span data-testid="recipe-score" class="text-black dark:text-white" v-show="item.score > 0">{{ item.score
-              }}⭐</span>
-          </div>
-        </div>
-      </div>
+      <recipe-card v-for="item in items" :key="item.id" :title="item.title" :image="item.image"
+        :imageAvailable="item.imageAvailable" :rating="item.score" @click="goToRecipe(item.id || 0)" />
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>
@@ -348,9 +334,9 @@ function simpleSearchInText(a: string, b: string) {
           <div class="px-1 py-1">
             <MenuItem :key="child.name" v-for="child in addOptions" v-slot="{ active }">
             <button @click="child.action" :class="[
-      active ? 'bg-theme-secondary text-white' : 'text-gray-900',
-      'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-    ]">
+              active ? 'bg-theme-secondary text-white' : 'text-gray-900',
+              'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+            ]">
               {{ child.text }}
             </button>
             </MenuItem>

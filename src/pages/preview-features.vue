@@ -4,8 +4,9 @@ import { useRouter } from "vue-router";
 import { useState } from "../services/store";
 import { saveSetting, getSetting } from "../services/dataService";
 import { useTranslation } from "i18next-vue";
+import ConfigSwitch from "../components/ConfigSwitch.vue";
 
-const { t, i18next } = useTranslation();
+const { t } = useTranslation();
 
 const state = useState()!;
 const router = useRouter()!;
@@ -16,6 +17,7 @@ const aiChatBaseUrl = ref("");
 const aiAuthorizationHeader = ref("");
 const openAIModelName = ref("");
 const editInSingleTextArea = ref(false);
+const enableCategoryDisplay = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.preview-features.title");
@@ -25,13 +27,15 @@ onMounted(async () => {
   const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
-  
+  const enableCategoryDisplayValue = await getSetting("EnableCategoryDisplay", "false");
+
   aiChatBaseUrl.value = await getSetting("OpenAIBaseApiUrl", "");
   aiAuthorizationHeader.value = await getSetting("OpenAIAuthorizationHeader", "");
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
   enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
+  enableCategoryDisplay.value = enableCategoryDisplayValue === "true";
 });
 
 function updateEnableNutritionFacts() {
@@ -61,70 +65,84 @@ function updateOpenAIModelName() {
 function updateEditInSingleTextArea() {
   saveSetting("EditInSingleTextArea", `${editInSingleTextArea.value}`);
 }
+
+function updateEnableCategoriesDisplay() {
+  saveSetting("EnableCategoryDisplay", `${enableCategoryDisplay.value}`);
+}
+
+function goToCategoriesSetup() {
+  router.push("/categories");
+}
 </script>
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.preview-features.enableNutritionFacts") }}</span>
-      <label data-testid="enable-nutrition-facts-toggle" class="switch float-right align-middle">
-        <input v-model="enableNutritionFacts" type="checkbox" @change="updateEnableNutritionFacts">
-        <span class="slider round"></span>
-      </label>
+      <config-switch v-model="enableNutritionFacts" @change="updateEnableNutritionFacts"
+        :display-name="t('pages.preview-features.enableNutritionFacts')"
+        :display-description="t('pages.preview-features.enableNutritionFactsDescription')"
+        test-id="enable-nutrition-facts-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="enableRecipeLanguageSwitcher" @change="updateEnableRecipeLanguageSwitcher"
+        :display-name="t('pages.preview-features.enableRecipeLanguageSwitcher')"
+        :display-description="t('pages.preview-features.enableRecipeLanguageSwitcherDescription')"
+        test-id="enable-recipe-language-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="editInSingleTextArea" @change="updateEditInSingleTextArea"
+        :display-name="t('pages.preview-features.editInSingleTextArea')"
+        :display-description="t('pages.preview-features.editInSingleTextAreaDescription')"
+        test-id="edit-in-single-text-area-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="enableCategoryDisplay" @change="updateEnableCategoriesDisplay"
+        :display-name="t('pages.categories.enableCategoryDisplay')"
+        :display-description="t('pages.categories.enableCategoryDisplayDescription')"
+        test-id="enable-category-toggle"></config-switch>
+    </div>
+    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
+      <label class="dark:text-white">{{ t("pages.options.categories") }}</label>
+      <div class="dark:text-white float-right ">
+        <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
       <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.enableNutritionFactsDescription") }}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.categoriesDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.preview-features.enableRecipeLanguageSwitcher") }}</span>
-      <label data-testid="enable-recipe-language-toggle" class="switch float-right align-middle">
-        <input v-model="enableRecipeLanguageSwitcher" type="checkbox" @change="updateEnableRecipeLanguageSwitcher">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.enableRecipeLanguageSwitcherDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.preview-features.editInSingleTextArea") }}</span>
-      <label data-testid="edit-in-single-text-area-toggle" class="switch float-right align-middle">
-        <input v-model="editInSingleTextArea" type="checkbox" @change="updateEditInSingleTextArea">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.editInSingleTextAreaDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.preview-features.enableAiChat") }}</span>
-      <label data-testid="enable-ai-chat-toggle" class="switch float-right align-middle">
-        <input v-model="enableAiChat" type="checkbox" @change="updateEnableAiChat">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.enableAiChatDescription") }}</span>
-      </div>
+      <config-switch v-model="enableAiChat" @change="updateEnableAiChat"
+        :display-name="t('pages.preview-features.enableAiChat')"
+        :display-description="t('pages.preview-features.enableAiChatDescription')"
+        test-id="enable-ai-chat-toggle"></config-switch>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiChatBaseUrl") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiChatBaseUrlDescription") }}</span>
       </div>
-      <input v-model="aiChatBaseUrl" @change="updateAiChatBaseUrl" placeholder="https://api.openai.com/" class="block p-2 w-full rounded text-black shadow-sm">
+      <input v-model="aiChatBaseUrl" @change="updateAiChatBaseUrl" placeholder="https://api.openai.com/"
+        class="block p-2 w-full rounded text-black shadow-sm">
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiAuthorizationHeader") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiAuthorizationHeaderDescription") }}</span>
       </div>
-      <input v-model="aiAuthorizationHeader" @change="updateAiAuthorizationHeader" placeholder="Bearer token" class="block p-2 w-full rounded text-black shadow-sm">
+      <input v-model="aiAuthorizationHeader" @change="updateAiAuthorizationHeader" placeholder="Bearer token"
+        class="block p-2 w-full rounded text-black shadow-sm">
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiModelName") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiModelNameDescription") }}</span>
       </div>
-      <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name" class="block p-2 w-full rounded text-black shadow-sm">
+      <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name"
+        class="block p-2 w-full rounded text-black shadow-sm">
     </div>
   </div>
 </template>

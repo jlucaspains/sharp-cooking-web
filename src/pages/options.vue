@@ -7,6 +7,7 @@ import Modal from "../components/Modal.vue";
 import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import { humanFileSize } from "../helpers/storageHelper";
+import ConfigSwitch from "../components/ConfigSwitch.vue";
 
 const { t, i18next } = useTranslation();
 
@@ -22,7 +23,7 @@ const selectedLanguage = ref("");
 const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
-const foldersEnabled = ref(false);
+const categoriesEnabled = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -155,14 +156,10 @@ function goToPreviewFeatures() {
       </div>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.options.multiplierType") }}</span>
-      <label data-testid="use-fractions-toggle" class="switch float-right align-middle">
-        <input v-model="useFractions" type="checkbox" @change="updateUseFractions">
-        <span class="slider round"></span>
-      </label>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.multiplierTypeDescription") }}</span>
-      </div>
+      <config-switch v-model="useFractions" @change="updateUseFractions"
+        :display-name="t('pages.options.multiplierType')"
+        :display-description="t('pages.options.multiplierTypeDescription')"
+        test-id="use-fractions-toggle"></config-switch>
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>

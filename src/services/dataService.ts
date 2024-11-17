@@ -2,13 +2,14 @@ import { Dexie, Table } from "dexie";
 import { BackupModel } from "../pages/recipe/backupModel"
 import { Recipe, RecipeImage, RecipeMedia, RecipeNutrition } from "./recipe";
 import { Setting } from "./setting";
+import { Category } from "./category";
 
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
     public recipeImages!: Table<RecipeImage, number>;
     public recipeMedia!: Table<RecipeMedia, number>;
     public settings!: Table<Setting, string>;
-    public folders!: Table<Folder, number>;
+    public categories!: Table<Category, number>;
 
     public constructor() {
         super("RecipeDatabase");
@@ -62,11 +63,15 @@ class RecipeDatabase extends Dexie {
             });
         });
         this.version(6).stores({
-            recipes: "++id,title,score,changedOn,folderId",
+            recipes: "++id,title,score,changedOn,categoryId",
             recipeImages: "++id,recipeId",
             recipeMedia: "++id,recipeId",
             settings: "name",
-            folders: "++id,name,color"
+            categories: "++id,name"
+        }).upgrade(async (transaction) => {
+            transaction.table("recipes").toCollection().modify((recipe: Recipe) => {
+                recipe.categoryId = 0;
+            });
         });
     }
 }
@@ -83,15 +88,12 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
     return result;
 }
 
-export async function getRecipes(folderId?: number): Promise<Recipe[]> {
-    let result;
-    if (folderId) {
-        result = await db.recipes.where("folderId").equals(folderId).toArray();
-    } else {
-        result = await db.recipes.toArray();
-    }
+export async function getRecipes(): Promise<Recipe[]> {
+    return await db.recipes.toArray();
+}
 
-    return result;
+export async function getRecipesByCategory(categoryId: number): Promise<Recipe[]> {
+    return await db.recipes.where("categoryId").equals(categoryId).toArray();
 }
 
 export async function getRecipeMediaList(id: number): Promise<RecipeMedia[]> {
@@ -222,32 +224,44 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
                 type: item.type, url: item.url
             };
         });
+    model.categoryId = recipe.categoryId;
+    // TODO: how to export folders?
 
     return model;
 }
 
-export async function createFolder(name: string, color: string): Promise<number> {
-    const result = await db.folders.add({ name, color });
+export async function createCategory(category: Category): Promise<number> {
+    const result = await db.categories.put(category);
     return result;
 }
 
-export async function getFolders(): Promise<Array<{ name: string, image: string }>> {
-    const folders = await db.folders.toArray();
-    const result = [];
-    for (const folder of folders) {
-        const recipe = await db.recipes.where("folderId").equals(folder.id).first();
+export async function getCategories(): Promise<Array<Category>> {
+    const categories = await db.categories.toArray();
+    const result = [] as Array<Category>;
+    for (const category of categories) {
+        const recipe = await db.recipes.where("categoryId").equals(category.id).first();
         if (recipe) {
             const media = await getRecipeMedia(recipe.id || 0);
-            result.push({ name: folder.name, image: media?.url || "" });
+            result.push({
+                id: category.id, name: category.name,
+                image: media?.url || ""
+            });
         }
     }
+    result.push({ id: 0, name: "Uncategorized", image: undefined });
     return result;
 }
 
-export async function moveRecipeToFolder(recipeId: number, folderId: number): Promise<void> {
-    const recipe = await db.recipes.get(recipeId);
-    if (recipe) {
-        recipe.folderId = folderId;
-        await saveRecipe(recipe);
+export async function getAllCategories(): Promise<Array<Category>> {
+    return await db.categories.toArray();
+}
+
+export async function getCategoryById(id: number): Promise<Category> {
+    var category = await db.categories.get(id);
+
+    if (category == null) {
+        throw new Error("Category not found");
     }
+
+    return category;
 }
