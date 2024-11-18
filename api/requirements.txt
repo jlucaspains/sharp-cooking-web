@@ -9,6 +9,6 @@ python-multipart~=0.0.17
 Pillow~=11.0
 pillow-avif-plugin~=1.4
 pytest~=8.3
-azure-cosmos~=4.7
+azure-cosmos~=4.8
 jsonschema~=4.23
 lxml==5.1.0
