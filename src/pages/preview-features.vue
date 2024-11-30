@@ -97,12 +97,12 @@ function goToCategoriesSetup() {
     </div>
     <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableCategoryDisplay" @change="updateEnableCategoriesDisplay"
-        :display-name="t('pages.categories.enableCategoryDisplay')"
-        :display-description="t('pages.categories.enableCategoryDisplayDescription')"
+        :display-name="t('pages.preview-features.enableCategoryDisplay')"
+        :display-description="t('pages.preview-features.enableCategoryDisplayDescription')"
         test-id="enable-category-toggle"></config-switch>
     </div>
     <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
-      <label class="dark:text-white">{{ t("pages.options.categories") }}</label>
+      <label class="dark:text-white">{{ t("pages.preview-features.categories") }}</label>
       <div class="dark:text-white float-right ">
         <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

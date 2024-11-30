@@ -16,7 +16,7 @@ const isLoaded = ref(false);
 onMounted(async () => {
 
   if (id.value == 0) {
-    category.value = { id: 0, name: "Uncategorized", image: undefined };
+    category.value = { id: 0, name: "All", image: undefined };
   } else {
     category.value = await getCategoryById(id.value);
   }

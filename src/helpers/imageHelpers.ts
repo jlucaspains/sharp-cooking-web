@@ -10,17 +10,28 @@ export async function pickImage(): Promise<string | undefined> {
     const data = new FormData();
     data.append('file', imagePicked);
 
-    const response = await fetchWithRetry("/api/process-image", {
-        method: "POST",
-        body: data
-    });
+    let responseOk = false;
+    try {
+        const response = await fetchWithRetry("/api/process-image", {
+            method: "POST",
+            body: data
+        });
 
-    if (!response.ok) {
-        return;
+        responseOk = response.ok;
+
+        if (responseOk) {
+            const responseJson = await response.json();
+            result = responseJson.image;
+        }
+    } catch (error) {
+        responseOk = false
     }
 
-    result = await response.json();
+    if (!responseOk) {
+        console.log("image failed to load, using default.")
+        result = "https://via.placeholder.com/150";
+    }
 
-    return result.image;
+    return result;
 
 }

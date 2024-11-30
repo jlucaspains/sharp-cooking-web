@@ -2,10 +2,12 @@
 import { ref, onMounted } from "vue";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { initialize, getSetting, getCategories } from "../services/dataService";
+import { useRouter } from "vue-router";
+import { initialize, getSetting } from "../services/dataService";
 import RecipeList from "../components/RecipeList.vue";
 import CategoryList from "../components/CategoryList.vue";
 
+const router = useRouter();
 const { t } = useTranslation();
 const state = useState()!;
 
@@ -21,8 +23,22 @@ onMounted(async () => {
   isLoaded.value = true;
   
   state.title = "Home";
-  state.menuOptions = [];
+  state.menuOptions = [
+    {
+      svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
+      children: [
+        {
+          text: t("pages.index.options"),
+          action: goToOptions,
+        },
+      ],
+    },
+  ];
 });
+
+function goToOptions() {
+  router.push("/options");
+}
 </script>
 
 <template>

@@ -239,16 +239,26 @@ export async function getCategories(): Promise<Array<Category>> {
     const categories = await db.categories.toArray();
     const result = [] as Array<Category>;
     for (const category of categories) {
+        const resultItem = {
+            id: category.id, name: category.name
+        } as Category;
+
         const recipe = await db.recipes.where("categoryId").equals(category.id).first();
-        if (recipe) {
-            const media = await getRecipeMedia(recipe.id || 0);
-            result.push({
-                id: category.id, name: category.name,
-                image: media?.url || ""
-            });
+        if (category.image) {
+            resultItem.image = category.image;
+        } else {
+            if (recipe) {
+                const media = await getRecipeMedia(recipe.id || 0);
+                resultItem.image = media?.url;
+            }
+        }
+
+        if (recipe)
+        {
+            result.push(resultItem);
         }
     }
-    result.push({ id: 0, name: "Uncategorized", image: undefined });
+    result.push({ id: 0, name: "All", image: undefined });
     return result;
 }
 
@@ -264,4 +274,8 @@ export async function getCategoryById(id: number): Promise<Category> {
     }
 
     return category;
+}
+
+export async function deleteCategory(id: number) {
+    await db.categories.delete(id);
 }
