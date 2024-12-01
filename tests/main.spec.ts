@@ -7,10 +7,10 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('title is All recipes', async ({ page }) => {
+test('title is Home', async ({ page }) => {
   await page.goto('/');
-  const mainPage = await page.getByRole('link', { name: 'All Recipes' });
-  await expect(mainPage).toHaveText('All Recipes');
+  const mainPage = await page.getByRole('link', { name: 'Home' });
+  await expect(mainPage).toHaveText('Home');
 });
 
 test('a default recipe is created on first use', async ({ page }) => {

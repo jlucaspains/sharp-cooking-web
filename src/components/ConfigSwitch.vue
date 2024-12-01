@@ -33,7 +33,7 @@ function updateValue(value: boolean) {
 <template>
     <div>
         <span class="dark:text-white">{{ props.displayName }}</span>
-        <label data-testid="{{props.testId}}" class="switch float-right align-middle">
+        <label :data-testid="props.testId" class="switch float-right align-middle">
             <input :checked="localValue" type="checkbox" @change="evt => updateValue((evt.target as HTMLInputElement).checked)">
             <span class="slider round"></span>
         </label>
