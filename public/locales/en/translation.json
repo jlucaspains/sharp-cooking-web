@@ -138,7 +138,9 @@
                     "sugar": "Sugar (g)",
                     "protein": "Protein (g)",
                     "changeLanguage": "Change Language",
-                    "changeLanguageTitle": "Change recipe language"
+                    "changeLanguageTitle": "Change recipe language",
+                    "category": "Category",
+                    "selectCategory": "Select category"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -258,8 +260,12 @@
             "selectImage": "Select an image...",
             "delete": "Delete...",
             "deleteModalTitle": "Delete this category?",
-            "deleteModalBody":"Are you sure? This action cannot be undone.",
-            "deleteYes": "Yes, delete"
+            "deleteModalBody": "Are you sure? This action cannot be undone.",
+            "deleteYes": "Yes, delete",
+            "categoryDeleted": "Category deleted successfully.",
+            "categoryDeleteFailed": "Failed to delete the category.",
+            "processImage1": "Compressing image...",
+            "processImage2": "Still working on the image. This may take a while"
         }
     },
     "initialRecipes": [

@@ -137,7 +137,9 @@
                     "sugar": "Açúcares (g)",
                     "protein": "Proteínas (g)",
                     "changeLanguage": "Alterar idioma",
-                    "changeLanguageTitle": "Alterar idioma da receita"
+                    "changeLanguageTitle": "Alterar idioma da receita",
+                    "category": "Categoria",
+                    "selectCategory": "Selecione categoria"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
@@ -257,7 +259,11 @@
             "delete": "Remover...",
             "deleteModalTitle": "Excluir esta categoria?",
             "deleteYes": "Sim, exclua",
-            "deleteModalBody": "Essa ação não pode ser desfeita."
+            "deleteModalBody": "Essa ação não pode ser desfeita.",
+            "categoryDeleted": "Categoria excluída com sucesso.",
+            "categoryDeleteFailed": "Falhou em excluir a categoria",
+            "processImage1": "Comprimindo imagem...",
+            "processImage2": "Ainda processando. Isso pode demorar um pouco..."
         }
     },
     "initialRecipes": [

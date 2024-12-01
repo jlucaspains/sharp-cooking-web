@@ -278,4 +278,8 @@ export async function getCategoryById(id: number): Promise<Category> {
 
 export async function deleteCategory(id: number) {
     await db.categories.delete(id);
+
+    db.recipes.where("categoryId").equals(id).modify((recipe: Recipe) => {
+        recipe.categoryId = 0;
+    });
 }

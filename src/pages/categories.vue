@@ -17,6 +17,7 @@ const newCategoryName = ref("");
 const newCategoryImage = ref<string | null>(null);
 const isDeleteModalOpen = ref(false);
 const selectedCategory = ref<Category | null>(null);
+const isProcessingImage = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.categories.title");
@@ -49,7 +50,7 @@ async function deleteItem() {
       {
         group: "success",
         title: t("general.success"),
-        text: t("pages.categories.recipeDeleted"),
+        text: t("pages.categories.categoryDeleted"),
       },
       2000
     );
@@ -60,7 +61,7 @@ async function deleteItem() {
       {
         group: "error",
         title: t("general.error"),
-        text: t("pages.categories.recipeDeleteFailed"),
+        text: t("pages.categories.categoryDeleteFailed"),
       },
       2000
     );
@@ -127,7 +128,7 @@ function selectCategory(category: Category) {
     <div class="w-full lg:px-40 mx-auto">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
         <div v-for="category in categories" @click="selectCategory(category)"
-          :class="{ 'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
+        :class="{ 'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
           'bg-theme-secondary': selectedCategory === category
            }">
           <img :src="category.image" alt="Category image" class="w-full h-32 object-cover rounded-lg" />
@@ -168,5 +169,7 @@ function selectCategory(category: Category) {
       ]">
       <span class="dark:text-white">{{ t("pages.categories.deleteModalBody") }}</span>
     </Modal>
+    <BusyIndicator :busy="isProcessingImage" :message1="t('pages.categories.processImage1')"
+      :message2="t('pages.categories.processImage2')" />
   </div>
 </template>

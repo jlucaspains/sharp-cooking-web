@@ -14,7 +14,6 @@ const category = ref({} as Category);
 const isLoaded = ref(false);
 
 onMounted(async () => {
-
   if (id.value == 0) {
     category.value = { id: 0, name: "All", image: undefined };
   } else {
