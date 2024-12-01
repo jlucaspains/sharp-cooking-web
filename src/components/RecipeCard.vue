@@ -23,7 +23,7 @@ const emit = defineEmits<{
           cursor-pointer
         ">
         <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
-            <img alt="Recipe image" v-if="props.imageAvailable" :src="props.image" class="object-contain" />
+            <img alt="Recipe" v-if="props.imageAvailable" :src="props.image" class="object-contain" />
             <div v-else class="bg-theme-primary h-full grid place-items-center">
                 <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">

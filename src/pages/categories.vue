@@ -131,7 +131,7 @@ function selectCategory(category: Category) {
         :class="{ 'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
           'bg-theme-secondary': selectedCategory === category
            }">
-          <img :src="category.image" alt="Category image" class="w-full h-32 object-cover rounded-lg" />
+          <img :src="category.image" alt="Category" class="w-full h-32 object-cover rounded-lg" />
           <div class="text-center mt-2">{{ category.name }}</div>
         </div>
       </div>

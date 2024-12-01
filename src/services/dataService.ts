@@ -246,15 +246,12 @@ export async function getCategories(): Promise<Array<Category>> {
         const recipe = await db.recipes.where("categoryId").equals(category.id).first();
         if (category.image) {
             resultItem.image = category.image;
-        } else {
-            if (recipe) {
-                const media = await getRecipeMedia(recipe.id || 0);
-                resultItem.image = media?.url;
-            }
+        } else if (recipe) {
+            const media = await getRecipeMedia(recipe.id || 0);
+            resultItem.image = media?.url;
         }
 
-        if (recipe)
-        {
+        if (recipe) {
             result.push(resultItem);
         }
     }
@@ -267,7 +264,7 @@ export async function getAllCategories(): Promise<Array<Category>> {
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
-    var category = await db.categories.get(id);
+    const category = await db.categories.get(id);
 
     if (category == null) {
         throw new Error("Category not found");

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useState } from "../../../services/store";
 import { getCategoryById } from "../../../services/dataService";
 import { Category } from "../../../services/category";

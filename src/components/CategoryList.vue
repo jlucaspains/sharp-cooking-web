@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";

@@ -16,7 +16,6 @@ import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
 import RatingPicker from "../../../components/RatingPicker.vue";
-import { fileOpen } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
@@ -259,7 +258,7 @@ async function addImage() {
   try {
     let result;
 
-    var imagePicked = await pickImage()
+    const imagePicked = await pickImage()
     isProcessingImage.value = true;
     if (!imagePicked) {
       return;
