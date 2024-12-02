@@ -3,18 +3,20 @@ import { onMounted, ref } from "vue";
 import { useState } from "../services/store";
 import { useTranslation } from "i18next-vue";
 import { notify } from "notiwind";
-import { getAllCategories, createCategory, deleteCategory } from "../services/dataService";
+import { getAllCategories, saveCategory, deleteCategory } from "../services/dataService";
 import { Category } from "../services/category";
 import Modal from "../components/Modal.vue";
 import { pickImage } from "../helpers/imageHelpers";
+import BusyIndicator from "../components/BusyIndicator.vue";
 
 const { t } = useTranslation();
 
 const state = useState()!;
 const categories = ref([] as Array<Category>);
 const isNewCategoryModalOpen = ref(false);
-const newCategoryName = ref("");
-const newCategoryImage = ref<string | null>(null);
+const isEditCategoryModalOpen = ref(false);
+const categoryName = ref("");
+const categoryImage = ref<string | null>(null);
 const isDeleteModalOpen = ref(false);
 const selectedCategory = ref<Category | null>(null);
 const isProcessingImage = ref(false);
@@ -25,6 +27,10 @@ onMounted(async () => {
     {
       text: t("pages.categories.more"),
       children: [
+        {
+          text: t("pages.categories.edit"),
+          action: editCategory,
+        },
         {
           text: t("pages.categories.delete"),
           action: confirmDeleteItem,
@@ -73,26 +79,47 @@ async function loadCategories() {
 }
 
 function addCategory() {
-  newCategoryImage.value = null;
-  newCategoryName.value = "";
+  categoryImage.value = null;
+  categoryName.value = "";
   isNewCategoryModalOpen.value = true;
+}
+
+function editCategory() {
+  categoryImage.value = selectedCategory.value?.image || null;
+  categoryName.value = selectedCategory.value?.name || "";
+  isEditCategoryModalOpen.value = true;
 }
 
 async function createNewCategory() {
   const newCategory = new Category();
-  newCategory.name = newCategoryName.value;
-  newCategory.image = newCategoryImage.value ?? "https://via.placeholder.com/150";
+  newCategory.name = categoryName.value;
+  newCategory.image = categoryImage.value ?? "https://via.placeholder.com/150";
 
-  await createCategory(newCategory);
+  await saveCategory(newCategory);
   await loadCategories();
   isNewCategoryModalOpen.value = false;
+}
+
+async function updateCategory() {
+  if (!selectedCategory.value) {
+    return;
+  }
+
+  selectedCategory.value.name = categoryName.value;
+  selectedCategory.value.image = categoryImage.value ?? "https://via.placeholder.com/150";
+
+  const category = JSON.parse(JSON.stringify(selectedCategory.value));
+
+  await saveCategory(category);
+  await loadCategories();
+  isEditCategoryModalOpen.value = false;
 }
 
 async function selectImage() {
   const imageSelected = await pickImage();
 
   if (imageSelected) {
-    newCategoryImage.value = imageSelected;
+    categoryImage.value = imageSelected;
   }
 }
 
@@ -127,10 +154,10 @@ function selectCategory(category: Category) {
     </div>
     <div class="w-full lg:px-40 mx-auto">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
-        <div v-for="category in categories" @click="selectCategory(category)"
-        :class="{ 'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
+        <div v-for="category in categories" @click="selectCategory(category)" :class="{
+          'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
           'bg-theme-secondary': selectedCategory === category
-           }">
+        }">
           <img :src="category.image" alt="Category" class="w-full h-32 object-cover rounded-lg" />
           <div class="text-center mt-2">{{ category.name }}</div>
         </div>
@@ -147,11 +174,28 @@ function selectCategory(category: Category) {
           action: async () => await createNewCategory(),
         },
       ]">
-      <input type="text" v-model="newCategoryName" data-testid="new-category-name"
+      <input type="text" v-model="categoryName" data-testid="new-category-name"
         class="block my-2 p-2 w-full rounded text-black shadow-sm" />
       <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded text-white shadow-sm">
         {{ t('pages.categories.selectImage') }}</button>
-      <img v-if="newCategoryImage" :src="newCategoryImage" alt="Selected image" class="object-cover rounded-lg" />
+      <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
+    </Modal>
+    <Modal :isOpen="isEditCategoryModalOpen" @closed="isEditCategoryModalOpen = false"
+      :title="t('pages.categories.editTitle')" :buttons="[
+        {
+          title: t('general.cancel'),
+          action: () => isEditCategoryModalOpen = false,
+        },
+        {
+          title: t('general.ok'),
+          action: async () => await updateCategory(),
+        },
+      ]">
+      <input type="text" v-model="categoryName" data-testid="edit-category-name"
+        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
+      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded text-white shadow-sm">
+        {{ t('pages.categories.selectImage') }}</button>
+      <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
     </Modal>
     <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
       :title="t('pages.categories.deleteModalTitle')" :buttons="[

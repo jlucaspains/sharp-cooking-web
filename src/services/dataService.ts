@@ -230,7 +230,7 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
     return model;
 }
 
-export async function createCategory(category: Category): Promise<number> {
+export async function saveCategory(category: Category): Promise<number> {
     const result = await db.categories.put(category);
     return result;
 }
