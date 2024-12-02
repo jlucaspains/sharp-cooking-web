@@ -37,8 +37,9 @@ const { t } = useTranslation();
 let isDirty = false;
 let croppingCanvas: HTMLCanvasElement;
 
-const id = computed(() => parseInt(route.params.id as string));
 const query = computed(() => route.query);
+const id = computed(() => parseInt(route.params.id as string));
+const categoryId = computed(() => parseInt(query.value.categoryId as string ?? "0"));
 const item = ref({
   id: 0,
   title: "",
@@ -49,6 +50,7 @@ const item = ref({
   imageAvailable: false,
   multiplier: 1,
   language: i18next.language,
+  categoryId: categoryId.value,
   nutrition: {
     servingSize: 0,
     totalFat: 0,
@@ -332,6 +334,11 @@ async function importRecipeFromUrl() {
     }
 
     item.value.imageAvailable = images.value.length > 0;
+
+    if (editInSingleTextArea.value) {
+      ingredientsText.value = item.value.ingredients.join("\n");
+      stepsText.value = item.value.steps.join("\n");
+    }
   }
   catch {
     isImportFromUrlModalOpen.value = true;
@@ -678,7 +685,7 @@ function changeLanguage() {
       <RatingPicker class="mb-2" v-model="item.score" />
       <label>{{ t("pages.recipe.id.edit.category") }}</label>
       <select v-model="item.categoryId" class="block p-2 w-full rounded text-black shadow-sm">
-        <option value="">{{ t("pages.recipe.id.edit.selectCategory") }}</option>
+        <option value="0" disabled>{{ t('pages.recipe.id.edit.selectCategory') }}</option>
         <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
       </select>
       <label>{{ t("pages.recipe.id.edit.ingredients") }}</label>

@@ -156,7 +156,7 @@ onMounted(async () => {
 });
 
 async function loadCategory() {
-  if (props.categoryId){
+  if (props.categoryId) {
     allRecipes = (await getRecipesByCategory(props.categoryId)) as RecipeViewModel[];
   } else {
     allRecipes = (await getRecipes()) as RecipeViewModel[];
@@ -196,7 +196,11 @@ function goToRecipe(id: number) {
 }
 
 function goToNew() {
-  router.push("/recipe/0/edit");
+  if (props.categoryId && props.categoryId > 0) {
+    router.push(`/recipe/0/edit?categoryId=${props.categoryId}`);
+  } else {
+    router.push(`/recipe/0/edit`);
+  }
 }
 
 function goToImportFromUrl() {
@@ -288,7 +292,8 @@ function simpleSearchInText(a: string, b: string) {
     </TransitionRoot>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
       <recipe-card v-for="item in items" :key="item.id" :title="item.title" :image="item.image"
-        :imageAvailable="item.imageAvailable" :rating="item.score" @click="goToRecipe(item.id || 0)" />
+        :imageAvailable="item.imageAvailable" :rating="item.score" @click="goToRecipe(item.id || 0)"
+        :recipeCount="0" />
     </div>
     <Menu as="div" class="p-0 w-14 h-14 fixed bottom-6 right-6">
       <div>

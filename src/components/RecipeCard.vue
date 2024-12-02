@@ -4,6 +4,7 @@ const props = defineProps<{
     image: string | undefined;
     imageAvailable: boolean;
     rating: number;
+    recipeCount: number;
 }>();
 
 const emit = defineEmits<{
@@ -23,7 +24,7 @@ const emit = defineEmits<{
           cursor-pointer
         ">
         <div style="height: calc(100% - 0.5rem)" class="-mx-5 -mt-5 overflow-hidden">
-            <img alt="Recipe" v-if="props.imageAvailable" :src="props.image" class="object-contain" />
+            <img alt="Recipe" v-if="props.imageAvailable" :src="props.image" class="object-contain m-auto" />
             <div v-else class="bg-theme-primary h-full grid place-items-center">
                 <svg class="h-16 w-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -33,15 +34,19 @@ const emit = defineEmits<{
                 </svg>
             </div>
         </div>
-        <div class="h-full pt-2">
-            <div class="truncate inline-block" style="width: calc(100% - 35px)">
+        <div class="pt-2 flex">
+            <div class="truncate grow pe-2">
                 <span data-testid="recipe-title" class="text-ellipsis text-black dark:text-white text-lg">{{
                     props.title
                 }}</span>
             </div>
-            <div class="truncate inline-block" syle="width: 30px">
-                <span data-testid="recipe-score" class="text-black dark:text-white" v-show="props.rating > 0">{{
-                    props.rating }}⭐</span>
+            <div class="my-auto" v-if="props.rating > 0">
+                <span data-testid="recipe-score" class="text-black dark:text-white">⭐{{
+                    props.rating }}</span>
+            </div>
+            <div class="my-auto" v-if="props.recipeCount > 0">
+                <span data-testid="recipe-count" class="text-black dark:text-white">{{
+                    props.recipeCount }}</span>
             </div>
         </div>
     </div>

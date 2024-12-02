@@ -243,7 +243,12 @@ export async function getCategories(): Promise<Array<Category>> {
             id: category.id, name: category.name
         } as Category;
 
-        const recipe = await db.recipes.where("categoryId").equals(category.id).first();
+        const recipes = db.recipes.where("categoryId").equals(category.id);
+        const count = await recipes.count();
+        const recipe = await recipes.first();
+
+        resultItem.recipeCount = count;
+
         if (category.image) {
             resultItem.image = category.image;
         } else if (recipe) {
@@ -255,7 +260,8 @@ export async function getCategories(): Promise<Array<Category>> {
             result.push(resultItem);
         }
     }
-    result.push({ id: 0, name: "All", image: undefined });
+    const allRecipesCount = await db.recipes.count();
+    result.push({ id: 0, name: "All", image: undefined, recipeCount: allRecipesCount });
     return result;
 }
 
