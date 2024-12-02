@@ -259,6 +259,7 @@
             "newTitle": "New Category",
             "selectImage": "Select an image...",
             "delete": "Delete...",
+            "edit": "Edit...",
             "deleteModalTitle": "Delete this category?",
             "deleteModalBody": "Are you sure? This action cannot be undone.",
             "deleteYes": "Yes, delete",

@@ -257,6 +257,7 @@
             "newTitle": "Nova categoria",
             "selectImage": "Selecione uma imagem...",
             "delete": "Remover...",
+            "edit": "Editar...",
             "deleteModalTitle": "Excluir esta categoria?",
             "deleteYes": "Sim, exclua",
             "deleteModalBody": "Essa ação não pode ser desfeita.",
