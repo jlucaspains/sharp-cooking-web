@@ -156,6 +156,7 @@ function selectCategory(category: Category) {
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
         <div v-for="category in categories" @click="selectCategory(category)" :class="{
           'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
+          'category-item': true,
           'bg-theme-secondary': selectedCategory === category
         }">
           <img :src="category.image" alt="Category" class="w-full h-32 object-cover rounded-lg" />
