@@ -260,8 +260,7 @@ async function addImage() {
   try {
     let result;
 
-    const imagePicked = await pickImage()
-    isProcessingImage.value = true;
+    const imagePicked = await pickImage((status) => isProcessingImage.value = status)
     if (!imagePicked) {
       return;
     }
@@ -272,8 +271,6 @@ async function addImage() {
   } catch {
     success = false;
   } finally {
-    isProcessingImage.value = false;
-
     if (!success) {
       notify(
         {

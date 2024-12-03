@@ -116,7 +116,7 @@ async function updateCategory() {
 }
 
 async function selectImage() {
-  const imageSelected = await pickImage();
+  const imageSelected = await pickImage((status) => isProcessingImage.value = status);
 
   if (imageSelected) {
     categoryImage.value = imageSelected;
