@@ -44,6 +44,18 @@ onMounted(async () => {
 });
 
 function confirmDeleteItem() {
+  if (!selectedCategory.value) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.categories.selectAnItem"),
+      },
+      2000
+    );
+    return;
+  }
+  
   isDeleteModalOpen.value = true;
 }
 
@@ -85,6 +97,18 @@ function addCategory() {
 }
 
 function editCategory() {
+  if (!selectedCategory.value) {
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.categories.selectAnItem"),
+      },
+      2000
+    );
+    return;
+  }
+  
   categoryImage.value = selectedCategory.value?.image || null;
   categoryName.value = selectedCategory.value?.name || "";
   isEditCategoryModalOpen.value = true;

@@ -264,7 +264,8 @@
             "categoryDeleted": "Categoria excluída com sucesso.",
             "categoryDeleteFailed": "Falhou em excluir a categoria",
             "processImage1": "Comprimindo imagem...",
-            "processImage2": "Ainda processando. Isso pode demorar um pouco..."
+            "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+            "selectAnItem": "Selecione um item."
         }
     },
     "initialRecipes": [

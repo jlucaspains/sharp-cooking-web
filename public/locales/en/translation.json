@@ -266,7 +266,8 @@
             "categoryDeleted": "Category deleted successfully.",
             "categoryDeleteFailed": "Failed to delete the category.",
             "processImage1": "Compressing image...",
-            "processImage2": "Still working on the image. This may take a while"
+            "processImage2": "Still working on the image. This may take a while",
+            "selectAnItem": "Please select an item."
         }
     },
     "initialRecipes": [

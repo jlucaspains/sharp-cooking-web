@@ -680,8 +680,8 @@ function changeLanguage() {
       <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
       <label>{{ t("pages.recipe.id.edit.rating") }}</label>
       <RatingPicker class="mb-2" v-model="item.score" />
-      <label>{{ t("pages.recipe.id.edit.category") }}</label>
-      <select v-model="item.categoryId" class="block p-2 w-full rounded text-black shadow-sm">
+      <label for="category">{{ t("pages.recipe.id.edit.category") }}</label>
+      <select id="category" v-model="item.categoryId" class="block p-2 w-full rounded text-black shadow-sm">
         <option value="0" disabled>{{ t('pages.recipe.id.edit.selectCategory') }}</option>
         <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
       </select>

@@ -1,19 +1,11 @@
 import { test, expect, Page } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createCategory, createRecipe } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem("DoNotAskToInstall", "true");
   });
 });
-
-
-async function createCategory(page: Page, id: number, title: string) {
-  await page.goto('/#/categories');
-  await page.getByTestId('add-menu-button').click();
-  await page.getByTestId('new-category-name').fill(title);
-  await page.getByText('OK').click();
-}
 
 test('add new category', async ({ page }) => {
   await createCategory(page, 1, "Category 1");
