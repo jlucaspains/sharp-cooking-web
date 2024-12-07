@@ -21,7 +21,7 @@ test('open default category', async ({ page }) => {
   await page.getByTestId('recipe-title').click();
   await page.waitForTimeout(500);
   await page.getByTestId('recipe-title').click();
-  await expect(page).toHaveURL(new RegExp(`.*/recipe/1`));
+  await expect(page).toHaveURL(/.*\/recipe\/1/);
 });
 
 test('displays custom category', async ({ page }) => {
@@ -45,5 +45,5 @@ test('options menu go to options', async ({ page }) => {
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
 
-  await expect(page).toHaveURL(new RegExp(".*/options"));
+  await expect(page).toHaveURL(/.*\/options/);
 });

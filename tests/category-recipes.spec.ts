@@ -31,7 +31,7 @@ test('open recipe', async ({ page }) => {
   await createRecipe(page, 2, "recipe", 1, ["1 cup flour"], ["Preheat oven to 350 F"], false, "Category 1");
   await goToCategory(page, "Category 1");
   await page.getByTestId('recipe-title').click();
-  await expect(page).toHaveURL(new RegExp(`.*/recipe/2`));
+  await expect(page).toHaveURL(/.*\/recipe\/2/);
 });
 
 test('sort by title', async ({ page }) => {
@@ -90,7 +90,7 @@ test('options menu go to options', async ({ page }) => {
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
 
-  await expect(page).toHaveURL(new RegExp(".*/options"));
+  await expect(page).toHaveURL(/.*\/options/);
 });
 
 test('add manually', async ({ page }) => {
@@ -100,7 +100,7 @@ test('add manually', async ({ page }) => {
   await page.getByTestId('add-menu-button').click();
   await page.getByRole('menuitem', { name: 'Add manually' }).click();
 
-  await expect(page).toHaveURL(new RegExp(".*/recipe/0/edit"));
+  await expect(page).toHaveURL(/.*\/recipe\/0\/edit/);
   expect(await page.getByLabel('Category').inputValue()).toBe("1");
 });
 
@@ -111,7 +111,7 @@ test('import from website', async ({ page }) => {
   await page.getByTestId('add-menu-button').click();
   await page.getByRole('menuitem', { name: 'Import from website' }).click();
 
-  await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?importFromUrl=1/));
+  await expect(page).toHaveURL(/.*\/recipe\/0\/edit\?importFromUrl=1/);
 });
 
 test('import from backup', async ({ page }) => {
@@ -121,7 +121,7 @@ test('import from backup', async ({ page }) => {
   await page.getByTestId('add-menu-button').click();
   await page.getByRole('menuitem', { name: 'Import from backup file' }).click();
 
-  await expect(page).toHaveURL(new RegExp(".*/import-backup"));
+  await expect(page).toHaveURL(/.*\/import-backup/);
 });
 
 

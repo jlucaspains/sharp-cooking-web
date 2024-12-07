@@ -1,5 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
-import { createCategory, createRecipe } from './helpers';
+import { test, expect } from '@playwright/test';
+import { createCategory } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
