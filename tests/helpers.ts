@@ -13,18 +13,24 @@ export async function createRecipe(page: Page, id: number, title: string, rating
     "Ferment for 2 hours",
     "Preheat oven at 420F",
     "Bake for 30 minutes with lid on"
-], category: string | null = null) {
-    await createRecipeWithoutSaving(page, title, rating, ingredients, steps, category);
+], startFromHome: boolean = true,
+    category: string | null = null) {
+    await createRecipeWithoutSaving(page, title, rating, ingredients, steps, startFromHome, category);
 
     await page.getByTestId("topbar-single-button").click();
     await expect(page).toHaveURL(new RegExp(`.*/recipe/${id}/edit`));
 }
 
-export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[], category: string | null = null) {
-    await page.goto('/');
-    await page.getByTestId('add-menu-button').click();
-    await page.getByRole('menuitem', { name: 'Add manually' }).click();
-    await expect(page).toHaveURL('/#/recipe/0/edit');
+export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[], startFromHome: boolean = true, category: string | null = null) {
+    if (startFromHome) {
+        await page.goto('/');
+        await page.getByTestId('add-menu-button').click();
+        await page.getByRole('menuitem', { name: 'Add manually' }).click();
+        await expect(page).toHaveURL('/#/recipe/0/edit');
+    } else {
+        await page.goto('/#/recipe/0/edit');
+    }
+
     await page.getByLabel('Title').fill(title);
     await page.getByRole('button', { name: '⭐' }).nth(rating - 1).click();
 
