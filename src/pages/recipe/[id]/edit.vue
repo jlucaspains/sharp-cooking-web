@@ -9,13 +9,13 @@ import {
   getRecipeMediaList,
   getNextRecipeId,
   getSetting,
+  getAllCategories,
 } from "../../../services/dataService";
 import { RecipeMedia } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
 import { notify } from "notiwind";
 import RatingPicker from "../../../components/RatingPicker.vue";
-import { fileOpen } from "browser-fs-access";
 import Modal from "../../../components/Modal.vue";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../../components/BusyIndicator.vue";
@@ -26,6 +26,8 @@ import { fetchWithRetry } from "../../../services/fetchWithRetry";
 import { isVideoUrlSupported, prepareUrlForEmbed } from "../../../helpers/videoHelpers";
 import RoundButton from "../../../components/RoundButton.vue";
 import i18next from "i18next";
+import { pickImage } from "../../../helpers/imageHelpers";
+import { Category } from "../../../services/category";
 
 const state = useState()!;
 const route = useRoute();
@@ -35,8 +37,9 @@ const { t } = useTranslation();
 let isDirty = false;
 let croppingCanvas: HTMLCanvasElement;
 
-const id = computed(() => parseInt(route.params.id as string));
 const query = computed(() => route.query);
+const id = computed(() => parseInt(route.params.id as string));
+const categoryId = computed(() => parseInt(query.value.categoryId as string ?? "0"));
 const item = ref({
   id: 0,
   title: "",
@@ -47,6 +50,7 @@ const item = ref({
   imageAvailable: false,
   multiplier: 1,
   language: i18next.language,
+  categoryId: categoryId.value,
   nutrition: {
     servingSize: 0,
     totalFat: 0,
@@ -86,6 +90,7 @@ const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const editInSingleTextArea = ref(false);
 const ingredientsText = ref("");
 const stepsText = ref("");
+const categories = ref([] as Array<Category>);
 
 let enableNutritionFacts = false;
 let enableRecipeLanguageSwitcher = false;
@@ -135,6 +140,8 @@ onMounted(async () => {
   if (query.value.shareCode) {
     importRecipeCode.value = query.value.shareCode as string;
   }
+
+  categories.value = await getAllCategories();
 
   let recipe: RecipeViewModel | null = null;
 
@@ -247,40 +254,23 @@ async function save() {
   );
 }
 
-async function pickImage() {
+async function addImage() {
   let success = true;
 
   try {
     let result;
-    const imagePicked = await fileOpen({
-      mimeTypes: ["image/*"],
-    });
 
-    isProcessingImage.value = true;
-
-    const data = new FormData();
-    data.append('file', imagePicked);
-
-    const response = await fetchWithRetry("/api/process-image", {
-      method: "POST",
-      body: data
-    });
-
-    success = response.ok;
-    if (!success) {
+    const imagePicked = await pickImage((status) => isProcessingImage.value = status)
+    if (!imagePicked) {
       return;
     }
 
-    result = await response.json();
-
-    const mediaIndex = images.value.push(new RecipeMedia(id.value, "img", result.image));
+    const mediaIndex = images.value.push(new RecipeMedia(id.value, "img", imagePicked));
     item.value.imageAvailable = true;
     selectedImage.value = mediaIndex - 1;
   } catch {
     success = false;
   } finally {
-    isProcessingImage.value = false;
-
     if (!success) {
       notify(
         {
@@ -341,6 +331,11 @@ async function importRecipeFromUrl() {
     }
 
     item.value.imageAvailable = images.value.length > 0;
+
+    if (editInSingleTextArea.value) {
+      ingredientsText.value = item.value.ingredients.join("\n");
+      stepsText.value = item.value.steps.join("\n");
+    }
   }
   catch {
     isImportFromUrlModalOpen.value = true;
@@ -562,7 +557,7 @@ function changeLanguage() {
             shadow-md
             hover:shadow-lg
             transition duration-150 ease-in-out
-          " :title="t('pages.recipe.id.edit.addImageTooltip')" data-testid="add-image-button" @click="pickImage">
+          " :title="t('pages.recipe.id.edit.addImageTooltip')" data-testid="add-image-button" @click="addImage">
           <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor"
@@ -685,6 +680,11 @@ function changeLanguage() {
       <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
       <label>{{ t("pages.recipe.id.edit.rating") }}</label>
       <RatingPicker class="mb-2" v-model="item.score" />
+      <label for="category">{{ t("pages.recipe.id.edit.category") }}</label>
+      <select id="category" v-model="item.categoryId" class="block p-2 w-full rounded text-black shadow-sm">
+        <option value="0" disabled>{{ t('pages.recipe.id.edit.selectCategory') }}</option>
+        <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+      </select>
       <label>{{ t("pages.recipe.id.edit.ingredients") }}</label>
       <button v-if="!editInSingleTextArea" class="ml-2 align-middle" type="button"
         :title="t('pages.recipe.id.edit.addIngredient')" @click="addIngredientAt(item.ingredients.length - 1)">
