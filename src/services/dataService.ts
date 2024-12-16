@@ -1,5 +1,5 @@
 import { Dexie, Table } from "dexie";
-import { BackupModel } from "../pages/recipe/backupModel"
+import { BackupModel, RecipeBackupModel } from "../pages/recipe/backupModel"
 import { Recipe, RecipeImage, RecipeMedia, RecipeNutrition } from "./recipe";
 import { Setting } from "./setting";
 import { Category } from "./category";
@@ -174,39 +174,47 @@ export async function getSetting(name: string, defaultValue: string): Promise<st
     return result;
 }
 
-export async function prepareBackup(): Promise<Array<BackupModel>> {
+export async function prepareBackup(): Promise<BackupModel> {
     const allRecipes = await db.recipes.toArray();
     const allMedia = await db.recipeMedia.toArray();
+    const allCategories = await db.categories.toArray();
 
-    const result = [];
+    const result = new BackupModel();
     for (const recipe of allRecipes) {
-        const model = getBackupModel(recipe, allMedia);
+        const category = allCategories.find(item => item.id == recipe.categoryId);
+        const model = getBackupModel(recipe, category, allMedia);
 
-        result.push(model);
+        result.recipes.push(model);
     }
+
+    result.categories = allCategories;
 
     return result;
 }
 
-
-export async function prepareRecipeBackup(id: number): Promise<Array<BackupModel>> {
+export async function prepareRecipeBackup(id: number): Promise<BackupModel> {
     const recipe = await db.recipes.get(id);
     const allMedia = await db.recipeMedia.where("recipeId").equals(id).toArray();
+    const category = await db.categories.get(recipe?.categoryId || 0);
 
-    const result: Array<BackupModel> = [];
+    const result = new BackupModel();
 
     if (!recipe) {
         return result;
     }
 
-    const model = getBackupModel(recipe, allMedia);
-    result.push(model);
+    const model = getBackupModel(recipe, category, allMedia);
+    result.recipes.push(model);
+
+    if (category) {
+        result.categories.push(category);
+    }
 
     return result;
 }
 
-function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
-    const model = new BackupModel();
+function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia: RecipeMedia[]): RecipeBackupModel {
+    const model = new RecipeBackupModel();
     model.id = recipe.id;
     model.title = recipe.title;
     model.ingredients = recipe.ingredients;
@@ -225,7 +233,7 @@ function getBackupModel(recipe: Recipe, allMedia: RecipeMedia[]): BackupModel {
             };
         });
     model.categoryId = recipe.categoryId;
-    // TODO: how to export folders?
+    model.category = category?.name;
 
     return model;
 }
