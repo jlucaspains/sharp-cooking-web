@@ -30,7 +30,7 @@ test('title is Category 1', async ({ page }) => {
 test('open recipe', async ({ page }) => {
   await createRecipe(page, 2, "recipe", 1, ["1 cup flour"], ["Preheat oven to 350 F"], false, "Category 1");
   await goToCategory(page, "Category 1");
-  await page.getByTestId('recipe-title').click();
+  await page.getByTestId('recipe-title').first().click();
   await expect(page).toHaveURL(/.*\/recipe\/2/);
 });
 
@@ -101,7 +101,7 @@ test('add manually', async ({ page }) => {
   await page.getByRole('menuitem', { name: 'Add manually' }).click();
 
   await expect(page).toHaveURL(/.*\/recipe\/0\/edit/);
-  expect(await page.getByLabel('Category').inputValue()).toBe("1");
+  await expect(page.getByLabel('Category')).toHaveValue("1");
 });
 
 test('import from website', async ({ page }) => {
@@ -134,7 +134,7 @@ test('search simple', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').fill("Cookie");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -146,7 +146,7 @@ test('search advanced by typing title', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').fill("title: Cookie");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -158,7 +158,7 @@ test('search advanced by typing ingredient', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').fill("ingredients: dough");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -170,7 +170,7 @@ test('search advanced by typing step', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').fill("steps: 354F");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -184,7 +184,7 @@ test('search advanced by selecting title', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').pressSequentially("cookie");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -197,7 +197,7 @@ test('search advanced by selecting ingredient', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').pressSequentially("dough");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });
 
@@ -210,6 +210,6 @@ test('search advanced by selecting step', async ({ page, isMobile }) => {
   await page.getByTestId('search-input').pressSequentially("354F");
   await page.waitForTimeout(500);
   const names = page.getByTestId('recipe-title');
-  expect(await names.count()).toBe(1);
+  await expect(names).toHaveCount(1);
   await expect(names.first()).toHaveText('Favorite cookie');
 });

@@ -86,7 +86,7 @@ test('add image', async ({ page, browserName, isMobile }) => {
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   await page.getByTestId('add-image-button').click();
-  expect(await page.locator('.list-images').getByRole("img").count()).toBe(2);
+  await expect(page.locator('.list-images').getByRole("img")).toHaveCount(2);
 });
 
 test('add video', async ({ page, browserName, isMobile }) => {
@@ -106,7 +106,7 @@ test('remove media', async ({ page }) => {
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   await page.getByTestId('remove-image-button').click();
-  expect(await page.locator('.list-images').getByRole("img").count()).toBe(0);
+  await expect(page.locator('.list-images').getByRole("img")).toHaveCount(0);
 });
 
 test('crop image cancel', async ({ page }) => {
@@ -116,7 +116,7 @@ test('crop image cancel', async ({ page }) => {
   const original = await page.locator('.list-images').getByRole("img").first().getAttribute("src");
   await page.getByTestId('crop-button').click();
   await page.getByTestId('cancel-crop-button').click();
-  expect(await page.locator('.list-images').getByRole("img").count()).toBe(1);
+  await expect(page.locator('.list-images').getByRole("img")).toHaveCount(1);
   const afterCropCancel = await page.locator('.list-images').getByRole("img").first().getAttribute("src");
   expect(original).toBe(afterCropCancel);
 });
@@ -138,14 +138,14 @@ test('change language', async ({ page }) => {
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   await page.getByTestId('change-lang-button').click();
-  
+
   expect(page.getByLabel('American English')).toBeChecked();
 
   await page.getByLabel('Brazilian Portuguese').check();
   await page.getByRole('button', { name: 'OK' }).click();
-  
+
   await page.getByTestId("topbar-single-button").click();
-  
+
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();

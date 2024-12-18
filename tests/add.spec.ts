@@ -99,5 +99,5 @@ test('import from code', async ({ page, browserName }) => {
   await expect(page.getByLabel('Title')).toHaveValue("New Bread Recipe");
   await expect(page.getByPlaceholder('1 cup flour')).toHaveValue("142g whole wheat flour");
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
-  expect(await page.locator('.list-images').getByRole("img").count()).toBe(1);
+  await expect(page.locator('.list-images').getByRole("img")).toHaveCount(1);
 });

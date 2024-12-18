@@ -21,7 +21,7 @@ test('change size', async ({ page }) => {
   await page.getByTestId('multiplier-button').click();
   await page.getByTestId('multiplier-value').fill("2");
   await page.getByRole('button').getByText("OK").click();
-  expect(await page.getByText('200g flour').textContent()).toBe('200g flour');
+  await expect(page.getByText('200g flour')).toHaveText('200g flour');
 });
 
 test('change time', async ({ page, browserName }) => {

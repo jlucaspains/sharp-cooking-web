@@ -19,7 +19,7 @@ test('create backup', async ({ page, browserName }) => {
           const result = await blob.text()
           const json = JSON.parse(result);
           delete json.recipes[0].changedOn;
-          
+
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
             console.error("File doesn't match expectation");
@@ -47,7 +47,7 @@ test('create backup', async ({ page, browserName }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
-  
+
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
   await page.getByText('Take a backup').click();
   await consoleWaiter;
@@ -66,7 +66,7 @@ test('create backup with categories', async ({ page, browserName }) => {
           const json = JSON.parse(result);
           delete json.recipes[0].changedOn;
           delete json.recipes[1].changedOn;
-          
+
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
             console.error("File doesn't match expectation");
@@ -97,7 +97,7 @@ test('create backup with categories', async ({ page, browserName }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
-  
+
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
   await page.getByText('Take a backup').click();
   await consoleWaiter;
@@ -132,7 +132,7 @@ test('multiplier to use fractions', async ({ page }) => {
   await page.getByTestId('multiplier-button').click();
   await page.getByTestId('multiplier-value').fill("0.5");
   await page.getByRole('button').getByText("OK").click();
-  expect(await page.getByText('1/2g salt').textContent()).toBe('1/2g salt');
+  await expect(page.getByText('1/2g salt')).toHaveText('1/2g salt');
 });
 
 
@@ -154,22 +154,22 @@ test('steps interval', async ({ page, browserName }) => {
   expect(await page.getByText('10:40 AM').textContent()).toMatch(/10:40.*/);
 });
 
-  // test('steps interval webkit', async ({ page, browserName }) => {
-  //   test.skip(browserName !== 'webkit', 'not applicable');
+// test('steps interval webkit', async ({ page, browserName }) => {
+//   test.skip(browserName !== 'webkit', 'not applicable');
 
-  //   await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
-  //   await page.goto('/');
-  //   await page.getByTestId('topbar-options').click();
-  //   await page.getByRole('menuitem', { name: 'Options' }).click();
-  //   await page.getByText('Steps Interval').click();
-  //   await page.getByTestId('steps-interval-input').clear();
-  //   await page.getByTestId('steps-interval-input').fill("10");
-  //   await page.getByRole('button').getByText("OK").click();
-  //   await page.goto('#/recipe/2');
-  //   await page.getByTestId('time-button').click();
-  //   await page.screenshot({ path: 'test-results/steps-webkit.png'});
-  //   await page.getByTestId('time-value-input').clear();
-  //   await page.getByTestId('time-value-input').type("10:00");
-  //   await page.getByRole('button').getByText("OK").click();
-  //   expect(await page.getByText('10:40 AM').textContent()).toMatch(/10:40.*/);
-  // });
+//   await createRecipe(page, 2, "New Bread", 5, ["1g salt"], ["Bake it for 30 min"]);
+//   await page.goto('/');
+//   await page.getByTestId('topbar-options').click();
+//   await page.getByRole('menuitem', { name: 'Options' }).click();
+//   await page.getByText('Steps Interval').click();
+//   await page.getByTestId('steps-interval-input').clear();
+//   await page.getByTestId('steps-interval-input').fill("10");
+//   await page.getByRole('button').getByText("OK").click();
+//   await page.goto('#/recipe/2');
+//   await page.getByTestId('time-button').click();
+//   await page.screenshot({ path: 'test-results/steps-webkit.png'});
+//   await page.getByTestId('time-value-input').clear();
+//   await page.getByTestId('time-value-input').type("10:00");
+//   await page.getByRole('button').getByText("OK").click();
+//   expect(await page.getByText('10:40 AM').textContent()).toMatch(/10:40.*/);
+// });
