@@ -25,7 +25,7 @@ test('title', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
   await page.waitForTimeout(500);
   await page.goto('/');
-  expect(await page.getByText('Changed Recipe').textContent()).toEqual("Changed Recipe");
+  await expect(page.getByText('Changed Recipe')).toHaveText("Changed Recipe");
 });
 
 test('add ingredient', async ({ page }) => {
@@ -37,7 +37,7 @@ test('add ingredient', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
   await page.waitForTimeout(500);
   await page.goto('#/recipe/1');
-  expect(await page.getByText('New Ingredient').textContent()).toEqual("New Ingredient");
+  await expect(page.getByText('New Ingredient')).toHaveText("New Ingredient");
 });
 
 test('add step', async ({ page }) => {
@@ -49,7 +49,7 @@ test('add step', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
   await page.waitForTimeout(500);
   await page.goto('#/recipe/1');
-  expect(await page.getByText('New Step').textContent()).toEqual("New Step");
+  await expect(page.getByText('New Step')).toHaveText("New Step");
 });
 
 test('add image', async ({ page, browserName, isMobile }) => {
@@ -97,7 +97,7 @@ test('add video', async ({ page, browserName, isMobile }) => {
   await page.getByTestId('add-video-url').fill("https://www.youtube.com/watch?v=0YY7K7Xa5rE");
   await page.getByRole("button").getByText("OK").click();
 
-  expect(page.locator("iframe"))
+  await expect(page.locator("iframe"))
     .toHaveAttribute("src", "https://www.youtube.com/embed/0YY7K7Xa5rE");
 });
 
@@ -164,10 +164,10 @@ test('edit ingredients and steps in single text area', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
   await page.waitForTimeout(500);
   await page.goto('#/recipe/1');
-  expect(await page.getByText('New Ingredient 1').textContent()).toEqual("New Ingredient 1");
-  expect(await page.getByText('New Ingredient 2').textContent()).toEqual("New Ingredient 2");
-  expect(await page.getByText('New Step 1').textContent()).toEqual("New Step 1");
-  expect(await page.getByText('New Step 2').textContent()).toEqual("New Step 2");
+  await expect(page.getByText('New Ingredient 1')).toHaveText("New Ingredient 1");
+  await expect(page.getByText('New Ingredient 2')).toHaveText("New Ingredient 2");
+  await expect(page.getByText('New Step 1')).toHaveText("New Step 1");
+  await expect(page.getByText('New Step 2')).toHaveText("New Step 2");
 });
 
 test('edit ingredients and steps in multiple text boxes', async ({ page }) => {
@@ -181,6 +181,6 @@ test('edit ingredients and steps in multiple text boxes', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
   await page.waitForTimeout(500);
   await page.goto('#/recipe/1');
-  expect(await page.getByText('New Ingredient').textContent()).toEqual("New Ingredient");
-  expect(await page.getByText('New Step').textContent()).toEqual("New Step");
+  await expect(page.getByText('New Ingredient')).toHaveText("New Ingredient");
+  await expect(page.getByText('New Step')).toHaveText("New Step");
 });

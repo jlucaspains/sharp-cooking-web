@@ -44,7 +44,7 @@ test('Restore v1 json backup old format', async ({ page }) => {
     await page.getByTestId("import-button").click();
     await page.getByTestId("topbar-single-button").click();
     await page.goto('#/recipe/1');
-    expect(await page.getByText('New Bread Recipe').textContent()).toEqual("New Bread Recipe");
+    await expect(page.getByText('New Bread Recipe')).toHaveText("New Bread Recipe");
 });
 
 test('Restore v1 json backup new format', async ({ page }) => {
@@ -83,7 +83,7 @@ test('Restore v1 json backup new format', async ({ page }) => {
     await page.getByTestId("import-button").click();
     await page.getByTestId("topbar-single-button").click();
     await page.goto('#/recipe/1');
-    expect(await page.getByText('New Bread Recipe').textContent()).toEqual("New Bread Recipe");
+    await expect(page.getByText('New Bread Recipe')).toHaveText("New Bread Recipe");
 });
 
 test('Restore v1 json backup with video', async ({ page }) => {
@@ -122,12 +122,11 @@ test('Restore v1 json backup with video', async ({ page }) => {
     await page.getByTestId("import-button").click();
     await page.getByTestId("topbar-single-button").click();
     await page.goto('#/recipe/1');
-    expect(await page.getByText('New Bread Recipe').textContent()).toEqual("New Bread Recipe");
+    await expect(page.getByText('New Bread Recipe')).toHaveText("New Bread Recipe");
     await page.waitForTimeout(1000);
-    expect(await page.locator("iframe"))
+    await expect(page.locator("iframe"))
         .toHaveAttribute("src", "https://www.youtube.com/embed/0YY7K7Xa5rE");
 });
-
 
 test('Restore v2 json backup new format', async ({ page }) => {
     await page.addInitScript(() => {
@@ -197,8 +196,8 @@ test('Restore v2 json backup new format', async ({ page }) => {
     await page.getByTestId("topbar-single-button").click();
 
     await page.goto('/');
-    expect(await page.getByText('Bread').textContent()).toEqual("Bread");
+    await expect(page.getByText('Bread')).toHaveText("Bread");
 
     await page.getByText('Bread').click();
-    expect(await page.getByText('New Bread Recipe').textContent()).toEqual("New Bread Recipe");
+    await expect(page.getByText('New Bread Recipe')).toHaveText("New Bread Recipe");
 });

@@ -55,19 +55,6 @@ test('print recipe', async ({ page }) => {
   await page.waitForEvent("console", item => item.text() == "Print was triggered")
 });
 
-// test('change time webkit', async ({ page, browserName }) => {
-//   test.skip(browserName !== 'webkit', 'not applicable');
-
-//   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
-//   await page.goto('/');
-//   await page.getByText('New Bread').first().click();
-//   await page.getByTestId('time-button').click();
-//   await page.getByTestId('time-value-input').clear();
-//   await page.getByTestId('time-value-input').type("10:00");
-//   await page.getByRole('button').getByText("OK").click();
-//   expect(await page.getByText('10:35 AM').textContent()).toMatch(/10:35.*/);
-// });
-
 test('delete', async ({ page }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('/');
