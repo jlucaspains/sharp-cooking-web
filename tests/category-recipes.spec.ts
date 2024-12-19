@@ -7,6 +7,7 @@ test.beforeEach(async ({ page }) => {
   });
 
   await page.goto('/');
+  await page.waitForTimeout(200);
 
   await page.goto('#/preview-features');
   await page.getByTestId('enable-category-toggle').click();
