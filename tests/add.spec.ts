@@ -10,22 +10,22 @@ test.beforeEach(async ({ page }) => {
 test('add new recipe', async ({ page }) => {
   await createRecipe(page, 2, "Bread 1", 5);
   await page.goto('/');
-  expect(await page.getByText('Bread 1').textContent()).toEqual('Bread 1');
+  await expect(page.getByText('Bread 1')).toHaveText('Bread 1');
 });
 
 test('create many recipes', async ({ page }) => {
   test.setTimeout(60000);
   await createRecipe(page, 2, "Bread 2", 5);
   await page.goto('/');
-  expect(await page.getByText('Bread 2').textContent()).toEqual('Bread 2');
+  await expect(page.getByText('Bread 2')).toHaveText('Bread 2');
 
   await createRecipe(page, 3, "Bread 3", 5);
   await page.goto('/');
-  expect(await page.getByText('Bread 3').textContent()).toEqual('Bread 3');
+  await expect(page.getByText('Bread 3')).toHaveText('Bread 3');
 
   await createRecipe(page, 4, "Bread 4", 5);
   await page.goto('/');
-  expect(await page.getByText('Bread 4').textContent()).toEqual('Bread 4');
+  await expect(page.getByText('Bread 4')).toHaveText('Bread 4');
 });
 
 test('import from website', async ({ page }) => {
@@ -72,7 +72,7 @@ test('import from url', async ({ page, browserName }) => {
 
 test('import from code', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
-  
+
   const response = `
     {
         "title": "New Bread Recipe",
@@ -87,7 +87,7 @@ test('import from code', async ({ page, browserName }) => {
     const json = JSON.parse(response);
     await route.fulfill({ json });
   });
-  
+
   await page.goto('/');
 
   await page.getByTestId('add-menu-button').click();
@@ -99,5 +99,5 @@ test('import from code', async ({ page, browserName }) => {
   await expect(page.getByLabel('Title')).toHaveValue("New Bread Recipe");
   await expect(page.getByPlaceholder('1 cup flour')).toHaveValue("142g whole wheat flour");
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
-  expect(await page.locator('.list-images').getByRole("img").count()).toBe(1);
+  await expect(page.locator('.list-images').getByRole("img")).toHaveCount(1);
 });

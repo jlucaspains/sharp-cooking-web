@@ -18,6 +18,7 @@ export class Recipe {
     source!: string;
     nutrition!: RecipeNutrition;
     language?: string;
+    categoryId?: number;
 }
 
 export class RecipeImage {

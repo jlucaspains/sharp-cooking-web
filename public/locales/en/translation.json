@@ -77,7 +77,11 @@
             "aiModelName": "AI Model Name",
             "aiModelNameDescription": "The name of the OpenAI model to use for the AI Chat service.",
             "editInSingleTextArea": "Enable simplified recipe editor",
-            "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps."
+            "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps.",
+            "enableCategoryDisplay": "Enable Category Display",
+            "enableCategoryDisplayDescription": "When enabled, show a list of categories on the main page.",
+            "categories": "Categories",
+            "categoriesDescription": "Maintain list of categories"
         },
         "recipe": {
             "id": {
@@ -134,7 +138,9 @@
                     "sugar": "Sugar (g)",
                     "protein": "Protein (g)",
                     "changeLanguage": "Change Language",
-                    "changeLanguageTitle": "Change recipe language"
+                    "changeLanguageTitle": "Change recipe language",
+                    "category": "Category",
+                    "selectCategory": "Select category..."
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"
@@ -247,6 +253,21 @@
         "chat": {
             "abortError": "Ok. I won't answer that question.",
             "unableToAnswer": "I'm sorry, I'm unable to answer that question right now."
+        },
+        "categories": {
+            "title": "Categories",
+            "newTitle": "New Category",
+            "selectImage": "Select an image...",
+            "delete": "Delete...",
+            "edit": "Edit...",
+            "deleteModalTitle": "Delete this category?",
+            "deleteModalBody": "Are you sure? This action cannot be undone.",
+            "deleteYes": "Yes, delete",
+            "categoryDeleted": "Category deleted successfully.",
+            "categoryDeleteFailed": "Failed to delete the category.",
+            "processImage1": "Compressing image...",
+            "processImage2": "Still working on the image. This may take a while",
+            "selectAnItem": "Please select an item."
         }
     },
     "initialRecipes": [

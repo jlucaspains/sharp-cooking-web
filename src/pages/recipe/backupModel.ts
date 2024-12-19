@@ -1,6 +1,7 @@
+import { Category } from "../../services/category";
 import { Recipe } from "../../services/recipe";
 
-export class BackupModel extends Recipe {
+export class RecipeBackupModel extends Recipe {
   constructor() {
     super();
 
@@ -10,4 +11,11 @@ export class BackupModel extends Recipe {
   }
 
   media?: Array<{type: string, url: string}>;
+  category?: string;
+}
+
+export class BackupModel {
+  recipes: RecipeBackupModel[] = [];
+  categories: Category[] = [];
+  version: number = 2;
 }
