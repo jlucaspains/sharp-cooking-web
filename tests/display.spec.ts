@@ -21,7 +21,7 @@ test('change size', async ({ page }) => {
   await page.getByTestId('multiplier-button').click();
   await page.getByTestId('multiplier-value').fill("2");
   await page.getByRole('button').getByText("OK").click();
-  expect(await page.getByText('200g flour').textContent()).toBe('200g flour');
+  await expect(page.getByText('200g flour')).toHaveText('200g flour');
 });
 
 test('change time', async ({ page, browserName }) => {
@@ -54,19 +54,6 @@ test('print recipe', async ({ page }) => {
   await expect(page.getByText('Bake it for 30 min')).toHaveText('Bake it for 30 min');
   await page.waitForEvent("console", item => item.text() == "Print was triggered")
 });
-
-// test('change time webkit', async ({ page, browserName }) => {
-//   test.skip(browserName !== 'webkit', 'not applicable');
-
-//   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
-//   await page.goto('/');
-//   await page.getByText('New Bread').first().click();
-//   await page.getByTestId('time-button').click();
-//   await page.getByTestId('time-value-input').clear();
-//   await page.getByTestId('time-value-input').type("10:00");
-//   await page.getByRole('button').getByText("OK").click();
-//   expect(await page.getByText('10:35 AM').textContent()).toMatch(/10:35.*/);
-// });
 
 test('delete', async ({ page }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
@@ -123,14 +110,14 @@ Bake it for 30 min`;
 test('share as file', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
   await page.addInitScript(() => {
-    const comparer = '[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour"],"steps":["Bake it for 30 min"],"notes":"","multiplier":1,"nutrition":{"servingSize":0,"totalFat":0,"saturatedFat":0,"sodium":0,"protein":0,"cholesterol":0,"calories":0,"carbohydrates":0,"fiber":0,"sugar":0,"transFat":0,"unsaturatedFat":0},"media":[]}]';
+    const comparer = '{"recipes":[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour"],"steps":["Bake it for 30 min"],"notes":"","multiplier":1,"nutrition":{"servingSize":0,"totalFat":0,"saturatedFat":0,"sodium":0,"protein":0,"cholesterol":0,"calories":0,"carbohydrates":0,"fiber":0,"sugar":0,"transFat":0,"unsaturatedFat":0},"categoryId":0,"media":[]}],"categories":[],"version":2}';
     const stream = new WritableStream({
       write(chunk) {
         return new Promise(async (resolve, reject) => {
           const blob = new Blob([chunk]);
           const result = await blob.text()
           const json = JSON.parse(result);
-          delete json[0].changedOn;
+          delete json.recipes[0].changedOn;
 
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
@@ -168,9 +155,7 @@ test('share as file', async ({ page, browserName }) => {
   await consoleWaiter;
 });
 
-test('share as code', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'not applicable');
-
+test('share as code', async ({ page }) => {
   const response = `{"id": "123456", "ttl": 3600}`;
 
   await page.route('**/api/share-recipe', async route => {

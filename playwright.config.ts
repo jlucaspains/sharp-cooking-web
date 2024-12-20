@@ -46,6 +46,9 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry',
     video: 'off',
     screenshot: 'only-on-failure',
+    contextOptions: {
+      serviceWorkers: "block"
+    }
   },
 
   /* Configure projects for major browsers */
@@ -63,21 +66,15 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: 'firefox',
-      use: {
-        ...devices['DeskDesktop Firefox'],
-      },
-    },
-    {
       name: 'Mobile Chrome',
       use: {
-        ...devices['Pixel 5'],
+        ...devices['Pixel 7'],
       },
     },
     {
       name: 'Mobile Safari',
       use: {
-        ...devices['iPhone 12'],
+        ...devices['iPhone 15'],
       },
     },
   ],

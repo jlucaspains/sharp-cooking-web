@@ -13,21 +13,30 @@ export async function createRecipe(page: Page, id: number, title: string, rating
     "Ferment for 2 hours",
     "Preheat oven at 420F",
     "Bake for 30 minutes with lid on"
-]) {
-    await createRecipeWithoutSaving(page, title, rating, ingredients, steps);
+], startFromHome: boolean = true,
+    category: string | null = null) {
+    await createRecipeWithoutSaving(page, title, rating, ingredients, steps, startFromHome, category);
 
     await page.getByTestId("topbar-single-button").click();
     await expect(page).toHaveURL(new RegExp(`.*/recipe/${id}/edit`));
 }
 
+export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[], startFromHome: boolean = true, category: string | null = null) {
+    if (startFromHome) {
+        await page.goto('/');
+        await page.getByTestId('add-menu-button').click();
+        await page.getByRole('menuitem', { name: 'Add manually' }).click();
+        await expect(page).toHaveURL('/#/recipe/0/edit');
+    } else {
+        await page.goto('/#/recipe/0/edit');
+    }
 
-export async function createRecipeWithoutSaving(page: Page, title: string, rating: number, ingredients: string[], steps: string[]) {
-    await page.goto('/');
-    await page.getByTestId('add-menu-button').click();
-    await page.getByRole('menuitem', { name: 'Add manually' }).click();
-    await expect(page).toHaveURL('/#/recipe/0/edit');
     await page.getByLabel('Title').fill(title);
     await page.getByRole('button', { name: '⭐' }).nth(rating - 1).click();
+
+    if (category) {
+        await page.getByLabel('Category').selectOption({ label: category ?? "None" });
+    }
 
     for (const item of ingredients) {
         await page.getByPlaceholder('1 cup flour').last().fill(item);
@@ -44,4 +53,11 @@ export async function createRecipeWithoutSaving(page: Page, title: string, ratin
             await page.getByPlaceholder('Preheat oven to 350 F').last().press("Enter");
         }
     }
+}
+
+export async function createCategory(page: Page, id: number, title: string) {
+    await page.goto('/#/categories');
+    await page.getByTestId('add-menu-button').click();
+    await page.getByTestId('new-category-name').fill(title);
+    await page.getByText('OK').click();
 }

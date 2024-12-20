@@ -12,10 +12,9 @@ async function enableNutritionFacts(page: any) {
     await page.getByTestId('enable-nutrition-facts-toggle').click();
 }
 
-test('import from url with nutrition facts', async ({ page, browserName }) => {
+test('import from url with nutrition facts', async ({ page }) => {
     await enableNutritionFacts(page);
 
-    test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
     const response = `
       {
           "title": "New Bread Recipe",

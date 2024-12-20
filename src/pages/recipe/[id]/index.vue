@@ -179,7 +179,10 @@ function prepareDisplay(
 ): void {
   currentStartTime.value = new Date(currentTime);
   const defaultTime = parseInt(defaultTimeSetting);
-  const language = recipe.language ?? i18next.language;
+  let language = recipe.language;
+  
+  if (!language)
+    language = i18next.language;
 
   displayIngredients.value = recipe.ingredients.map((ingredient) =>
     prepareIngredientDisplay(

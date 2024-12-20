@@ -94,7 +94,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          npx playwright install chromium firefox webkit
+          npx playwright install chromium webkit
           HOME=/root npx playwright test
 
       - name: Create test summary

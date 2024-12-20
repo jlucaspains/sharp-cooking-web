@@ -76,7 +76,11 @@
             "aiModelName": "Nome do Modelo de IA",
             "aiModelNameDescription": "O nome do modelo OpenAI a ser usado para o serviço de Chat de IA.",
             "editInSingleTextArea": "Habilitar editor de receitas simplificado",
-            "editInSingleTextAreaDescription": "Use uma área de texto para editar os ingredientes e outra para os passos."
+            "editInSingleTextAreaDescription": "Use uma área de texto para editar os ingredientes e outra para os passos.",
+            "enableCategoryDisplay": "Ativar Categorias",
+            "enableCategoryDisplayDescription": "Quando ativado, mostra uma lista de categories na página principal.",
+            "categories": "Categorias",
+            "categoriesDescription": "Manter lista de categorias"
         },
         "recipe": {
             "id": {
@@ -133,7 +137,9 @@
                     "sugar": "Açúcares (g)",
                     "protein": "Proteínas (g)",
                     "changeLanguage": "Alterar idioma",
-                    "changeLanguageTitle": "Alterar idioma da receita"
+                    "changeLanguageTitle": "Alterar idioma da receita",
+                    "category": "Categoria",
+                    "selectCategory": "Selecione categoria..."
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"
@@ -245,6 +251,21 @@
         "chat": {
             "abortError": "Ok. Eu não vou responder essa pergunta.",
             "unableToAnswer": "Desculpe, eu não consigo responder sua pergunta no momento."
+        },
+        "categories": {
+            "title": "Categorias",
+            "newTitle": "Nova categoria",
+            "selectImage": "Selecione uma imagem...",
+            "delete": "Remover...",
+            "edit": "Editar...",
+            "deleteModalTitle": "Excluir esta categoria?",
+            "deleteYes": "Sim, exclua",
+            "deleteModalBody": "Essa ação não pode ser desfeita.",
+            "categoryDeleted": "Categoria excluída com sucesso.",
+            "categoryDeleteFailed": "Falhou em excluir a categoria",
+            "processImage1": "Comprimindo imagem...",
+            "processImage2": "Ainda processando. Isso pode demorar um pouco...",
+            "selectAnItem": "Selecione um item."
         }
     },
     "initialRecipes": [
