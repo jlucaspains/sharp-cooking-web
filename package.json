@@ -39,7 +39,7 @@
     "postcss": "^8.4.49",
     "postcss-nesting": "^13.0.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
+    "typescript": "5.6.3",
     "vite": "^6.0.4",
     "vite-plugin-pages": "^0.32.4",
     "vite-plugin-pwa": "^0.21.1",
