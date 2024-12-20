@@ -108,7 +108,7 @@ Bake it for 30 min`;
 });
 
 test('share as file', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit' || browserName === "firefox", 'not applicable');
+  test.skip(browserName === 'webkit', 'not applicable');
   await page.addInitScript(() => {
     const comparer = '{"recipes":[{"id":2,"title":"New Bread","score":5,"ingredients":["100g flour"],"steps":["Bake it for 30 min"],"notes":"","multiplier":1,"nutrition":{"servingSize":0,"totalFat":0,"saturatedFat":0,"sodium":0,"protein":0,"cholesterol":0,"calories":0,"carbohydrates":0,"fiber":0,"sugar":0,"transFat":0,"unsaturatedFat":0},"categoryId":0,"media":[]}],"categories":[],"version":2}';
     const stream = new WritableStream({

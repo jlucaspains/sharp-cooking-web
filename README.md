@@ -46,7 +46,7 @@ Sharp Cooking leverages [Playwright](https://playwright.dev/) for end to end tes
 
 Install playwright browsers:
 ```powershell
-npx playwright install chromium firefox webkit
+npx playwright install chromium webkit
 ```
 
 Run tests locally:

@@ -26,7 +26,7 @@ test('will show install prompt on chromium', async ({ page, browserName }) => {
 });
 
 test('will hide install prompt after installed on chromium', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit' || browserName === 'firefox', 'not applicable');
+  test.skip(browserName === 'webkit', 'not applicable');
 
   await page.addInitScript(() => {
 

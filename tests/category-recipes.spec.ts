@@ -32,6 +32,7 @@ test('open recipe', async ({ page }) => {
   await createRecipe(page, 2, "recipe", 1, ["1 cup flour"], ["Preheat oven to 350 F"], false, "Category 1");
   await goToCategory(page, "Category 1");
   await page.getByTestId('recipe-title').first().click();
+  await page.waitForTimeout(200);
   await expect(page).toHaveURL(/.*\/recipe\/2/);
 });
 
