@@ -37,8 +37,7 @@ test('import from website', async ({ page }) => {
   await expect(page).toHaveURL(new RegExp(/.*\/recipe\/0\/edit\?importFromUrl=1/));
 });
 
-test('import from url', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
+test('import from url', async ({ page }) => {
   const response = `
     {
         "title": "New Bread Recipe",
@@ -70,9 +69,7 @@ test('import from url', async ({ page, browserName }) => {
   await expect(page.getByPlaceholder('Preheat oven to 350 F')).toHaveValue("Mix together the dry ingredients");
 });
 
-test('import from code', async ({ page, browserName }) => {
-  test.skip(browserName === 'webkit', 'this test doesnt work in webkit');
-
+test('import from code', async ({ page }) => {
   const response = `
     {
         "title": "New Bread Recipe",

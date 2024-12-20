@@ -46,6 +46,9 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry',
     video: 'off',
     screenshot: 'only-on-failure',
+    contextOptions: {
+      serviceWorkers: "block"
+    }
   },
 
   /* Configure projects for major browsers */

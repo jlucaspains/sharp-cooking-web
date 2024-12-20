@@ -52,9 +52,7 @@ test('add step', async ({ page }) => {
   await expect(page.getByText('New Step')).toHaveText("New Step");
 });
 
-test('add image', async ({ page, browserName, isMobile }) => {
-  test.skip(browserName === 'webkit', 'not applicable');
-
+test('add image', async ({ page }) => {
   await page.addInitScript(async () => {
     var url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
 
