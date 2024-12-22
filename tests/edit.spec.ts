@@ -111,6 +111,8 @@ test('video media shows thumbnail', async ({ page, browserName, isMobile }) => {
   await expect(page.locator("iframe"))
     .toHaveAttribute("src", "https://www.youtube.com/embed/0YY7K7Xa5rE");
 
+  await page.getByTestId("topbar-single-button").click();
+
   await page.goto('/');
   await expect(page.getByTestId('recipe-image')).toHaveAttribute("src", "https://img.youtube.com/vi/0YY7K7Xa5rE/0.jpg")
 });
