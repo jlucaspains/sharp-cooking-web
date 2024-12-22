@@ -3,7 +3,7 @@ import { ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipesByCategory, getRecipeMedia, initialize, saveSetting, getSetting, getRecipes } from "../services/dataService";
+import { getRecipesByCategory, getRecipeMediaUrl, initialize, saveSetting, getSetting, getRecipes } from "../services/dataService";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import debounce from "lodash.debounce";
 import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
@@ -162,8 +162,7 @@ async function loadCategory() {
   }
 
   for (const recipe of allRecipes) {
-    const item = await getRecipeMedia(recipe.id || 0);
-    recipe.image = (item && item.url) || undefined;
+    recipe.image = await getRecipeMediaUrl(recipe.id || 0);
     recipe.imageAvailable = recipe.image ? true : false;
   }
 

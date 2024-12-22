@@ -3,6 +3,7 @@ import { BackupModel, RecipeBackupModel } from "../pages/recipe/backupModel"
 import { Recipe, RecipeImage, RecipeMedia, RecipeNutrition } from "./recipe";
 import { Setting } from "./setting";
 import { Category } from "./category";
+import { getThumbnail } from "../helpers/videoHelpers";
 
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
@@ -103,10 +104,19 @@ export async function getRecipeMediaList(id: number): Promise<RecipeMedia[]> {
 }
 
 export async function getRecipeMedia(id: number): Promise<RecipeMedia | undefined> {
-    const result = await db.recipeMedia
+    return await db.recipeMedia
         .where("recipeId").equals(id)
-        .and(item => item.type == "img")
         .first();
+}
+
+export async function getRecipeMediaUrl(id: number): Promise<string | undefined> {
+    const media = await getRecipeMedia(id);
+
+    let result = media?.url;
+    if (media?.type == "vid")
+    {
+        result = getThumbnail(media.url);
+    }
 
     return result;
 }
