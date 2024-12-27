@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
 async function goToCategory(page: Page, category: string) {
   await page.goto('/');
   await page.getByText(category).click();
-  await page.waitForTimeout(200);
+  await page.waitForTimeout(500);
 }
 
 test('title is Category 1', async ({ page }) => {
