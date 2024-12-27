@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
 async function goToCategory(page: Page, category: string) {
   await page.goto('/');
   await page.getByText(category).click();
-  await page.waitForTimeout(200);
+  await page.waitForTimeout(500);
 }
 
 test('title is Category 1', async ({ page }) => {
@@ -31,7 +31,6 @@ test('title is Category 1', async ({ page }) => {
 test('open recipe', async ({ page }) => {
   await createRecipe(page, 2, "recipe", 1, ["1 cup flour"], ["Preheat oven to 350 F"], false, "Category 1");
   await goToCategory(page, "Category 1");
-  await page.waitForTimeout(200);
   await page.getByTestId('recipe-title').first().click();
   await page.waitForTimeout(200);
   await expect(page).toHaveURL(/.*\/recipe\/2/);
