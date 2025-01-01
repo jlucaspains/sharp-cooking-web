@@ -1,0 +1,16 @@
+{
+    "name": "Sharp Cooking Recipe Importer",
+    "version": "1.0.0",
+    "description": "Import recipes from the webpage.",
+    "manifest_version": 3,
+    "author": "lpains",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {},
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": ["https://sharpcooking.lpains.net/api/*"]
+}
