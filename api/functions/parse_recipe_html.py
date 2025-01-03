@@ -17,15 +17,14 @@ ureg = UnitRegistry()
 bp = func.Blueprint()
 
 @bp.route(route="parse-recipe-html", methods=["POST"]) 
-def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
+def parse_recipe_html(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
-    req_body = req.get_json()
-    url: str = req_body.get("url")
-    html: str = req_body.get("html")
+    url: str = req.form.get("url")
+    html: str = req.form.get("html")
     scraper: AbstractScraper
-    download_image: bool = req_body.get("downloadImage") or False
+    download_image: bool = req.form.get("downloadImage") or False
     try:
         logging.info(f"processing parse request id {correlation_id} for url: {html}")
         for file in req.files.values():

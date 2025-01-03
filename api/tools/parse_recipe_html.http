@@ -1,6 +1,4 @@
 POST http://localhost:7071/api/parse-recipe-html
-Content-Type: application/json
-
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryePkpFF7tjBAqx29L
 
 ------WebKitFormBoundaryePkpFF7tjBAqx29L
