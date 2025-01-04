@@ -8,9 +8,14 @@
         "activeTab",
         "scripting"
     ],
-    "action": {},
+    "action": {
+        "default_popup": "popup.html"
+    },
     "background": {
         "service_worker": "background.js"
     },
-    "host_permissions": ["https://sharpcooking.lpains.net/api/*"]
+    "host_permissions": [
+        "https://sharpcooking.lpains.net/api/*",
+        "https://delightful-flower-0c3edd710-383.centralus.2.azurestaticapps.net/api/*"
+    ]
 }

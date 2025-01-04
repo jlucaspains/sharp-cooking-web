@@ -386,6 +386,11 @@ async function importRecipeFromCode() {
     });
 
     item.value.imageAvailable = images.value.length > 0;
+
+    if (editInSingleTextArea.value) {
+      ingredientsText.value = item.value.ingredients.join("\n");
+      stepsText.value = item.value.steps.join("\n");
+    }
   }
   catch {
     isImportFromUrlModalOpen.value = true;
