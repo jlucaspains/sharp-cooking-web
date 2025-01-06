@@ -3,10 +3,11 @@
 <head>
     <style>
         .container {
-            min-height: 5rem;
+            height: 5rem;
             width: 10rem;
             padding: 1rem;
         }
+
         .result {
             font-size: 2rem;
             margin: auto;
@@ -18,7 +19,9 @@
     <div class="container">
         <div id="sharp-cooking-message">Trying to extract recipe. Please wait...</div>
         <div id="sharp-cooking-code" class="result"></div>
+        <div id="qrcode"></div>
     </div>
+    <script src="qrcode.js"></script>
     <script src="popup.js">
     </script>
 </body>

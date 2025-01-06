@@ -11,6 +11,12 @@ chrome.runtime.onMessage.addListener(
             document.getElementById("sharp-cooking-code").innerHTML = request.code || "";
             document.getElementById("sharp-cooking-message").innerHTML = request.error || "";
 
+            new QRCode(document.getElementById("qrcode"), {
+                text: request.code,
+                width: 128,
+                height: 128
+            });
+
             return false; // there is no need to respond
         }
     }
