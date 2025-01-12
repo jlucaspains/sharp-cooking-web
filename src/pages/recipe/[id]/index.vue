@@ -61,6 +61,7 @@ const isIngredientDetailsModalOpen = ref(false);
 const isBusy = ref(false);
 const isShareOptionsModalOpen = ref(false);
 const shareCode = ref("");
+const shareQRCode = ref("");
 const isInstructionDetailsModalOpen = ref(false);
 const isNutritionFactsModalOpen = ref(false);
 const { t } = useTranslation();
@@ -419,6 +420,7 @@ async function shareOnline() {
 
     const result = await response.json();
     shareCode.value = result.id;
+    shareQRCode.value = result.qrCode;
 
     isShareOptionsModalOpen.value = true;
 
@@ -789,6 +791,7 @@ function nutritionHasValues(): boolean {
         }
       ]">
       <div class="text-center my-6">
+        <div class="bg-white w-60 m-auto" v-html="shareQRCode"></div>
         <span class="text-2xl dark:text-white" data-testid="actual-share-code">{{ shareCode }}</span>
       </div>
     </Modal>
