@@ -1,3 +1,4 @@
+from contextlib import suppress
 import io
 from zipfile import ZipFile
 from fractions import Fraction
@@ -9,6 +10,8 @@ from PIL import Image
 from pint import UnitRegistry
 import pillow_avif
 from recipe_scrapers import scrape_html, AbstractScraper
+
+ureg = UnitRegistry()
 
 def parse_recipe_ingredients(text: str, ureg: UnitRegistry):
     """Parses a recipe collection of ingredientes that are formatted in a single string separated by \n
@@ -187,3 +190,68 @@ def get_html(url: str) -> AbstractScraper:
     html = requests.get(url, headers=request_headers).content
 
     return scrape_html(html, url, wild_mode=True)
+
+def get_recipe_from_scraper(scraper: AbstractScraper, download_image: bool = False):
+    """Parses a recipe from a scraper
+    Args:
+        scraper (AbstractScraper): scraper object
+        download_image (bool): whether to download the image or not, default is False
+    Returns:
+        dict: dictionary with recipe information
+    """    
+    lang = scraper.language() or "en"
+    
+    ingredients = map(lambda x: parse_recipe_ingredient(x, lang, ureg), scraper.ingredients())
+    instructions = map(lambda x: parse_recipe_instruction(x, lang), scraper.instructions_list())
+    yields, yields_description = parse_yields(scraper.yields())
+    result = {
+        "title": scraper.title(),
+        "totalTime": scraper.total_time(),
+        "yields": yields,
+        "yieldsDescription": yields_description,
+        "ingredients": list(ingredients),
+        "steps": list(instructions),
+        "image": scraper.image(),
+        "host": scraper.host(),
+        "language": scraper.language()
+    }
+
+    # since nutrients are not always available, we need to suppress the exception
+    with suppress(NotImplementedError):
+        result["nutrients"] = parse_nutrients(scraper.nutrients())
+
+    result["image"] = get_recipe_image(result["image"]) if download_image else result["image"]
+
+    return result
+
+def parse_nutrients(nutrients: dict):
+    return {
+        "calories": parse_nutrient_value(nutrients.get("calories")),
+        "totalFat": parse_nutrient_value(nutrients.get("fatContent")),
+        "saturatedFat": parse_nutrient_value(nutrients.get("saturatedFatContent")),
+        "unsaturatedFat": parse_nutrient_value(nutrients.get("unsaturatedFatContent")),
+        "transFat": parse_nutrient_value(nutrients.get("transFatContent")),
+        "carbohydrates": parse_nutrient_value(nutrients.get("carbohydrateContent")),
+        "sugar": parse_nutrient_value(nutrients.get("sugarContent")),
+        "cholesterol": parse_nutrient_value(nutrients.get("cholesterolContent")),
+        "sodium": parse_nutrient_value(nutrients.get("sodiumContent")),
+        "protein": parse_nutrient_value(nutrients.get("proteinContent")),
+        "fiber": parse_nutrient_value(nutrients.get("fiberContent"))
+    }
+
+def parse_yields(yields: str):
+    if not yields:
+        return 0, ""
+    
+    parts = yields.split(" ")
+    
+    return float(parts[0]), parts[1] if len(parts) > 1 else ""
+
+def parse_nutrient_value(value: str) -> float:
+    if not value:
+        return 0
+    
+    qty_re = re.search(r"^(?P<Value>\d{1,5})", value)
+    qty = qty_re.group("Value")
+
+    return float(qty) if qty else 0

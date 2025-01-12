@@ -420,7 +420,10 @@ async function shareOnline() {
 
     const result = await response.json();
     shareCode.value = result.id;
-    shareQRCode.value = result.qr_code;
+    shareQRCode.value = result.qr_code
+    // HACK: remove width and height from QR Code as library that generates it
+    // doesn't have an option to remove it
+      .replace("width=\"29mm\"", "").replace("height=\"29mm\"", "");  
 
     isShareOptionsModalOpen.value = true;
 
