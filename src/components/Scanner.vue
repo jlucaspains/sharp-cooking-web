@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { onMounted, onUnmounted } from "vue";
+import { Html5Qrcode } from "html5-qrcode";
 
 const emit = defineEmits<{
     (e: "codeScanned", value: string): void;

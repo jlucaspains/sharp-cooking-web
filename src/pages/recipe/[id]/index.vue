@@ -420,7 +420,7 @@ async function shareOnline() {
 
     const result = await response.json();
     shareCode.value = result.id;
-    shareQRCode.value = result.qrCode;
+    shareQRCode.value = result.qr_code;
 
     isShareOptionsModalOpen.value = true;
 
