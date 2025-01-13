@@ -951,12 +951,12 @@
     wrap-ansi "^8.1.0"
     wrap-ansi-cjs "npm:wrap-ansi@^7.0.0"
 
-"@jlucaspains/sharp-recipe-parser@^1.2.1":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.3.0.tgz#9e3819c09953f275263c5212ec6e5b158bf149ef"
-  integrity sha512-xlYFYlQQKiNhBSu2nUVIo1RlVAq47nQjT6k5o3k1IdrmpmtLhhI0m5bVUyv4Xz+XOCUHcLR40EfTah/0a+NykQ==
+"@jlucaspains/sharp-recipe-parser@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.3.1.tgz#535e09c0fd690e48ce4758d5771b96dbad161ab2"
+  integrity sha512-w0HYmqh/SE4Dt1QpuC8dai4BI+KW/tCsZu8Vkh199dzZGL9IbRMQkeHR8aeWBDXJgX0RyZX6EjJTo6WGkntz8g==
   dependencies:
-    fraction.js "^4.2.0"
+    fraction.js "^5.0.6"
 
 "@jridgewell/gen-mapping@^0.3.2", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.8"
@@ -2075,12 +2075,12 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
 
-fraction.js@^4.2.0, fraction.js@^4.3.7:
+fraction.js@^4.3.7:
   version "4.3.7"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-fraction.js@^5.2.1:
+fraction.js@^5.0.6, fraction.js@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-5.2.1.tgz#93ffc9507b1a68a1271883aa28e98f58a1c0c6b3"
   integrity sha512-Ah6t/7YCYjrPUFUFsOsRLMXAdnYM+aQwmojD2Ayb/Ezr82SwES0vuyQ8qZ3QO8n9j7W14VJuVZZet8U3bhSdQQ==
@@ -2295,10 +2295,10 @@ i18next-vue@^5.0.0:
   resolved "https://registry.yarnpkg.com/i18next-vue/-/i18next-vue-5.0.0.tgz#466bf834671a9a93525679f6203042ce5152cc41"
   integrity sha512-8jlctdGSKws9fcFlGlFOQRKCQQdUTKSs4D9pbZ6iitpzHQzQSVTdeDPvrjxLomsTjLK65W+MUGW6cwavAMGo9w==
 
-i18next@^24.2.0:
-  version "24.2.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.2.0.tgz#344c15a6f3b43d02aed78e2b08532e5b170951b4"
-  integrity sha512-ArJJTS1lV6lgKH7yEf4EpgNZ7+THl7bsGxxougPYiXRTJ/Fe1j08/TBpV9QsXCIYVfdE/HWG/xLezJ5DOlfBOA==
+i18next@^24.2.1:
+  version "24.2.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.2.1.tgz#91e8f11fc9bd7042ec0bd36bed2dd0457aaa35fa"
+  integrity sha512-Q2wC1TjWcSikn1VAJg13UGIjc+okpFxQTxjVAymOnSA3RpttBQNMPf2ovcgoFVsV4QNxTfNZMAxorXZXsk4fBA==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
@@ -2400,11 +2400,6 @@ is-date-object@^1.0.5, is-date-object@^1.1.0:
   dependencies:
     call-bound "^1.0.2"
     has-tostringtag "^1.0.2"
-
-is-electron@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/is-electron/-/is-electron-2.2.2.tgz#3778902a2044d76de98036f5dc58089ac4d80bb9"
-  integrity sha512-FO/Rhvz5tuw4MCWkpMzHFKWD2LsfHzIb7i6MdPYZ/KW7AlxawyLkqdy+jPZP1WubqEADE3O4FUENlJHDfQASRg==
 
 is-extglob@^2.1.1:
   version "2.1.1"
@@ -3362,7 +3357,16 @@ sourcemap-codec@^1.4.8:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -3440,7 +3444,14 @@ stringify-object@^3.3.0:
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -3537,24 +3548,23 @@ terser@^5.17.4:
     commander "^2.20.0"
     source-map-support "~0.5.20"
 
-tesseract.js-core@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/tesseract.js-core/-/tesseract.js-core-5.1.1.tgz#2b6f3ef28dd109bf4efdbc8fff70bd11adac8b85"
-  integrity sha512-KX3bYSU5iGcO1XJa+QGPbi+Zjo2qq6eBhNjSGR5E5q0JtzkoipJKOUQD7ph8kFyteCEfEQ0maWLu8MCXtvX5uQ==
+tesseract.js-core@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/tesseract.js-core/-/tesseract.js-core-6.0.0.tgz#6f25da94f70f8e8f02aff47a43be61d49e6f67c3"
+  integrity sha512-1Qncm/9oKM7xgrQXZXNB+NRh19qiXGhxlrR8EwFbK5SaUbPZnS5OMtP/ghtqfd23hsr1ZvZbZjeuAGcMxd/ooA==
 
-tesseract.js@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/tesseract.js/-/tesseract.js-5.1.1.tgz#7bfaca1c103ba0ce3ddf5e101f0692802a01f880"
-  integrity sha512-lzVl/Ar3P3zhpUT31NjqeCo1f+D5+YfpZ5J62eo2S14QNVOmHBTtbchHm/YAbOOOzCegFnKf4B3Qih9LuldcYQ==
+tesseract.js@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/tesseract.js/-/tesseract.js-6.0.0.tgz#62ff7fffc8833b5810430a4067785e49d5ca8e7f"
+  integrity sha512-tqYCod1HwJzkeZw1l6XWx+ly2hhisGcBtak9MArhYwDAxL0NgeVhLJcUjqPxZMQtpgtVUzWcpZPryi+hnaQGVw==
   dependencies:
     bmp-js "^0.1.0"
     idb-keyval "^6.2.0"
-    is-electron "^2.2.2"
     is-url "^1.2.4"
     node-fetch "^2.6.9"
     opencollective-postinstall "^2.0.3"
     regenerator-runtime "^0.13.3"
-    tesseract.js-core "^5.1.1"
+    tesseract.js-core "^6.0.0"
     wasm-feature-detect "^1.2.11"
     zlibjs "^0.3.1"
 
@@ -3654,10 +3664,10 @@ typed-array-length@^1.0.7:
     possible-typed-array-names "^1.0.0"
     reflect.getprototypeof "^1.0.6"
 
-typescript@^5.7.2:
-  version "5.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
-  integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
+typescript@^5.7.3:
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.3.tgz#919b44a7dbb8583a9b856d162be24a54bf80073e"
+  integrity sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==
 
 ufo@^1.5.4:
   version "1.5.4"
@@ -3753,10 +3763,10 @@ vite-plugin-pwa@^0.21.1:
     workbox-build "^7.3.0"
     workbox-window "^7.3.0"
 
-vite@^6.0.6:
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-6.0.6.tgz#a851674fcff55b0c1962f72082354b8802e48505"
-  integrity sha512-NSjmUuckPmDU18bHz7QZ+bTYhRR0iA72cs2QAxCqDpafJ0S6qetco0LB3WW2OxlMHS0JmAv+yZ/R3uPmMyGTjQ==
+vite@^6.0.7:
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-6.0.7.tgz#f0f8c120733b04af52b4a1e3e7cb54eb851a799b"
+  integrity sha512-RDt8r/7qx9940f8FcOIAH9PTViRrghKaK2K1jY3RaAURrEUbm9Du1mJ72G+jlhtG3WwodnfzY8ORQZbBavZEAQ==
   dependencies:
     esbuild "^0.24.2"
     postcss "^8.4.49"
