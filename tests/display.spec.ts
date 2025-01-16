@@ -156,7 +156,7 @@ test('share as file', async ({ page, browserName }) => {
 });
 
 test('share as code', async ({ page }) => {
-  const response = `{"id": "123456", "ttl": 3600}`;
+  const response = `{"id": "123456", "qr_code": "<svg></svg>", "ttl": 3600}`;
 
   await page.route('**/api/share-recipe', async route => {
     const json = JSON.parse(response);
