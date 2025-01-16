@@ -5,23 +5,35 @@
     <title>Sharp Cooking Extension</title>
     <style>
         .container {
-            height: 5rem;
-            width: 10rem;
             padding: 1rem;
+        }
+
+        .display-text {
+            min-width: 200px;
+            font-size: 1rem;
+        }
+
+        .mb-1 {
+            margin-bottom: 1rem;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: center;
         }
 
         .result {
             font-size: 2rem;
-            margin: auto;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div id="sharp-cooking-message">Trying to extract recipe. Please wait...</div>
-        <div id="sharp-cooking-code" class="result"></div>
-        <div id="qrcode"></div>
+        <div id="sharp-cooking-message" class="mb-1 display-text">Trying to extract recipe. Please wait...</div>
+        <div id="qrcode" class="mb-1 flex">
+        </div>
+        <div id="sharp-cooking-code" class="result flex"></div>
     </div>
     <script src="qrcode.js"></script>
     <script src="popup.js">

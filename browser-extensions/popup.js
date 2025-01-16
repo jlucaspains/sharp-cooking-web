@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(
     function (request) {
         if (request.contentScriptQuery == "parseRecipeResult") {
             document.getElementById("sharp-cooking-code").innerHTML = request.code || "";
-            document.getElementById("sharp-cooking-message").innerHTML = request.error || "";
+            document.getElementById("sharp-cooking-message").innerHTML = request.error || "Please scan the QR code with your Sharp Cooking app to import the recipe.";
 
             _ = new QRCode(document.getElementById("qrcode"), {
                 text: request.code,

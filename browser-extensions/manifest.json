@@ -17,5 +17,9 @@
     "host_permissions": [
         "https://sharpcooking.lpains.net/api/*",
         "https://delightful-flower-0c3edd710-383.centralus.2.azurestaticapps.net/api/*"
-    ]
+    ],
+    "icons": {
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    }
 }
