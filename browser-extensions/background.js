@@ -22,7 +22,7 @@ function parseRecipe(url, downloadImage, body, sendResponse) {
         body: data
     };
 
-    fetch(`https://delightful-flower-0c3edd710-383.centralus.2.azurestaticapps.net/api/parse-recipe-html`, options)
+    fetch(`https://sharpcooking.lpains.net/api/parse-recipe-html`, options)
         .then(response => {
             if (response.ok) {
                 return response.json();
