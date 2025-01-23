@@ -28,6 +28,7 @@ import RoundButton from "../../../components/RoundButton.vue";
 import i18next from "i18next";
 import { pickImage } from "../../../helpers/imageHelpers";
 import { Category } from "../../../services/category";
+import Scanner from "../../../components/Scanner.vue";
 
 const state = useState()!;
 const route = useRoute();
@@ -91,6 +92,7 @@ const editInSingleTextArea = ref(false);
 const ingredientsText = ref("");
 const stepsText = ref("");
 const categories = ref([] as Array<Category>);
+const scanCodeWithCamera = ref(false);
 
 let enableNutritionFacts = false;
 let enableRecipeLanguageSwitcher = false;
@@ -386,6 +388,11 @@ async function importRecipeFromCode() {
     });
 
     item.value.imageAvailable = images.value.length > 0;
+
+    if (editInSingleTextArea.value) {
+      ingredientsText.value = item.value.ingredients.join("\n");
+      stepsText.value = item.value.steps.join("\n");
+    }
   }
   catch {
     isImportFromUrlModalOpen.value = true;
@@ -417,35 +424,6 @@ async function fillUrlFromClipboard(type: "recipe" | "video") {
             addVideoUrl.value = clipText;
           }
         }
-      })
-      .catch((error) => {
-        notify(
-          {
-            group: "error",
-            title: t("general.error"),
-            text: t("pages.recipe.id.edit.importFromClipboardFailed"),
-          },
-          2000
-        );
-      });
-  } else {
-    notify(
-      {
-        group: "error",
-        title: t("general.error"),
-        text: t("pages.recipe.id.edit.importFromClipboardNotAccessible"),
-      },
-      2000
-    );
-  }
-}
-
-async function fillCodeFromClipboard() {
-  if (navigator.clipboard) {
-    navigator.clipboard
-      .readText()
-      .then((clipText) => {
-        importRecipeCode.value = clipText;
       })
       .catch((error) => {
         notify(
@@ -890,9 +868,9 @@ function changeLanguage() {
     <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
       :title="t('pages.recipe.id.edit.importFromShareTitle')" :buttons="[
         {
-          title: t('pages.recipe.id.edit.importFromShareFromClipboard'),
+          title: t('pages.recipe.id.edit.importFromShareQRCode'),
           action: async () => {
-            await fillCodeFromClipboard();
+            scanCodeWithCamera = true;
           }
         },
         {
@@ -906,6 +884,7 @@ function changeLanguage() {
       ]">
       <input v-model="importRecipeCode" data-testid="import-code"
         class="block my-2 p-2 w-full rounded text-black shadow-sm" />
+      <Scanner v-if="scanCodeWithCamera" @codeScanned="code => importRecipeCode = code" />
     </Modal>
     <Modal :isOpen="isLanguageModalOpen" @closed="isLanguageModalOpen = false"
       :title="t('pages.recipe.id.edit.changeLanguageTitle')" :buttons="[

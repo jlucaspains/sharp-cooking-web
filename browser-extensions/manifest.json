@@ -1,0 +1,25 @@
+{
+    "name": "Sharp Cooking Recipe Importer",
+    "version": "1.0.0",
+    "description": "Import recipes from the webpage.",
+    "manifest_version": 3,
+    "author": "lpains",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": [
+        "https://sharpcooking.lpains.net/api/*",
+        "https://delightful-flower-0c3edd710-383.centralus.2.azurestaticapps.net/api/*"
+    ],
+    "icons": {
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    }
+}

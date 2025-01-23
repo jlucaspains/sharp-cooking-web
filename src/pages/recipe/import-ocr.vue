@@ -69,9 +69,7 @@ async function cropImage() {
         'eng',
     );
 
-    for (const item of result.data.paragraphs) {
-        scanModalText.value += item.text.replaceAll("\n", " ") + "\n\n";
-    }
+    scanModalText.value += result.data.text.replaceAll("\n", " ") + "\n\n";
 
     isScanModalOpen.value = true;
     isBusy.value = false;

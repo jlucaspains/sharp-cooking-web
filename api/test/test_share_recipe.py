@@ -28,6 +28,7 @@ def test_share_recipe_success():
     parsed_response = json.loads(response.get_body().decode())
 
     assert len(parsed_response["id"]) == 6
+    assert parsed_response["qr_code"].startswith("<svg")
     assert parsed_response["ttl"] == 3600
 
 def test_share_recipe_bad_data():

@@ -140,7 +140,8 @@
                     "changeLanguage": "Change Language",
                     "changeLanguageTitle": "Change recipe language",
                     "category": "Category",
-                    "selectCategory": "Select category..."
+                    "selectCategory": "Select category...",
+                    "importFromShareQRCode": "Scan QR Code"
                 },
                 "gallery": {
                     "recipeImage": "Recipe Image"

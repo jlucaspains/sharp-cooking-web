@@ -6,21 +6,25 @@ import azure.functions as func
 from uuid import uuid4
 from time import perf_counter
 
-from .util import get_recipe_from_scraper, get_html
+from recipe_scrapers import scrape_html, AbstractScraper
+
+from .util import get_recipe_from_scraper
 
 bp = func.Blueprint()
 
-@bp.route(route="parse-recipe", methods=["POST"]) 
-def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="parse-recipe-html", methods=["POST"]) 
+def parse_recipe_html(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
-    req_body = req.get_json()
-    url: str = req_body.get("url")
-    download_image: bool = req_body.get("downloadImage") or False
+    url: str = req.form.get("url")
+    html: str = req.form.get("html")
+    scraper: AbstractScraper
+    download_image: bool = req.form.get("downloadImage") or False
     try:
-        logging.info(f"processing parse request id {correlation_id} for url: {url}")
-        scraper = get_html(url)
+        logging.info(f"processing parse request id {correlation_id} for url: {html}")
+        for file in req.files.values():
+            scraper = scrape_html(file.stream.read(), url, wild_mode=True)
         
         result = get_recipe_from_scraper(scraper, download_image)
 

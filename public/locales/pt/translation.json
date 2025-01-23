@@ -139,7 +139,8 @@
                     "changeLanguage": "Alterar idioma",
                     "changeLanguageTitle": "Alterar idioma da receita",
                     "category": "Categoria",
-                    "selectCategory": "Selecione categoria..."
+                    "selectCategory": "Selecione categoria...",
+                    "importFromShareQRCode": "Código QR"
                 },
                 "gallery": {
                     "recipeImage": "Imagem de Receita"

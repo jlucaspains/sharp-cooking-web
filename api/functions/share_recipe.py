@@ -4,6 +4,8 @@ import json
 import random
 import string
 import jsonschema
+import qrcode
+import qrcode.image.svg
 
 import azure.functions as func
 from jsonschema import validate
@@ -16,6 +18,7 @@ from .models import recipeSchema
 
 repository = Repository()
 bp = func.Blueprint()
+qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
 
 def mock_repository(mock_repository: Repository):
     global repository
@@ -50,7 +53,13 @@ def share_recipe(req: func.HttpRequest) -> func.HttpResponse:
         operation_result = repository.create_item(new_item)
         logging.debug(operation_result)
 
-        result = json.dumps({ "id": share_id, "ttl": ttl })
+        qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
+        qr.add_data(share_id)
+        qr.make(fit=True)
+
+        img = qr.make_image()
+
+        result = json.dumps({ "id": share_id, "qr_code": img.to_string(encoding='unicode'), "ttl": ttl })
 
         return func.HttpResponse(result, status_code=202, mimetype="application/json")
     except jsonschema.exceptions.ValidationError as e:
