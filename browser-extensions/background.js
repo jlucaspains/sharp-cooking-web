@@ -23,15 +23,17 @@ function parseRecipe(url, downloadImage, body, sendResponse) {
     };
 
     fetch(`https://sharpcooking.lpains.net/api/parse-recipe-html`, options)
-        .then(response => {
+        .then(async response => {
             if (response.ok) {
-                return response.json();
+                const data = await response.json();
+                shareParsedRecipe(data, sendResponse);
+
             } else {
-                throw new Error(`Something went wrong: ${response.status}`);
+                const error = await response.text();
+                chrome.runtime.sendMessage(
+                    { contentScriptQuery: "parseRecipeResult", error: error },
+                );
             }
-        })
-        .then(data => {
-            shareParsedRecipe(data, sendResponse);
         })
         .catch(error => {
             chrome.runtime.sendMessage(
@@ -56,19 +58,19 @@ function shareParsedRecipe(parseResult, sendResponse) {
         body: JSON.stringify(body)
     };
 
-    fetch(`https://delightful-flower-0c3edd710-383.centralus.2.azurestaticapps.net/api/share-recipe`, options)
-        .then(response => {
+    fetch(`https://sharpcooking.lpains.net/api/share-recipe`, options)
+        .then(async response => {
+            let messageToBeSent;
             if (response.ok) {
-                return response.json();
+                const data = await response.json();
+                sendResponse(data.id)
+                messageToBeSent = { contentScriptQuery: "parseRecipeResult", code: data.id };
+
             } else {
-                throw new Error(`Something went wrong: ${response.status}`);
+                const error = await response.text();
+                messageToBeSent = { contentScriptQuery: "parseRecipeResult", error };
             }
-        })
-        .then(data => {
-            sendResponse(data.id)
-            chrome.runtime.sendMessage(
-                { contentScriptQuery: "parseRecipeResult", code: data.id },
-            );
+            chrome.runtime.sendMessage(messageToBeSent);
         })
         .catch(error => {
             chrome.runtime.sendMessage(
