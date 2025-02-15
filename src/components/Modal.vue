@@ -36,7 +36,7 @@ function closeModal() {
     <Dialog as="div" :open="props.isOpen" @close="closeModal" class="relative z-10">
       <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
         leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
-        <div class="fixed inset-0 bg-black bg-opacity-25" />
+        <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -56,7 +56,7 @@ function closeModal() {
               <div class="mt-4 float-right">
                 <button v-for="button in props.buttons" type="button"
                   :class="['inline-flex justify-center rounded-md border border-transparent',
-                  'px-4 py-2 mr-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+                  'px-4 py-2 mr-2 text-sm font-medium focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
                   button.danger ? 'bg-red-500 text-white hover:bg-red-700' : 'bg-gray-200 text-black dark:bg-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-900']"
                   @click="button.action" v-focus="button.focus">
                   {{ button.title }}

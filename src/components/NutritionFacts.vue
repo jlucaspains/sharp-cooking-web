@@ -685,27 +685,27 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
   line-height: 14px;
   text-align: left;
 
-  &-title,
-  &-serving-unit-qty,
-  &-highlight,
-  &-serving,
-  &-amount-per-serving,
-  &-calories {
+  .nf-title,
+  .nf-serving-unit-qty,
+  .nf-highlight,
+  .nf-serving,
+  .nf-amount-per-serving,
+  .nf-calories {
     font-family: 'Archivo Black', sans-serif;
   }
 
-  &-title {
+  .nf-title {
     font-size: 2.15em;
     line-height: 1.15em;
     margin-top: -6px;
   }
 
-  &-serving-per-container {
+  .nf-serving-per-container {
     font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 2px;
   }
 
-  &-serving {
+  .nf-serving {
     font-size: 1.2em;
     line-height: normal;
     padding: 2px 0;
@@ -713,42 +713,42 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     overflow: auto;
   }
 
-  &-serving-size {
+  .nf-serving-size {
     margin-left: 105px;
     text-align: right;
   }
 
-  &-amount-per-serving {
+  .nf-amount-per-serving {
     font-size: .94em;
   }
 
-  &-arrow-up,
-  &-arrow-down {
+  .nf-arrow-up,
+  .nf-arrow-down {
     width: 0;
     height: 0;
     border-style: solid;
   }
 
-  &-arrows {
+  .nf-arrows {
     float: left;
     padding: 6px 5px 0 0;
   }
 
-  &-arrow-up {
+  .nf-arrow-up {
     cursor: pointer;
     margin-bottom: 4px;
     border-width: 0 5px 6px 5px;
     border-color: transparent transparent #333 transparent;
   }
 
-  &-arrow-down {
+  .nf-arrow-down {
     cursor: pointer;
     margin-top: 4px;
     border-width: 6px 5px 0 5px;
     border-color: #333 transparent transparent transparent;
   }
 
-  &-modifier-field {
+  .nf-modifier-field {
     width: 30px;
     text-align: center;
     line-height: normal;
@@ -760,7 +760,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     margin-top: 3px;
   }
 
-  &-item-name {
+  .nf-item-name {
     display: table;
     margin-left: 42px;
     min-height: 25px;
@@ -788,76 +788,76 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
     }
   }
 
-  &-serving-unit-qty {
+  .nf-serving-unit-qty {
     display: inline-block;
   }
 
-  &-calories {
+  .nf-calories {
     font-size: 2em;
     line-height: 1em;
   }
 
-  &-percent-dv {
+  .nf-percent-dv {
     font-size: .84em;
   }
 
-  &-vitamin-column {
+  .nf-vitamin-column {
     font-size: .94em;
     padding: 1px 0;
     border-bottom: 1px solid #000;
   }
 
-  &-ingredient-statement,
-  &-disclaimer {
+  .nf-ingredient-statement,
+  .nf-disclaimer {
     padding-top: 8px;
   }
 
-  &-footnote {
+  .nf-footnote {
     padding-top: 4px;
     margin-left: 5px;
     font-size: .85em;
     line-height: 1em;
   }
 
-  &-footnote:before {
+  .nf-footnote:before {
     content: "*";
     float: left;
     margin-left: -5px;
   }
 
-  &-text-right {
+  .nf-text-right {
     text-align: right;
   }
 
-  &-line {
+  .nf-line {
     border-top: 1px solid #000;
     padding-top: 1px;
     padding-bottom: 1px;
     font-size: .94em;
   }
 
-  &-indent2 {
+  .nf-indent2 {
     margin-left: 28px;
   }
 
-  &-indent {
+  .nf-indent {
     padding-left: 16px;
   }
 
-  &-pr {
+  .nf-pr {
     float: right;
   }
 
-  &-bar1 {
+  .nf-bar1 {
     height: 5px;
   }
 
-  &-bar2 {
+  .nf-bar2 {
     height: 10px;
   }
 
-  &-bar1,
-  &-bar2 {
+  .nf-bar1,
+  .nf-bar2 {
     background-color: #000;
   }
 

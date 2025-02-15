@@ -55,50 +55,50 @@
                 <div class="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Full Name</div>
                 <div class="flex flex-col md:flex-row">
                     <div class="w-full flex-1 mx-2 svelte-1l8159u">
-                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
+                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded-sm svelte-1l8159u">
                             <input placeholder="First Name"
-                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800">
+                                class="p-1 px-2 appearance-none outline-hidden w-full text-gray-800">
                         </div>
                     </div>
                     <div class="w-full flex-1 mx-2 svelte-1l8159u">
-                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
+                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded-sm svelte-1l8159u">
                             <input placeholder="Last Name"
-                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800">
+                                class="p-1 px-2 appearance-none outline-hidden w-full text-gray-800">
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row">
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold h-6 mt-3 text-gray-600 text-xs leading-8 uppercase"> Username</div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
+                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded-sm svelte-1l8159u">
                             <input placeholder="Just a hint.."
-                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800">
+                                class="p-1 px-2 appearance-none outline-hidden w-full text-gray-800">
                         </div>
                     </div>
                     <div class="w-full mx-2 flex-1 svelte-1l8159u">
                         <div class="font-bold h-6 mt-3 text-gray-600 text-xs leading-8 uppercase"> Your Email</div>
-                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
+                        <div class="bg-white my-2 p-1 flex border border-gray-200 rounded-sm svelte-1l8159u">
                             <input placeholder="jhon@doe.com"
-                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800">
+                                class="p-1 px-2 appearance-none outline-hidden w-full text-gray-800">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="flex p-2 mt-4">
-                <button class="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                <button class="text-base hover:scale-110 focus:outline-hidden flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-gray-200  
         bg-gray-100 
         text-gray-700 
         border duration-200 ease-in-out 
         border-gray-600 transition">Previous</button>
                 <div class="flex-auto flex flex-row-reverse">
-                    <button class="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                    <button class="text-base  ml-2  hover:scale-110 focus:outline-hidden flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-teal-600  
         bg-teal-600 
         text-teal-100 
         border duration-200 ease-in-out 
         border-teal-600 transition">Next</button>
-                    <button class="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                    <button class="text-base hover:scale-110 focus:outline-hidden flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-teal-200  
         bg-teal-100 
         text-teal-700 

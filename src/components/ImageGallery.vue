@@ -119,7 +119,7 @@ function close() {
                 <ul
                     class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                     <template v-for="(image, i) in props.images" :key="image">
-                        <li class="w-full flex-shrink-0 snap-start">
+                        <li class="w-full shrink-0 snap-start">
                             <a v-if="image.type == 'img'" href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
                                     :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
@@ -133,7 +133,7 @@ function close() {
 
                 <div class="m-auto max-w-full">
                     <div class="flex" v-show="props.images.length > 1">
-                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
+                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="prev">
                             <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -146,7 +146,7 @@ function close() {
                         <ul
                             :class="{ 'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
                             <template v-for="(image, i) in props.images" :key="image">
-                                <li class="flex-shrink-0 snap-start mx-1">
+                                <li class="shrink-0 snap-start mx-1">
                                     <a class="inline-block" href="#" @click.prevent="activeImage = i">
                                         <svg :class="{ 'h-6 w-6': true, 'dark:text-white': activeImage == i, 'text-slate-400': activeImage != i }"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -160,7 +160,7 @@ function close() {
                         <ul
                             :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
                             <template v-for="(image, i) in props.images" :key="image">
-                                <li class="flex-shrink-0 snap-start  mx-1">
+                                <li class="shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
                                         <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
@@ -176,7 +176,7 @@ function close() {
                                 </li>
                             </template>
                         </ul>
-                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 flex-grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
+                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
                             href="#" @click.prevent="next">
                             <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

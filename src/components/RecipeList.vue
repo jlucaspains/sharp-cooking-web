@@ -273,17 +273,17 @@ function simpleSearchInText(a: string, b: string) {
       leave-to="opacity-0 scale-90">
       <div class="flex flex-col mb-2">
         <input ref="searchInput" type="search" data-testid="search-input" :placeholder="t('pages.index.search')"
-          v-model="searchText" class="p-2 my-2 rounded text-black" />
+          v-model="searchText" class="p-2 my-2 rounded-sm bg-white text-black" />
         <div class="flex">
           <button type="button" data-testid="search-by-title"
-            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 rounded-sm"
             @click="setSearchType(t('pages.index.filterByTitle'))">{{ t("pages.index.filterByTitle") }}</button>
           <button type="button" data-testid="search-by-ingredients"
-            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded-sm"
             @click="setSearchType(t('pages.index.filterByIngredients'))">{{ t("pages.index.filterByIngredients")
             }}</button>
           <button type="button" data-testid="search-by-steps"
-            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded"
+            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold p-2 my-2 ml-2 rounded-sm"
             @click="setSearchType(t('pages.index.filterBySteps'))">{{ t("pages.index.filterBySteps") }}</button>
         </div>
       </div>
@@ -332,7 +332,7 @@ function simpleSearchInText(a: string, b: string) {
             rounded-md
             shadow-lg
             ring-1 ring-black ring-opacity-5
-            focus:outline-none
+            focus:outline-hidden
           ">
           <div class="px-1 py-1">
             <MenuItem :key="child.name" v-for="child in addOptions" v-slot="{ active }">

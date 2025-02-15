@@ -77,31 +77,31 @@ function goToCategoriesSetup() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableNutritionFacts" @change="updateEnableNutritionFacts"
         :display-name="t('pages.preview-features.enableNutritionFacts')"
         :display-description="t('pages.preview-features.enableNutritionFactsDescription')"
         test-id="enable-nutrition-facts-toggle"></config-switch>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableRecipeLanguageSwitcher" @change="updateEnableRecipeLanguageSwitcher"
         :display-name="t('pages.preview-features.enableRecipeLanguageSwitcher')"
         :display-description="t('pages.preview-features.enableRecipeLanguageSwitcherDescription')"
         test-id="enable-recipe-language-toggle"></config-switch>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="editInSingleTextArea" @change="updateEditInSingleTextArea"
         :display-name="t('pages.preview-features.editInSingleTextArea')"
         :display-description="t('pages.preview-features.editInSingleTextAreaDescription')"
         test-id="edit-in-single-text-area-toggle"></config-switch>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableCategoryDisplay" @change="updateEnableCategoriesDisplay"
         :display-name="t('pages.preview-features.enableCategoryDisplay')"
         :display-description="t('pages.preview-features.enableCategoryDisplayDescription')"
         test-id="enable-category-toggle"></config-switch>
     </div>
-    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
+    <div class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
       <label class="dark:text-white">{{ t("pages.preview-features.categories") }}</label>
       <div class="dark:text-white float-right ">
         <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
@@ -114,35 +114,35 @@ function goToCategoriesSetup() {
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.categoriesDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableAiChat" @change="updateEnableAiChat"
         :display-name="t('pages.preview-features.enableAiChat')"
         :display-description="t('pages.preview-features.enableAiChatDescription')"
         test-id="enable-ai-chat-toggle"></config-switch>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiChatBaseUrl") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiChatBaseUrlDescription") }}</span>
       </div>
       <input v-model="aiChatBaseUrl" @change="updateAiChatBaseUrl" placeholder="https://api.openai.com/"
-        class="block p-2 w-full rounded text-black shadow-sm">
+        class="block p-2 w-full rounded-sm bg-white text-black shadow-xs">
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiAuthorizationHeader") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiAuthorizationHeaderDescription") }}</span>
       </div>
       <input v-model="aiAuthorizationHeader" @change="updateAiAuthorizationHeader" placeholder="Bearer token"
-        class="block p-2 w-full rounded text-black shadow-sm">
+        class="block p-2 w-full rounded-sm bg-white text-black shadow-xs">
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.preview-features.aiModelName") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.preview-features.aiModelNameDescription") }}</span>
       </div>
       <input v-model="openAIModelName" @change="updateOpenAIModelName" placeholder="Model Name"
-        class="block p-2 w-full rounded text-black shadow-sm">
+        class="block p-2 w-full rounded-sm bg-white text-black shadow-xs">
     </div>
   </div>
 </template>

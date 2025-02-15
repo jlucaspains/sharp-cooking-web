@@ -713,7 +713,7 @@ function nutritionHasValues(): boolean {
       ]">
       <span class="dark:text-white">Enter decimal value of quantity. E.g. 0.5 or 2</span>
       <input @keyup.enter="applyMultiplier" data-testid="multiplier-value" type="number" v-model="newMultiplier"
-        class="block my-2 p-2 w-full rounded text-black" />
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black" />
     </Modal>
     <Modal :isOpen="isTimeModalOpen" @closed="isTimeModalOpen = false"
       :title="t('pages.recipe.id.index.startTimeTitle')" :buttons="[
