@@ -135,7 +135,7 @@ function selectAll() {
     <div>
         <span>{{ t("pages.recipe.importBackup.step1") }}</span>
         <div class="flex mt-3">
-            <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
+            <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded-sm "
                 data-testid="import-button" @click="pickFile">{{ t("pages.recipe.importBackup.selectFile") }}</button>
         </div>
         <div class="flex mt-3" v-if="canSave">

@@ -179,7 +179,7 @@ function selectCategory(category: Category) {
     <div class="w-full lg:px-40 mx-auto">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
         <div v-for="category in categories" @click="selectCategory(category)" :class="{
-          'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-none': true,
+          'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-hidden': true,
           'category-item': true,
           'bg-theme-secondary': selectedCategory === category
         }">
@@ -200,8 +200,8 @@ function selectCategory(category: Category) {
         },
       ]">
       <input type="text" v-model="categoryName" data-testid="new-category-name"
-        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
-      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded text-white shadow-sm">
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
+      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded-sm text-white shadow-xs">
         {{ t('pages.categories.selectImage') }}</button>
       <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
     </Modal>
@@ -217,8 +217,8 @@ function selectCategory(category: Category) {
         },
       ]">
       <input type="text" v-model="categoryName" data-testid="edit-category-name"
-        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
-      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded text-white shadow-sm">
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
+      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded-sm text-white shadow-xs">
         {{ t('pages.categories.selectImage') }}</button>
       <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
     </Modal>

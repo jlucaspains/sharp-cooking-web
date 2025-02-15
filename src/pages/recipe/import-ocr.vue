@@ -155,7 +155,7 @@ function acceptScan() {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
                 <div class="flex mt-3">
-                    <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
+                    <button class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded-sm "
                         data-testid="import-button" @click="pickFile">{{ t("pages.recipe.importImage.selectFile")
                         }}</button>
                     <label class="ml-4 align-middle">{{ fileName }}</label>
@@ -166,20 +166,20 @@ function acceptScan() {
                 <div class="mt-3">
                     <div class="flex mt-3">
                         <button :disabled="!canSave"
-                            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded "
+                            class="bg-theme-primary hover:bg-theme-secondary text-white font-bold py-2 px-4 rounded-sm "
                             data-testid="crop-image-button" @click="cropImage">{{
                                 t("pages.recipe.importImage.scanSelection") }}</button>
                     </div>
                     <label for="recipeTitle">{{ t("pages.recipe.importImage.recipeTitle") }}</label>
-                    <input id="recipeTitle" class="block p-2 w-full rounded text-black shadow-sm" v-model="title" />
+                    <input id="recipeTitle" class="block p-2 w-full rounded-sm bg-white text-black shadow-xs" v-model="title" />
                     <label for="recipeIngredients">{{ t("pages.recipe.importImage.recipeIngredients") }}</label>
-                    <textarea id="recipeIngredients" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <textarea id="recipeIngredients" class="block p-2 flex-auto w-full h-60 bg-white rounded-sm text-base text-black"
                         v-model="ingredients"></textarea>
                     <label for="recipeSteps">{{ t("pages.recipe.importImage.recipeSteps") }}</label>
-                    <textarea id="recipeSteps" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <textarea id="recipeSteps" class="block p-2 flex-auto w-full h-60 bg-white rounded-sm text-base text-black"
                         v-model="steps"></textarea>
                     <label for="recipeNotes">{{ t("pages.recipe.importImage.recipeNotes") }}</label>
-                    <textarea id="recipeNotes" class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                    <textarea id="recipeNotes" class="block p-2 flex-auto w-full h-60 bg-white rounded-sm text-base text-black"
                         v-model="notes"></textarea>
                 </div>
             </div>
@@ -205,7 +205,7 @@ function acceptScan() {
                     <span class="font-medium">{{ t("pages.recipe.importImage.tip") }}</span>
                     {{ t("pages.recipe.importImage.tipContent") }}
                 </div>
-                <textarea class="block p-2 flex-auto w-full h-60 bg-white rounded text-base text-black"
+                <textarea class="block p-2 flex-auto w-full h-60 bg-white rounded-sm text-base text-black"
                     v-model="scanModalText"></textarea>
             </div>
             <div class="mt-4">

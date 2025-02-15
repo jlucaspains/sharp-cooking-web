@@ -655,11 +655,11 @@ function changeLanguage() {
     </div>
     <div>
       <label for="title">{{ t("pages.recipe.id.edit.title") }}</label>
-      <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded text-black shadow-sm" />
+      <input id="title" type="text" v-model="item.title" class="block p-2 w-full rounded-sm bg-white text-black shadow-xs" />
       <label>{{ t("pages.recipe.id.edit.rating") }}</label>
       <RatingPicker class="mb-2" v-model="item.score" />
       <label for="category">{{ t("pages.recipe.id.edit.category") }}</label>
-      <select id="category" v-model="item.categoryId" class="block p-2 w-full rounded text-black shadow-sm">
+      <select id="category" v-model="item.categoryId" class="block p-2 w-full rounded-sm bg-white text-black shadow-xs">
         <option value="0" disabled>{{ t('pages.recipe.id.edit.selectCategory') }}</option>
         <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
       </select>
@@ -682,7 +682,7 @@ function changeLanguage() {
       <div v-else class="flex my-3 w-full" v-for="(ingredient, index) in item.ingredients">
         <input type="text" :placeholder="t('pages.recipe.id.edit.ingredientPlaceholder')"
           v-model="item.ingredients[index]" @keyup.enter="addIngredientAt(index)" ref="ingredientRefs"
-          class="block p-2 rounded flex-auto text-black shadow-sm" />
+          class="block p-2 rounded-sm flex-auto bg-white text-black shadow-xs" />
         <button type="button" class="ml-2 align-middle" :title="t('pages.recipe.id.edit.deleteIngredient')"
           @click="item.ingredients.splice(index, 1)">
           <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -714,7 +714,7 @@ function changeLanguage() {
           text-base text-black" rows="10"></textarea>
       <div v-else class="flex my-3 w-full" v-for="(step, index) in item.steps">
         <input type="text" :placeholder="t('pages.recipe.id.edit.stepPlaceholder')" v-model="item.steps[index]"
-          class="block p-2 flex-auto rounded text-black shadow-sm" ref="stepRefs" @keyup.enter="addStepAt(index)" />
+          class="block p-2 flex-auto rounded-sm bg-white text-black shadow-xs" ref="stepRefs" @keyup.enter="addStepAt(index)" />
         <button type="button" class="ml-2" :title="t('pages.recipe.id.edit.deleteStep')"
           @click="item.steps.splice(index, 1)">
           <svg class="h-4 w-4 text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -743,69 +743,69 @@ function changeLanguage() {
       <label for="nutritionFacts" v-if="enableNutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full" v-if="enableNutritionFacts">
         <div class="flex my-3">
-          <label for="servingSize" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>
-          <input id="servingSize" type="text" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="servingSize" type="text" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.servingSize" />
         </div>
         <div class="flex my-3">
-          <label for="calories" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="calories" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.calories") }}</label>
-          <input id="calories" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="calories" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.calories" />
         </div>
         <div class="flex flex-row my-3">
-          <label for="totalFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="totalFat" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.totalFat") }}</label>
-          <input id="totalFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="totalFat" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.totalFat" />
         </div>
         <div class="flex my-3">
-          <label for="saturatedFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="saturatedFat" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.saturatedFat") }}</label>
-          <input id="saturatedFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="saturatedFat" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.saturatedFat" />
         </div>
         <div class="flex my-3">
-          <label for="transFat" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="transFat" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.transFat") }}</label>
-          <input id="transFat" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="transFat" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.transFat" />
         </div>
         <div class="flex my-3">
-          <label for="cholesterol" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="cholesterol" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.cholesterol") }}</label>
-          <input id="cholesterol" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="cholesterol" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.cholesterol" />
         </div>
         <div class="flex my-3">
-          <label for="sodium" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="sodium" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.sodium") }}</label>
-          <input id="sodium" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="sodium" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.sodium" />
         </div>
         <div class="flex my-3">
-          <label for="carbohydrates" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="carbohydrates" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.carbohydrates") }}</label>
-          <input id="carbohydrates" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="carbohydrates" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.carbohydrates" />
         </div>
         <div class="flex my-3">
-          <label for="fiber" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="fiber" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.fiber") }}</label>
-          <input id="fiber" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="fiber" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.fiber" />
         </div>
         <div class="flex my-3">
-          <label for="sugar" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="sugar" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.sugar") }}</label>
-          <input id="sugar" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="sugar" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.sugar" />
         </div>
         <div class="flex my-3">
-          <label for="protein" class="block p-2 w-52 rounded text-black dark:text-white">{{
+          <label for="protein" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.protein") }}</label>
-          <input id="protein" type="number" class="block p-2 grow rounded text-black shadow-sm"
+          <input id="protein" type="number" class="block p-2 grow rounded-sm bg-white text-black shadow-xs"
             v-model="item.nutrition.protein" />
         </div>
       </div>
@@ -842,7 +842,7 @@ function changeLanguage() {
         },
       ]">
       <input type="url" v-model="importRecipeUrl" data-testid="import-url"
-        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
     </Modal>
     <Modal :isOpen="isAddVideoModalOpen" @closed="isAddVideoModalOpen = false"
       :title="t('pages.recipe.id.edit.addVideoTitle')" :buttons="[
@@ -862,7 +862,7 @@ function changeLanguage() {
         },
       ]">
       <input type="url" v-model="addVideoUrl" data-testid="add-video-url"
-        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
       <span class="mt-2 text-sm text-red-500">{{ addVideoUrlError }}</span>
     </Modal>
     <Modal :isOpen="isImportFromShareModalOpen" @closed="isImportFromShareModalOpen = false"
@@ -883,7 +883,7 @@ function changeLanguage() {
         },
       ]">
       <input v-model="importRecipeCode" data-testid="import-code"
-        class="block my-2 p-2 w-full rounded text-black shadow-sm" />
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
       <Scanner v-if="scanCodeWithCamera" @codeScanned="code => importRecipeCode = code" />
     </Modal>
     <Modal :isOpen="isLanguageModalOpen" @closed="isLanguageModalOpen = false"

@@ -38,7 +38,7 @@ function updateValue(event: Event) {
     <input
       data-testid="time-value-input"
       type="time"
-      class="block m-2 p-2 rounded text-black"
+      class="block m-2 p-2 rounded-sm bg-white text-black"
       v-model="localValue"
       @input="updateValue"
     />

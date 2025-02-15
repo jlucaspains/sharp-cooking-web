@@ -46,7 +46,7 @@ const props = defineProps<{
             rounded-md
             shadow-lg
             ring-1 ring-black ring-opacity-5
-            focus:outline-none
+            focus:outline-hidden
           ">
           <div class="px-1 py-1">
             <MenuItem :key="child.name" v-for="child in props.items" v-slot="{ active }">

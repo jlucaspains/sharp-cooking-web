@@ -115,7 +115,7 @@ function goToPreviewFeatures() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewReleaseNotes">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="reviewReleaseNotes">
       <span class="dark:text-white">{{ t("appName") }}</span>
       <div class="dark:text-white float-right">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -128,7 +128,7 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.releaseNotes") }} {{ version }}</span>
       </div>
     </div>
-    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="showChangeLanguageModal">
+    <div class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="showChangeLanguageModal">
       <label class="dark:text-white">{{ t("pages.options.language") }}</label>
       <div class="dark:text-white float-right ">
         <button data-testid="change-lang-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
@@ -141,7 +141,7 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ displayLanguage }}</span>
       </div>
     </div>
-    <div class="p-2 dark:text-white rounded cursor-pointer active:bg-theme-secondary" @click="changeStepsInterval">
+    <div class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="changeStepsInterval">
       <label class="dark:text-white">{{ t("pages.options.stepsInterval") }}</label>
       <div class="dark:text-white float-right ">
         <button class="mr-2 align-top">{{ stepsInterval }} {{ t("pages.options.minutes") }}</button>
@@ -155,19 +155,19 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.stepsIntervalDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="useFractions" @change="updateUseFractions"
         :display-name="t('pages.options.multiplierType')"
         :display-description="t('pages.options.multiplierTypeDescription')"
         test-id="use-fractions-toggle"></config-switch>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
       <div>
         <span class="text-gray-500 text-sm">{{ storageDescription }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="goToPreviewFeatures">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToPreviewFeatures">
       <span class="dark:text-white">{{ t("pages.options.previewFeatures") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -180,7 +180,7 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.previewFeaturesDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="takeBackup">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="takeBackup">
       <span class="dark:text-white">{{ t("pages.options.takeBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -193,7 +193,7 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.takeBackupDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="restoreBackup">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="restoreBackup">
       <span class="dark:text-white">{{ t("pages.options.restoreBackup") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -207,7 +207,7 @@ function goToPreviewFeatures() {
       </div>
     </div>
 
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewTermsOfUse">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="reviewTermsOfUse">
       <span class="dark:text-white">{{ t("pages.options.termsOfUse") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -220,7 +220,7 @@ function goToPreviewFeatures() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.termsOfUseDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded cursor-pointer active:bg-theme-secondary" @click="reviewPrivacyPolicy">
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="reviewPrivacyPolicy">
       <span class="dark:text-white">{{ t("pages.options.privacyPolicy") }}</span>
       <div class="dark:text-white float-right ">
         <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -245,7 +245,7 @@ function goToPreviewFeatures() {
       },
     ]">
       <input v-model.number="stepsIntervalEditing" data-testid="steps-interval-input"
-        class="block my-2 p-2 w-full rounded text-black" />
+        class="block my-2 p-2 w-full rounded-sm bg-white text-black" />
     </Modal>
     <Modal :isOpen="isLanguagesModalOpen" @closed="isLanguagesModalOpen = false"
       :title="t('pages.options.languageModalTitle')" :buttons="[

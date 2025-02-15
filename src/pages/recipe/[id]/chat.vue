@@ -255,7 +255,7 @@ async function sendMessage() {
         <footer class="bg-white border-t border-gray-300 -mx-4 p-4 fixed bottom-0 w-full safe-inset">
           <div class="flex items-center">
             <input type="text" @keydown.enter="sendMessage" v-model="userQuery" placeholder="Type a message..."
-              class="w-full p-2 rounded-md border text-black border-gray-400 focus:outline-none focus:border-blue-500">
+              class="w-full p-2 rounded-md border bg-white text-black border-gray-400 focus:outline-hidden focus:border-blue-500">
             <button class="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2" @click="sendMessage">Send</button>
           </div>
         </footer>

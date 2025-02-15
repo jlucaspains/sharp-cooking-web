@@ -46,8 +46,8 @@ function goBack() {
               text-sm
               font-medium
               text-white
-              hover:bg-theme-secondary hover:bg-opacity-30
-              focus:outline-none
+              hover:bg-theme-secondary/30
+              focus:outline-hidden
               focus-visible:ring-2
               focus-visible:ring-white
               focus-visible:ring-opacity-75
@@ -76,8 +76,8 @@ function goBack() {
                     text-sm
                     font-medium
                     text-white
-                    hover:bg-theme-secondary hover:bg-opacity-30
-                    focus:outline-none
+                    hover:bg-theme-secondary/30
+                    focus:outline-hidden
                     focus-visible:ring-2
                     focus-visible:ring-white
                     focus-visible:ring-opacity-75
@@ -102,7 +102,7 @@ function goBack() {
                     bg-white
                     shadow-lg
                     ring-1 ring-black ring-opacity-5
-                    focus:outline-none
+                    focus:outline-hidden
                   ">
                   <div class="px-1 py-1">
                     <MenuItem v-slot="{ active }" v-for="child in menuOption.children">
@@ -130,8 +130,8 @@ function goBack() {
                 text-sm
                 font-medium
                 text-white
-                hover:bg-theme-secondary hover:bg-opacity-30
-                focus:outline-none
+                hover:bg-theme-secondary/30
+                focus:outline-hidden
                 focus-visible:ring-2
                 focus-visible:ring-white
                 focus-visible:ring-opacity-75
