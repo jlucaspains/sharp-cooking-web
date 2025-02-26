@@ -31,6 +31,7 @@ onMounted(async () => {
 
   aiChatBaseUrl.value = await getSetting("OpenAIBaseApiUrl", "");
   aiAuthorizationHeader.value = await getSetting("OpenAIAuthorizationHeader", "");
+  openAIModelName.value = await getSetting("OpenAIModelName", "");
   enableNutritionFacts.value = enableNutritionFactsValue === "true";
   enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   enableAiChat.value = enableAiChatValue === "true";

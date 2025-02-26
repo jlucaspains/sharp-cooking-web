@@ -89,6 +89,16 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
     return result;
 }
 
+export async function getRecipeByName(name: string): Promise<Recipe | undefined> {
+    const result = await db.recipes.where("title").equals(name).first();
+
+    if (result && !result.nutrition) {
+        result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+
+    return result;
+}
+
 export async function getRecipes(): Promise<Recipe[]> {
     return await db.recipes.toArray();
 }
