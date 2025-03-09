@@ -8,9 +8,10 @@ import {
   getRecipeByName,
   getRecipes,
   getSetting,
+  saveRecipe,
 } from "../../../services/dataService";
 import { recipeAsText } from "../../../helpers/shareHelpers";
-import { AzureChatOpenAI, ChatOpenAI, ChatOpenAICallOptions } from "@langchain/openai";
+import { ChatOpenAI, ChatOpenAICallOptions } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { MessagesAnnotation, StateGraph } from "@langchain/langgraph/web";
 import {
@@ -132,7 +133,30 @@ onMounted(async () => {
     }
   )
 
-  const tools = [getAllRecipes, getCurrentRecipe, lookupRecipeByName];
+  const updateRecipeIngredientsByName = tool(
+    async ({ name, updatedIngredients }) => {
+      const recipe = await getRecipeByName(name);
+
+      if (!recipe) {
+        return "";
+      } else {
+        console.log(updatedIngredients);
+        recipe.ingredients = updatedIngredients.split("\n");
+        await saveRecipe(recipe);
+        return "updated";
+      }
+    },
+    {
+      name: "updateRecipeIngredientsByName",
+      description: "Updates a recipe ingredients by name. Provide the updated ingredients with each ingredient in a new line.",
+      schema: z.object({
+        name: z.string(),
+        updatedIngredients: z.string()
+      }),
+    }
+  )
+
+  const tools = [getAllRecipes, getCurrentRecipe, lookupRecipeByName, updateRecipeIngredientsByName];
   toolsByName = Object.fromEntries(tools.map((tool) => [tool.name, tool]));
   llmWithTools = llm.bindTools(tools);
 
@@ -140,13 +164,11 @@ onMounted(async () => {
   agentBuilder = new StateGraph(MessagesAnnotation)
     .addNode("llmCall", llmCall)
     .addNode("tools", toolNode)
-    // Add edges to connect nodes
     .addEdge("__start__", "llmCall")
     .addConditionalEdges(
       "llmCall",
       shouldContinue,
       {
-        // Name returned by shouldContinue : Name of next node to visit
         "Action": "tools",
         "__end__": "__end__",
       }
@@ -170,7 +192,6 @@ async function llmCall(state: typeof MessagesAnnotation.State) {
     },
     ...state.messages
   ], { options: { stream: true } });
-  // ], {options: {stream: true} });
 
   return {
     messages: [result]
@@ -178,7 +199,6 @@ async function llmCall(state: typeof MessagesAnnotation.State) {
 }
 
 async function toolNode(state: typeof MessagesAnnotation.State) {
-  // Performs the tool call
   const results: ToolMessage[] = [];
   const lastMessage = state.messages.at(-1) as AIMessage;
 
@@ -198,7 +218,6 @@ async function toolNode(state: typeof MessagesAnnotation.State) {
   return { messages: results };
 }
 
-// Conditional edge function to route to the tool node or end
 function shouldContinue(state: typeof MessagesAnnotation.State) {
   const messages = state.messages as AIMessage[];
   const lastMessage = messages.at(-1);
@@ -233,7 +252,6 @@ async function askAssistant() {
   controller = new AbortController();
 
   try {
-
     const eventStream = await agentBuilder.streamEvents(
       { messages: llmMessages },
       { version: "v2", signal: controller.signal });
@@ -292,7 +310,6 @@ async function sendMessage() {
       <div class="flex-1">
         <!-- Chat Messages -->
         <div class="pt-4 pb-8 container mx-auto">
-
           <template v-for="item of messages">
             <!-- Thinking Message -->
             <div v-if="item.thinking" class="flex mb-4 cursor-pointer">
@@ -348,7 +365,6 @@ async function sendMessage() {
         </footer>
       </div>
     </div>
-
   </div>
 </template>
 
