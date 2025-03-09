@@ -1,10 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-async function enableChangingRecipeLanguage(page: any) {
-  await page.goto('#/preview-features');
-  await page.getByTestId('enable-recipe-language-toggle').click();
-}
-
 async function enableEditInSingleEditor(page: any) {
   await page.goto('#/preview-features');
   await page.getByTestId('edit-in-single-text-area-toggle').click();
@@ -151,7 +146,6 @@ test('crop image', async ({ page }) => {
 });
 
 test('change language', async ({ page }) => {
-  await enableChangingRecipeLanguage(page);
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();

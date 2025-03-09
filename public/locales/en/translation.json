@@ -64,10 +64,6 @@
         },
         "preview-features": {
             "title": "Preview Features",
-            "enableNutritionFacts": "Enable nutrition labels",
-            "enableNutritionFactsDescription": "Allows for recipes imported or inputted with nutrition facts to display a nutrition facts label.",
-            "enableRecipeLanguageSwitcher": "Enable recipe language switcher",
-            "enableRecipeLanguageSwitcherDescription": "Allows for selecting which language a recipe is written in. This directly influences the parsing of recipe ingredients and steps.",
             "enableAiChat": "Enable AI Chat",
             "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
             "aiChatBaseUrl": "AI Chat Base URL",

@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 export async function createRecipe(page: Page, id: number, title: string, rating: number, ingredients = [
     "1000g flour",

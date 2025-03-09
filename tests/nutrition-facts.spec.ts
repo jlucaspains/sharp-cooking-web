@@ -7,14 +7,7 @@ test.beforeEach(async ({ page }) => {
     });
 });
 
-async function enableNutritionFacts(page: any) {
-    await page.goto('#/preview-features');
-    await page.getByTestId('enable-nutrition-facts-toggle').click();
-}
-
 test('import from url with nutrition facts', async ({ page }) => {
-    await enableNutritionFacts(page);
-
     const response = `
       {
           "title": "New Bread Recipe",
@@ -56,8 +49,6 @@ test('import from url with nutrition facts', async ({ page }) => {
 });
 
 test('add new recipe with nutrition facts', async ({ page }) => {
-    await enableNutritionFacts(page);
-
     await createRecipeWithoutSaving(page, "Bread 1", 5, [
         "1000g flour",
         "700g water",
@@ -110,8 +101,6 @@ test('add new recipe with nutrition facts', async ({ page }) => {
 });
 
 test('add new recipe without nutrition facts', async ({ page }) => {
-    await enableNutritionFacts(page);
-
     await createRecipeWithoutSaving(page, "Bread 1", 5, [
         "1000g flour",
         "700g water",

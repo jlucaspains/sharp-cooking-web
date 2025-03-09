@@ -63,10 +63,6 @@
             "previewFeaturesDescription": "Revisar e habilitar recursos que ainda estão em desenvolvimento e podem não funcionar como esperado."
         },
         "preview-features": {
-            "enableNutritionFacts": "Ativar informações nutricionais (preview)",
-            "enableNutritionFactsDescription": "Permite que receitas importadas ou inseridas com informações nutricionais exibam um rótulo de informações nutricionais.",
-            "enableRecipeLanguageSwitcher": "Ativar alternador de idioma da receita",
-            "enableRecipeLanguageSwitcherDescription": "Permite selecionar em qual idioma a receita está escrita. Isso influencia diretamente a análise dos ingredientes e passos da receita.",
             "enableAiChat": "Ativar Chat de IA",
             "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
             "aiChatBaseUrl": "URL Base do Chat de IA",
