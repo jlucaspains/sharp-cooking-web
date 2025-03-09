@@ -21,7 +21,7 @@ onMounted(async () => {
   categoriesEnabled.value = enableCategories === "true";
 
   isLoaded.value = true;
-  
+
   state.title = "Home";
   state.menuOptions = [
     {
@@ -31,6 +31,10 @@ onMounted(async () => {
           text: t("pages.index.options"),
           action: goToOptions,
         },
+        {
+          text: t("pages.recipe.id.index.chatWithAssistant"),
+          action: goToChat,
+        },
       ],
     },
   ];
@@ -38,6 +42,10 @@ onMounted(async () => {
 
 function goToOptions() {
   router.push("/options");
+}
+
+function goToChat() {
+  router.push(`/recipe/0/chat`);
 }
 </script>
 

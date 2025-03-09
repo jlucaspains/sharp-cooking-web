@@ -27,6 +27,7 @@ onMounted(async () => {
 
   aiChatBaseUrl.value = await getSetting("OpenAIBaseApiUrl", "");
   aiAuthorizationHeader.value = await getSetting("OpenAIAuthorizationHeader", "");
+  openAIModelName.value = await getSetting("OpenAIModelName", "");
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
   enableCategoryDisplay.value = enableCategoryDisplayValue === "true";

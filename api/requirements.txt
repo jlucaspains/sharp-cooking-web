@@ -4,7 +4,7 @@
 
 azure-functions~=1.21
 pint~=0.24
-recipe-scrapers~=15.4
+recipe-scrapers~=15.5
 python-multipart~=0.0.20
 Pillow~=11.1
 pillow-avif-plugin~=1.4
