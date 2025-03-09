@@ -69,7 +69,6 @@ const { t } = useTranslation();
 const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
-let enableNutritionFacts = false;
 let enableAiChat = false;
 
 function confirmDeleteItem() {
@@ -105,8 +104,6 @@ onMounted(async () => {
   defaultTimeSetting = await getSetting("StepsInterval", "5");
   const useFractionsOverDecimalString = await getSetting("UseFractions", "false");
   useFractionsOverDecimal = useFractionsOverDecimalString == "true";
-  const enableNutritionFactsString = await getSetting("EnableNutritionFacts", "false");
-  enableNutritionFacts = enableNutritionFactsString == "true";
 
   const enableAiChatString = await getSetting("EnableAiChat", "false");
   enableAiChat = enableAiChatString == "true";
@@ -620,7 +617,7 @@ function nutritionHasValues(): boolean {
           <rect x="7" y="13" width="10" height="8" rx="2" />
         </svg>
       </button>
-      <button v-if="enableNutritionFacts" class="
+      <button class="
           w-12
           h-12
           m-1

@@ -94,8 +94,6 @@ const stepsText = ref("");
 const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
 
-let enableNutritionFacts = false;
-let enableRecipeLanguageSwitcher = false;
 
 watch(
   item,
@@ -122,12 +120,6 @@ onMounted(async () => {
       svg: `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />  <polyline points="17 21 17 13 7 13 7 21" />  <polyline points="7 3 7 8 15 8" />`,
     },
   ];
-
-  const enableNutritionFactsSetting = await getSetting("EnableNutritionFacts", "false");
-  enableNutritionFacts = enableNutritionFactsSetting == "true";
-
-  const enableRecipeLanguageSwitcherSetting = await getSetting("EnableRecipeLanguageSwitcher", "false");
-  enableRecipeLanguageSwitcher = enableRecipeLanguageSwitcherSetting == "true";
 
   editInSingleTextArea.value = (await getSetting("EditInSingleTextArea", "false")) === "true";
 
@@ -642,7 +634,7 @@ function changeLanguage() {
             <path d="M5 12l5 5l10 -10" />
           </svg>
         </button>
-        <RoundButton v-if="enableRecipeLanguageSwitcher" :title="t('pages.recipe.id.edit.changeLanguage')"
+        <RoundButton :title="t('pages.recipe.id.edit.changeLanguage')"
           test-id="change-lang-button" @click="() => isLanguageModalOpen = true">
           <svg class="h-5 w-5 text-white m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px"
             fill="#ffffff">
@@ -740,8 +732,8 @@ function changeLanguage() {
           rounded
           text-base text-black
         " />
-      <label for="nutritionFacts" v-if="enableNutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
-      <div class="my-3 w-full" v-if="enableNutritionFacts">
+      <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
+      <div class="my-3 w-full">
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>

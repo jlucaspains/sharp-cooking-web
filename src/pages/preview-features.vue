@@ -10,8 +10,6 @@ const { t } = useTranslation();
 
 const state = useState()!;
 const router = useRouter()!;
-const enableNutritionFacts = ref(false);
-const enableRecipeLanguageSwitcher = ref(false);
 const enableAiChat = ref(false);
 const aiChatBaseUrl = ref("");
 const aiAuthorizationHeader = ref("");
@@ -23,28 +21,16 @@ onMounted(async () => {
   state.title = t("pages.preview-features.title");
   state.menuOptions = [];
 
-  const enableNutritionFactsValue = await getSetting("EnableNutritionFacts", "false");
-  const enableRecipeLanguageSwitcherValue = await getSetting("EnableRecipeLanguageSwitcher", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
   const enableCategoryDisplayValue = await getSetting("EnableCategoryDisplay", "false");
 
   aiChatBaseUrl.value = await getSetting("OpenAIBaseApiUrl", "");
   aiAuthorizationHeader.value = await getSetting("OpenAIAuthorizationHeader", "");
-  enableNutritionFacts.value = enableNutritionFactsValue === "true";
-  enableRecipeLanguageSwitcher.value = enableRecipeLanguageSwitcherValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
   enableCategoryDisplay.value = enableCategoryDisplayValue === "true";
 });
-
-function updateEnableNutritionFacts() {
-  saveSetting("EnableNutritionFacts", `${enableNutritionFacts.value}`);
-}
-
-function updateEnableRecipeLanguageSwitcher() {
-  saveSetting("EnableRecipeLanguageSwitcher", `${enableRecipeLanguageSwitcher.value}`);
-}
 
 function updateEnableAiChat() {
   saveSetting("EnableAiChat", `${enableAiChat.value}`);
@@ -77,18 +63,6 @@ function goToCategoriesSetup() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <config-switch v-model="enableNutritionFacts" @change="updateEnableNutritionFacts"
-        :display-name="t('pages.preview-features.enableNutritionFacts')"
-        :display-description="t('pages.preview-features.enableNutritionFactsDescription')"
-        test-id="enable-nutrition-facts-toggle"></config-switch>
-    </div>
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <config-switch v-model="enableRecipeLanguageSwitcher" @change="updateEnableRecipeLanguageSwitcher"
-        :display-name="t('pages.preview-features.enableRecipeLanguageSwitcher')"
-        :display-description="t('pages.preview-features.enableRecipeLanguageSwitcherDescription')"
-        test-id="enable-recipe-language-toggle"></config-switch>
-    </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="editInSingleTextArea" @change="updateEditInSingleTextArea"
         :display-name="t('pages.preview-features.editInSingleTextArea')"
