@@ -24,6 +24,7 @@ const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
 const categoriesEnabled = ref(false);
+const enableAiChat = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -31,12 +32,16 @@ onMounted(async () => {
 
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
+  const enableCategories = await getSetting("EnableCategoryDisplay", "false");
+  const enableAiChatValue = await getSetting("EnableAiChat", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
   version.value = import.meta.env.VITE_APP_VERSION;
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
+  categoriesEnabled.value = enableCategories === "true";
+  enableAiChat.value = enableAiChatValue === "true";
 });
 
 watch(displayLanguage, async (value) => {
@@ -111,6 +116,14 @@ async function setSelectedLanguage() {
 function goToPreviewFeatures() {
   router.push("/preview-features");
 }
+
+function goToCategoriesSetup() {
+  router.push("/categories");
+}
+
+function goToAIOptions() {
+  router.push("/ai-options");
+}
 </script>
 
 <template>
@@ -160,6 +173,32 @@ function goToPreviewFeatures() {
         :display-name="t('pages.options.multiplierType')"
         :display-description="t('pages.options.multiplierTypeDescription')"
         test-id="use-fractions-toggle"></config-switch>
+    </div>
+    <div v-if="categoriesEnabled" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
+      <label class="dark:text-white">{{ t("pages.preview-features.categories") }}</label>
+      <div class="dark:text-white float-right ">
+        <button data-testid="categories-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.categoriesDescription") }}</span>
+      </div>
+    </div>
+    <div v-if="enableAiChat" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToAIOptions">
+      <label class="dark:text-white">{{ t("pages.options.aiOptions") }}</label>
+      <div class="dark:text-white float-right ">
+        <button data-testid="ai-options-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.aiOptionsDescription") }}</span>
+      </div>
     </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>

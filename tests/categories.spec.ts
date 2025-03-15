@@ -27,9 +27,7 @@ test('add multiple category', async ({ page }) => {
 
 test('edit category', async ({ page }) => {
   await createCategory(page, 1, "Category 1");
-  await page.getByRole('img', { name: 'Category' }).click();
-  await page.getByTestId('topbar-options').click();
-  await page.getByRole('menuitem', { name: 'Edit...' }).click();
+  await page.getByTestId('edit-category').click();
   await page.getByTestId('edit-category-name').fill('Category 2');
   await page.getByRole('button', { name: 'OK' }).click();
   await expect(page.locator('.category-item')).toHaveCount(1);
@@ -38,9 +36,7 @@ test('edit category', async ({ page }) => {
 
 test('delete category', async ({ page }) => {
   await createCategory(page, 1, "Category 1");
-  await page.locator('.category-item').first().click();
-  await page.getByTestId('topbar-options').click();
-  await page.getByRole('menuitem', { name: 'Delete...' }).click();
+  await page.getByTestId('delete-category').click();
   await page.getByRole('button', { name: 'Yes, delete' }).click();
   await page.waitForTimeout(500);
   await expect(page.locator('.category-item')).toHaveCount(0);

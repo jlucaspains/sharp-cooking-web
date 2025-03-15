@@ -33,7 +33,7 @@ export async function pickImage(statusFunc: (inProgress: boolean) => {}): Promis
 
     if (!responseOk) {
         console.log("image failed to load, using default.")
-        result = "https://via.placeholder.com/150";
+        result = "";
     }
 
     

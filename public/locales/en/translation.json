@@ -60,18 +60,14 @@
             "storageNotTraceable": "Storage cannot be tracked on this device",
             "storageDescription": "Space used {{used}} of {{remaining}} available.",
             "previewFeatures": "Preview features",
-            "previewFeaturesDescription": "Review and enable features that are still in development and may not work as expected."
+            "previewFeaturesDescription": "Review and enable features that are still in development and may not work as expected.",
+            "aiOptions": "AI Options",
+            "aiOptionsDescription": "Configure AI Chat options"
         },
         "preview-features": {
             "title": "Preview Features",
             "enableAiChat": "Enable AI Chat",
             "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
-            "aiChatBaseUrl": "AI Chat Base URL",
-            "aiChatBaseUrlDescription": "The base URL for the AI Chat service. Must support Open AI style HTTP API.",
-            "aiAuthorizationHeader": "AI Chat Authorization Header",
-            "aiAuthorizationHeaderDescription": "The authorization header for the AI Chat service. Typically: Bearer <token>",
-            "aiModelName": "AI Model Name",
-            "aiModelNameDescription": "The name of the OpenAI model to use for the AI Chat service.",
             "editInSingleTextArea": "Enable simplified recipe editor",
             "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps.",
             "enableCategoryDisplay": "Enable Category Display",
@@ -265,6 +261,15 @@
             "processImage1": "Compressing image...",
             "processImage2": "Still working on the image. This may take a while",
             "selectAnItem": "Please select an item."
+        },
+        "ai-options": {
+            "title": "AI Options",
+            "aiChatBaseUrl": "AI Chat Base URL",
+            "aiChatBaseUrlDescription": "The base URL for the AI Chat service. Must support Open AI style HTTP API.",
+            "aiAuthorizationHeader": "AI Chat Authorization Header",
+            "aiAuthorizationHeaderDescription": "The authorization header for the AI Chat service.",
+            "aiModelName": "AI Model Name",
+            "aiModelNameDescription": "The name of the OpenAI model to use for the AI Chat service."
         }
     },
     "initialRecipes": [
