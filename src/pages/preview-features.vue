@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
 import { useState } from "../services/store";
 import { saveSetting, getSetting } from "../services/dataService";
 import { useTranslation } from "i18next-vue";
