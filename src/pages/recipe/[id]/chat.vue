@@ -80,7 +80,7 @@ onMounted(async () => {
   
   const llm = new ChatOpenAI({
     model: openAIModel,
-    apiKey: openAIAuthorizationHeader.replace("Bearer ", ""),
+    apiKey: openAIAuthorizationHeader,
     streaming: true,
   });
 

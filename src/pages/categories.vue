@@ -6,8 +6,6 @@ import { notify } from "notiwind";
 import { getAllCategories, saveCategory, deleteCategory } from "../services/dataService";
 import { Category } from "../services/category";
 import Modal from "../components/Modal.vue";
-import { pickImage } from "../helpers/imageHelpers";
-import BusyIndicator from "../components/BusyIndicator.vue";
 
 const { t } = useTranslation();
 
@@ -16,46 +14,18 @@ const categories = ref([] as Array<Category>);
 const isNewCategoryModalOpen = ref(false);
 const isEditCategoryModalOpen = ref(false);
 const categoryName = ref("");
-const categoryImage = ref<string | null>(null);
 const isDeleteModalOpen = ref(false);
 const selectedCategory = ref<Category | null>(null);
-const isProcessingImage = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.categories.title");
-  state.menuOptions = [
-    {
-      text: t("pages.categories.more"),
-      children: [
-        {
-          text: t("pages.categories.edit"),
-          action: editCategory,
-        },
-        {
-          text: t("pages.categories.delete"),
-          action: confirmDeleteItem,
-        }
-      ],
-      svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
-    }
-  ]
-
+  
   await loadCategories();
 });
 
-function confirmDeleteItem() {
-  if (!selectedCategory.value) {
-    notify(
-      {
-        group: "error",
-        title: t("general.error"),
-        text: t("pages.categories.selectAnItem"),
-      },
-      2000
-    );
-    return;
-  }
-  
+function confirmDeleteItem(id: number) {
+  selectedCategory.value = categories.value.find((c) => c.id === id) ?? null;
+
   isDeleteModalOpen.value = true;
 }
 
@@ -91,25 +61,12 @@ async function loadCategories() {
 }
 
 function addCategory() {
-  categoryImage.value = null;
   categoryName.value = "";
   isNewCategoryModalOpen.value = true;
 }
 
-function editCategory() {
-  if (!selectedCategory.value) {
-    notify(
-      {
-        group: "error",
-        title: t("general.error"),
-        text: t("pages.categories.selectAnItem"),
-      },
-      2000
-    );
-    return;
-  }
-  
-  categoryImage.value = selectedCategory.value?.image || null;
+function editCategory(id: number) {
+  selectedCategory.value = categories.value.find((c) => c.id === id) || null;
   categoryName.value = selectedCategory.value?.name || "";
   isEditCategoryModalOpen.value = true;
 }
@@ -117,7 +74,6 @@ function editCategory() {
 async function createNewCategory() {
   const newCategory = new Category();
   newCategory.name = categoryName.value;
-  newCategory.image = categoryImage.value ?? "https://via.placeholder.com/150";
 
   await saveCategory(newCategory);
   await loadCategories();
@@ -130,21 +86,12 @@ async function updateCategory() {
   }
 
   selectedCategory.value.name = categoryName.value;
-  selectedCategory.value.image = categoryImage.value ?? "https://via.placeholder.com/150";
 
   const category = JSON.parse(JSON.stringify(selectedCategory.value));
 
   await saveCategory(category);
   await loadCategories();
   isEditCategoryModalOpen.value = false;
-}
-
-async function selectImage() {
-  const imageSelected = await pickImage((status) => isProcessingImage.value = status);
-
-  if (imageSelected) {
-    categoryImage.value = imageSelected;
-  }
 }
 
 function selectCategory(category: Category) {
@@ -177,14 +124,40 @@ function selectCategory(category: Category) {
       </div>
     </div>
     <div class="w-full lg:px-40 mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
+      <div class="grid gap-3 ">
+
         <div v-for="category in categories" @click="selectCategory(category)" :class="{
-          'p-2 rounded-lg cursor-pointer hover:bg-theme-primary active:bg-theme-secondary focus:outline-hidden': true,
+          'h-12 shadow overflow-hidden rounded-lg bg-white dark:bg-theme-secondary-gray hover:bg-gray-600 focus:outline-hidden': true,
           'category-item': true,
           'bg-theme-secondary': selectedCategory === category
         }">
-          <img :src="category.image" alt="Category" class="w-full h-32 object-cover rounded-lg" />
-          <div class="text-center mt-2">{{ category.name }}</div>
+          <div class="flex px-3 py-2">
+            <div class="truncate grow pe-2">
+              <span class="text-ellipsis text-black dark:text-white text-lg">
+                {{ category.name }}
+              </span>
+            </div>
+            <div class="mx-1">
+              <button class="cursor-pointer" data-testid="edit-category" @click="() => editCategory(category.id)">
+                <svg class="h-5 w-5 text-white m-auto" width="24" height="24" viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                </svg>
+              </button>
+              <button class="ps-2 cursor-pointer" data-testid="delete-category" @click="() => confirmDeleteItem(category.id)">
+                <svg class="text-black dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" />
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="10" y1="11" x2="10" y2="17" />
+                  <line x1="14" y1="11" x2="14" y2="17" />
+                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -201,9 +174,6 @@ function selectCategory(category: Category) {
       ]">
       <input type="text" v-model="categoryName" data-testid="new-category-name"
         class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
-      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded-sm text-white shadow-xs">
-        {{ t('pages.categories.selectImage') }}</button>
-      <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
     </Modal>
     <Modal :isOpen="isEditCategoryModalOpen" @closed="isEditCategoryModalOpen = false"
       :title="t('pages.categories.editTitle')" :buttons="[
@@ -218,9 +188,6 @@ function selectCategory(category: Category) {
       ]">
       <input type="text" v-model="categoryName" data-testid="edit-category-name"
         class="block my-2 p-2 w-full rounded-sm bg-white text-black shadow-xs" />
-      <button @click="selectImage" class="bg-theme-primary block my-2 p-2 w-full rounded-sm text-white shadow-xs">
-        {{ t('pages.categories.selectImage') }}</button>
-      <img v-if="categoryImage" :src="categoryImage" alt="Selected image" class="object-cover rounded-lg" />
     </Modal>
     <Modal :isOpen="isDeleteModalOpen" @closed="isDeleteModalOpen = false"
       :title="t('pages.categories.deleteModalTitle')" :buttons="[
@@ -238,7 +205,5 @@ function selectCategory(category: Category) {
       ]">
       <span class="dark:text-white">{{ t("pages.categories.deleteModalBody") }}</span>
     </Modal>
-    <BusyIndicator :busy="isProcessingImage" :message1="t('pages.categories.processImage1')"
-      :message2="t('pages.categories.processImage2')" />
   </div>
 </template>
