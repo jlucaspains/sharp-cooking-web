@@ -63,8 +63,9 @@ export type InstructionDisplay = {
 
 export function prepareIngredientDisplay(input: string, multiplier: number, useFractionsOverDecimal: boolean, locale: string, highlight: boolean = false): IngredientDisplay {
     multiplier = multiplier > 0 ? multiplier : 1;
+    const fallbackLanguage = locale.startsWith("pt") ? "pt" : "en";
 
-    const result = parseIngredient(input, locale, { includeExtra: true, includeAlternativeUnits: true });
+    const result = parseIngredient(input, locale, { includeExtra: true, includeAlternativeUnits: true, fallbackLanguage });
 
     if (!result) {
         return {
@@ -109,7 +110,8 @@ export function prepareIngredientDisplay(input: string, multiplier: number, useF
 }
 
 export function prepareStepDisplay(input: string, currentTime: Date, locale: string, highlight: boolean = false): InstructionDisplay {
-    const result = parseInstruction(input, locale, { includeAlternativeTemperatureUnit: true });
+    const fallbackLanguage = locale.startsWith("pt") ? "pt" : "en";
+    const result = parseInstruction(input, locale, { includeAlternativeTemperatureUnit: true, fallbackLanguage });
 
     if (!result) {
         return { text: input, startTime: currentTime, timeInSeconds: 0, temperature: 0, temperatureUnit: "", alternativeTemperatures: [] };

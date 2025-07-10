@@ -34,6 +34,7 @@ test('displays custom category', async ({ page }) => {
   await page.getByPlaceholder('Preheat oven to 350 F').last().fill('Preheat oven to 350 F');
   await page.getByTestId("topbar-single-button").click();
 
+  await page.waitForTimeout(500);
   await page.goto('/');
   await expect(page.getByText('Category 1')).toHaveText("Category 1");
   await expect(page.getByTestId('recipe-count').first()).toHaveText("1");
