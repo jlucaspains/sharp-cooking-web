@@ -397,10 +397,10 @@ async function shareOnline() {
     const model = {
       id: item.value.id,
       title: item.value.title,
-      ingredients: item.value.ingredients,
+      ingredients: item.value.ingredients.filter(ingredient => ingredient.trim() !== ""),
       notes: item.value.notes,
       source: item.value.source,
-      steps: item.value.steps,
+      steps: item.value.steps.filter(step => step.trim() !== ""),
       media: images.value.map(item => {
         return { "type": item.type, "url": item.url };
       }),
