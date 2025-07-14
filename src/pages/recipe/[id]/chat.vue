@@ -77,7 +77,7 @@ onMounted(async () => {
 
   const openAIAuthorizationHeader = await getSetting("OpenAIAuthorizationHeader", "");
   const openAIModel = await getSetting("OpenAIModelName", "");
-  
+
   const llm = new ChatOpenAI({
     model: openAIModel,
     apiKey: openAIAuthorizationHeader,
@@ -115,8 +115,8 @@ onMounted(async () => {
   )
 
   const lookupRecipeByName = tool(
-    async ({ name }) => {
-      const recipe = await getRecipeByName(name);
+    async (input: any) => {
+      const recipe = await getRecipeByName(input.name);
 
       if (!recipe) {
         return "";
@@ -134,14 +134,14 @@ onMounted(async () => {
   )
 
   const updateRecipeIngredientsByName = tool(
-    async ({ name, updatedIngredients }) => {
-      const recipe = await getRecipeByName(name);
+    async (input: any) => {
+      const recipe = await getRecipeByName(input.name);
 
       if (!recipe) {
         return "";
       } else {
-        console.log(updatedIngredients);
-        recipe.ingredients = updatedIngredients.split("\n");
+        console.log(input.updatedIngredients);
+        recipe.ingredients = input.updatedIngredients.split("\n");
         await saveRecipe(recipe);
         return "updated";
       }
