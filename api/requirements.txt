@@ -10,6 +10,6 @@ Pillow==11.1
 pillow-avif-plugin~=1.5
 pytest~=8.4
 azure-cosmos~=4.9
-jsonschema~=4.24
+jsonschema~=4.25
 lxml==5.1.0
 qrcode==8.2
