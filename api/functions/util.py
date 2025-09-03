@@ -189,7 +189,10 @@ def get_recipe_image(image_url: str):
 def get_html(url: str) -> AbstractScraper:
     html = requests.get(url, headers=request_headers).content
 
-    return scrape_html(html, url, wild_mode=True)
+    return scrape_html(html, url, supported_only=False)
+
+def get_mock_html(mock_html: str, url: str) -> AbstractScraper:
+    return scrape_html(mock_html, url, supported_only=False)
 
 def get_recipe_from_scraper(scraper: AbstractScraper, download_image: bool = False):
     """Parses a recipe from a scraper
