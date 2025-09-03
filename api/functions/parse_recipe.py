@@ -11,7 +11,7 @@ from .util import get_mock_html, get_recipe_from_scraper, get_html
 bp = func.Blueprint()
 
 mock_recipe_html = None
-def set_mock_recipe_html(mock_recipe: str | None):
+def set_mock_recipe_html(mock_recipe: str):
     global mock_recipe_html
     mock_recipe_html = mock_recipe
 
