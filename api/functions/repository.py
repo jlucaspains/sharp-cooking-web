@@ -6,7 +6,7 @@ DATABASE_NAME = "sharp-cooking"
 CONTAINER_NAME = "ShareItems"
 
 class Repository:
-    def __init__(self):
+    def connect(self):
         endpoint = os.environ.get("COSMOS_ENDPOINT")
         key = os.environ.get("COSMOS_KEY")
 
@@ -16,6 +16,10 @@ class Repository:
         self.client = CosmosClient(url=endpoint, credential=key)
         self.database = self.client.get_database_client(DATABASE_NAME)
         self.container = self.database.get_container_client(CONTAINER_NAME)
+
+    @property
+    def connected(self) -> bool:
+        return hasattr(self, 'container') and self.container is not None
 
     def read_item(self, id: str) -> Dict[str, Any]:
         return self.container.read_item(id, partition_key=id)

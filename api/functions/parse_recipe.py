@@ -6,9 +6,14 @@ import azure.functions as func
 from uuid import uuid4
 from time import perf_counter
 
-from .util import get_recipe_from_scraper, get_html
+from .util import get_mock_html, get_recipe_from_scraper, get_html
 
 bp = func.Blueprint()
+
+mock_recipe_html = None
+def set_mock_recipe_html(mock_recipe: str):
+    global mock_recipe_html
+    mock_recipe_html = mock_recipe
 
 @bp.route(route="parse-recipe", methods=["POST"]) 
 def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
@@ -20,8 +25,13 @@ def parse_recipe(req: func.HttpRequest) -> func.HttpResponse:
     download_image: bool = req_body.get("downloadImage") or False
     try:
         logging.info(f"processing parse request id {correlation_id} for url: {url}")
-        scraper = get_html(url)
         
+        if mock_recipe_html is not None:
+            print("using mock and url " + url)
+            scraper = get_mock_html(mock_recipe_html, url)
+        else:
+            scraper = get_html(url)
+
         result = get_recipe_from_scraper(scraper, download_image)
 
         return func.HttpResponse(json.dumps(result), status_code=200, mimetype="application/json")

@@ -29,6 +29,9 @@ def share_recipe(req: func.HttpRequest) -> func.HttpResponse:
     start = perf_counter()
     correlation_id = uuid4()
 
+    if not repository.connected:
+        repository.connect()
+
     rand = random.SystemRandom()
     share_id = ''.join(rand.choices(population=string.ascii_uppercase +  string.digits, k=6))
 
