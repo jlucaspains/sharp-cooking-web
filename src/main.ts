@@ -10,6 +10,7 @@ import routes from '~pages';
 import { createState, stateSymbol } from './services/store';
 import Notifications from 'notiwind';
 import i18n from './i18n';
+import { sendPageViewData, sendPageViewDurationData } from './sharp-web-insights';
 
 registerSW({ immediate: true, onOfflineReady() { } });
 
@@ -26,6 +27,31 @@ const router = createRouter({
         }
     }
 });
+
+let lastToDateTime: Date | null = null;
+let lastToPageViewId: string | null = null;
+
+router.afterEach((to, from) => {
+    if (import.meta.env.DEV) {
+        console.log('Navigated from:', from.fullPath, 'to:', to.fullPath);
+        return;
+    }
+
+    if (lastToDateTime && lastToPageViewId) {
+        sendPageViewDurationData(lastToPageViewId, lastToDateTime);
+    }
+
+    lastToDateTime = new Date();
+    if (to.matched.length > 0) {
+        sendPageViewData(to.matched[0].path, document.referrer)
+            .then((data) => {
+                lastToPageViewId = data || "";
+            }).catch((error) => {
+                console.error('Error sending page view duration data:', error);
+            })
+    }
+});
+
 
 const app = createApp(Suspenser);
 
