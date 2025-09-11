@@ -32,7 +32,7 @@ let lastToDateTime: Date | null = null;
 let lastToPageViewId: string | null = null;
 
 router.afterEach((to, from) => {
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || import.meta.env.CI) {
         console.log('Navigated from:', from.fullPath, 'to:', to.fullPath);
         return;
     }
