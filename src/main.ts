@@ -47,7 +47,7 @@ router.afterEach((to, from) => {
             .then((data) => {
                 lastToPageViewId = data || "";
             }).catch((error) => {
-                console.error('Error sending page view duration data:', error);
+                console.error('Error sending page view data:', error);
             })
     }
 });
