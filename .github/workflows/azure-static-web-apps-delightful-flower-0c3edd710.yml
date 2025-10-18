@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     name: API Unit Tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: 3.9
 
@@ -38,13 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -72,8 +72,8 @@ jobs:
     env:
       BASEURL: https://delightful-flower-0c3edd710-${{github.event.number}}.centralus.2.azurestaticapps.net # sets value for URL to test
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
 
@@ -86,7 +86,7 @@ jobs:
           HOME=/root npx playwright test
 
       - name: Create test summary
-        uses: test-summary/action@dist
+        uses: test-summary/action@v2.4
         if: always()
         with:
           paths: test-results/junit.xml

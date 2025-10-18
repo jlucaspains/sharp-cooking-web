@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { setup } from './helpers';
 
 async function enableEditInSingleEditor(page: any) {
   await page.goto('#/preview-features');
@@ -6,9 +7,7 @@ async function enableEditInSingleEditor(page: any) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("DoNotAskToInstall", "true");
-  });
+  await setup(page);
 });
 
 test('title', async ({ page }) => {

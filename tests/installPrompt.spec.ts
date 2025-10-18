@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { preventPageStats } from './helpers';
+
+test.beforeEach(async ({ page }) => {
+  await preventPageStats(page);
+});
 
 test('will show install prompt on webkit', async ({ page, browserName }) => {
   test.skip(browserName !== 'webkit', 'not applicable');

@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-        window.localStorage.setItem("DoNotAskToInstall", "true");
-    });
+    await setup(page);
 });
 
 test('Highligh ingredient quantity and UOM', async ({ page, browserName, isMobile }) => {

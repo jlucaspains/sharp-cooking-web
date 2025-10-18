@@ -61,3 +61,19 @@ export async function createCategory(page: Page, id: number, title: string) {
     await page.getByTestId('new-category-name').fill(title);
     await page.getByText('OK').click();
 }
+
+export async function setup(page: Page) {
+    await page.addInitScript(() => {
+        window.localStorage.setItem("DoNotAskToInstall", "true");
+    });
+    await preventPageStats(page);
+}
+
+export async function preventPageStats(page: Page) {
+    await page.route(/.*\/pageview/, async route => {
+        await route.fulfill({ status: 200, body: 'OK' });
+    });
+    await page.route(/.*\/pageViewDuration/, async route => {
+        await route.fulfill({ status: 200, body: 'OK' });
+    });
+}

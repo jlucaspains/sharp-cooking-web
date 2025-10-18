@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-        window.localStorage.setItem("DoNotAskToInstall", "true");
-    });
+    await setup(page);
 });
 
 async function setupImage(page) {

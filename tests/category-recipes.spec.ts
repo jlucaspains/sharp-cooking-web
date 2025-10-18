@@ -1,10 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { createCategory, createRecipe } from './helpers';
+import { createCategory, createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("DoNotAskToInstall", "true");
-  });
+  await setup(page);
 
   await page.goto('/');
   await page.waitForTimeout(200);

@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createCategory } from './helpers';
+import { createCategory, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("DoNotAskToInstall", "true");
-  });
+  await setup(page);
 });
 
 test('add new category', async ({ page }) => {
