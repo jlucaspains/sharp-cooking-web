@@ -2,14 +2,14 @@
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
 
-azure-functions~=1.23
-pint~=0.24
+azure-functions~=1.24
+pint~=0.25
 recipe-scrapers~=15.9
 python-multipart~=0.0.20
 Pillow==11.1
 pillow-avif-plugin~=1.5
 pytest~=8.4
-azure-cosmos~=4.9
+azure-cosmos~=4.14
 jsonschema~=4.25
 lxml==5.1.0
 qrcode==8.2
