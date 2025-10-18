@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createCategory } from './helpers';
+import { createCategory, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("DoNotAskToInstall", "true");
-  });
+  await setup(page);
   await page.goto('#/preview-features');
   await page.getByTestId('enable-category-toggle').click();
 });

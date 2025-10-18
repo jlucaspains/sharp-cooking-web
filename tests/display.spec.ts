@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("DoNotAskToInstall", "true");
-  });
+  await setup(page);
 });
 
 test('edit', async ({ page }) => {
@@ -38,7 +36,7 @@ test('change time', async ({ page, browserName }) => {
 
 test('print recipe', async ({ page }) => {
   await createRecipe(page, 2, "Print Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
-  
+
   page.on("load", (pg) => {
     pg.evaluate("window.print = function() { console.log('Print was triggered'); };")
   });
@@ -170,5 +168,5 @@ test('share as code', async ({ page }) => {
   await page.getByTestId('topbar-options').click();
 
   await page.getByRole('menuitem', { name: 'Share via share code' }).click();
-  await expect( page.getByTestId("actual-share-code")).toHaveText("123456");
+  await expect(page.getByTestId("actual-share-code")).toHaveText("123456");
 });
