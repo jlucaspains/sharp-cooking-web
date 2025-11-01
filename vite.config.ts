@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import Pages from 'vite-plugin-pages'
-import path from 'path'
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from "@tailwindcss/vite"
 
@@ -110,7 +109,7 @@ export default defineConfig({
   })],
   resolve: {
     alias: {
-      '@/': fileURLToPath(new URL('./src', import.meta.url)),
+      '@/': fileURLToPath(new URL('./src/', import.meta.url)),
       'util': "./src/util.js"
     }
   }
