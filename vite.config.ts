@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import Pages from 'vite-plugin-pages'
-import path from 'path'
+import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from "@tailwindcss/vite"
 
 // https://vitejs.dev/config/
@@ -15,13 +15,47 @@ export default defineConfig({
       /* other options */
     },
     registerType: 'autoUpdate',
+    injectRegister: 'auto',
+    useCredentials: true,
+    workbox: {
+      skipWaiting: true,
+      clientsClaim: true,
+      globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2,ttf,eot,json}'],
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'gstatic-fonts-cache',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+            }
+          }
+        }
+      ]
+    },
     manifest: {
       id: 'lpains.sharpcooking',
       name: 'Sharp Cooking',
       short_name: 'Sharp Cooking',
       description: 'Your recipe book app',
+      start_url: '/',
+      display: 'standalone',
+      background_color: '#ffffff',
       theme_color: '#ffffff',
-      scope: '.',
+      scope: '/',
       icons: [
         {
           src: 'android-chrome-192x192.png',
@@ -75,7 +109,7 @@ export default defineConfig({
   })],
   resolve: {
     alias: {
-      '@/': `${path.resolve(__dirname, 'src')}/`,
+      '@/': fileURLToPath(new URL('./src/', import.meta.url)),
       'util': "./src/util.js"
     }
   }
