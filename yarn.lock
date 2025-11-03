@@ -962,10 +962,10 @@
   dependencies:
     "@tanstack/vue-virtual" "^3.0.0-beta.60"
 
-"@jlucaspains/sharp-recipe-parser@^1.3.5":
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.3.5.tgz#2619ded827f7354077a22ca1cb9feb70a7287c8a"
-  integrity sha512-67LU8ZXLE+yMdmXwIHZuwBNKsw4xI+Ry5p9KGpXnTiODiVuAoFy3OaibBSOGcmqSswFmXgrHyFgyvsgzaMXMpA==
+"@jlucaspains/sharp-recipe-parser@^1.3.6":
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/@jlucaspains/sharp-recipe-parser/-/sharp-recipe-parser-1.3.6.tgz#798a223210e56864bfe617ca34acb774b891cda3"
+  integrity sha512-NqI0svYcg/oubFf4GsTkIEaIz9HUqWnhg4sxHVxft5xAikIFYwZXCsjosk2+y1wZgKfrV+14C4mm5q6/wr6BHw==
   dependencies:
     fraction.js "^5.0.6"
 
@@ -1011,10 +1011,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@langchain/core@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@langchain/core/-/core-1.0.1.tgz#c2bdbdff87649fe17b2c86bf535d749ac73a586c"
-  integrity sha512-hVM3EkojYOk4ISJQKjLuWYSH6kyyOFlZIrLFETDA1L0Z2/Iu0q32aJawZ0FDn6rlXE8QZjBt/9OaOL36rXc05w==
+"@langchain/core@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@langchain/core/-/core-1.0.2.tgz#67b20a764e68deee1af6714e18a38044f89ea485"
+  integrity sha512-6mOn4bZyO6XT0GGrEijRtMVrmYJGZ8y1BcwyTPDptFz38lP0CEzrKEYB++h+u3TEcAd3eO25l1aGw/zVlVgw2Q==
   dependencies:
     "@cfworker/json-schema" "^4.0.2"
     ansi-styles "^5.0.0"
@@ -1517,10 +1517,10 @@
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.6.4.tgz#cbe97fe0162b365edc1dba80e173f90492535343"
   integrity sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==
 
-"@vue/language-core@3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@vue/language-core/-/language-core-3.1.2.tgz#0ab203a1f800d2b3143ee31f651841eb3c3db596"
-  integrity sha512-PyFDCqpdfYUT+oMLqcc61oHfJlC6yjhybaefwQjRdkchIihToOEpJ2Wu/Ebq2yrnJdd1EsaAvZaXVAqcxtnDxQ==
+"@vue/language-core@3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@vue/language-core/-/language-core-3.1.3.tgz#abc5350afcce83ea81fc5be6c34c42e442de4b8b"
+  integrity sha512-KpR1F/eGAG9D1RZ0/T6zWJs6dh/pRLfY5WupecyYKJ1fjVmDMgTPw9wXmKv2rBjo4zCJiOSiyB8BDP1OUwpMEA==
   dependencies:
     "@volar/language-core" "2.4.23"
     "@vue/compiler-dom" "^3.5.0"
@@ -3866,13 +3866,13 @@ vue-router@4:
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 
-vue-tsc@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/vue-tsc/-/vue-tsc-3.1.2.tgz#f83019ed112b5bcc995904a7a4e5791760b580a5"
-  integrity sha512-3fd4DY0rFczs5f+VB3OhcLU83V6+3Puj2yLBe0Ak65k7ERk+STVNKaOAi0EBo6Lc15UiJB6LzU6Mxy4+h/pKew==
+vue-tsc@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/vue-tsc/-/vue-tsc-3.1.3.tgz#542dd668bc43b5ef193d4e3edf46f382ddc0fb5a"
+  integrity sha512-StMNfZHwPIXQgY3KxPKM0Jsoc8b46mDV3Fn2UlHCBIwRJApjqrSwqeMYgWf0zpN+g857y74pv7GWuBm+UqQe1w==
   dependencies:
     "@volar/typescript" "2.4.23"
-    "@vue/language-core" "3.1.2"
+    "@vue/language-core" "3.1.3"
 
 vue@^3.5.22:
   version "3.5.22"
