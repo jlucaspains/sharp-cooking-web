@@ -25,6 +25,7 @@ const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
 const categoriesEnabled = ref(false);
 const enableAiChat = ref(false);
+const editInSingleTextArea = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -34,6 +35,7 @@ onMounted(async () => {
   const useFractionsValue = await getSetting("UseFractions", "false");
   const enableCategories = await getSetting("EnableCategoryDisplay", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
+  const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
@@ -42,6 +44,7 @@ onMounted(async () => {
   storageDescription.value = await getStorageDescription(i18next.language);
   categoriesEnabled.value = enableCategories === "true";
   enableAiChat.value = enableAiChatValue === "true";
+  editInSingleTextArea.value = editInSingleTextAreaValue === "true";
 });
 
 watch(displayLanguage, async (value) => {
@@ -101,6 +104,14 @@ function updateStepsInterval() {
 
 function updateUseFractions() {
   saveSetting("UseFractions", `${useFractions.value}`);
+}
+
+function updateEditInSingleTextArea() {
+  saveSetting("EditInSingleTextArea", `${editInSingleTextArea.value}`);
+}
+
+function updateEnableCategoryDisplay() {
+  saveSetting("EnableCategoryDisplay", `${categoriesEnabled.value}`);
 }
 
 function showChangeLanguageModal() {
@@ -174,8 +185,20 @@ function goToAIOptions() {
         :display-description="t('pages.options.multiplierTypeDescription')"
         test-id="use-fractions-toggle"></config-switch>
     </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="editInSingleTextArea" @change="updateEditInSingleTextArea"
+        :display-name="t('pages.options.editInSingleTextArea')"
+        :display-description="t('pages.options.editInSingleTextAreaDescription')"
+        test-id="edit-in-single-text-area-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="categoriesEnabled" @change="updateEnableCategoryDisplay"
+        :display-name="t('pages.options.enableCategoryDisplay')"
+        :display-description="t('pages.options.enableCategoryDisplayDescription')"
+        test-id="enable-category-toggle"></config-switch>
+    </div>
     <div v-if="categoriesEnabled" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
-      <label class="dark:text-white">{{ t("pages.preview-features.categories") }}</label>
+      <label class="dark:text-white">{{ t("pages.options.categories") }}</label>
       <div class="dark:text-white float-right ">
         <button data-testid="categories-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -184,7 +207,7 @@ function goToAIOptions() {
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.preview-features.categoriesDescription") }}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.categoriesDescription") }}</span>
       </div>
     </div>
     <div v-if="enableAiChat" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToAIOptions">
