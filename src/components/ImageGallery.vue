@@ -118,7 +118,7 @@ function close() {
                 </div>
                 <ul
                     class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
-                    <template v-for="(image, i) in props.images" :key="image">
+                    <template v-for="(image, i) in props.images" :key="`image-${i}`">
                         <li class="w-full shrink-0 snap-start">
                             <a v-if="image.type == 'img'" href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
@@ -149,7 +149,7 @@ function close() {
                         </a>
                         <ul
                             :class="{ 'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
-                            <template v-for="(image, i) in props.images" :key="image">
+                            <template v-for="(image, i) in props.images" :key="`thumb-${i}`">
                                 <li class="shrink-0 snap-start mx-1">
                                     <a class="inline-block" href="#" @click.prevent="activeImage = i">
                                         <svg :class="{ 'h-6 w-6': true, 'dark:text-white': activeImage == i, 'text-slate-400': activeImage != i }"
@@ -163,7 +163,7 @@ function close() {
                         </ul>
                         <ul
                             :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
-                            <template v-for="(image, i) in props.images" :key="image">
+                            <template v-for="(image, i) in props.images" :key="`nav-${i}`">
                                 <li class="shrink-0 snap-start  mx-1">
                                     <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
                                         :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
