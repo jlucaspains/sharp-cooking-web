@@ -1,6 +1,10 @@
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export function sendPageViewData(url: string, referrer: string): Promise<string> {
+    if (document.URL.startsWith("http://localhost")) {
+        return Promise.resolve("");
+    }
+
     const loadDateTime = new Date();
     const pageViewData = {
         url,
@@ -20,7 +24,7 @@ export function sendPageViewData(url: string, referrer: string): Promise<string>
 
 
 export function sendPageViewDurationData(pageViewId: string, loadDateTime: Date): Promise<Response | null> {
-    if (pageViewId === "") {
+    if (pageViewId === "" || document.URL.startsWith("http://localhost")) {
         return Promise.resolve(null);
     }
 

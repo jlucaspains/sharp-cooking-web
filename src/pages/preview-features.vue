@@ -11,6 +11,7 @@ const state = useState()!;
 const enableAiChat = ref(false);
 const editInSingleTextArea = ref(false);
 const enableCategoryDisplay = ref(false);
+const enableCompactMobileTimeline = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.preview-features.title");
@@ -19,10 +20,12 @@ onMounted(async () => {
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
   const enableCategoryDisplayValue = await getSetting("EnableCategoryDisplay", "false");
+  const enableCompactMobileTimelineValue = await getSetting("EnableCompactMobileTimeline", "false");
 
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
   enableCategoryDisplay.value = enableCategoryDisplayValue === "true";
+  enableCompactMobileTimeline.value = enableCompactMobileTimelineValue === "true";
 });
 
 function updateEnableAiChat() {
@@ -35,6 +38,10 @@ function updateEditInSingleTextArea() {
 
 function updateEnableCategoriesDisplay() {
   saveSetting("EnableCategoryDisplay", `${enableCategoryDisplay.value}`);
+}
+
+function updateEnableCompactMobileTimeline() {
+  saveSetting("EnableCompactMobileTimeline", `${enableCompactMobileTimeline.value}`);
 }
 </script>
 
@@ -57,6 +64,12 @@ function updateEnableCategoriesDisplay() {
         :display-name="t('pages.preview-features.enableAiChat')"
         :display-description="t('pages.preview-features.enableAiChatDescription')"
         test-id="enable-ai-chat-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="enableCompactMobileTimeline" @change="updateEnableCompactMobileTimeline"
+        :display-name="t('pages.preview-features.enableCompactMobileTimeline')"
+        :display-description="t('pages.preview-features.enableCompactMobileTimelineDescription')"
+        test-id="enable-compact-mobile-timeline-toggle"></config-switch>
     </div>
   </div>
 </template>

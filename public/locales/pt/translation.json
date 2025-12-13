@@ -72,7 +72,9 @@
             "enableCategoryDisplay": "Ativar Categorias",
             "enableCategoryDisplayDescription": "Quando ativado, mostra uma lista de categories na página principal.",
             "categories": "Categorias",
-            "categoriesDescription": "Manter lista de categorias"
+            "categoriesDescription": "Manter lista de categorias",
+            "enableCompactMobileTimeline": "Ativar Timeline Compacta no Celular",
+            "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela."
         },
         "recipe": {
             "id": {

@@ -170,3 +170,24 @@ test('share as code', async ({ page }) => {
   await page.getByRole('menuitem', { name: 'Share via share code' }).click();
   await expect(page.getByTestId("actual-share-code")).toHaveText("123456");
 });
+
+test('display works with compact timeline enabled', async ({ page }) => {
+  // Enable compact timeline feature
+  await page.goto('#/preview-features');
+  await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
+  
+  await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
+  await page.goto('#/recipe/2');
+  
+  // Verify basic display elements still work
+  await expect(page.getByText('New Bread')).toBeVisible();
+  await expect(page.getByText('100g flour')).toBeVisible();
+  await expect(page.getByText('Bake it for 30 min')).toBeVisible();
+  
+  // Verify interactive checkboxes are present
+  await expect(page.locator('[role="checkbox"]')).toHaveCount(2); // 1 ingredients + 1 step
+  
+  // Verify edit button still works
+  await page.getByTestId('edit-button').click();
+  await expect(page).toHaveURL(new RegExp(".*recipe/2/edit"));
+});
