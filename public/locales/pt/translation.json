@@ -222,7 +222,7 @@
                 "selectAll": "Selecionar tudo",
                 "deselectAll": "Desmarcar tudo",
                 "step1": "Selecione um arquivo de backup",
-                "step1Description": "O backup deve ter sido criado pelo Cozinha Afiada iOS, Android ou Web e deve ser um arquivo .json",
+                "step1Description": "O backup deve ter sido criado pelo Cozinha Afiada Web e deve ser um arquivo .json",
                 "step2": "Selecione receitas para importar",
                 "step2Description": "Revise e escolha quais receitas você quer importar",
                 "step3": "Confirme e importe",

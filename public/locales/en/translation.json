@@ -224,7 +224,7 @@
                 "selectAll": "Select all",
                 "deselectAll": "Deselect all",
                 "step1": "Select a backup file",
-                "step1Description": "The backup must have been created by Sharp Cooking iOS, Android, or Web App and must be a .json file",
+                "step1Description": "The backup must have been created by Sharp Cooking Web App and must be a .json file",
                 "step2": "Select recipes to import",
                 "step2Description": "Review and choose which recipes you want to import",
                 "step3": "Confirm and import",
