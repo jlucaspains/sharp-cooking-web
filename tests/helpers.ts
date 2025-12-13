@@ -77,3 +77,8 @@ export async function preventPageStats(page: Page) {
         await route.fulfill({ status: 200, body: 'OK' });
     });
 }
+
+export async function enableCompactMobileTimeline(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
+}
