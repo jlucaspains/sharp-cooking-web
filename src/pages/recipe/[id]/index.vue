@@ -70,6 +70,7 @@ const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
 let enableAiChat = false;
+const enableCompactMobileTimeline = ref(false);
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -107,6 +108,9 @@ onMounted(async () => {
 
   const enableAiChatString = await getSetting("EnableAiChat", "false");
   enableAiChat = enableAiChatString == "true";
+
+  const enableCompactMobileTimelineString = await getSetting("EnableCompactMobileTimeline", "false");
+  enableCompactMobileTimeline.value = enableCompactMobileTimelineString == "true";
 
   setupMenuOptions();
 
@@ -639,8 +643,8 @@ function nutritionHasValues(): boolean {
 
       </button>
     </div>
-    <div class="grid grid-cols-12 w-full mt-7">
-      <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+    <div :class="enableCompactMobileTimeline ? 'pl-6' : ''" class="grid grid-cols-12 w-full mt-7 pr-1">
+      <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(currentStartTime) }}
       </div>
       <div class="-ml-3.5 mt-3">
@@ -649,18 +653,18 @@ function nutritionHasValues(): boolean {
           <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
-      <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-        {{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)
+      <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
+        <span>{{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)</span><span v-if="enableCompactMobileTimeline" class="sm:hidden">{{ parseTime(currentStartTime) }}</span>
       </div>
       <template v-for="subItem in displayIngredients">
-        <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div class="lg:col-span-10 sm:col-span-9 col-span-8" @click="showIngredientDetails(subItem)"
+        <div :class="enableCompactMobileTimeline ? 'col-span-11' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9" @click="showIngredientDetails(subItem)"
           v-html="subItem.text">
         </div>
       </template>
       <template v-for="(displayItem, index) in displayInstructions">
-        <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
           {{ parseTime(displayItem.startTime) }}
         </div>
         <div class="-ml-3.5 mt-3">
@@ -669,16 +673,16 @@ function nutritionHasValues(): boolean {
             <circle cx="12" cy="12" r="10" />
           </svg>
         </div>
-        <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-          {{ t('pages.recipe.id.index.step') }} {{ index + 1 }}
+        <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
+          <span>{{ t('pages.recipe.id.index.step') }} {{ index + 1 }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(displayItem.startTime) }}</span>
         </div>
-        <div class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div class="lg:col-span-10 sm:col-span-9 col-span-8" v-html="displayItem.text"
+        <div :class="enableCompactMobileTimeline ? 'col-span-11' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9" v-html="displayItem.text"
           @click="showInstructionDetails(displayItem)">
         </div>
       </template>
-      <div class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+      <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(finishTime) }}
       </div>
       <div class="-ml-3.5 mt-3">
@@ -687,8 +691,8 @@ function nutritionHasValues(): boolean {
           <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
-      <div class="lg:col-span-10 sm:col-span-9 col-span-8 mt-3">
-        {{ t('pages.recipe.id.index.enjoy') }}
+      <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
+        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(finishTime) }}</span>
       </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>

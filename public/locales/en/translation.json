@@ -73,7 +73,9 @@
             "enableCategoryDisplay": "Enable Category Display",
             "enableCategoryDisplayDescription": "When enabled, show a list of categories on the main page.",
             "categories": "Categories",
-            "categoriesDescription": "Maintain list of categories"
+            "categoriesDescription": "Maintain list of categories",
+            "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
+            "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space."
         },
         "recipe": {
             "id": {
