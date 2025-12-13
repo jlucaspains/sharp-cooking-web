@@ -66,13 +66,13 @@
             "editInSingleTextArea": "Habilitar editor de receitas simplificado",
             "editInSingleTextAreaDescription": "Use uma área de texto para editar os ingredientes e outra para os passos.",
             "enableCategoryDisplay": "Ativar Categorias",
-            "enableCategoryDisplayDescription": "Quando ativado, mostra uma lista de categories na página principal."
+            "enableCategoryDisplayDescription": "Quando ativado, mostra uma lista de categories na página principal.",
+            "categories": "Categorias",
+            "categoriesDescription": "Manter lista de categorias"
         },
         "preview-features": {
             "enableAiChat": "Ativar Chat de IA",
             "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
-            "categories": "Categorias",
-            "categoriesDescription": "Manter lista de categorias",
             "enableCompactMobileTimeline": "Ativar Timeline Compacta no Celular",
             "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela."
         },
