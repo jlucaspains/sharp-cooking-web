@@ -658,11 +658,11 @@ function nutritionHasValues(): boolean {
 
       </button>
     </div>
-    <div :class="enableCompactMobileTimeline ? 'pl-6' : ''" class="grid grid-cols-12 w-full mt-7 pr-1">
+    <div :class="enableCompactMobileTimeline ? 'pl-4' : ''" class="grid grid-cols-12 w-full mt-7 pr-1">
       <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(currentStartTime) }}
       </div>
-      <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleIngredientsCompletion">
+      <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleIngredientsCompletion" role="checkbox" :aria-checked="completedIngredients" :aria-label="t('pages.recipe.id.index.ingredients')">
         <svg v-if="!completedIngredients" class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -687,7 +687,7 @@ function nutritionHasValues(): boolean {
         <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
           {{ parseTime(displayItem.startTime) }}
         </div>
-        <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleStepCompletion(index)">
+        <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleStepCompletion(index)" role="checkbox" :aria-checked="completedSteps.has(index)" :aria-label="`${t('pages.recipe.id.index.step')} ${index + 1}`">
           <svg v-if="!completedSteps.has(index)" class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
