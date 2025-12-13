@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { setup } from './helpers';
 
 async function enableEditInSingleEditor(page: any) {
-  await page.goto('#/preview-features');
+  await page.goto('#/options');
   await page.getByTestId('edit-in-single-text-area-toggle').click();
 }
 

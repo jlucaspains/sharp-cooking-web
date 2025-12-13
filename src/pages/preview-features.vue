@@ -9,8 +9,6 @@ const { t } = useTranslation();
 
 const state = useState()!;
 const enableAiChat = ref(false);
-const editInSingleTextArea = ref(false);
-const enableCategoryDisplay = ref(false);
 const enableCompactMobileTimeline = ref(false);
 
 onMounted(async () => {
@@ -18,26 +16,14 @@ onMounted(async () => {
   state.menuOptions = [];
 
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
-  const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
-  const enableCategoryDisplayValue = await getSetting("EnableCategoryDisplay", "false");
   const enableCompactMobileTimelineValue = await getSetting("EnableCompactMobileTimeline", "false");
 
   enableAiChat.value = enableAiChatValue === "true";
-  editInSingleTextArea.value = editInSingleTextAreaValue === "true";
-  enableCategoryDisplay.value = enableCategoryDisplayValue === "true";
   enableCompactMobileTimeline.value = enableCompactMobileTimelineValue === "true";
 });
 
 function updateEnableAiChat() {
   saveSetting("EnableAiChat", `${enableAiChat.value}`);
-}
-
-function updateEditInSingleTextArea() {
-  saveSetting("EditInSingleTextArea", `${editInSingleTextArea.value}`);
-}
-
-function updateEnableCategoriesDisplay() {
-  saveSetting("EnableCategoryDisplay", `${enableCategoryDisplay.value}`);
 }
 
 function updateEnableCompactMobileTimeline() {
@@ -47,18 +33,6 @@ function updateEnableCompactMobileTimeline() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <config-switch v-model="editInSingleTextArea" @change="updateEditInSingleTextArea"
-        :display-name="t('pages.preview-features.editInSingleTextArea')"
-        :display-description="t('pages.preview-features.editInSingleTextAreaDescription')"
-        test-id="edit-in-single-text-area-toggle"></config-switch>
-    </div>
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <config-switch v-model="enableCategoryDisplay" @change="updateEnableCategoriesDisplay"
-        :display-name="t('pages.preview-features.enableCategoryDisplay')"
-        :display-description="t('pages.preview-features.enableCategoryDisplayDescription')"
-        test-id="enable-category-toggle"></config-switch>
-    </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableAiChat" @change="updateEnableAiChat"
         :display-name="t('pages.preview-features.enableAiChat')"

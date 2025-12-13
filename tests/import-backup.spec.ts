@@ -187,7 +187,7 @@ test('Restore v2 json backup new format', async ({ page }) => {
         };
     });
 
-    await page.goto('#/preview-features');
+    await page.goto('#/options');
     await page.getByTestId('enable-category-toggle').click();
 
     await page.goto('#/recipe/import-backup');

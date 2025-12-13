@@ -3,7 +3,7 @@ import { createCategory, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
-  await page.goto('#/preview-features');
+  await page.goto('#/options');
   await page.getByTestId('enable-category-toggle').click();
 });
 

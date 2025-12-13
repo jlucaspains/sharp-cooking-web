@@ -62,16 +62,16 @@
             "previewFeatures": "Preview features",
             "previewFeaturesDescription": "Review and enable features that are still in development and may not work as expected.",
             "aiOptions": "AI Options",
-            "aiOptionsDescription": "Configure AI Chat options"
+            "aiOptionsDescription": "Configure AI Chat options",
+            "editInSingleTextArea": "Enable simplified recipe editor",
+            "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps.",
+            "enableCategoryDisplay": "Enable Category Display",
+            "enableCategoryDisplayDescription": "When enabled, show a list of categories on the main page."
         },
         "preview-features": {
             "title": "Preview Features",
             "enableAiChat": "Enable AI Chat",
             "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
-            "editInSingleTextArea": "Enable simplified recipe editor",
-            "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps.",
-            "enableCategoryDisplay": "Enable Category Display",
-            "enableCategoryDisplayDescription": "When enabled, show a list of categories on the main page.",
             "categories": "Categories",
             "categoriesDescription": "Maintain list of categories",
             "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
