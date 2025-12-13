@@ -64,6 +64,8 @@ const shareCode = ref("");
 const shareQRCode = ref("");
 const isInstructionDetailsModalOpen = ref(false);
 const isNutritionFactsModalOpen = ref(false);
+const completedSteps = ref(new Set<number>());
+const completedIngredients = ref(false);
 const { t } = useTranslation();
 
 const noSleep = new NoSleep();
@@ -71,6 +73,19 @@ let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
 let enableAiChat = false;
 const enableCompactMobileTimeline = ref(false);
+
+function toggleStepCompletion(index: number) {
+  if (completedSteps.value.has(index)) {
+    completedSteps.value.delete(index);
+  } else {
+    completedSteps.value.add(index);
+  }
+  completedSteps.value = new Set(completedSteps.value);
+}
+
+function toggleIngredientsCompletion() {
+  completedIngredients.value = !completedIngredients.value;
+}
 
 function confirmDeleteItem() {
   isDeleteModalOpen.value = true;
@@ -647,14 +662,19 @@ function nutritionHasValues(): boolean {
       <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(currentStartTime) }}
       </div>
-      <div class="-ml-3.5 mt-3">
-        <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleIngredientsCompletion">
+        <svg v-if="!completedIngredients" class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10" />
         </svg>
+        <svg v-else class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
       </div>
       <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span>{{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)</span><span v-if="enableCompactMobileTimeline" class="sm:hidden">{{ parseTime(currentStartTime) }}</span>
+        <span class="font-semibold">{{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)</span><span v-if="enableCompactMobileTimeline" :class="completedIngredients ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden text-sm">{{ parseTime(currentStartTime) }}</span>
       </div>
       <template v-for="subItem in displayIngredients">
         <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
@@ -667,14 +687,19 @@ function nutritionHasValues(): boolean {
         <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
           {{ parseTime(displayItem.startTime) }}
         </div>
-        <div class="-ml-3.5 mt-3">
-          <svg class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleStepCompletion(index)">
+          <svg v-if="!completedSteps.has(index)" class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
           </svg>
+          <svg v-else class="h-8 w-8 text-theme-secondary" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+          </svg>
         </div>
         <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-          <span>{{ t('pages.recipe.id.index.step') }} {{ index + 1 }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(displayItem.startTime) }}</span>
+          <span class="font-semibold">{{ t('pages.recipe.id.index.step') }} {{ index + 1 }}</span><span v-if="enableCompactMobileTimeline" :class="completedSteps.has(index) ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden pr-1 text-sm">{{ parseTime(displayItem.startTime) }}</span>
         </div>
         <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
