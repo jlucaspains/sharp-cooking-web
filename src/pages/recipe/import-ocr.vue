@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
-import { notify } from "notiwind";
+import { notify } from "../../services/notificationService";
 import { Recipe } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";

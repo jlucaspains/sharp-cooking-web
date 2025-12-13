@@ -5,7 +5,7 @@ import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
 import { getRecipesByCategory, getRecipeMediaUrl, initialize, saveSetting, getSetting, getRecipes } from "../services/dataService";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
-import debounce from "lodash.debounce";
+import { debounce } from "../helpers/debounce";
 import { TransitionRoot, Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import RecipeCard from "./RecipeCard.vue";
 

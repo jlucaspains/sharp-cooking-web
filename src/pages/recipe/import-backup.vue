@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useState } from "../../services/store";
 import { fileOpen } from "browser-fs-access";
 import { saveCategory, saveRecipe, saveRecipeMedia } from "../../services/dataService";
-import { notify } from "notiwind";
+import { notify } from "../../services/notificationService";
 import { Recipe, RecipeMedia, RecipeNutrition } from "../../services/recipe";
 import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";

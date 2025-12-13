@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useState } from "../services/store";
 import { useTranslation } from "i18next-vue";
-import { notify } from "notiwind";
+import { notify } from "../services/notificationService";
 import { getAllCategories, saveCategory, deleteCategory } from "../services/dataService";
 import { Category } from "../services/category";
 import Modal from "../components/Modal.vue";

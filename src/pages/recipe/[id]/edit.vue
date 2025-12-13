@@ -14,7 +14,7 @@ import {
 import { RecipeMedia } from "../../../services/recipe";
 import { RecipeViewModel } from "../recipeViewModel";
 import { useState } from "../../../services/store";
-import { notify } from "notiwind";
+import { notify } from "../../../services/notificationService";
 import RatingPicker from "../../../components/RatingPicker.vue";
 import Modal from "../../../components/Modal.vue";
 import { useTranslation } from "i18next-vue";

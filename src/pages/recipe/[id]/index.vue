@@ -13,7 +13,7 @@ import { useState } from "../../../services/store";
 import { RecipeViewModel } from "../recipeViewModel";
 import Modal from "../../../components/Modal.vue";
 import TimePicker from "../../../components/TimePicker.vue";
-import { notify } from "notiwind";
+import { notify } from "../../../services/notificationService";
 import { getImpliedTimeFromString, secondsToString } from "../../../helpers/timeHelpers";
 import { IngredientDisplay, InstructionDisplay, prepareIngredientDisplay, prepareStepDisplay, applyMultiplierToString } from "../../../helpers/multiplierHelpers";
 import NoSleep from "@scottjgilroy/no-sleep";
