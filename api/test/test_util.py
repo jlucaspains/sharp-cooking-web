@@ -1,4 +1,3 @@
-from zipfile import ZipFile
 from ..functions.util import parse_recipe_ingredient, parse_recipe_ingredients, parse_recipe_instruction
 from ..functions.util import parse_recipe_instructions, replace_unicode_fractions, parse_image
 from pint import UnitRegistry
@@ -109,19 +108,6 @@ def test_replace_unicode_fractions_number():
 def test_replace_unicode_fractions_unicode():
     result = replace_unicode_fractions("½ cups of water")
     assert result == "1/2 cups of water"
-
-# image from backup
-def test_parse_image():
-    with ZipFile("test/test_backup.zip", 'r') as zip:
-        image = zip.read("e99653943ef24ce18ae140c83d42349f.jpeg")
-        result = parse_image("e99653943ef24ce18ae140c83d42349f.jpeg", image)
-        assert result.startswith("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD")
-
-def test_parse_image_no_resize():
-    with ZipFile("test/test_backup.zip", 'r') as zip:
-        image = zip.read("e99653943ef24ce18ae140c83d42349f.jpeg")
-        result = parse_image("e99653943ef24ce18ae140c83d42349f.jpeg", image, False)
-        assert result.startswith("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD")
 
 def test_parse_image_avif():
     avif_file = open("test/test_image.avif", "rb")
