@@ -32,6 +32,7 @@ let agentBuilder: any;
 let controller: AbortController;
 
 const scrollBox = ref(null as HTMLDivElement | null);
+const textareaRef = ref(null as HTMLTextAreaElement | null);
 
 const systemPrompt = `You are a helpful chef's assistant. 
 
@@ -101,10 +102,10 @@ onMounted(async () => {
     async () => {
       const recipe = await getRecipe(id.value);
 
-      if (!recipe) {
-        return "";
-      } else {
+      if (recipe) {
         return recipeAsText(recipe);
+      } else {
+        return "";
       }
     },
     {
@@ -118,10 +119,10 @@ onMounted(async () => {
     async (input: any) => {
       const recipe = await getRecipeByName(input.name);
 
-      if (!recipe) {
-        return "";
-      } else {
+      if (recipe) {
         return recipeAsText(recipe);
+      } else {
+        return "";
       }
     },
     {
@@ -137,13 +138,12 @@ onMounted(async () => {
     async (input: any) => {
       const recipe = await getRecipeByName(input.name);
 
-      if (!recipe) {
-        return "";
-      } else {
-        console.log(input.updatedIngredients);
+      if (recipe) {
         recipe.ingredients = input.updatedIngredients.split("\n");
         await saveRecipe(recipe);
         return "updated";
+      } else {
+        return "";
       }
     },
     {
@@ -289,8 +289,17 @@ function setMenuOptions(isQuerying: boolean) {
   }
 }
 
+function autoResizeTextarea() {
+  if (textareaRef.value) {
+    textareaRef.value.style.height = 'auto';
+    textareaRef.value.style.height = textareaRef.value.scrollHeight + 'px';
+  }
+}
+
 async function sendMessage() {
-  const query = userQuery.value;
+  const query = userQuery.value.trim();
+  if (!query) return;
+  
   messages.value.push({
     role: "user",
     content: query,
@@ -298,8 +307,20 @@ async function sendMessage() {
     hiddenFromUser: false
   });
   userQuery.value = "";
+  
+  // Reset textarea height
+  if (textareaRef.value) {
+    textareaRef.value.style.height = 'auto';
+  }
 
   await askAssistant();
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
 }
 </script>
 
@@ -357,9 +378,15 @@ async function sendMessage() {
 
         <!-- Chat Input -->
         <footer class="bg-white border-t border-gray-300 -mx-4 p-4 fixed bottom-0 w-full safe-inset">
-          <div class="flex items-center">
-            <input type="text" @keydown.enter="sendMessage" v-model="userQuery" placeholder="Type a message..."
-              class="w-full p-2 rounded-md border bg-white text-black border-gray-400 focus:outline-hidden focus:border-blue-500">
+          <div class="flex items-end">
+            <textarea ref="textareaRef" 
+                      @keydown="handleKeyDown" 
+                      @input="autoResizeTextarea" 
+                      v-model="userQuery" 
+                      :placeholder="t('pages.chat.inputPlaceholder')"
+                      :aria-label="t('pages.chat.messageInputAriaLabel')"
+                      rows="1"
+                      class="chat-textarea w-full p-2 rounded-md border bg-white text-black border-gray-400 focus:outline-hidden focus:border-blue-500"></textarea>
             <button class="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2" @click="sendMessage">Send</button>
           </div>
         </footer>
@@ -371,6 +398,14 @@ async function sendMessage() {
 <style scoped>
 .safe-inset {
   padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+.chat-textarea {
+  resize: none;
+  overflow-y: hidden;
+  max-height: 200px;
+  min-height: 42px;
+  line-height: 1.5;
 }
 
 .keep-spaces {
