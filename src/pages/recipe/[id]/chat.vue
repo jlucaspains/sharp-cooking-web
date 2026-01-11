@@ -102,10 +102,10 @@ onMounted(async () => {
     async () => {
       const recipe = await getRecipe(id.value);
 
-      if (!recipe) {
-        return "";
-      } else {
+      if (recipe) {
         return recipeAsText(recipe);
+      } else {
+        return "";
       }
     },
     {
@@ -119,10 +119,10 @@ onMounted(async () => {
     async (input: any) => {
       const recipe = await getRecipeByName(input.name);
 
-      if (!recipe) {
-        return "";
-      } else {
+      if (recipe) {
         return recipeAsText(recipe);
+      } else {
+        return "";
       }
     },
     {
@@ -138,13 +138,12 @@ onMounted(async () => {
     async (input: any) => {
       const recipe = await getRecipeByName(input.name);
 
-      if (!recipe) {
-        return "";
-      } else {
-        console.log(input.updatedIngredients);
+      if (recipe) {
         recipe.ingredients = input.updatedIngredients.split("\n");
         await saveRecipe(recipe);
         return "updated";
+      } else {
+        return "";
       }
     },
     {
@@ -380,9 +379,14 @@ function handleKeyDown(event: KeyboardEvent) {
         <!-- Chat Input -->
         <footer class="bg-white border-t border-gray-300 -mx-4 p-4 fixed bottom-0 w-full safe-inset">
           <div class="flex items-end">
-            <textarea ref="textareaRef" @keydown="handleKeyDown" @input="autoResizeTextarea" v-model="userQuery" 
-              placeholder="Type a message..." rows="1"
-              class="chat-textarea w-full p-2 rounded-md border bg-white text-black border-gray-400 focus:outline-hidden focus:border-blue-500"></textarea>
+            <textarea ref="textareaRef" 
+                      @keydown="handleKeyDown" 
+                      @input="autoResizeTextarea" 
+                      v-model="userQuery" 
+                      :placeholder="t('pages.chat.inputPlaceholder')"
+                      :aria-label="t('pages.chat.messageInputAriaLabel')"
+                      rows="1"
+                      class="chat-textarea w-full p-2 rounded-md border bg-white text-black border-gray-400 focus:outline-hidden focus:border-blue-500"></textarea>
             <button class="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2" @click="sendMessage">Send</button>
           </div>
         </footer>

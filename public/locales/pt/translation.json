@@ -262,7 +262,9 @@
         },
         "chat": {
             "abortError": "Ok. Eu não vou responder essa pergunta.",
-            "unableToAnswer": "Desculpe, eu não consigo responder sua pergunta no momento."
+            "unableToAnswer": "Desculpe, eu não consigo responder sua pergunta no momento.",
+            "inputPlaceholder": "Digite uma mensagem...",
+            "messageInputAriaLabel": "Entrada de mensagem do chat"
         },
         "categories": {
             "title": "Categorias",

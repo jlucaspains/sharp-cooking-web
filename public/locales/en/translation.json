@@ -264,7 +264,9 @@
         },
         "chat": {
             "abortError": "Ok. I won't answer that question.",
-            "unableToAnswer": "I'm sorry, I'm unable to answer that question right now."
+            "unableToAnswer": "I'm sorry, I'm unable to answer that question right now.",
+            "inputPlaceholder": "Type a message...",
+            "messageInputAriaLabel": "Chat message input"
         },
         "categories": {
             "title": "Categories",
