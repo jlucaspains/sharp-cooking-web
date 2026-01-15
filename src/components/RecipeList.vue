@@ -289,7 +289,7 @@ function simpleSearchInText(a: string, b: string) {
       </div>
     </TransitionRoot>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
-      <recipe-card v-for="item in items" :key="item.id" :title="item.title" :image="item.image"
+      <recipe-card v-for="item in items" :key="item.id" :is-category="false" :title="item.title" :image="item.image"
         :imageAvailable="item.imageAvailable" :rating="item.score" @click="goToRecipe(item.id || 0)"
         :recipeCount="0" />
     </div>
