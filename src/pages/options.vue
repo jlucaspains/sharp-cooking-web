@@ -24,6 +24,7 @@ const availableLanguages = ref(["pt-BR", "en-US"] as Array<string>);
 const isLanguagesModalOpen = ref(false);
 const storageDescription = ref("");
 const categoriesEnabled = ref(false);
+const allCategoryFirst = ref(false);
 const enableAiChat = ref(false);
 const editInSingleTextArea = ref(false);
 
@@ -34,6 +35,7 @@ onMounted(async () => {
   const stepsInvervalValue = await getSetting("StepsInterval", "5");
   const useFractionsValue = await getSetting("UseFractions", "false");
   const enableCategories = await getSetting("EnableCategoryDisplay", "false");
+  const allCategoryFirstValue = await getSetting("AllCategoryFirst", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
 
@@ -43,6 +45,7 @@ onMounted(async () => {
   selectedLanguage.value = i18next.language;
   storageDescription.value = await getStorageDescription(i18next.language);
   categoriesEnabled.value = enableCategories === "true";
+  allCategoryFirst.value = allCategoryFirstValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
 });
@@ -112,6 +115,10 @@ function updateEditInSingleTextArea() {
 
 function updateEnableCategoryDisplay() {
   saveSetting("EnableCategoryDisplay", `${categoriesEnabled.value}`);
+}
+
+function updateAllCategoryFirst() {
+  saveSetting("AllCategoryFirst", `${allCategoryFirst.value}`);
 }
 
 function showChangeLanguageModal() {
@@ -196,6 +203,12 @@ function goToAIOptions() {
         :display-name="t('pages.options.enableCategoryDisplay')"
         :display-description="t('pages.options.enableCategoryDisplayDescription')"
         test-id="enable-category-toggle"></config-switch>
+    </div>
+    <div v-if="categoriesEnabled" class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="allCategoryFirst" @change="updateAllCategoryFirst"
+        :display-name="t('pages.options.allCategoryFirst')"
+        :display-description="t('pages.options.allCategoryFirstDescription')"
+        test-id="all-category-first-toggle"></config-switch>
     </div>
     <div v-if="categoriesEnabled" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCategoriesSetup">
       <label class="dark:text-white">{{ t("pages.options.categories") }}</label>

@@ -5,6 +5,7 @@ const props = defineProps<{
     imageAvailable: boolean;
     rating: number;
     recipeCount: number;
+    isCategory: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -13,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div @click="emit('click')" @keydown.enter="emit('click')" tabindex="0" class="
+    <div @click="emit('click')" @keydown.enter="emit('click')" tabindex="0" :data-testid="props.isCategory ? 'category-item' : 'recipe-item'" class="
           p-5
           h-60
           rounded-lg

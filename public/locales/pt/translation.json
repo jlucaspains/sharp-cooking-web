@@ -67,6 +67,8 @@
             "editInSingleTextAreaDescription": "Use uma área de texto para editar os ingredientes e outra para os passos.",
             "enableCategoryDisplay": "Ativar Categorias",
             "enableCategoryDisplayDescription": "Quando ativado, mostra uma lista de categories na página principal.",
+            "allCategoryFirst": "Mostrar categoria 'Todas' primeiro",
+            "allCategoryFirstDescription": "Quando ativado, a categoria 'Todas' aparecerá no início da lista de categorias.",
             "categories": "Categorias",
             "categoriesDescription": "Manter lista de categorias"
         },

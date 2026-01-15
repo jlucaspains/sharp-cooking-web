@@ -289,7 +289,15 @@ export async function getCategories(): Promise<Array<Category>> {
         }
     }
     const allRecipesCount = await db.recipes.count();
-    result.push({ id: 0, name: "All", image: undefined, recipeCount: allRecipesCount });
+    const allCategoryFirst = await getSetting("AllCategoryFirst", "false");
+    const allCategory = { id: 0, name: "All", image: undefined, recipeCount: allRecipesCount };
+    
+    if (allCategoryFirst === "true") {
+        result.unshift(allCategory);
+    } else {
+        result.push(allCategory);
+    }
+    
     return result;
 }
 

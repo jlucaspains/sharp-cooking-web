@@ -152,6 +152,57 @@ test('steps interval', async ({ page, browserName }) => {
   expect(await page.getByText('10:40 AM').textContent()).toMatch(/10:40.*/);
 });
 
+test('all category first toggle visibility', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('topbar-options').click();
+  await page.getByRole('menuitem', { name: 'Options' }).click();
+  
+  // Toggle should be hidden when categories are disabled
+  await expect(page.getByTestId('all-category-first-toggle')).not.toBeVisible();
+  
+  // Enable categories
+  await page.getByTestId('enable-category-toggle').click();
+  
+  // Toggle should now be visible
+  await expect(page.getByTestId('all-category-first-toggle')).toBeVisible();
+  
+  // Disable categories again
+  await page.getByTestId('enable-category-toggle').click();
+  
+  // Toggle should be hidden again
+  await expect(page.getByTestId('all-category-first-toggle')).not.toBeVisible();
+});
+
+test('all category first toggle state', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('topbar-options').click();
+  await page.getByRole('menuitem', { name: 'Options' }).click();
+  
+  // Enable categories first
+  await page.getByTestId('enable-category-toggle').click();
+  await expect(page.getByTestId('all-category-first-toggle')).toBeVisible();
+  
+  // Toggle should be off by default
+  const toggle = page.getByTestId('all-category-first-toggle').locator('input[type="checkbox"]');
+  await expect(toggle).not.toBeChecked();
+  
+  // Turn on the toggle
+  await page.getByTestId('all-category-first-toggle').click();
+  await expect(toggle).toBeChecked();
+  
+  // Refresh page and verify persistence
+  await page.reload();
+  await expect(toggle).toBeChecked();
+  
+  // Turn off the toggle
+  await page.getByTestId('all-category-first-toggle').click();
+  await expect(toggle).not.toBeChecked();
+  
+  // Refresh and verify it stayed off
+  await page.reload();
+  await expect(toggle).not.toBeChecked();
+});
+
 // test('steps interval webkit', async ({ page, browserName }) => {
 //   test.skip(browserName !== 'webkit', 'not applicable');
 
