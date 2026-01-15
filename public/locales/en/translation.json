@@ -67,6 +67,8 @@
             "editInSingleTextAreaDescription": "Use one text area to edit ingredients and another for steps.",
             "enableCategoryDisplay": "Enable Category Display",
             "enableCategoryDisplayDescription": "When enabled, show a list of categories on the main page.",
+            "allCategoryFirst": "Show 'All' category first",
+            "allCategoryFirstDescription": "When enabled, the 'All' category will appear at the beginning of the category list.",
             "categories": "Categories",
             "categoriesDescription": "Maintain list of categories"
         },

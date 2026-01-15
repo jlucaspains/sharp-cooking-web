@@ -24,7 +24,7 @@ function goToCategory(id: number) {
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white">
     <div class="grid md:grid-cols-2 lg:grid-cols-3 my-4 gap-5">
-      <recipe-card v-for="category in categories" :title="category.name" :image="category.image"
+      <recipe-card v-for="category in categories" :is-category="true" :title="category.name" :image="category.image"
         :imageAvailable="category.image != undefined" :recipeCount="category.recipeCount"
         @click="goToCategory(category.id)" :rating="0" />
     </div>
