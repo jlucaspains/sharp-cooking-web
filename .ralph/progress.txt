@@ -7,9 +7,11 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
 - **Menu configuration**: RecipeList component sets its own menuOptions in onMounted(), which overwrites parent menus. Add menu items to both index.vue and RecipeList.vue for global visibility
 - **Testing**: Playwright for E2E tests. Navigate using `/#/` prefix (e.g., `page.goto('/#/export-recipe-book')`)
 - **Testing ES modules**: Use `await import()` in page.evaluate() for browser context tests, NOT `require()`
-- **Translations**: Translation keys follow pattern `pages.{pageName}.{keyName}`. Update all locales: en, pt, en-US, pt-BR
+- **Testing recipe setup**: Recipe IDs are auto-generated. Don't assume specific IDs in test helpers - use createRecipeWithoutSaving
+- **Translations**: Translation keys follow pattern `pages.{pageName}.{keyName}`. Update all locales: en, pt, en-US, pt-BR. Use {{variable}} for interpolation
 - **PDF generation**: Use jspdf + jspdf-autotable. Always compress images (max 800px), handle null images gracefully, check page overflow
 - **Build process**: `npm run build` runs vue-tsc typecheck + vite build
+- **Recipe data access**: Use getRecipes() from dataService (not state). Cast to RecipeViewModel and populate image/imageAvailable/hasNotes fields using getRecipeMediaUrl()
 ---
 
 ## 2026-01-24 22:18 - US-001
@@ -112,4 +114,43 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - Keyboard accessibility requires role, aria-checked, and aria-label attributes
   - Focus states use outline CSS property for visibility
   - Search filtering uses computed() for reactive filtering without state duplication
+---
+
+## 2026-01-24 22:35 - US-006
+- Created full export recipe book page with recipe selection UI
+- Implemented RecipeSelectionList component integration for displaying recipes with checkboxes
+- Added Select All and Clear All buttons with selection count display
+- Added Back button to return to recipe list
+- Export PDF button is disabled when no recipes selected, enabled when recipes are selected
+- Shows helper text "Select at least 1 recipe to export" when nothing is selected
+- Page is fully responsive (mobile and desktop)
+- Added translation keys for all UI elements (en, pt, en-US, pt-BR):
+  - pages.exportRecipeBook.title
+  - pages.exportRecipeBook.back
+  - pages.exportRecipeBook.selectAll
+  - pages.exportRecipeBook.clearAll
+  - pages.exportRecipeBook.selectedCount
+  - pages.exportRecipeBook.exportButton
+  - pages.exportRecipeBook.selectAtLeastOne
+- Created comprehensive E2E tests (13 tests, all passing):
+  - Recipe list display
+  - Back button navigation
+  - Select All/Clear All functionality
+  - Selection count display
+  - Export button enabled/disabled states
+  - Helper text visibility
+  - Mobile responsiveness
+  - Individual checkbox interaction
+  - Search filter functionality
+- Files changed: src/pages/export-recipe-book.vue, public/locales/*/translation.json (4 files), tests/export-recipe-book-selection.spec.ts (new), tests/helpers.ts
+- Typecheck and build passed successfully
+- **Learnings for future iterations:**
+  - Recipes must be loaded using getRecipes() from dataService, not from state
+  - Recipe objects need to be cast to RecipeViewModel and have image/imageAvailable/hasNotes fields populated
+  - Use getRecipeMediaUrl() to load recipe images (returns URL or null)
+  - Recipe IDs might be undefined, so use .filter((id): id is number => id !== undefined) when creating Sets
+  - Fixed export button appears at bottom of screen with bottom padding to prevent content overlap
+  - Translation keys for count use {{count}} interpolation syntax
+  - Test helper setupTestRecipes should not assume specific recipe IDs - IDs are auto-generated
+  - Use createRecipeWithoutSaving + manual save to avoid ID assertions in test helpers
 ---

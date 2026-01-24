@@ -38,6 +38,18 @@ This file contains important patterns and conventions for developers and AI agen
 - Example: `t("pages.index.exportRecipeBook")`
 - Translation files must be updated in all locales: `en`, `pt`, `en-US`, `pt-BR`
 - Files located in: `public/locales/{locale}/translation.json`
+- Use `{{variable}}` syntax for variable interpolation (e.g., `{{count}}`)
+
+### Recipe Data Access
+
+- **Load recipes**: Use `getRecipes()` or `getRecipesByCategory()` from `dataService`
+- **Never access recipes directly from state** - state doesn't contain a recipes array
+- Cast Recipe objects to RecipeViewModel when needed by UI components
+- After loading recipes, populate additional fields:
+  - `recipe.image = await getRecipeMediaUrl(recipe.id || 0)`
+  - `recipe.imageAvailable = recipe.image ? true : false`
+  - `recipe.hasNotes = recipe.notes ? true : false`
+- Recipe IDs can be undefined - filter them when needed: `.filter((id): id is number => id !== undefined)`
 
 ### Testing
 
@@ -47,6 +59,8 @@ This file contains important patterns and conventions for developers and AI agen
 - Test helper file: `tests/helpers.ts` provides common setup functions
 - Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
 - **Important**: Use `await import()` in page.evaluate() for ES modules, NOT `require()`
+- **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
+- Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
 - Some chromium tests can be flaky - run with retries if timing issues occur
 
 ### Services Layer
