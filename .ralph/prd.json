@@ -193,7 +193,7 @@
         "Verify in browser using playwright tests"
       ],
       "priority": 10,
-      "passes": false,
+      "passes": true,
       "notes": ""
     },
     {

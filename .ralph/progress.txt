@@ -244,3 +244,35 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - Large batch inserts in tests (60 recipes) can take time - use appropriate timeouts
   - Computed properties in Vue react immediately to selection changes - perfect for conditional warnings
 ---
+
+## 2026-01-24 23:15 - US-010
+- Implemented edge case handling and empty states for export page
+- Added empty state UI when no recipes exist:
+  - Displays book icon with "No Recipes Found" message
+  - Shows "Add recipes to create a recipe book" description
+  - Hides selection controls, category filter, and export button
+  - Shows only back button to return to home
+- Added proper error message handling:
+  - Replaced generic alert() with styled error banner
+  - Error messages appear in red banner at top of screen (aria-live="assertive")
+  - Auto-hide after 5 seconds
+  - Translation key: pages.exportRecipeBook.exportError
+- Export button already disabled when no selection (from US-006)
+- Recipes without images already handled gracefully (from US-008)
+- Added translation keys for empty state and error messages in all 4 locales
+- Created E2E tests (2 tests, all passing on chromium):
+  - Handle recipes without images gracefully
+  - Export button disabled until selection
+- Files changed:
+  - src/pages/export-recipe-book.vue (added empty state UI, error handling)
+  - public/locales/*/translation.json (4 files - added emptyState, emptyStateDescription, exportError keys)
+  - tests/export-recipe-book-edge-cases.spec.ts (new - 8 tests across 4 browsers)
+- Typecheck and build passed successfully
+- **Learnings for future iterations:**
+  - Empty states should clearly guide users to the next action (e.g., "Add recipes")
+  - Error messages should use aria-live="assertive" for immediate screen reader announcement
+  - Success uses aria-live="polite", errors use aria-live="assertive"
+  - Conditional rendering with v-if is cleaner than v-show for major UI sections
+  - Auto-hiding messages (setTimeout) improves UX - errors stay longer (5s) than success (3s)
+  - Empty state icons help communicate the situation visually
+---
