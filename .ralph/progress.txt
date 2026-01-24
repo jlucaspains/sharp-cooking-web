@@ -6,6 +6,7 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
 - **Hash-based routing**: Uses createWebHashHistory, so routes are accessed via `/#/route-name`
 - **Menu configuration**: RecipeList component sets its own menuOptions in onMounted(), which overwrites parent menus. Add menu items to both index.vue and RecipeList.vue for global visibility
 - **Testing**: Playwright for E2E tests. Navigate using `/#/` prefix (e.g., `page.goto('/#/export-recipe-book')`)
+- **Testing ES modules**: Use `await import()` in page.evaluate() for browser context tests, NOT `require()`
 - **Translations**: Translation keys follow pattern `pages.{pageName}.{keyName}`. Update all locales: en, pt, en-US, pt-BR
 - **PDF generation**: Use jspdf + jspdf-autotable. Always compress images (max 800px), handle null images gracefully, check page overflow
 - **Build process**: `npm run build` runs vue-tsc typecheck + vite build
@@ -62,4 +63,31 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - PDF helpers need to handle page overflow - check yPosition and add new pages when needed
   - Playwright tests can use page.evaluate() to test utility functions in browser context
   - Some timing issues in chromium tests can be resolved with retries (flaky test patterns)
+---
+
+## 2026-01-24 22:35 - US-004
+- Created src/services/recipeBookExportService.ts with core export orchestration
+- Implemented validateExportRequest() to ensure at least 1 recipe is selected
+- Implemented filterRecipesByCategory() for category-based filtering
+- Implemented generateFileName() with format Sharp-Cooking-Recipe-Book-YYYY-MM-DD.pdf
+- Implemented exportRecipeBook() service that orchestrates full PDF generation:
+  - Generates cover page with title and date
+  - Generates table of contents using PDF helpers
+  - Generates recipe pages with only title, image, ingredients, steps
+  - Does NOT include nutrition facts or recipe notes
+  - Handles recipes without images gracefully
+  - Downloads PDF with correct filename format
+- Created comprehensive Playwright tests (tests/recipeBookExportService.spec.ts)
+- All 40 tests pass across 4 browsers (chromium, webkit, Mobile Chrome, Mobile Safari)
+- Tests cover: validation, filtering, filename generation, image handling, nutrition exclusion, full export flow
+- Files changed: src/services/recipeBookExportService.ts (new), tests/recipeBookExportService.spec.ts (new)
+- Typecheck passed successfully
+- **Learnings for future iterations:**
+  - Playwright tests must use `await import()` instead of `require()` for ES modules
+  - The Recipe class includes nutrition and notes fields, but these should NOT be passed to PDF generation
+  - PDF helpers already handle recipes without images gracefully - just pass null for recipeImage
+  - The exportRecipeBook() service accepts a Map<number, string | null> for recipe images
+  - jsPDF's save() method triggers a download automatically with the specified filename
+  - Tests can mock HTMLAnchorElement.prototype.click to prevent actual downloads during testing
+  - The service is stateless - it doesn't need to track state, just orchestrate the PDF generation
 ---

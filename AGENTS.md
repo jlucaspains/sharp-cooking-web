@@ -46,7 +46,18 @@ This file contains important patterns and conventions for developers and AI agen
 - Always include tests for multiple browser engines: chromium, webkit, Mobile Chrome, Mobile Safari
 - Test helper file: `tests/helpers.ts` provides common setup functions
 - Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
+- **Important**: Use `await import()` in page.evaluate() for ES modules, NOT `require()`
 - Some chromium tests can be flaky - run with retries if timing issues occur
+
+### Services Layer
+
+- **State Management**: `src/services/store.ts` provides reactive state
+- **Recipe Management**: `src/services/recipe.ts` defines Recipe, RecipeImage, RecipeNutrition classes
+- **Export Service**: `src/services/recipeBookExportService.ts` orchestrates PDF generation
+  - Accepts RecipeBookExportRequest with selected recipes
+  - Generates cover page, TOC, and recipe pages
+  - Excludes nutrition facts and notes from PDF output
+  - Downloads with filename format: `Sharp-Cooking-Recipe-Book-YYYY-MM-DD.pdf`
 
 ### PDF Generation
 
