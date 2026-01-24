@@ -1,4 +1,6 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, type Page, type BrowserContext } from '@playwright/test';
+import { Recipe } from '../src/services/recipe';
+import { Category } from '../src/services/category';
 
 export async function createRecipe(page: Page, id: number, title: string, rating: number, ingredients = [
     "1000g flour",
@@ -114,4 +116,106 @@ export async function cleanupTestRecipes(page: Page) {
             request.onerror = () => resolve();
         });
     });
+}
+
+export async function clearDatabase(context: BrowserContext) {
+    const page = await context.newPage();
+    await page.goto('/');
+    
+    // Clear the database
+    await page.evaluate(() => {
+        return new Promise<void>((resolve) => {
+            const request = indexedDB.deleteDatabase('RecipeDatabase');
+            request.onsuccess = () => resolve();
+            request.onerror = () => resolve();
+            request.onblocked = () => {
+                setTimeout(() => resolve(), 1000);
+            };
+        });
+    });
+    
+    // Wait a bit for DB to fully clear
+    await page.waitForTimeout(500);
+    
+    // Clear all recipes from the now-reinitialized database
+    await page.evaluate(async () => {
+        const { default: Dexie } = await import('/node_modules/dexie/dist/dexie.mjs');
+        const db = new Dexie('RecipeDatabase');
+        db.version(6).stores({
+            recipes: "++id,title,score,changedOn,categoryId",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            categories: "++id,name"
+        });
+        await db.recipes.clear();
+        await db.categories.clear();
+        await db.recipeMedia.clear();
+    });
+    
+    await page.close();
+}
+
+export function createRecipeData(title: string, rating: number = 5): Recipe {
+    const recipe = new Recipe();
+    recipe.title = title;
+    recipe.score = rating;
+    recipe.ingredients = ["1000g flour", "700g water", "15g salt"];
+    recipe.steps = ["Mix ingredients", "Bake for 30 minutes"];
+    recipe.multiplier = 1;
+    recipe.categoryId = 0;
+    recipe.changedOn = new Date().toISOString();
+    return recipe;
+}
+
+export async function saveRecipe(context: BrowserContext, recipe: Recipe): Promise<number> {
+    const page = await context.newPage();
+    await page.goto('/');
+    
+    const recipeId = await page.evaluate(async (recipeData: any) => {
+        const { saveRecipe, getNextRecipeId } = await import('/src/services/dataService.ts');
+        const { Recipe, RecipeNutrition } = await import('/src/services/recipe.ts');
+        
+        const recipe = new Recipe();
+        recipe.id = recipeData.id || await getNextRecipeId();
+        recipe.title = recipeData.title;
+        recipe.score = recipeData.score;
+        recipe.ingredients = recipeData.ingredients;
+        recipe.steps = recipeData.steps;
+        recipe.multiplier = recipeData.multiplier;
+        recipe.categoryId = recipeData.categoryId;
+        recipe.changedOn = recipeData.changedOn;
+        recipe.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        
+        return await saveRecipe(recipe);
+    }, recipe);
+    
+    await page.close();
+    return recipeId;
+}
+
+export function createCategoryData(name: string): Category {
+    const category = new Category();
+    category.id = Math.floor(Math.random() * 1000000) + 1; // Random ID
+    category.name = name;
+    return category;
+}
+
+export async function saveCategory(context: BrowserContext, category: Category): Promise<number> {
+    const page = await context.newPage();
+    await page.goto('/');
+    
+    const categoryId = await page.evaluate(async (categoryData: any) => {
+        const { saveCategory } = await import('/src/services/dataService.ts');
+        const { Category } = await import('/src/services/category.ts');
+        
+        const category = new Category();
+        category.id = categoryData.id;
+        category.name = categoryData.name;
+        
+        return await saveCategory(category);
+    }, category);
+    
+    await page.close();
+    return categoryId;
 }

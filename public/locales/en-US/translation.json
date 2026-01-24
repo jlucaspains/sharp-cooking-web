@@ -3,6 +3,8 @@
     "exportRecipeBook": {
       "title": "Export Recipe Book",
       "back": "Back",
+      "filterByCategory": "Filter by Category",
+      "allCategories": "All Categories",
       "selectAll": "Select All",
       "clearAll": "Clear All",
       "selectedCount": "{{count}} recipes selected",

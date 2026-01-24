@@ -3,6 +3,8 @@
     "exportRecipeBook": {
       "title": "Exportar Livro de Receitas",
       "back": "Voltar",
+      "filterByCategory": "Filtrar por Categoria",
+      "allCategories": "Todas as Categorias",
       "selectAll": "Selecionar Tudo",
       "clearAll": "Limpar Tudo",
       "selectedCount": "{{count}} receitas selecionadas",

@@ -3,26 +3,42 @@ import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
-import { getRecipes, getRecipeMediaUrl } from "../services/dataService";
+import { getRecipes, getRecipeMediaUrl, getCategories } from "../services/dataService";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
+import { Category } from "../services/category";
 import RecipeSelectionList from "../components/RecipeSelectionList.vue";
 
 const { t } = useTranslation();
 const state = useState()!;
 const router = useRouter();
 
-const recipes = ref<RecipeViewModel[]>([]);
+const allRecipes = ref<RecipeViewModel[]>([]);
+const categories = ref<Category[]>([]);
+const selectedCategoryId = ref<number | null>(null);
 const selectedRecipeIds = ref<Set<number>>(new Set());
+
+const filteredRecipes = computed(() => {
+  if (selectedCategoryId.value === null || selectedCategoryId.value === 0) {
+    return allRecipes.value;
+  }
+  return allRecipes.value.filter(r => r.categoryId === selectedCategoryId.value);
+});
 
 const selectedCount = computed(() => selectedRecipeIds.value.size);
 const hasSelection = computed(() => selectedCount.value > 0);
 
 const selectAll = () => {
-  selectedRecipeIds.value = new Set(recipes.value.map((r: RecipeViewModel) => r.id).filter((id): id is number => id !== undefined));
+  selectedRecipeIds.value = new Set(filteredRecipes.value.map((r: RecipeViewModel) => r.id).filter((id): id is number => id !== undefined));
 };
 
 const clearAll = () => {
   selectedRecipeIds.value = new Set();
+};
+
+const handleCategoryChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement;
+  const value = target.value;
+  selectedCategoryId.value = value === "" ? null : parseInt(value);
 };
 
 const goBack = () => {
@@ -38,17 +54,20 @@ onMounted(async () => {
   state.title = t("pages.exportRecipeBook.title");
   state.menuOptions = [];
   
+  // Load categories
+  categories.value = await getCategories();
+  
   // Load recipes
-  const allRecipes = (await getRecipes()) as RecipeViewModel[];
+  const recipes = (await getRecipes()) as RecipeViewModel[];
   
   // Load recipe images
-  for (const recipe of allRecipes) {
+  for (const recipe of recipes) {
     recipe.image = await getRecipeMediaUrl(recipe.id || 0);
     recipe.imageAvailable = recipe.image ? true : false;
     recipe.hasNotes = recipe.notes ? true : false;
   }
   
-  recipes.value = allRecipes;
+  allRecipes.value = recipes;
 });
 </script>
 
@@ -64,6 +83,24 @@ onMounted(async () => {
         ← {{ t("pages.exportRecipeBook.back") }}
       </button>
       <h1 class="text-2xl font-bold">{{ t("pages.exportRecipeBook.title") }}</h1>
+    </div>
+
+    <!-- Category filter -->
+    <div class="mb-4">
+      <label for="category-filter" class="block text-sm font-medium mb-2">
+        {{ t("pages.exportRecipeBook.filterByCategory") }}
+      </label>
+      <select
+        id="category-filter"
+        @change="handleCategoryChange"
+        class="w-full md:w-64 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        :aria-label="t('pages.exportRecipeBook.filterByCategory')"
+      >
+        <option value="">{{ t("pages.exportRecipeBook.allCategories") }}</option>
+        <option v-for="category in categories" :key="category.id" :value="category.id">
+          {{ category.name }} ({{ category.recipeCount }})
+        </option>
+      </select>
     </div>
 
     <!-- Selection controls -->
@@ -89,7 +126,7 @@ onMounted(async () => {
 
     <!-- Recipe selection list -->
     <RecipeSelectionList
-      :recipes="recipes"
+      :recipes="filteredRecipes"
       :selectedRecipeIds="selectedRecipeIds"
       @update:selectedRecipeIds="selectedRecipeIds = $event"
       class="mb-6"
