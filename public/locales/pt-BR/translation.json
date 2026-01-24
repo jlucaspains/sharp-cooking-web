@@ -11,7 +11,10 @@
       "exportButton": "Exportar PDF",
       "exporting": "Exportando...",
       "selectAtLeastOne": "Selecione pelo menos 1 receita para exportar",
-      "successMessage": "Livro de receitas baixado com sucesso!"
+      "successMessage": "Livro de receitas baixado com sucesso!",
+      "exportingProgress": "Exportando Livro de Receitas",
+      "processing": "{{name}} ({{current}} de {{total}})",
+      "largeExportWarning": "Exportações grandes podem demorar mais"
     }
   }
 }

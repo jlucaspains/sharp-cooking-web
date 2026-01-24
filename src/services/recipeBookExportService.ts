@@ -13,6 +13,13 @@ export interface RecipeBookExportRequest {
   categoryFilter?: string;
 }
 
+export interface RecipeBookExportProgress {
+  currentRecipe: string;
+  currentIndex: number;
+  totalRecipes: number;
+  percentage: number;
+}
+
 /**
  * Validate export request
  */
@@ -49,7 +56,8 @@ export function generateFileName(): string {
  */
 export async function exportRecipeBook(
   request: RecipeBookExportRequest,
-  recipeImages: Map<number, string | null> = new Map()
+  recipeImages: Map<number, string | null> = new Map(),
+  onProgress?: (progress: RecipeBookExportProgress) => void
 ): Promise<void> {
   // Validate request
   const validation = validateExportRequest(request);
@@ -76,6 +84,18 @@ export async function exportRecipeBook(
   for (let i = 0; i < request.recipes.length; i++) {
     const recipe = request.recipes[i];
     const recipeImage = recipe.id ? recipeImages.get(recipe.id) ?? null : null;
+    
+    // Report progress if callback provided
+    if (onProgress) {
+      const progress: RecipeBookExportProgress = {
+        currentRecipe: recipe.title || 'Untitled Recipe',
+        currentIndex: i + 1,
+        totalRecipes: request.recipes.length,
+        percentage: Math.round(((i + 1) / request.recipes.length) * 100),
+      };
+      onProgress(progress);
+    }
+    
     await generateRecipePage(doc, recipe, recipeImage, false);
   }
 

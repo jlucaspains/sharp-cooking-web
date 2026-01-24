@@ -306,7 +306,10 @@
       "exportButton": "Export PDF",
       "exporting": "Exporting...",
       "selectAtLeastOne": "Select at least 1 recipe to export",
-      "successMessage": "Recipe book downloaded successfully!"
+      "successMessage": "Recipe book downloaded successfully!",
+      "exportingProgress": "Exporting Recipe Book",
+      "processing": "{{name}} ({{current}} of {{total}})",
+      "largeExportWarning": "Large exports may take longer"
     }
   },
   "initialRecipes": [

@@ -7,7 +7,7 @@ import { getRecipes, getRecipeMediaUrl, getCategories } from "../services/dataSe
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import { Category } from "../services/category";
 import RecipeSelectionList from "../components/RecipeSelectionList.vue";
-import { exportRecipeBook } from "../services/recipeBookExportService";
+import { exportRecipeBook, type RecipeBookExportProgress } from "../services/recipeBookExportService";
 import type { Recipe } from "../services/recipe";
 
 const { t } = useTranslation();
@@ -20,6 +20,8 @@ const selectedCategoryId = ref<number | null>(null);
 const selectedRecipeIds = ref<Set<number>>(new Set());
 const showSuccessMessage = ref(false);
 const isExporting = ref(false);
+const exportProgress = ref<RecipeBookExportProgress | null>(null);
+const showLargeExportWarning = computed(() => selectedCount.value > 50);
 
 const filteredRecipes = computed(() => {
   if (selectedCategoryId.value === null || selectedCategoryId.value === 0) {
@@ -55,6 +57,7 @@ const handleExport = async () => {
   try {
     isExporting.value = true;
     showSuccessMessage.value = false;
+    exportProgress.value = null;
     
     // Get selected recipes
     const selectedRecipes = allRecipes.value
@@ -80,16 +83,23 @@ const handleExport = async () => {
       }
     }
     
-    // Export the recipe book
+    // Show progress dialog for 10+ recipes
+    const showProgress = selectedRecipes.length >= 10;
+    
+    // Export the recipe book with progress callback
     await exportRecipeBook(
       {
         recipes: selectedRecipes,
       },
-      recipeImages
+      recipeImages,
+      showProgress ? (progress) => {
+        exportProgress.value = progress;
+      } : undefined
     );
     
     // Show success message
     showSuccessMessage.value = true;
+    exportProgress.value = null;
     
     // Hide success message after 3 seconds
     setTimeout(() => {
@@ -100,6 +110,7 @@ const handleExport = async () => {
     alert('Failed to export recipe book. Please try again.');
   } finally {
     isExporting.value = false;
+    exportProgress.value = null;
   }
 };
 
@@ -195,9 +206,48 @@ onMounted(async () => {
       {{ t("pages.exportRecipeBook.successMessage") }}
     </div>
 
+    <!-- Progress dialog -->
+    <div
+      v-if="exportProgress"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      role="dialog"
+      aria-labelledby="progress-title"
+      aria-modal="true"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+        <h2 id="progress-title" class="text-xl font-semibold mb-4">
+          {{ t("pages.exportRecipeBook.exportingProgress") }}
+        </h2>
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span>{{ t("pages.exportRecipeBook.processing", { name: exportProgress.currentRecipe, current: exportProgress.currentIndex, total: exportProgress.totalRecipes }) }}</span>
+            <span class="font-semibold">{{ exportProgress.percentage }}%</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div
+              class="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
+              :style="{ width: exportProgress.percentage + '%' }"
+              role="progressbar"
+              :aria-valuenow="exportProgress.percentage"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Export button and helper text -->
     <div class="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
       <div class="max-w-4xl mx-auto">
+        <!-- Warning for large exports -->
+        <div
+          v-if="showLargeExportWarning"
+          class="mb-3 px-4 py-2 bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 dark:border-yellow-600 rounded text-yellow-800 dark:text-yellow-200 text-sm"
+          role="alert"
+        >
+          ⚠️ {{ t("pages.exportRecipeBook.largeExportWarning") }}
+        </div>
         <button
           @click="handleExport"
           :disabled="!hasSelection || isExporting"
