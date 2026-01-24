@@ -32,6 +32,8 @@ const filteredRecipes = computed(() => {
 
 const selectedCount = computed(() => selectedRecipeIds.value.size);
 const hasSelection = computed(() => selectedCount.value > 0);
+const hasRecipes = computed(() => allRecipes.value.length > 0);
+const errorMessage = ref<string | null>(null);
 
 const selectAll = () => {
   selectedRecipeIds.value = new Set(filteredRecipes.value.map((r: RecipeViewModel) => r.id).filter((id): id is number => id !== undefined));
@@ -58,6 +60,7 @@ const handleExport = async () => {
     isExporting.value = true;
     showSuccessMessage.value = false;
     exportProgress.value = null;
+    errorMessage.value = null;
     
     // Get selected recipes
     const selectedRecipes = allRecipes.value
@@ -107,7 +110,12 @@ const handleExport = async () => {
     }, 3000);
   } catch (error) {
     console.error('Error exporting recipe book:', error);
-    alert('Failed to export recipe book. Please try again.');
+    errorMessage.value = t("pages.exportRecipeBook.exportError");
+    
+    // Hide error message after 5 seconds
+    setTimeout(() => {
+      errorMessage.value = null;
+    }, 5000);
   } finally {
     isExporting.value = false;
     exportProgress.value = null;
@@ -150,7 +158,7 @@ onMounted(async () => {
     </div>
 
     <!-- Category filter -->
-    <div class="mb-4">
+    <div class="mb-4" v-if="hasRecipes">
       <label for="category-filter" class="block text-sm font-medium mb-2">
         {{ t("pages.exportRecipeBook.filterByCategory") }}
       </label>
@@ -167,8 +175,27 @@ onMounted(async () => {
       </select>
     </div>
 
+    <!-- Empty state -->
+    <div v-if="!hasRecipes" class="flex flex-col items-center justify-center py-12">
+      <svg class="w-24 h-24 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        {{ t("pages.exportRecipeBook.emptyState") }}
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 mb-4">
+        {{ t("pages.exportRecipeBook.emptyStateDescription") }}
+      </p>
+      <button
+        @click="goBack"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+      >
+        {{ t("pages.exportRecipeBook.back") }}
+      </button>
+    </div>
+
     <!-- Selection controls -->
-    <div class="mb-4 flex flex-wrap gap-3 items-center">
+    <div class="mb-4 flex flex-wrap gap-3 items-center" v-if="hasRecipes">
       <button
         @click="selectAll"
         class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
@@ -190,6 +217,7 @@ onMounted(async () => {
 
     <!-- Recipe selection list -->
     <RecipeSelectionList
+      v-if="hasRecipes"
       :recipes="filteredRecipes"
       :selectedRecipeIds="selectedRecipeIds"
       @update:selectedRecipeIds="selectedRecipeIds = $event"
@@ -204,6 +232,16 @@ onMounted(async () => {
       aria-live="polite"
     >
       {{ t("pages.exportRecipeBook.successMessage") }}
+    </div>
+
+    <!-- Error message -->
+    <div
+      v-if="errorMessage"
+      class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-red-500 text-white rounded-lg shadow-lg"
+      role="alert"
+      aria-live="assertive"
+    >
+      {{ errorMessage }}
     </div>
 
     <!-- Progress dialog -->
@@ -238,7 +276,7 @@ onMounted(async () => {
     </div>
 
     <!-- Export button and helper text -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
+    <div v-if="hasRecipes" class="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
       <div class="max-w-4xl mx-auto">
         <!-- Warning for large exports -->
         <div

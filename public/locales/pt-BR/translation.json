@@ -14,7 +14,10 @@
       "successMessage": "Livro de receitas baixado com sucesso!",
       "exportingProgress": "Exportando Livro de Receitas",
       "processing": "{{name}} ({{current}} de {{total}})",
-      "largeExportWarning": "Exportações grandes podem demorar mais"
+      "largeExportWarning": "Exportações grandes podem demorar mais",
+      "emptyState": "Nenhuma Receita Encontrada",
+      "emptyStateDescription": "Adicione receitas para criar um livro de receitas",
+      "exportError": "Falha ao exportar livro de receitas. Por favor, tente novamente."
     }
   }
 }
