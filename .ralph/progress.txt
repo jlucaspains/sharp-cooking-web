@@ -276,3 +276,35 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - Auto-hiding messages (setTimeout) improves UX - errors stay longer (5s) than success (3s)
   - Empty state icons help communicate the situation visually
 ---
+
+## 2026-01-24 23:16 - US-011
+- Verified and completed internationalization support for export feature
+- All translation keys have been added throughout previous stories (US-002 through US-010):
+  - pages.exportRecipeBook.title
+  - pages.exportRecipeBook.back
+  - pages.exportRecipeBook.filterByCategory
+  - pages.exportRecipeBook.allCategories
+  - pages.exportRecipeBook.selectAll
+  - pages.exportRecipeBook.clearAll
+  - pages.exportRecipeBook.selectedCount
+  - pages.exportRecipeBook.exportButton
+  - pages.exportRecipeBook.exporting
+  - pages.exportRecipeBook.selectAtLeastOne
+  - pages.exportRecipeBook.successMessage
+  - pages.exportRecipeBook.exportingProgress
+  - pages.exportRecipeBook.processing
+  - pages.exportRecipeBook.largeExportWarning
+  - pages.exportRecipeBook.emptyState
+  - pages.exportRecipeBook.emptyStateDescription
+  - pages.exportRecipeBook.exportError
+- All keys exist in all 4 locales: en, pt, en-US, pt-BR
+- Fixed last hardcoded aria-label to use t() function
+- All UI text now uses i18n keys - no hardcoded strings remain
+- Translation key format follows pattern: pages.exportRecipeBook.{keyName}
+- Typecheck and build passed successfully
+- **Learnings for future iterations:**
+  - aria-label attributes should also use t() for full internationalization
+  - Building i18n incrementally (story by story) is more manageable than adding all keys at once
+  - Keeping translation keys consistent across locales prevents missing translations
+  - Using {{variable}} interpolation syntax allows dynamic content in translations
+---

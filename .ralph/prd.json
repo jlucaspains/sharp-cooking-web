@@ -208,7 +208,7 @@
         "Verify in browser using playwright tests"
       ],
       "priority": 11,
-      "passes": false,
+      "passes": true,
       "notes": ""
     },
     {
