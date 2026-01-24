@@ -150,7 +150,7 @@ onMounted(async () => {
       <button
         @click="goBack"
         class="mb-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-        aria-label="Back to recipe list"
+        :aria-label="t('pages.exportRecipeBook.back')"
       >
         ← {{ t("pages.exportRecipeBook.back") }}
       </button>
