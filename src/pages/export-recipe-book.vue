@@ -7,6 +7,8 @@ import { getRecipes, getRecipeMediaUrl, getCategories } from "../services/dataSe
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 import { Category } from "../services/category";
 import RecipeSelectionList from "../components/RecipeSelectionList.vue";
+import { exportRecipeBook } from "../services/recipeBookExportService";
+import type { Recipe } from "../services/recipe";
 
 const { t } = useTranslation();
 const state = useState()!;
@@ -16,6 +18,8 @@ const allRecipes = ref<RecipeViewModel[]>([]);
 const categories = ref<Category[]>([]);
 const selectedCategoryId = ref<number | null>(null);
 const selectedRecipeIds = ref<Set<number>>(new Set());
+const showSuccessMessage = ref(false);
+const isExporting = ref(false);
 
 const filteredRecipes = computed(() => {
   if (selectedCategoryId.value === null || selectedCategoryId.value === 0) {
@@ -45,9 +49,58 @@ const goBack = () => {
   router.push('/');
 };
 
-const handleExport = () => {
-  // TODO: Implement PDF export in US-008
-  console.log('Export', selectedRecipeIds.value);
+const handleExport = async () => {
+  if (!hasSelection.value) return;
+  
+  try {
+    isExporting.value = true;
+    showSuccessMessage.value = false;
+    
+    // Get selected recipes
+    const selectedRecipes = allRecipes.value
+      .filter((r: RecipeViewModel) => r.id !== undefined && selectedRecipeIds.value.has(r.id))
+      .map((r: RecipeViewModel) => {
+        // Convert RecipeViewModel back to Recipe (only fields needed for PDF)
+        const recipe: Recipe = {
+          id: r.id,
+          title: r.title || '',
+          ingredients: r.ingredients || [],
+          steps: r.steps || [],
+          categoryId: r.categoryId,
+          // Note: DO NOT include nutrition or notes - per acceptance criteria
+        } as Recipe;
+        return recipe;
+      });
+    
+    // Create recipe images map
+    const recipeImages = new Map<number, string | null>();
+    for (const recipe of allRecipes.value) {
+      if (recipe.id !== undefined) {
+        recipeImages.set(recipe.id, recipe.image || null);
+      }
+    }
+    
+    // Export the recipe book
+    await exportRecipeBook(
+      {
+        recipes: selectedRecipes,
+      },
+      recipeImages
+    );
+    
+    // Show success message
+    showSuccessMessage.value = true;
+    
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      showSuccessMessage.value = false;
+    }, 3000);
+  } catch (error) {
+    console.error('Error exporting recipe book:', error);
+    alert('Failed to export recipe book. Please try again.');
+  } finally {
+    isExporting.value = false;
+  }
 };
 
 onMounted(async () => {
@@ -132,20 +185,30 @@ onMounted(async () => {
       class="mb-6"
     />
 
+    <!-- Success message -->
+    <div
+      v-if="showSuccessMessage"
+      class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-green-500 text-white rounded-lg shadow-lg"
+      role="alert"
+      aria-live="polite"
+    >
+      {{ t("pages.exportRecipeBook.successMessage") }}
+    </div>
+
     <!-- Export button and helper text -->
     <div class="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
       <div class="max-w-4xl mx-auto">
         <button
           @click="handleExport"
-          :disabled="!hasSelection"
+          :disabled="!hasSelection || isExporting"
           class="w-full px-6 py-3 rounded font-semibold transition"
           :class="{
-            'bg-green-500 text-white hover:bg-green-600': hasSelection,
-            'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 cursor-not-allowed': !hasSelection
+            'bg-green-500 text-white hover:bg-green-600': hasSelection && !isExporting,
+            'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 cursor-not-allowed': !hasSelection || isExporting
           }"
           :aria-label="t('pages.exportRecipeBook.exportButton')"
         >
-          {{ t("pages.exportRecipeBook.exportButton") }}
+          {{ isExporting ? t("pages.exportRecipeBook.exporting") : t("pages.exportRecipeBook.exportButton") }}
         </button>
         <p
           v-if="!hasSelection"

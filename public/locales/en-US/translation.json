@@ -9,7 +9,9 @@
       "clearAll": "Clear All",
       "selectedCount": "{{count}} recipes selected",
       "exportButton": "Export PDF",
-      "selectAtLeastOne": "Select at least 1 recipe to export"
+      "exporting": "Exporting...",
+      "selectAtLeastOne": "Select at least 1 recipe to export",
+      "successMessage": "Recipe book downloaded successfully!"
     }
   }
 }

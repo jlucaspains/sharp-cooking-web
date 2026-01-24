@@ -302,7 +302,9 @@
       "clearAll": "Limpar Tudo",
       "selectedCount": "{{count}} receitas selecionadas",
       "exportButton": "Exportar PDF",
-      "selectAtLeastOne": "Selecione pelo menos 1 receita para exportar"
+      "exporting": "Exportando...",
+      "selectAtLeastOne": "Selecione pelo menos 1 receita para exportar",
+      "successMessage": "Livro de receitas baixado com sucesso!"
     }
   },
   "initialRecipes": [
