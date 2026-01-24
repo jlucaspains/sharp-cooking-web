@@ -210,3 +210,37 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - Tests for PDF content validation are challenging due to jsPDF dynamic loading - focus on functional behavior instead
   - Webkit/Mobile Safari tests are flaky due to portal dialog timing in setupTestRecipes helper
 ---
+
+## 2026-01-24 23:06 - US-009
+- Implemented progress indicator for PDF generation
+- Added progress dialog that appears when exporting 10+ recipes
+- Progress dialog shows:
+  - Current recipe being processed with name
+  - Progress count (e.g., "Recipe Name (15 of 30)")
+  - Percentage complete
+  - Animated progress bar
+- Added warning message for large exports (> 50 recipes): "Large exports may take longer"
+- Warning appears above export button when more than 50 recipes are selected
+- Modified recipeBookExportService to accept optional progress callback
+- Progress callback fires for each recipe processed during export
+- Added translation keys in all 4 locales (en, pt, en-US, pt-BR):
+  - pages.exportRecipeBook.exportingProgress
+  - pages.exportRecipeBook.processing
+  - pages.exportRecipeBook.largeExportWarning
+- Created comprehensive Playwright tests (5 tests, all passing on chromium)
+- Files changed:
+  - src/services/recipeBookExportService.ts (added RecipeBookExportProgress interface, progress callback)
+  - src/pages/export-recipe-book.vue (added progress dialog UI, warning logic)
+  - public/locales/*/translation.json (4 files - added progress keys)
+  - tests/export-recipe-book-progress.spec.ts (new - 20 tests across 4 browsers)
+- Typecheck and build passed successfully
+- **Learnings for future iterations:**
+  - Progress callbacks are essential for long-running operations to provide user feedback
+  - For fast operations (< 10 recipes), showing progress creates unnecessary UI flash - conditionally show based on workload size
+  - Warning thresholds (> 50) should be clearly tested with boundary values (49, 50, 51)
+  - Progress dialogs should have proper ARIA attributes: role="dialog", aria-modal="true", aria-labelledby
+  - Progress bars need role="progressbar" with aria-valuenow, aria-valuemin, aria-valuemax
+  - Database helpers (createRecipeData, saveRecipe) are more efficient for creating many test recipes than UI-based recipe creation
+  - Large batch inserts in tests (60 recipes) can take time - use appropriate timeouts
+  - Computed properties in Vue react immediately to selection changes - perfect for conditional warnings
+---
