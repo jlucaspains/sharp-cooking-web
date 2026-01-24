@@ -1,0 +1,235 @@
+{
+  "project": "Sharp Cooking",
+  "branchName": "ralph/recipe-book-pdf-export-v3",
+  "description": "Recipe Book PDF Export - Allow users to export selected recipes as a formatted PDF cookbook",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Install PDF generation dependencies",
+      "description": "As a developer, I need to add jsPDF and related libraries to enable PDF generation functionality.",
+      "acceptanceCriteria": [
+        "Add jspdf and jspdf-autotable to package.json dependencies",
+        "Run npm install successfully",
+        "Libraries are available for import in TypeScript",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Create export route and navigation entry",
+      "description": "As a user, I want to access the export feature from the navigation menu so I can create a recipe book.",
+      "acceptanceCriteria": [
+        "Route /export-recipe-book is configured in router",
+        "Menu item 'Export Recipe Book' appears in ellipsis dropdown",
+        "Clicking menu item navigates to /export-recipe-book",
+        "Menu item has appropriate export icon",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Create PDF helper utilities",
+      "description": "As a developer, I need core PDF generation utilities to build recipe book PDFs.",
+      "acceptanceCriteria": [
+        "Create src/helpers/pdfHelpers.ts with table of contents generation",
+        "Implement recipe page layout function (title, image, ingredients, steps)",
+        "Handle image embedding with compression (max 800px width)",
+        "Handle recipes without images gracefully",
+        "Export utilities follow TypeScript best practices",
+        "Unit test: Generate cover page",
+        "Unit test: Generate table of contents",
+        "Unit test: Generate recipe page with title, image, ingredients, steps",
+        "Unit test: Handle image compression",
+        "Unit test: Handle recipes without images",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Create recipe book export service",
+      "description": "As a developer, I need a service that orchestrates the PDF generation process.",
+      "acceptanceCriteria": [
+        "Create src/services/recipeBookExportService.ts",
+        "Service accepts RecipeBookExportRequest with selected recipes",
+        "Service generates PDF with TOC as first page",
+        "Service generates PDF with recipes containing only: title, image, ingredients, steps",
+        "Service does NOT include nutrition facts or notes",
+        "File downloads with name format: Sharp-Cooking-Recipe-Book-YYYY-MM-DD.pdf",
+        "Unit test: Filter recipes by category",
+        "Unit test: Validate export request (min 1 recipe)",
+        "Unit test: Handle recipes without images",
+        "Unit test: Handle recipes without nutrition data",
+        "Integration test: Full export flow with 5 recipes",
+        "Integration test: Verify TOC appears as first page",
+        "Integration test: Verify no nutrition or notes in output",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Create RecipeSelectionList component",
+      "description": "As a developer, I need a reusable component for displaying recipes with checkboxes.",
+      "acceptanceCriteria": [
+        "Create RecipeSelectionList.vue component",
+        "Component displays recipes with checkboxes",
+        "Component emits selection change events",
+        "Component supports search/filter input",
+        "Component is keyboard accessible",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Create export recipe book page - layout and selection",
+      "description": "As a user, I want to see all my recipes with checkboxes so I can select which ones to export.",
+      "acceptanceCriteria": [
+        "Create src/pages/export-recipe-book.vue",
+        "Page displays recipe list with checkboxes using RecipeSelectionList component",
+        "Page shows 'Select All' and 'Clear All' buttons",
+        "Page shows selected count (e.g., '15 recipes selected')",
+        "Page has back/cancel navigation",
+        "Export button is visible but disabled when no recipes selected",
+        "Helper text shows 'Select at least 1 recipe to export' when none selected",
+        "Page is responsive (mobile and desktop)",
+        "E2E test: Export button disabled when no recipes selected",
+        "E2E test: Back button returns to recipe list",
+        "E2E test: Select All and Clear All buttons work correctly",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "Add category filter to export page",
+      "description": "As a user, I want to filter recipes by category so I can quickly select all recipes of a specific type.",
+      "acceptanceCriteria": [
+        "Category/tag filter dropdown appears on export page",
+        "Selecting a category filters the recipe list",
+        "User can combine category filter with manual selection",
+        "Filter state persists while user adjusts selection",
+        "E2E test: Filter recipes by category and verify filtered list",
+        "Integration test: Export with category filter applied",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-008",
+      "title": "Implement PDF generation and download",
+      "description": "As a user, I want to export selected recipes as a PDF so I can print or save my cookbook.",
+      "acceptanceCriteria": [
+        "Clicking 'Export PDF' button triggers PDF generation",
+        "PDF includes table of contents with recipe titles as first page",
+        "Each recipe appears on separate page with title, image (if available), ingredients, steps",
+        "PDF does NOT include nutrition facts or recipe notes",
+        "PDF downloads automatically after generation",
+        "File name format is Sharp-Cooking-Recipe-Book-YYYY-MM-DD.pdf",
+        "Success message appears after download",
+        "E2E test: Export recipe book with manual selection (3 recipes)",
+        "E2E test: Verify PDF download initiated and success message shown",
+        "E2E test: Verify PDF contains TOC + recipes with title, image, ingredients, steps only",
+        "E2E test: Verify PDF does not include nutrition facts or recipe notes",
+        "Integration test: Export with mixed image/no-image recipes",
+        "Integration test: Large export (25+ recipes) performance test",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-009",
+      "title": "Add progress indicator for PDF generation",
+      "description": "As a user, I want to see progress while my PDF is being generated so I know the app is working.",
+      "acceptanceCriteria": [
+        "Progress dialog appears when export starts",
+        "Dialog shows percentage or progress bar",
+        "Dialog shows current recipe being processed",
+        "Dialog shows count (e.g., 'Processing: Recipe Name (15 of 30)')",
+        "Progress indicator appears for exports with 10+ recipes",
+        "Warning appears if > 50 recipes selected: 'Large exports may take longer'",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-010",
+      "title": "Handle edge cases and empty states",
+      "description": "As a user, I want helpful messages when there are no recipes or issues occur.",
+      "acceptanceCriteria": [
+        "Empty state message appears if user has 0 recipes: 'Add recipes to create a recipe book'",
+        "Export button remains disabled until at least 1 recipe selected",
+        "Recipes without images display properly (no broken image icon)",
+        "Error message appears if PDF generation fails",
+        "E2E test: Handle recipes without images gracefully",
+        "E2E test: Empty state shown when no recipes exist",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-011",
+      "title": "Add internationalization support",
+      "description": "As a developer, I need to add all translation keys for the export feature.",
+      "acceptanceCriteria": [
+        "Add translation keys for: title, button labels, messages, PDF content",
+        "Keys match format in PRD section 6 (export.*, pdf.*)",
+        "All UI text uses i18n keys (no hardcoded strings)",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-012",
+      "title": "Implement accessibility features",
+      "description": "As a user with accessibility needs, I want the export feature to be fully keyboard navigable and screen reader friendly.",
+      "acceptanceCriteria": [
+        "All controls are keyboard accessible (tab navigation)",
+        "Checkboxes have proper ARIA labels",
+        "Export button has descriptive aria-label",
+        "Progress dialog has proper role and aria-labelledby",
+        "Focus indicators are visible on all interactive elements",
+        "Color contrast meets WCAG 2.1 AA (4.5:1 ratio)",
+        "E2E test: Keyboard navigation works for all controls",
+        "E2E test: Screen reader announces proper labels and states",
+        "Typecheck passes",
+        "Verify in browser using playwright tests"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+# Ralph Progress Log
+Started: Sat, 24 Jan 2026 15:18:52 MST
+
+## Codebase Patterns
+- **File-based routing**: Uses vite-plugin-pages - pages in `src/pages/` are automatically registered as routes
+- **Hash-based routing**: Uses createWebHashHistory, so routes are accessed via `/#/route-name`
+- **Menu configuration**: RecipeList component sets its own menuOptions in onMounted(), which overwrites parent menus. Add menu items to both index.vue and RecipeList.vue for global visibility
+- **Testing**: Playwright for E2E tests. Navigate using `/#/` prefix (e.g., `page.goto('/#/export-recipe-book')`)
+- **Translations**: Translation keys follow pattern `pages.{pageName}.{keyName}`. Update all locales: en, pt, en-US, pt-BR
+- **PDF generation**: Use jspdf + jspdf-autotable. Always compress images (max 800px), handle null images gracefully, check page overflow
+- **Build process**: `npm run build` runs vue-tsc typecheck + vite build
+---
+
+## 2026-01-24 22:18 - US-001
+- Installed jspdf (v4.0.0) and jspdf-autotable (v5.0.7) dependencies
+- Files changed: package.json, package-lock.json
+- Typecheck passed successfully
+- **Learnings for future iterations:**
+  - The project uses npm for package management
+  - Build script includes vue-tsc typecheck followed by vite build
+  - All dependencies should be verified with npm run build to ensure TypeScript compatibility
+---
+
+## 2026-01-24 22:23 - US-002
+- Created /export-recipe-book route with basic page (src/pages/export-recipe-book.vue)
+- Added "Export Recipe Book" menu item to ellipsis dropdown in RecipeList component
+- Added "Export Recipe Book" menu item to index.vue page  
+- Added download icon SVG to menu item
+- Added translation keys for "exportRecipeBook" in en and pt locales
+- Created Playwright tests for route navigation and menu visibility
+- Updated playwright.config.ts to enable webServer for tests
+- Files changed: src/pages/export-recipe-book.vue, src/components/RecipeList.vue, src/pages/index.vue, public/locales/en/translation.json, public/locales/pt/translation.json, tests/export-recipe-book.spec.ts, playwright.config.ts
+- All 12 Playwright tests passing (chromium, webkit, Mobile Chrome, Mobile Safari)
+- Typecheck passed successfully
+- **Learnings for future iterations:**
+  - This codebase uses vite-plugin-pages for file-based routing - pages in src/pages/ are automatically registered as routes
+  - RecipeList component sets its own menuOptions in onMounted, which overwrites any menu set by parent pages
+  - Menu items must be added to RecipeList.vue (not just index.vue) to appear in the ellipsis dropdown
+  - The app uses hash-based routing (createWebHashHistory), so routes are accessed via /#/route-name
+  - Playwright tests must use /#/ prefix for direct navigation (e.g., '/#/export-recipe-book')
+  - playwright.config.ts webServer was commented out - enabled it for test execution
+  - TopBar component uses Headless UI Menu components for dropdowns
+  - Translation keys follow pattern pages.pageName.keyName (e.g., pages.index.exportRecipeBook)
+---
+
+## 2026-01-24 22:30 - US-003
+- Created src/helpers/pdfHelpers.ts with comprehensive PDF generation utilities
+- Implemented initializePDF() to create new PDF documents
+- Implemented generateCoverPage() for recipe book cover with title and optional date
+- Implemented generateTableOfContents() using jspdf-autotable for clean recipe list layout
+- Implemented compressImage() to resize and compress images to max 800px width (JPEG 80% quality)
+- Implemented generateRecipePage() to render recipes with title, image (if available), ingredients, and steps
+- Recipe pages handle page overflow for long content (ingredients and steps)
+- Created comprehensive Playwright tests (tests/pdfHelpers.spec.ts) with 36 tests across 4 browsers
+- All tests pass: cover page generation, TOC generation, recipe page rendering, image compression, graceful handling of missing images
+- Files changed: src/helpers/pdfHelpers.ts (new), tests/pdfHelpers.spec.ts (new)
+- Typecheck passed successfully
+- **Learnings for future iterations:**
+  - jspdf and jspdf-autotable work well together for structured content (TOC)
+  - Image compression is important for PDF size - use canvas to resize and compress
+  - Always handle missing images gracefully (null checks before addImage)
+  - PDF helpers need to handle page overflow - check yPosition and add new pages when needed
+  - Playwright tests can use page.evaluate() to test utility functions in browser context
+  - Some timing issues in chromium tests can be resolved with retries (flaky test patterns)
+---
