@@ -62,6 +62,10 @@ This file contains important patterns and conventions for developers and AI agen
 - **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
 - Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
 - Some chromium tests can be flaky - run with retries if timing issues occur
+- **Large datasets**: Use database helpers (`createRecipeData()`, `saveRecipe()`) for batch inserts (e.g., 50+ recipes)
+  - More efficient than UI-based recipe creation
+  - Use longer timeouts for large batch operations
+- **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
 
 ### Services Layer
 
@@ -82,6 +86,12 @@ This file contains important patterns and conventions for developers and AI agen
 - **Page overflow**: Track `yPosition` and call `doc.addPage()` when content exceeds page height
 - **Table of contents**: Use `jspdf-autotable` for structured lists
 - **Text wrapping**: Use `doc.splitTextToSize()` for long text that needs to wrap
+- **Progress indicators**: 
+  - For long operations (10+ recipes), show progress dialog with current item and percentage
+  - Export service accepts optional progress callback: `(progress: RecipeBookExportProgress) => void`
+  - Progress dialog should have proper ARIA attributes: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`
+  - Progress bars need `role="progressbar"` with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
+  - For very fast operations, avoid showing progress to prevent UI flash
 
 ## Project Scripts
 
