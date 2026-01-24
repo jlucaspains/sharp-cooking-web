@@ -91,3 +91,25 @@ Started: Sat, 24 Jan 2026 15:18:52 MST
   - Tests can mock HTMLAnchorElement.prototype.click to prevent actual downloads during testing
   - The service is stateless - it doesn't need to track state, just orchestrate the PDF generation
 ---
+
+## 2026-01-24 22:34 - US-005
+- Created RecipeSelectionList.vue component with checkbox selection functionality
+- Component accepts recipes array and selectedRecipeIds Set as props
+- Component emits update:selectedRecipeIds event when selection changes
+- Implemented search/filter input to filter recipes by title
+- Made component fully keyboard accessible:
+  - Recipe items are focusable with tab navigation
+  - Items have role="checkbox" and aria-checked attributes
+  - Space and Enter keys toggle selection
+  - Focus indicators visible on interactive elements
+- Component uses Vue Composition API with TypeScript
+- Files changed: src/components/RecipeSelectionList.vue (new)
+- Typecheck and build passed successfully
+- **Learnings for future iterations:**
+  - Component follows Vue 3 Composition API patterns with <script setup> and TypeScript
+  - Uses Set<number> for efficient selection tracking (can quickly check membership)
+  - Emits events using defineEmits<T> with typed event signatures
+  - Keyboard accessibility requires role, aria-checked, and aria-label attributes
+  - Focus states use outline CSS property for visibility
+  - Search filtering uses computed() for reactive filtering without state duplication
+---

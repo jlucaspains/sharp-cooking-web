@@ -87,3 +87,31 @@ export async function enableAIChat(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-ai-chat-toggle').click();
 }
+
+export async function setupTestRecipes(page: Page) {
+    // Create test recipes for export tests - don't use specific IDs
+    await createRecipeWithoutSaving(page, 'Test Recipe 1', 5, ["1000g flour", "700g water"], ["Mix ingredients", "Bake for 30 minutes"], true, null);
+    await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
+    
+    await page.goto('/');
+    await createRecipeWithoutSaving(page, 'Test Recipe 2', 4, ["500g flour"], ["Mix", "Bake"], true, null);
+    await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
+    
+    await page.goto('/');
+    await createRecipeWithoutSaving(page, 'Test Recipe 3', 3, ["100g sugar"], ["Mix sugar", "Cook"], true, null);
+    await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
+}
+
+export async function cleanupTestRecipes(page: Page) {
+    // Clean up test data by clearing IndexedDB
+    await page.evaluate(() => {
+        return new Promise<void>((resolve) => {
+            const request = indexedDB.deleteDatabase('SharpCooking');
+            request.onsuccess = () => resolve();
+            request.onerror = () => resolve();
+        });
+    });
+}

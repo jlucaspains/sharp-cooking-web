@@ -1,3 +1,13 @@
 {
-    
+  "pages": {
+    "exportRecipeBook": {
+      "title": "Export Recipe Book",
+      "back": "Back",
+      "selectAll": "Select All",
+      "clearAll": "Clear All",
+      "selectedCount": "{{count}} recipes selected",
+      "exportButton": "Export PDF",
+      "selectAtLeastOne": "Select at least 1 recipe to export"
+    }
+  }
 }
