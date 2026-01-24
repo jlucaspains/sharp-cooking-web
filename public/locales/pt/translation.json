@@ -33,7 +33,8 @@
             "options": "Opções...",
             "filterByTitle": "título:",
             "filterByIngredients": "ingredientes:",
-            "filterBySteps": "passos:"
+            "filterBySteps": "passos:",
+            "exportRecipeBook": "Exportar Livro de Receitas"
         },
         "options": {
             "title": "Opções",
