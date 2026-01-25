@@ -81,9 +81,6 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
         />
         <div class="flex-1">
           <h3 class="font-medium dark:text-white text-gray-900">{{ recipe.title }}</h3>
-          <p v-if="recipe.categoryId" class="text-sm text-gray-500">
-            Category ID: {{ recipe.categoryId }}
-          </p>
         </div>
       </div>
 
