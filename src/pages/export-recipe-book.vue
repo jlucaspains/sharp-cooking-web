@@ -49,10 +49,6 @@ const handleCategoryChange = (event: Event) => {
   selectedCategoryId.value = value === "" ? null : parseInt(value);
 };
 
-const goBack = () => {
-  router.push('/');
-};
-
 const handleExport = async () => {
   if (!hasSelection.value) return;
   
@@ -145,17 +141,6 @@ onMounted(async () => {
 
 <template>
   <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white min-h-screen p-4">
-    <!-- Header with back button -->
-    <div class="mb-6">
-      <button
-        @click="goBack"
-        class="mb-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-        :aria-label="t('pages.exportRecipeBook.back')"
-      >
-        ← {{ t("pages.exportRecipeBook.back") }}
-      </button>
-      <h1 class="text-2xl font-bold">{{ t("pages.exportRecipeBook.title") }}</h1>
-    </div>
 
     <!-- Category filter -->
     <div class="mb-4" v-if="hasRecipes">
@@ -183,22 +168,16 @@ onMounted(async () => {
       <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
         {{ t("pages.exportRecipeBook.emptyState") }}
       </h2>
-      <p class="text-gray-500 dark:text-gray-400 mb-4">
+      <p class="text-gray-500 dark:text-gray-400">
         {{ t("pages.exportRecipeBook.emptyStateDescription") }}
       </p>
-      <button
-        @click="goBack"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
-        {{ t("pages.exportRecipeBook.back") }}
-      </button>
     </div>
 
     <!-- Selection controls -->
     <div class="mb-4 flex flex-wrap gap-3 items-center" v-if="hasRecipes">
       <button
         @click="selectAll"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        class="px-4 py-2 text-white rounded bg-theme-primary hover:bg-theme-secondary transition"
         :aria-label="t('pages.exportRecipeBook.selectAll')"
       >
         {{ t("pages.exportRecipeBook.selectAll") }}
@@ -291,7 +270,7 @@ onMounted(async () => {
           :disabled="!hasSelection || isExporting"
           class="w-full px-6 py-3 rounded font-semibold transition"
           :class="{
-            'bg-green-500 text-white hover:bg-green-600': hasSelection && !isExporting,
+            'bg-theme-primary hover:bg-theme-secondar text-white': hasSelection && !isExporting,
             'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 cursor-not-allowed': !hasSelection || isExporting
           }"
           :aria-label="t('pages.exportRecipeBook.exportButton')"

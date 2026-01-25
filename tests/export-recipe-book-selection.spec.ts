@@ -25,11 +25,21 @@ test.describe('Export Recipe Book - Selection UI', () => {
   });
 
   test('should have back button that returns to recipe list', async ({ page }) => {
-    // Find and click back button
-    const backButton = page.getByRole('button', { name: /back/i });
+    // Navigate from home to export page to ensure clean history
+    await page.goto('/#/');
+    await page.waitForTimeout(200);
+    await page.goto('/#/export-recipe-book');
+    await page.waitForTimeout(500);
+    
+    // The back button is in the TopBar (left arrow SVG at top-left)
+    // Find it by looking for the back arrow SVG path
+    const backButton = page.locator('button').filter({ 
+      has: page.locator('svg path[d*="M10 19l-7-7"]') 
+    });
     await expect(backButton).toBeVisible();
     
     await backButton.click();
+    await page.waitForTimeout(500);
     
     // Should be back on home page
     await expect(page).toHaveURL(/\/#\/$/);
