@@ -70,11 +70,11 @@ test.describe('Export Recipe Book - Category Filter', () => {
     
     // Initially should show all recipes
     let recipeItems = page.locator('.recipe-item');
-    await expect(recipeItems).toHaveCount(3);
+    await expect(recipeItems).toHaveCount(4);
     
     // Select "Desserts" category
     const categoryFilter = page.locator('#category-filter');
-    await categoryFilter.selectOption("Desserts");
+    await categoryFilter.selectOption({ label: "Desserts (2)" });
     await page.waitForTimeout(1000);
     
     // Should show only 2 dessert recipes
@@ -112,7 +112,7 @@ test.describe('Export Recipe Book - Category Filter', () => {
     
     // Filter by Desserts
     const categoryFilter = page.locator('#category-filter');
-    await categoryFilter.selectOption("Desserts");
+    await categoryFilter.selectOption({ label: "Desserts (2)" });
     await page.waitForTimeout(300);
     
     // Click Select All
@@ -155,7 +155,7 @@ test.describe('Export Recipe Book - Category Filter', () => {
     
     // Change category filter
     const categoryFilter = page.locator('#category-filter');
-    await categoryFilter.selectOption("Main Courses");
+    await categoryFilter.selectOption({ label: "Main Courses (1)" });
     await page.waitForTimeout(300);
     
     // Selection count should still be 1 (preserved)
@@ -190,7 +190,7 @@ test.describe('Export Recipe Book - Category Filter', () => {
     
     // Filter by category first
     const categoryFilter = page.locator('#category-filter');
-    await categoryFilter.selectOption("Desserts");
+    await categoryFilter.selectOption({ label: "Desserts (1)" });
     await page.waitForTimeout(300);
     
     // Should show only 1 recipe
@@ -203,7 +203,7 @@ test.describe('Export Recipe Book - Category Filter', () => {
     
     // Should show all 2 recipes
     recipeItems = page.locator('.recipe-item');
-    await expect(recipeItems).toHaveCount(2);
+    await expect(recipeItems).toHaveCount(3);
   });
 
   test('should show recipe count for each category', async ({ page, context }) => {

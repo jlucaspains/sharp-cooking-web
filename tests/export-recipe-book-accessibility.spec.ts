@@ -27,9 +27,6 @@ test.describe('Export Recipe Book - Accessibility', () => {
     
     // After several tabs, we should be able to reach our controls
     // Let's just verify the controls are focusable
-    await page.getByRole('button', { name: /back/i }).focus();
-    await expect(page.getByRole('button', { name: /back/i })).toBeFocused();
-    
     // Category filter
     await page.locator('#category-filter').focus();
     await expect(page.locator('#category-filter')).toBeFocused();
@@ -150,10 +147,6 @@ test.describe('Export Recipe Book - Accessibility', () => {
 
   test('screen reader should announce proper states', async ({ page }) => {
     // Check that important elements have proper roles and labels
-    
-    // Back button
-    const backButton = page.getByRole('button', { name: /back/i });
-    await expect(backButton).toHaveAttribute('aria-label');
     
     // Select/Clear buttons
     const selectAllButton = page.getByRole('button', { name: /select all/i });

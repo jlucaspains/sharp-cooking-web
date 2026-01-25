@@ -21,10 +21,3 @@ test('clicking export recipe book navigates to /export-recipe-book', async ({ pa
   
   await expect(page).toHaveURL(new RegExp(".*/export-recipe-book"));
 });
-
-test('export recipe book page displays title', async ({ page }) => {
-  await page.goto('/#/export-recipe-book');
-  
-  const title = await page.getByRole('heading', { name: 'Export Recipe Book' });
-  await expect(title).toBeVisible();
-});

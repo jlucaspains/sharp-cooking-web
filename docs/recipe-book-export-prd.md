@@ -308,7 +308,7 @@ interface RecipeBookExportRequest {
 **Desktop Layout:**
 ```
 ┌────────────────────────────────────────────────┐
-│  ← Back    Export Recipe Book        [Export] │ ← Header
+│  ← Back    Export Recipe Book                  │ ← Header
 ├────────────────────────────────────────────────┤
 │                                                │
 │  Category: [All ▼]     [Search recipes...]     │ ← Filters
@@ -331,7 +331,7 @@ interface RecipeBookExportRequest {
 **Mobile Layout:**
 ```
 ┌──────────────────────────┐
-│ ← Export Recipe Book   ⋮ │ ← Header with menu
+│ ← Export Recipe Book     │ ← Header
 ├──────────────────────────┤
 │ Category: [All ▼]        │
 │ [Search recipes...]      │
@@ -377,7 +377,6 @@ interface RecipeBookExportRequest {
   "export": {
     "title": "Export Recipe Book",
     "button": "Export PDF",
-    "backButton": "Back to Recipes",
     "selectAll": "Select All",
     "clearAll": "Clear All",
     "searchPlaceholder": "Search recipes...",

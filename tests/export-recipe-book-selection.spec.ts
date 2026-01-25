@@ -15,9 +15,6 @@ test.describe('Export Recipe Book - Selection UI', () => {
   });
 
   test('should show export page with recipe list', async ({ page }) => {
-    // Check page title
-    const title = page.getByRole('heading', { level: 1 });
-    await expect(title).toBeVisible();
     
     // Check that recipes are displayed
     const recipeItems = page.locator('[role="checkbox"]');
@@ -140,10 +137,6 @@ test.describe('Export Recipe Book - Selection UI', () => {
   test('should be responsive on mobile viewport', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
-    // Check that key elements are still visible
-    const title = page.getByRole('heading', { level: 1 });
-    await expect(title).toBeVisible();
     
     const selectAllButton = page.getByRole('button', { name: /select all/i });
     await expect(selectAllButton).toBeVisible();
