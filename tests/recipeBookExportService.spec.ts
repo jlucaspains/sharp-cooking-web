@@ -121,7 +121,6 @@ test.describe('Recipe Book Export Service', () => {
       const originalSave = window.HTMLAnchorElement.prototype.click;
       let savedFileName = '';
       window.HTMLAnchorElement.prototype.click = function() {
-        const href = this.getAttribute('href');
         const download = this.getAttribute('download');
         if (download) {
           savedFileName = download;
@@ -236,7 +235,6 @@ test.describe('Recipe Book Export Service', () => {
       
       // We'll capture the PDF to verify page structure
       let pdfPageCount = 0;
-      const originalAddPage = (window as any).jsPDF?.prototype?.addPage;
       
       const originalSave = window.HTMLAnchorElement.prototype.click;
       window.HTMLAnchorElement.prototype.click = function() {};

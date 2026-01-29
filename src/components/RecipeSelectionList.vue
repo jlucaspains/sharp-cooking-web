@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
 
 const props = defineProps<{
@@ -49,12 +49,12 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
 <template>
   <div class="recipe-selection-list">
     <!-- Search input -->
-    <div class="search-container mb-4">
+    <div class="search-container mb-3 sm:mb-4">
       <input
         v-model="searchText"
         type="text"
         placeholder="Search recipes..."
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label="Search recipes"
       />
     </div>
@@ -64,7 +64,7 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
       <div
         v-for="recipe in filteredRecipes"
         :key="recipe.id"
-        class="recipe-item flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+        class="recipe-item flex items-center p-2 sm:p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-700 cursor-pointer transition-colors"
         @click="toggleRecipe(recipe.id!)"
         @keydown="handleKeydown($event, recipe.id!)"
         tabindex="0"
@@ -75,16 +75,16 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
         <input
           type="checkbox"
           :checked="isSelected(recipe.id!)"
-          class="mr-3 h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-500 rounded cursor-pointer"
+          class="mr-2 sm:mr-3 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-blue-600 focus:ring-2 focus:ring-blue-500 rounded cursor-pointer"
           tabindex="-1"
           :aria-label="`Select ${recipe.title}`"
         />
-        <div class="flex-1">
-          <h3 class="font-medium dark:text-white text-gray-900">{{ recipe.title }}</h3>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-sm sm:text-base font-medium dark:text-white text-gray-900 truncate">{{ recipe.title }}</h3>
         </div>
       </div>
 
-      <div v-if="filteredRecipes.length === 0" class="text-center py-8 text-gray-500">
+      <div v-if="filteredRecipes.length === 0" class="text-center py-8 text-sm sm:text-base text-gray-500 dark:text-gray-400">
         No recipes found matching "{{ searchText }}"
       </div>
     </div>

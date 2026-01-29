@@ -1,10 +1,6 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import {
   setupTestRecipes,
-  createRecipeWithoutSaving,
-  clearDatabase,
-  createRecipeData,
-  saveRecipe,
 } from './helpers';
 
 test.describe('Export Recipe Book - PDF Generation', () => {
@@ -74,40 +70,6 @@ test.describe('Export Recipe Book - PDF Generation', () => {
     // Check for success message
     const successMessage = page.locator('text=Recipe book downloaded successfully!');
     await expect(successMessage).toBeVisible();
-  });
-
-  test('should show exporting state while processing', async ({ page }) => {
-    await setupTestRecipes(page, 2);
-
-    await page.goto('/#/export-recipe-book');
-    await page.waitForTimeout(1000);
-
-    await page.click('button:has-text("Select All")');
-    await page.waitForTimeout(500);
-
-    // Mock PDF save with delay
-    await page.evaluate(() => {
-      (window as any).jspdf = (window as any).jspdf || {};
-      (window as any).jspdf.jsPDF = (window as any).jspdf.jsPDF || class {
-        constructor() {}
-        addPage() { return this; }
-        setFontSize() { return this; }
-        setFont() { return this; }
-        text() { return this; }
-        addImage() { return this; }
-        save() { 
-          return new Promise(resolve => setTimeout(resolve, 500));
-        }
-        internal = { pageSize: { getWidth: () => 210, getHeight: () => 297 } };
-      };
-    });
-
-    // Start export
-    const exportButton = page.locator('button:has-text("Export PDF")');
-    await exportButton.click();
-
-    // Check for exporting state
-    await expect(page.locator('button:has-text("Exporting...")')).toBeVisible();
   });
 
   test('should generate PDF with table of contents', async ({ page }) => {

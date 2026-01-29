@@ -19,5 +19,5 @@ test('clicking export recipe book navigates to /export-recipe-book', async ({ pa
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Export Recipe Book' }).click();
   
-  await expect(page).toHaveURL(new RegExp(".*/export-recipe-book"));
+  await expect(page).toHaveURL(/.*\/export-recipe-book/);
 });

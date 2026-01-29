@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import { Recipe } from './recipe';
 import {
   initializePDF,

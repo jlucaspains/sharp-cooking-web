@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
 import { useTranslation } from "i18next-vue";
 import { useState } from "../services/store";
 import { getRecipes, getRecipeMediaUrl, getCategories } from "../services/dataService";
@@ -9,16 +8,15 @@ import { Category } from "../services/category";
 import RecipeSelectionList from "../components/RecipeSelectionList.vue";
 import { exportRecipeBook, type RecipeBookExportProgress } from "../services/recipeBookExportService";
 import type { Recipe } from "../services/recipe";
+import { notify } from "notiwind";
 
 const { t } = useTranslation();
 const state = useState()!;
-const router = useRouter();
 
 const allRecipes = ref<RecipeViewModel[]>([]);
 const categories = ref<Category[]>([]);
 const selectedCategoryId = ref<number | null>(null);
 const selectedRecipeIds = ref<Set<number>>(new Set());
-const showSuccessMessage = ref(false);
 const isExporting = ref(false);
 const exportProgress = ref<RecipeBookExportProgress | null>(null);
 const showLargeExportWarning = computed(() => selectedCount.value > 50);
@@ -54,7 +52,6 @@ const handleExport = async () => {
   
   try {
     isExporting.value = true;
-    showSuccessMessage.value = false;
     exportProgress.value = null;
     errorMessage.value = null;
     
@@ -96,22 +93,20 @@ const handleExport = async () => {
       } : undefined
     );
     
+    notify({
+      group: "success",
+      title: t("general.success"),
+      text: t("pages.exportRecipeBook.successMessage")
+    });
+
     // Show success message
-    showSuccessMessage.value = true;
     exportProgress.value = null;
-    
-    // Hide success message after 3 seconds
-    setTimeout(() => {
-      showSuccessMessage.value = false;
-    }, 3000);
   } catch (error) {
-    console.error('Error exporting recipe book:', error);
-    errorMessage.value = t("pages.exportRecipeBook.exportError");
-    
-    // Hide error message after 5 seconds
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 5000);
+    notify({
+      group: "error",
+      title: t("general.error"),
+      text: t("pages.exportRecipeBook.exportError")
+    });
   } finally {
     isExporting.value = false;
     exportProgress.value = null;
@@ -203,26 +198,6 @@ onMounted(async () => {
       class="mb-6"
     />
 
-    <!-- Success message -->
-    <div
-      v-if="showSuccessMessage"
-      class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-green-500 text-white rounded-lg shadow-lg"
-      role="alert"
-      aria-live="polite"
-    >
-      {{ t("pages.exportRecipeBook.successMessage") }}
-    </div>
-
-    <!-- Error message -->
-    <div
-      v-if="errorMessage"
-      class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 bg-red-500 text-white rounded-lg shadow-lg"
-      role="alert"
-      aria-live="assertive"
-    >
-      {{ errorMessage }}
-    </div>
-
     <!-- Progress dialog -->
     <div
       v-if="exportProgress"
@@ -270,7 +245,7 @@ onMounted(async () => {
           :disabled="!hasSelection || isExporting"
           class="w-full px-6 py-3 rounded font-semibold transition"
           :class="{
-            'bg-theme-primary hover:bg-theme-secondar text-white': hasSelection && !isExporting,
+            'bg-theme-primary hover:bg-theme-secondary text-white': hasSelection && !isExporting,
             'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 cursor-not-allowed': !hasSelection || isExporting
           }"
           :aria-label="t('pages.exportRecipeBook.exportButton')"
