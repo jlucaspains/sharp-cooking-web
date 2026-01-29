@@ -118,6 +118,10 @@ onMounted(async () => {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
       children: [
         {
+          text: t("pages.index.exportRecipeBook"),
+          action: goToExportRecipeBook,
+        },
+        {
           text: t("pages.index.sortByTitle"),
           action: async () => {
             items.value = await sort("title", items.value);
@@ -215,6 +219,10 @@ function goToImportFromScan() {
 
 function goToOptions() {
   router.push("/options");
+}
+
+function goToExportRecipeBook() {
+  router.push("/export-recipe-book");
 }
 
 async function saveSortOption(type: string) {
