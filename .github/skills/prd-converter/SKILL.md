@@ -1,43 +1,38 @@
 ---
 name: prd-converter
-description: "Convert PRDs to prd.json format for the Ralph autonomous agent system. Use when you have an existing PRD and need to convert it to Ralph's JSON format. Triggers on: convert this prd, turn this into ralph format, create prd.json from this, ralph json."
+description: "Convert PRDs to prd.yaml format for the Ralph autonomous agent system. Use when you have an existing PRD and need to convert it to Ralph's YAML format. Triggers on: convert this prd, turn this into ralph format, create prd.yaml from this, ralph yaml."
 ---
 
 # Ralph PRD Converter
 
-Converts existing PRDs to the prd.json format that Ralph uses for autonomous execution.
+Converts existing PRDs to the prd.yaml format that Ralph uses for autonomous execution.
 
 ---
 
 ## The Job
 
-Take a PRD (markdown file or text) and convert it to `.ralph/prd.json` in your scripts directory.
+Take a PRD (markdown file or text) and convert it to `.ralph/prd.yaml` in your scripts directory.
 
 ---
 
 ## Output Format
 
-```json
-{
-  "project": "[Project Name]",
-  "branchName": "ralph/[feature-name-kebab-case]",
-  "description": "[Feature description from PRD title/intro]",
-  "userStories": [
-    {
-      "id": "US-001",
-      "title": "[Story title]",
-      "description": "As a [user], I want [feature] so that [benefit]",
-      "acceptanceCriteria": [
-        "Criterion 1",
-        "Criterion 2",
-        "Typecheck passes"
-      ],
-      "priority": 1,
-      "passes": false,
-      "notes": ""
-    }
-  ]
-}
+```yaml
+project: "[Project Name]"
+branchName: ralph/[feature-name-kebab-case]
+description: "[Feature description from PRD title/intro]"
+userStories:
+- id: US-001
+  title: "[Story title]"
+  description: As a [user], I want [feature] so that [benefit]
+  acceptanceCriteria:
+  - Criterion 1
+  - Criterion 2
+  - Typecheck passes
+  priority: 1
+  passes: false
+  notes: ''
+
 ```
 
 ---
@@ -117,7 +112,7 @@ Frontend stories are NOT complete until visually verified. Ralph will use the pl
 
 ## Conversion Rules
 
-1. **Each user story becomes one JSON entry**
+1. **Each user story becomes one yaml entry**
 2. **IDs**: Sequential (US-001, US-002, etc.)
 3. **Priority**: Based on dependency order, then document order
 4. **All stories**: `passes: false` and empty `notes`
@@ -162,95 +157,80 @@ Add ability to mark tasks with different statuses.
 - Persist status in database
 ```
 
-**Output prd.json:**
-```json
-{
-  "project": "TaskApp",
-  "branchName": "ralph/task-status",
-  "description": "Task Status Feature - Track task progress with status indicators",
-  "userStories": [
-    {
-      "id": "US-001",
-      "title": "Add status field to tasks table",
-      "description": "As a developer, I need to store task status in the database.",
-      "acceptanceCriteria": [
-        "Add status column: 'pending' | 'in_progress' | 'done' (default 'pending')",
-        "Generate and run migration successfully",
-        "Typecheck passes"
-      ],
-      "priority": 1,
-      "passes": false,
-      "notes": ""
-    },
-    {
-      "id": "US-002",
-      "title": "Display status badge on task cards",
-      "description": "As a user, I want to see task status at a glance.",
-      "acceptanceCriteria": [
-        "Each task card shows colored status badge",
-        "Badge colors: gray=pending, blue=in_progress, green=done",
-        "Typecheck passes",
-        "Verify in browser using playwright tests"
-      ],
-      "priority": 2,
-      "passes": false,
-      "notes": ""
-    },
-    {
-      "id": "US-003",
-      "title": "Add status toggle to task list rows",
-      "description": "As a user, I want to change task status directly from the list.",
-      "acceptanceCriteria": [
-        "Each row has status dropdown or toggle",
-        "Changing status saves immediately",
-        "UI updates without page refresh",
-        "Typecheck passes",
-        "Verify in browser using playwright tests"
-      ],
-      "priority": 3,
-      "passes": false,
-      "notes": ""
-    },
-    {
-      "id": "US-004",
-      "title": "Filter tasks by status",
-      "description": "As a user, I want to filter the list to see only certain statuses.",
-      "acceptanceCriteria": [
-        "Filter dropdown: All | Pending | In Progress | Done",
-        "Filter persists in URL params",
-        "Typecheck passes",
-        "Verify in browser using playwright tests"
-      ],
-      "priority": 4,
-      "passes": false,
-      "notes": ""
-    }
-  ]
-}
+**Output prd.yaml:**
+```yaml
+project: TaskApp
+branchName: ralph/task-status
+description: Task Status Feature - Track task progress with status indicators
+userStories:
+- id: US-001
+  title: Add status field to tasks table
+  description: As a developer, I need to store task status in the database.
+  acceptanceCriteria:
+  - 'Add status column: ''pending'' | ''in_progress'' | ''done'' (default ''pending'')'
+  - Generate and run migration successfully
+  - Typecheck passes
+  priority: 1
+  passes: false
+  notes: ''
+- id: US-002
+  title: Display status badge on task cards
+  description: As a user, I want to see task status at a glance.
+  acceptanceCriteria:
+  - Each task card shows colored status badge
+  - 'Badge colors: gray=pending, blue=in_progress, green=done'
+  - Typecheck passes
+  - Verify in browser using playwright tests
+  priority: 2
+  passes: false
+  notes: ''
+- id: US-003
+  title: Add status toggle to task list rows
+  description: As a user, I want to change task status directly from the list.
+  acceptanceCriteria:
+  - Each row has status dropdown or toggle
+  - Changing status saves immediately
+  - UI updates without page refresh
+  - Typecheck passes
+  - Verify in browser using playwright tests
+  priority: 3
+  passes: false
+  notes: ''
+- id: US-004
+  title: Filter tasks by status
+  description: As a user, I want to filter the list to see only certain statuses.
+  acceptanceCriteria:
+  - 'Filter dropdown: All | Pending | In Progress | Done'
+  - Filter persists in URL params
+  - Typecheck passes
+  - Verify in browser using playwright tests
+  priority: 4
+  passes: false
+  notes: ''
 ```
 
 ---
 
 ## Archiving Previous Runs
 
-**Before writing a new prd.json, check if there is an existing one from a different feature:**
+**Before writing a new prd.yaml, check if there is an existing one from a different feature:**
 
-1. Read the current `.ralph/prd.json` if it exists
+1. Read the current `.ralph/prd.yaml` if it exists
 2. Check if `branchName` differs from the new feature's branch name
 3. If different AND `progress.txt` has content beyond the header:
    - Create archive folder: `archive/YYYY-MM-DD-feature-name/`
-   - Copy current `.ralph/prd.json` and `.ralph/progress.txt` to archive
+   - Copy current `.ralph/prd.yaml` and `.ralph/progress.txt` to archive
    - Reset `progress.txt` with fresh header
 
-**The ralph CLI script handles this automatically** when you run it, but if you are manually updating prd.json between runs, archive first.
+**The ralph CLI script handles this automatically** when you run it, but if you are manually updating prd.yaml between runs, archive first.
 
 ---
 
 ## Checklist Before Saving
 
-Before writing prd.json, verify:
+Before writing prd.yaml, verify:
 
-- [ ] **Previous run archived** (if prd.json exists with different branchName, archive it first)
+- [ ] **Previous run archived** (if prd.yaml exists with different branchName, archive it first)
 - [ ] Each story is completable in one iteration (small enough)
 - [ ] Stories are ordered by dependency (schema to backend to UI)
 - [ ] Every story has "Typecheck passes" as criterion

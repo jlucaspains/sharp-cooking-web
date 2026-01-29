@@ -4,7 +4,7 @@ You are an autonomous coding agent working on a software project.
 
 ## Your Task
 
-1. Read the PRD at `.ralph/prd.json`.
+1. Read the PRD at `.ralph/prd.yaml`.
 If you don't find this file, abort and inform the user the file is required.
 2. Read the progress log at `.ralph/progress.txt` (check Codebase Patterns section first)
 3. Check you're on the correct branch from PRD `branchName`. If not, check it out or create from main.
