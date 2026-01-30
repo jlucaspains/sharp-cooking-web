@@ -135,10 +135,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white min-h-screen p-4">
+  <div class="bg-white text-slate-900 dark:bg-theme-gray dark:text-white flex flex-col h-[calc(100vh-6rem)]">
 
     <!-- Category filter -->
-    <div class="mb-4" v-if="hasRecipes">
+    <div class="p-4 pb-0" v-if="hasRecipes">
       <label for="category-filter" class="block text-sm font-medium mb-2">
         {{ t("pages.exportRecipeBook.filterByCategory") }}
       </label>
@@ -169,7 +169,7 @@ onMounted(async () => {
     </div>
 
     <!-- Selection controls -->
-    <div class="mb-4 flex flex-wrap gap-3 items-center" v-if="hasRecipes">
+    <div class="p-4 flex flex-wrap gap-3 items-center" v-if="hasRecipes">
       <button
         @click="selectAll"
         class="px-4 py-2 text-white rounded bg-theme-primary hover:bg-theme-secondary transition"
@@ -189,14 +189,14 @@ onMounted(async () => {
       </span>
     </div>
 
-    <!-- Recipe selection list -->
-    <RecipeSelectionList
-      v-if="hasRecipes"
-      :recipes="filteredRecipes"
-      :selectedRecipeIds="selectedRecipeIds"
-      @update:selectedRecipeIds="selectedRecipeIds = $event"
-      class="mb-6"
-    />
+    <!-- Recipe selection list - scrollable area -->
+    <div class="flex-1 overflow-y-auto px-4" v-if="hasRecipes">
+      <RecipeSelectionList
+        :recipes="filteredRecipes"
+        :selectedRecipeIds="selectedRecipeIds"
+        @update:selectedRecipeIds="selectedRecipeIds = $event"
+      />
+    </div>
 
     <!-- Progress dialog -->
     <div
@@ -230,7 +230,7 @@ onMounted(async () => {
     </div>
 
     <!-- Export button and helper text -->
-    <div v-if="hasRecipes" class="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
+    <div v-if="hasRecipes" class="px-4 pt-4 bg-white dark:bg-theme-gray border-t border-gray-200 dark:border-gray-700">
       <div class="max-w-4xl mx-auto">
         <!-- Warning for large exports -->
         <div
@@ -260,8 +260,5 @@ onMounted(async () => {
         </p>
       </div>
     </div>
-
-    <!-- Add padding at bottom to account for fixed button -->
-    <div class="h-24"></div>
   </div>
 </template>
