@@ -312,7 +312,11 @@
       "largeExportWarning": "Large exports may take longer",
       "emptyState": "No Recipes Found",
       "emptyStateDescription": "Add recipes to create a recipe book",
-      "exportError": "Failed to export recipe book. Please try again."
+      "exportError": "Failed to export recipe book. Please try again.",
+      "searchPlaceholder": "Search recipes...",
+      "searchAriaLabel": "Search recipes",
+      "selectRecipeAriaLabel": "Select {{title}}",
+      "noRecipesFound": "No recipes found matching \"{{searchText}}\""
     }
   },
   "initialRecipes": [
