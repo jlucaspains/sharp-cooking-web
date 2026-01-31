@@ -1,4 +1,5 @@
 import { Recipe } from './recipe';
+import i18next from 'i18next';
 import {
   initializePDF,
   generateCoverPage,
@@ -24,7 +25,7 @@ export interface RecipeBookExportProgress {
  */
 export function validateExportRequest(request: RecipeBookExportRequest): { valid: boolean; error?: string } {
   if (!request.recipes || request.recipes.length === 0) {
-    return { valid: false, error: 'At least 1 recipe must be selected for export' };
+    return { valid: false, error: i18next.t('pages.exportRecipeBook.selectAtLeastOne') };
   }
   return { valid: true };
 }

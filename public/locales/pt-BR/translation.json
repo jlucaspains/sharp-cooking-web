@@ -1,23 +1,2 @@
 {
-  "pages": {
-    "exportRecipeBook": {
-      "title": "Exportar Livro de Receitas",
-      "back": "Voltar",
-      "filterByCategory": "Filtrar por Categoria",
-      "allCategories": "Todas as Categorias",
-      "selectAll": "Selecionar Tudo",
-      "clearAll": "Limpar Tudo",
-      "selectedCount": "{{count}} receitas selecionadas",
-      "exportButton": "Exportar PDF",
-      "exporting": "Exportando...",
-      "selectAtLeastOne": "Selecione pelo menos 1 receita para exportar",
-      "successMessage": "Livro de receitas baixado com sucesso!",
-      "exportingProgress": "Exportando Livro de Receitas",
-      "processing": "{{name}} ({{current}} de {{total}})",
-      "largeExportWarning": "Exportações grandes podem demorar mais",
-      "emptyState": "Nenhuma Receita Encontrada",
-      "emptyStateDescription": "Adicione receitas para criar um livro de receitas",
-      "exportError": "Falha ao exportar livro de receitas. Por favor, tente novamente."
-    }
-  }
 }

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useTranslation } from "i18next-vue";
 import { RecipeViewModel } from "../pages/recipe/recipeViewModel";
+
+const { t } = useTranslation();
 
 const props = defineProps<{
   recipes: RecipeViewModel[];
@@ -53,9 +56,9 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
       <input
         v-model="searchText"
         type="text"
-        placeholder="Search recipes..."
+        :placeholder="t('pages.exportRecipeBook.searchPlaceholder')"
         class="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        aria-label="Search recipes"
+        :aria-label="t('pages.exportRecipeBook.searchAriaLabel')"
       />
     </div>
 
@@ -70,14 +73,14 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
         tabindex="0"
         role="checkbox"
         :aria-checked="isSelected(recipe.id!)"
-        :aria-label="`Select ${recipe.title}`"
+        :aria-label="t('pages.exportRecipeBook.selectRecipeAriaLabel', { title: recipe.title })"
       >
         <input
           type="checkbox"
           :checked="isSelected(recipe.id!)"
           class="mr-2 sm:mr-3 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-blue-600 focus:ring-2 focus:ring-blue-500 rounded cursor-pointer"
           tabindex="-1"
-          :aria-label="`Select ${recipe.title}`"
+          :aria-label="t('pages.exportRecipeBook.selectRecipeAriaLabel', { title: recipe.title })"
         />
         <div class="flex-1 min-w-0">
           <h3 class="text-sm sm:text-base font-medium dark:text-white text-gray-900 truncate">{{ recipe.title }}</h3>
@@ -85,7 +88,7 @@ function handleKeydown(event: KeyboardEvent, recipeId: number) {
       </div>
 
       <div v-if="filteredRecipes.length === 0" class="text-center py-8 text-sm sm:text-base text-gray-500 dark:text-gray-400">
-        No recipes found matching "{{ searchText }}"
+        {{ t('pages.exportRecipeBook.noRecipesFound', { searchText: searchText }) }}
       </div>
     </div>
   </div>

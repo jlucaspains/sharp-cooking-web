@@ -1,23 +1,2 @@
 {
-  "pages": {
-    "exportRecipeBook": {
-      "title": "Export Recipe Book",
-      "back": "Back",
-      "filterByCategory": "Filter by Category",
-      "allCategories": "All Categories",
-      "selectAll": "Select All",
-      "clearAll": "Clear All",
-      "selectedCount": "{{count}} recipes selected",
-      "exportButton": "Export PDF",
-      "exporting": "Exporting...",
-      "selectAtLeastOne": "Select at least 1 recipe to export",
-      "successMessage": "Recipe book downloaded successfully!",
-      "exportingProgress": "Exporting Recipe Book",
-      "processing": "{{name}} ({{current}} of {{total}})",
-      "largeExportWarning": "Large exports may take longer",
-      "emptyState": "No Recipes Found",
-      "emptyStateDescription": "Add recipes to create a recipe book",
-      "exportError": "Failed to export recipe book. Please try again."
-    }
-  }
 }

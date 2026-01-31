@@ -310,7 +310,11 @@
       "largeExportWarning": "Exportações grandes podem demorar mais",
       "emptyState": "Nenhuma Receita Encontrada",
       "emptyStateDescription": "Adicione receitas para criar um livro de receitas",
-      "exportError": "Falha ao exportar livro de receitas. Por favor, tente novamente."
+      "exportError": "Falha ao exportar livro de receitas. Por favor, tente novamente.",
+      "searchPlaceholder": "Buscar receitas...",
+      "searchAriaLabel": "Buscar receitas",
+      "selectRecipeAriaLabel": "Selecionar {{title}}",
+      "noRecipesFound": "Nenhuma receita encontrada com \"{{searchText}}\""
     }
   },
   "initialRecipes": [
