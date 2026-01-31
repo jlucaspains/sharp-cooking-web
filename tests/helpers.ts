@@ -1,5 +1,4 @@
-import { expect, type Page, type BrowserContext } from '@playwright/test';
-import { Recipe } from '../src/services/recipe';
+import { expect, type Page } from '@playwright/test';
 import { Category } from '../src/services/category';
 
 export async function createRecipe(page: Page, id: number, title: string, rating: number, ingredients = [
