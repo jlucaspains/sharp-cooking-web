@@ -1,15 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page, context }) => {
-  await page.goto('/#/');
+  await setup(page);
+  await page.goto('/');
   await page.waitForLoadState('networkidle');
 });
 
 test('should show progress dialog when exporting 10+ recipes', async ({ page, context }) => {
   // Create 12 test recipes using database helpers
   for (let i = 1; i <= 12; i++) {
-    await createRecipe(page, i+1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
+    await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
   }
 
   await page.goto('/#/export-recipe-book');
@@ -32,7 +33,7 @@ test('should show progress dialog when exporting 10+ recipes', async ({ page, co
 test('should NOT show progress dialog for exports with less than 10 recipes', async ({ page, context }) => {
   // Create only 5 test recipes
   for (let i = 1; i <= 5; i++) {
-    await createRecipe(page, i+1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
+    await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
   }
 
   await page.goto('/#/export-recipe-book');
@@ -60,10 +61,10 @@ test('should NOT show progress dialog for exports with less than 10 recipes', as
 
 test('should show warning for large exports (>50 recipes)', async ({ page, context }) => {
   test.setTimeout(90000);
-  
+
   // Create 60 test recipes
   for (let i = 1; i <= 51; i++) {
-    await createRecipe(page, i+1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
+    await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
   }
 
   await page.goto('/#/export-recipe-book');
@@ -81,7 +82,7 @@ test('should show warning for large exports (>50 recipes)', async ({ page, conte
 
 test('should NOT show warning for 5 recipes', async ({ page, context }) => {
   for (let i = 1; i <= 5; i++) {
-    await createRecipe(page, i+1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
+    await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
   }
 
   await page.goto('/#/export-recipe-book');
@@ -100,7 +101,7 @@ test('should NOT show warning for 5 recipes', async ({ page, context }) => {
 test('should hide progress dialog after export completes', async ({ page, context }) => {
   // Create 15 test recipes
   for (let i = 1; i <= 15; i++) {
-    await createRecipe(page, i+1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
+    await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
   }
 
   await page.goto('/#/export-recipe-book');

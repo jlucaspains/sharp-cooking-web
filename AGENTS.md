@@ -53,18 +53,17 @@ This file contains important patterns and conventions for developers and AI agen
 
 ### Testing
 
-- Playwright config has `webServer` option that can auto-start dev server for tests
-- Tests use `getByTestId()`, `getByRole()`, and other accessibility-friendly selectors
+- Playwright config has `webServer` option that can auto-start dev server for tests in local environment. CI runs on a deployed website.
+- Tests use `getByTestId()` first then `getByRole()`, and other accessibility-friendly selectors. It is ok to modify code to add the test id.
 - Always include tests for multiple browser engines: chromium, webkit, Mobile Chrome, Mobile Safari
 - Test helper file: `tests/helpers.ts` provides common setup functions
-- Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
-- **Important**: Use `await import()` in page.evaluate() for ES modules, NOT `require()`
+- Always include `await setup(page);` on `beforeEach` hook to prevent the app from trying to install during tests.
+- **NEVER** Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
+- **NEVER** Use `await import()` or `require()` or `page.evaluate()` for ES modules.
 - **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
 - Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
 - Some chromium tests can be flaky - run with retries if timing issues occur
-- **Large datasets**: Use database helpers (`createRecipeData()`, `saveRecipe()`) for batch inserts (e.g., 50+ recipes)
-  - More efficient than UI-based recipe creation
-  - Use longer timeouts for large batch operations
+- **Large datasets**: Use database helpers (`createRecipe()``) to add each recipe. You may need to expand the timeout for the test after 30 recipes.
 - **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
 
 ### Services Layer

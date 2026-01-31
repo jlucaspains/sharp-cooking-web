@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createCategory, createRecipe } from './helpers';
+import { createCategory, createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page, context }) => {
+  await setup(page);
   await page.goto('/');
 });
 

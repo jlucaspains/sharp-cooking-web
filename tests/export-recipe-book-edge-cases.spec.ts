@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page, context }) => {
-  await page.goto('/#/');
+  await setup(page);
+  await page.goto('/');
   await page.waitForLoadState('networkidle');
 });
 

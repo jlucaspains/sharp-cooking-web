@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
-  // Navigate to export page
+  await setup(page);
   await page.goto('/');
   await page.waitForTimeout(500); // Allow recipes to load
   await page.goto('/#/export-recipe-book');

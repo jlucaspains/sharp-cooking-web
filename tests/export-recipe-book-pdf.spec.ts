@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
+  await setup(page);
   await page.goto('/');
   await page.evaluate(() => {
     return new Promise<void>((resolve) => {
