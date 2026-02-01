@@ -139,6 +139,10 @@ onMounted(async () => {
           text: t("pages.index.options"),
           action: goToOptions,
         },
+        {
+          text: t("pages.index.exportRecipeBook"),
+          action: goToExportRecipeBook,
+        },
       ],
     },
   ];
@@ -215,6 +219,10 @@ function goToImportFromScan() {
 
 function goToOptions() {
   router.push("/options");
+}
+
+function goToExportRecipeBook() {
+  router.push("/export-recipe-book");
 }
 
 async function saveSortOption(type: string) {

@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+import { Category } from '../src/services/category';
 
 export async function createRecipe(page: Page, id: number, title: string, rating: number, ingredients = [
     "1000g flour",
@@ -16,7 +17,6 @@ export async function createRecipe(page: Page, id: number, title: string, rating
 ], startFromHome: boolean = true,
     category: string | null = null) {
     await createRecipeWithoutSaving(page, title, rating, ingredients, steps, startFromHome, category);
-
     await page.getByTestId("topbar-single-button").click();
     await expect(page).toHaveURL(new RegExp(`.*/recipe/${id}/edit`));
 }
@@ -57,6 +57,7 @@ export async function createRecipeWithoutSaving(page: Page, title: string, ratin
 
 export async function createCategory(page: Page, id: number, title: string) {
     await page.goto('/#/categories');
+    await page.waitForTimeout(500);
     await page.getByTestId('add-menu-button').click();
     await page.getByTestId('new-category-name').fill(title);
     await page.getByText('OK').click();
@@ -86,4 +87,11 @@ export async function enableCompactMobileTimeline(page: Page) {
 export async function enableAIChat(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-ai-chat-toggle').click();
+}
+
+export function createCategoryData(name: string): Category {
+    const category = new Category();
+    category.id = Math.floor(Math.random() * 1000000) + 1; // Random ID
+    category.name = name;
+    return category;
 }

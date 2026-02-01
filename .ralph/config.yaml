@@ -1,0 +1,10 @@
+tool: copilot
+max_iterations: 10
+auto_archive: true
+prompt_file: prompt.md
+tool_args:
+  claude:
+    - "--dangerously-skip-permissions"
+    - "--print"
+  copilot:
+    - "--allow-all-tools"

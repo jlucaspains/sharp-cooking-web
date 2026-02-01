@@ -12,6 +12,9 @@ dev-dist
 node_modules
 *.local
 
+# Lock files - project uses yarn
+package-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

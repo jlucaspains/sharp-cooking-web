@@ -28,6 +28,10 @@ onMounted(async () => {
       svg: `<circle cx="12" cy="12" r="1" />  <circle cx="12" cy="5" r="1" />  <circle cx="12" cy="19" r="1" />`,
       children: [
         {
+          text: t("pages.index.exportRecipeBook"),
+          action: goToExportRecipeBook,
+        },
+        {
           text: t("pages.index.options"),
           action: goToOptions,
         },
@@ -46,6 +50,10 @@ function goToOptions() {
 
 function goToChat() {
   router.push(`/recipe/0/chat`);
+}
+
+function goToExportRecipeBook() {
+  router.push("/export-recipe-book");
 }
 </script>
 
