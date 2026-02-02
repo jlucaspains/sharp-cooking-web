@@ -34,3 +34,6 @@ notebooks/**/*.csv
 notebooks/**/*.json
 notebooks/**/*.zip
 .venv
+
+.ralph/*
+!/.ralph/config.yaml
