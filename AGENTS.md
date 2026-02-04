@@ -68,11 +68,19 @@ This file contains important patterns and conventions for developers and AI agen
 - **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
 - **HeadlessUI Modals**: When testing modals with transitions, check for dialog content visibility (title/text) instead of dialog element visibility
 - **Ingredient fields**: Use `getByPlaceholder('1 cup flour')` selector - ingredient fields don't have labels, only placeholders
+- **Mocking APIs**: Use `page.route('https://api.example.com/**', handler)` to intercept API calls in tests
+  - OpenAI API responses must follow chat completion format with choices array
+  - Mock responses should use realistic data for testing validation logic
 
 ### Services Layer
 
 - **State Management**: `src/services/store.ts` provides reactive state
 - **Recipe Management**: `src/services/recipe.ts` defines Recipe, RecipeImage, RecipeNutrition classes
+- **AI Service**: `src/services/aiService.ts` provides generateNutritionFacts() for AI-powered nutrition calculation
+  - Uses ChatOpenAI directly for simplicity
+  - Returns RecipeNutrition object with all 12 nutrition fields
+  - Throws AIServiceError on failures for typed error handling
+- **Data Service**: `getSetting(name, defaultValue)` requires both parameters - use empty string `""` for optional settings
 - **Export Service**: `src/services/recipeBookExportService.ts` orchestrates PDF generation
   - Accepts RecipeBookExportRequest with selected recipes
   - Generates cover page, TOC, and recipe pages
