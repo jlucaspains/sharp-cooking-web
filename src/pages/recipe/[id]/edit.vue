@@ -94,6 +94,7 @@ const stepsText = ref("");
 const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
 const isAIConfigured = ref(false);
+const isNutritionOverwriteWarningOpen = ref(false);
 
 watch(
   item,
@@ -254,6 +255,33 @@ async function save() {
 }
 
 async function generateNutritionWithAI() {
+  // Check if any nutrition field has a non-zero value
+  const hasExistingData = 
+    item.value.nutrition.servingSize > 0 ||
+    item.value.nutrition.calories > 0 ||
+    item.value.nutrition.totalFat > 0 ||
+    item.value.nutrition.saturatedFat > 0 ||
+    item.value.nutrition.transFat > 0 ||
+    item.value.nutrition.unsaturatedFat > 0 ||
+    item.value.nutrition.cholesterol > 0 ||
+    item.value.nutrition.sodium > 0 ||
+    item.value.nutrition.carbohydrates > 0 ||
+    item.value.nutrition.fiber > 0 ||
+    item.value.nutrition.sugar > 0 ||
+    item.value.nutrition.protein > 0;
+  
+  if (hasExistingData) {
+    // Show warning dialog
+    isNutritionOverwriteWarningOpen.value = true;
+  } else {
+    // Proceed immediately if no existing data
+    await proceedWithNutritionGeneration();
+  }
+}
+
+async function proceedWithNutritionGeneration() {
+  // Close the warning dialog if it was open
+  isNutritionOverwriteWarningOpen.value = false;
   // Implementation will be completed in US-004
   console.log("Generate nutrition with AI - placeholder for US-004");
 }
@@ -917,6 +945,20 @@ function changeLanguage() {
         <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
         <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`) }}</label>
       </div>
+    </Modal>
+    <Modal :isOpen="isNutritionOverwriteWarningOpen" @closed="isNutritionOverwriteWarningOpen = false"
+      data-testid="nutrition-overwrite-warning-dialog"
+      :title="t('pages.recipe.id.edit.nutritionOverwriteWarningTitle')" :buttons="[
+        {
+          title: t('general.cancel'),
+          action: () => isNutritionOverwriteWarningOpen = false,
+        },
+        {
+          title: t('general.continue'),
+          action: proceedWithNutritionGeneration,
+        },
+      ]">
+      <span class="dark:text-white">{{ t('pages.recipe.id.edit.nutritionOverwriteWarning') }}</span>
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

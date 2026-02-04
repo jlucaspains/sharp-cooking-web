@@ -8,6 +8,7 @@
     "done": "Done",
     "error": "Error",
     "cancel": "Cancel",
+    "continue": "Continue",
     "save": "Save",
     "seconds": "seconds ",
     "minutes": "minutes ",
@@ -139,7 +140,9 @@
           "category": "Category",
           "selectCategory": "Select category...",
           "importFromShareQRCode": "Scan QR Code",
-          "generateNutritionAI": "Generate with AI"
+          "generateNutritionAI": "Generate with AI",
+          "nutritionOverwriteWarning": "This will replace existing nutrition data. Continue?",
+          "nutritionOverwriteWarningTitle": "Replace Nutrition Data?"
         },
         "gallery": {
           "recipeImage": "Recipe Image"
