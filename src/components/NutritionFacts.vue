@@ -491,8 +491,17 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
 </script>
 
 <template>
-  <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" class="nf"
-    :class="{ us: true }" :style="{ width: settings.width }">
+  <div>
+    <!-- Serving Basis Label -->
+    <div v-if="servingPerContainer > 0" class="serving-basis-label" data-testid="serving-basis">
+      {{ t('components.nutritionFacts.perServing', { servings: servingPerContainer }) }}
+    </div>
+    <div v-else class="serving-basis-label" data-testid="serving-basis">
+      {{ t('components.nutritionFacts.per100g') }}
+    </div>
+    
+    <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" class="nf"
+      :class="{ us: true }" :style="{ width: settings.width }">
     <div class="nf-title">{{ t('pages.recipe.id.nutrition.title') }}
     </div>
     <div class="nf-line">
@@ -670,11 +679,21 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
         <div v-html="ingredientStatement"></div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Archivo+Black');
+
+.serving-basis-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  text-align: center;
+}
 
 .nf {
   border: 1px solid #000;

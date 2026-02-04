@@ -354,6 +354,12 @@
       "notes": "Whole wheat flour may be replaced with rye flour for added taste"
     }
   ],
+  "components": {
+    "nutritionFacts": {
+      "perServing": "Per Serving ({{servings}} servings)",
+      "per100g": "Per 100g"
+    }
+  },
   "installPrompt": {
     "installWithPromptMessage": "Sharp Cooking is designed to work best when installed as a standalone app. Would you like to install?",
     "installManualMessage": "Sharp Cooking is designed to work best when installed as a standalone app. In iOS, please use share and select Add to Home Screen.",
