@@ -66,6 +66,8 @@ This file contains important patterns and conventions for developers and AI agen
 - Some chromium tests can be flaky - run with retries if timing issues occur
 - **Large datasets**: Use database helpers (`createRecipe()``) to add each recipe. You may need to expand the timeout for the test after 30 recipes.
 - **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
+- **HeadlessUI Modals**: When testing modals with transitions, check for dialog content visibility (title/text) instead of dialog element visibility
+- **Ingredient fields**: Use `getByPlaceholder('1 cup flour')` selector - ingredient fields don't have labels, only placeholders
 
 ### Services Layer
 
