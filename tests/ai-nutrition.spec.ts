@@ -170,3 +170,113 @@ test.describe('US-002: Warning dialog before overwriting nutrition data', () => 
     // For now, we just verify the dialog closed (placeholder function was called)
   });
 });
+
+test.describe('US-004: Integrate AI service into recipe edit form', () => {
+  test.beforeEach(async ({ page }) => {
+    // Mock the OpenAI API response for all tests in this group
+    await page.route('https://api.openai.com/**', async route => {
+      const nutrition = {
+        servingSize: 100,
+        calories: 250.5,
+        totalFat: 12.3,
+        saturatedFat: 3.2,
+        transFat: 0.1,
+        unsaturatedFat: 8.9,
+        cholesterol: 15.0,
+        sodium: 380.0,
+        carbohydrates: 28.7,
+        fiber: 2.5,
+        sugar: 4.3,
+        protein: 8.6
+      };
+      
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          id: 'chatcmpl-test',
+          object: 'chat.completion',
+          created: Date.now(),
+          model: 'gpt-4',
+          choices: [{
+            index: 0,
+            message: {
+              role: 'assistant',
+              content: JSON.stringify(nutrition)
+            },
+            finish_reason: 'stop'
+          }]
+        })
+      });
+    });
+  });
+
+  test('Success notification appears after generation with verification reminder', async ({ page }) => {
+    // Navigate to recipe with ingredients
+    await page.goto('/');
+    await page.getByText('Sourdough Bread').first().click();
+    await page.getByTestId('edit-button').click();
+    await page.waitForLoadState('networkidle');
+
+    // Click generate button
+    const button = page.getByTestId('generate-nutrition-ai-button');
+    await button.click();
+
+    // Wait for success notification
+    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
+  });
+
+  test('Generated values populate all nutrition fields correctly', async ({ page }) => {
+    // Navigate to recipe with ingredients
+    await page.goto('/');
+    await page.getByText('Sourdough Bread').first().click();
+    await page.getByTestId('edit-button').click();
+    await page.waitForLoadState('networkidle');
+
+    // Clear any existing nutrition data first
+    await page.locator('input#servingSize').fill('0');
+    await page.locator('input#calories').fill('0');
+
+    // Click generate button
+    const button = page.getByTestId('generate-nutrition-ai-button');
+    await button.click();
+
+    // Wait for the generation to complete (check for success notification or field update)
+    await page.waitForTimeout(2000);
+
+    // Verify all fields are populated with the mocked values (rounded to 1 decimal)
+    await expect(page.locator('input#servingSize')).toHaveValue('100');
+    await expect(page.locator('input#calories')).toHaveValue('250.5');
+    await expect(page.locator('input#totalFat')).toHaveValue('12.3');
+    await expect(page.locator('input#saturatedFat')).toHaveValue('3.2');
+    await expect(page.locator('input#transFat')).toHaveValue('0.1');
+    await expect(page.locator('input#cholesterol')).toHaveValue('15');
+    await expect(page.locator('input#sodium')).toHaveValue('380');
+    await expect(page.locator('input#carbohydrates')).toHaveValue('28.7');
+    await expect(page.locator('input#fiber')).toHaveValue('2.5');
+    await expect(page.locator('input#sugar')).toHaveValue('4.3');
+    await expect(page.locator('input#protein')).toHaveValue('8.6');
+  });
+
+  test('Generated values can be edited manually after generation', async ({ page }) => {
+    // Navigate to recipe with ingredients
+    await page.goto('/');
+    await page.getByText('Sourdough Bread').first().click();
+    await page.getByTestId('edit-button').click();
+    await page.waitForLoadState('networkidle');
+
+    // Click generate button
+    const button = page.getByTestId('generate-nutrition-ai-button');
+    await button.click();
+
+    // Wait for generation to complete
+    await page.waitForTimeout(2000);
+
+    // Verify we can edit the generated values
+    await page.locator('input#calories').fill('300');
+    await expect(page.locator('input#calories')).toHaveValue('300');
+
+    await page.locator('input#protein').fill('12.5');
+    await expect(page.locator('input#protein')).toHaveValue('12.5');
+  });
+});

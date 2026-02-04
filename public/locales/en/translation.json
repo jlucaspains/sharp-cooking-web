@@ -142,7 +142,9 @@
           "importFromShareQRCode": "Scan QR Code",
           "generateNutritionAI": "Generate with AI",
           "nutritionOverwriteWarning": "This will replace existing nutrition data. Continue?",
-          "nutritionOverwriteWarningTitle": "Replace Nutrition Data?"
+          "nutritionOverwriteWarningTitle": "Replace Nutrition Data?",
+          "nutritionGeneratedSuccess": "Nutrition facts generated successfully. Please verify values for accuracy.",
+          "nutritionGeneratedError": "Unable to generate nutrition facts. Please try again."
         },
         "gallery": {
           "recipeImage": "Recipe Image"

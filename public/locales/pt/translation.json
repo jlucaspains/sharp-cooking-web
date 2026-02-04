@@ -141,7 +141,9 @@
           "importFromShareQRCode": "Código QR",
           "generateNutritionAI": "Gerar com IA",
           "nutritionOverwriteWarning": "Isso substituirá os dados nutricionais existentes. Continuar?",
-          "nutritionOverwriteWarningTitle": "Substituir Dados Nutricionais?"
+          "nutritionOverwriteWarningTitle": "Substituir Dados Nutricionais?",
+          "nutritionGeneratedSuccess": "Dados nutricionais gerados com sucesso. Verifique os valores para precisão.",
+          "nutritionGeneratedError": "Não foi possível gerar dados nutricionais. Tente novamente."
         },
         "gallery": {
           "recipeImage": "Imagem de Receita"

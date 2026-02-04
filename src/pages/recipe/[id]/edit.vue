@@ -29,6 +29,7 @@ import i18next from "i18next";
 import { pickImage } from "../../../helpers/imageHelpers";
 import { Category } from "../../../services/category";
 import Scanner from "../../../components/Scanner.vue";
+import { generateNutritionFacts, AIServiceError } from "../../../services/aiService";
 
 const state = useState()!;
 const route = useRoute();
@@ -95,6 +96,7 @@ const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
 const isAIConfigured = ref(false);
 const isNutritionOverwriteWarningOpen = ref(false);
+const isGeneratingNutrition = ref(false);
 
 watch(
   item,
@@ -282,8 +284,64 @@ async function generateNutritionWithAI() {
 async function proceedWithNutritionGeneration() {
   // Close the warning dialog if it was open
   isNutritionOverwriteWarningOpen.value = false;
-  // Implementation will be completed in US-004
-  console.log("Generate nutrition with AI - placeholder for US-004");
+  
+  // Set loading state
+  isGeneratingNutrition.value = true;
+  
+  try {
+    // Get AI settings
+    const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+    const model = await getSetting("OpenAIModelName", "");
+    
+    if (!apiKey || !model) {
+      throw new AIServiceError("AI configuration is missing. Please configure AI settings.");
+    }
+    
+    // Call AI service to generate nutrition facts
+    const nutrition = await generateNutritionFacts(
+      item.value.ingredients,
+      item.value.nutrition.servingSize,
+      { apiKey, model }
+    );
+    
+    // Populate all nutrition fields with rounded values
+    item.value.nutrition.servingSize = Math.round(nutrition.servingSize * 10) / 10;
+    item.value.nutrition.calories = Math.round(nutrition.calories * 10) / 10;
+    item.value.nutrition.totalFat = Math.round(nutrition.totalFat * 10) / 10;
+    item.value.nutrition.saturatedFat = Math.round(nutrition.saturatedFat * 10) / 10;
+    item.value.nutrition.transFat = Math.round(nutrition.transFat * 10) / 10;
+    item.value.nutrition.unsaturatedFat = Math.round(nutrition.unsaturatedFat * 10) / 10;
+    item.value.nutrition.cholesterol = Math.round(nutrition.cholesterol * 10) / 10;
+    item.value.nutrition.sodium = Math.round(nutrition.sodium * 10) / 10;
+    item.value.nutrition.carbohydrates = Math.round(nutrition.carbohydrates * 10) / 10;
+    item.value.nutrition.fiber = Math.round(nutrition.fiber * 10) / 10;
+    item.value.nutrition.sugar = Math.round(nutrition.sugar * 10) / 10;
+    item.value.nutrition.protein = Math.round(nutrition.protein * 10) / 10;
+    
+    // Show success notification
+    notify(
+      {
+        group: "success",
+        title: t("general.success"),
+        text: t("pages.recipe.id.edit.nutritionGeneratedSuccess"),
+      },
+      4000
+    );
+  } catch (error) {
+    console.error("Failed to generate nutrition:", error);
+    
+    // Show error notification
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.edit.nutritionGeneratedError"),
+      },
+      4000
+    );
+  } finally {
+    isGeneratingNutrition.value = false;
+  }
 }
 
 async function addImage() {
@@ -776,15 +834,19 @@ function changeLanguage() {
           v-if="isAIConfigured"
           data-testid="generate-nutrition-ai-button"
           type="button"
-          :disabled="!item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim())"
+          :disabled="!item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingNutrition"
           @click="generateNutritionWithAI"
           class="flex items-center gap-2 px-4 py-2 mb-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="item.ingredients && item.ingredients.length > 0 && item.ingredients.some((ing: string) => ing.trim()) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400'"
+          :class="item.ingredients && item.ingredients.length > 0 && item.ingredients.some((ing: string) => ing.trim()) && !isGeneratingNutrition ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400'"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <svg v-if="!isGeneratingNutrition" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
           </svg>
-          {{ t("pages.recipe.id.edit.generateNutritionAI") }}
+          <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ isGeneratingNutrition ? t("general.loading") : t("pages.recipe.id.edit.generateNutritionAI") }}
         </button>
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
