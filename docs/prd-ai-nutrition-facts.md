@@ -1,8 +1,8 @@
 # PRD: AI-Powered Nutritional Facts Generation
 
-**Feature Name:** AI-Powered Nutritional Facts Generation
+**Feature Name:** AI-Powered Nutritional Facts Generation  
 **GitHub Issue:** [#479](https://github.com/jlucaspains/sharp-cooking-web/issues/479)  
-**Document Version:** 1.0
+**Document Version:** 1.0  
 **Date:** 2026-02-01  
 **Status:** Draft
 
