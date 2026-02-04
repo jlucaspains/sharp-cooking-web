@@ -138,7 +138,8 @@
           "changeLanguageTitle": "Change recipe language",
           "category": "Category",
           "selectCategory": "Select category...",
-          "importFromShareQRCode": "Scan QR Code"
+          "importFromShareQRCode": "Scan QR Code",
+          "generateNutritionAI": "Generate with AI"
         },
         "gallery": {
           "recipeImage": "Recipe Image"

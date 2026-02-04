@@ -137,7 +137,8 @@
           "changeLanguageTitle": "Alterar idioma da receita",
           "category": "Categoria",
           "selectCategory": "Selecione categoria...",
-          "importFromShareQRCode": "Código QR"
+          "importFromShareQRCode": "Código QR",
+          "generateNutritionAI": "Gerar com IA"
         },
         "gallery": {
           "recipeImage": "Imagem de Receita"

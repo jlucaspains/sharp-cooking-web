@@ -93,7 +93,7 @@ const ingredientsText = ref("");
 const stepsText = ref("");
 const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
-
+const isAIConfigured = ref(false);
 
 watch(
   item,
@@ -122,6 +122,11 @@ onMounted(async () => {
   ];
 
   editInSingleTextArea.value = (await getSetting("EditInSingleTextArea", "false")) === "true";
+
+  // Check AI configuration
+  const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+  const modelName = await getSetting("OpenAIModelName", "");
+  isAIConfigured.value = !!apiKey && !!modelName;
 
   if (query.value.importFromUrl == "1") {
     isImportFromUrlModalOpen.value = true;
@@ -246,6 +251,11 @@ async function save() {
     },
     2000
   );
+}
+
+async function generateNutritionWithAI() {
+  // Implementation will be completed in US-004
+  console.log("Generate nutrition with AI - placeholder for US-004");
 }
 
 async function addImage() {
@@ -734,6 +744,20 @@ function changeLanguage() {
         " />
       <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
+        <button
+          v-if="isAIConfigured"
+          data-testid="generate-nutrition-ai-button"
+          type="button"
+          :disabled="!item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim())"
+          @click="generateNutritionWithAI"
+          class="flex items-center gap-2 px-4 py-2 mb-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          :class="item.ingredients && item.ingredients.length > 0 && item.ingredients.some((ing: string) => ing.trim()) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+          </svg>
+          {{ t("pages.recipe.id.edit.generateNutritionAI") }}
+        </button>
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>

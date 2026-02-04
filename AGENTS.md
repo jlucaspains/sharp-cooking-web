@@ -36,7 +36,7 @@ This file contains important patterns and conventions for developers and AI agen
 
 - Translation keys follow pattern: `pages.{pageName}.{keyName}`
 - Example: `t("pages.index.exportRecipeBook")`
-- Translation files must be updated in all locales: `en`, `pt`, `en-US`, `pt-BR`
+- Translation files must be updated in locales: `en`, `pt`
 - Files located in: `public/locales/{locale}/translation.json`
 - Use `{{variable}}` syntax for variable interpolation (e.g., `{{count}}`)
 
@@ -60,6 +60,7 @@ This file contains important patterns and conventions for developers and AI agen
 - Always include `await setup(page);` on `beforeEach` hook to prevent the app from trying to install during tests.
 - **NEVER** Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
 - **NEVER** Use `await import()` or `require()` or `page.evaluate()` for ES modules.
+- **NEVER** directly access the IndexedDB when testing. **ALWAYS** use existing page functionality to setup or verify data.
 - **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
 - Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
 - Some chromium tests can be flaky - run with retries if timing issues occur

@@ -89,6 +89,23 @@ export async function enableAIChat(page: Page) {
     await page.getByTestId('enable-ai-chat-toggle').click();
 }
 
+export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {
+    await page.goto('/#/ai-options');
+    await page.waitForLoadState('networkidle');
+    
+    // Fill in AI settings
+    const authInput = page.locator('input[placeholder="token"]');
+    const modelInput = page.locator('input[placeholder="Model Name"]');
+    
+    await authInput.fill(apiKey);
+    await authInput.blur(); // Trigger change event
+    
+    await modelInput.fill(modelName);
+    await modelInput.blur(); // Trigger change event
+    
+    await page.waitForTimeout(500); // Wait for settings to save
+}
+
 export function createCategoryData(name: string): Category {
     const category = new Category();
     category.id = Math.floor(Math.random() * 1000000) + 1; // Random ID
