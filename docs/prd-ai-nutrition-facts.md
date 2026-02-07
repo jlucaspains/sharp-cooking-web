@@ -175,7 +175,7 @@ Enable users to automatically generate nutritional facts for their recipes using
 
 **FR-14:** Serving basis label must use recipe's servingSize and serving count to determine correct display
 
-**FR-15:** Add translation keys for all new UI text in all supported locales (en, pt, en-US, pt-BR)
+**FR-15:** Add translation keys for all new UI text in all supported locales (en, pt)
 
 **FR-16:** Generate comprehensive Playwright tests covering both edit form and chat interface flows
 
