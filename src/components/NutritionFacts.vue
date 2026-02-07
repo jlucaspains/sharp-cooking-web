@@ -681,15 +681,6 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Archivo+Black');
 
-.serving-basis-label {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #333;
-  text-align: center;
-}
-
 .nf {
   border: 1px solid #000;
   padding: 6px;

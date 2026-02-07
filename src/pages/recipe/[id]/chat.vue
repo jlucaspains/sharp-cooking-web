@@ -164,11 +164,11 @@ onMounted(async () => {
         const recipe = await getRecipe(id.value);
         
         if (!recipe) {
-          return "Error: No recipe found. This tool only works when viewing a specific recipe.";
+          return t('pages.chat.noRecipeError');
         }
 
         if (!recipe.ingredients || recipe.ingredients.length === 0 || recipe.ingredients.every((ing: string) => !ing.trim())) {
-          return "Error: Recipe has no ingredients. Please add ingredients before generating nutrition facts.";
+          return t('pages.chat.noIngredientsError');
         }
 
         // Get AI settings
@@ -176,7 +176,7 @@ onMounted(async () => {
         const model = await getSetting("OpenAIModelName", "");
 
         if (!apiKey || !model) {
-          return "Error: AI chat is not configured. Please configure your OpenAI API key and model in settings.";
+          return t('pages.chat.aiNotConfiguredError');
         }
 
         // Call AI service to generate nutrition facts
@@ -190,12 +190,12 @@ onMounted(async () => {
         recipe.nutrition = nutritionFacts;
         await saveRecipe(recipe);
 
-        return "I've calculated the nutrition facts for this recipe and saved them. You can view them in the recipe details or edit page.";
+        return t('pages.chat.nutritionCalculatedSuccess');
       } catch (error) {
         if (error instanceof AIServiceError) {
           return `Error: ${error.message}`;
         }
-        return "I couldn't generate nutrition facts. Please try again.";
+        return t('pages.chat.nutritionCalculationFailed');
       }
     },
     {

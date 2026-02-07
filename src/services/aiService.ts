@@ -1,5 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { RecipeNutrition } from "./recipe";
+import i18next from 'i18next';
 
 /**
  * Settings required for AI service operations
@@ -117,7 +118,7 @@ Do not include any explanations or markdown formatting. Return only the JSON obj
 
     if (missingFields.length > 0) {
       throw new AIServiceError(
-        `AI response is missing required nutrition fields: ${missingFields.join(', ')}`
+        i18next.t('pages.recipe.edit.aiMissingFields', { fields: missingFields.join(', ') })
       );
     }
 
@@ -142,7 +143,7 @@ Do not include any explanations or markdown formatting. Return only the JSON obj
     }
     
     throw new AIServiceError(
-      "Failed to generate nutrition facts. Please check your AI configuration and try again.",
+      i18next.t('pages.recipe.edit.aiGenerationFailed'),
       error
     );
   }
