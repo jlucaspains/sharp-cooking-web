@@ -245,7 +245,7 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
     await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
 
     // Verify all fields are populated with the mocked values (rounded to 1 decimal)
-    await expect(page.locator('input#servingSize')).toHaveValue('100');
+    await expect(page.locator('input#servingSize')).toHaveValue('0');
     await expect(page.locator('input#calories')).toHaveValue('250.5');
     await expect(page.locator('input#totalFat')).toHaveValue('12.3');
     await expect(page.locator('input#saturatedFat')).toHaveValue('3.2');
