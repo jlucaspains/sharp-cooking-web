@@ -29,6 +29,7 @@ import i18next from "i18next";
 import { pickImage } from "../../../helpers/imageHelpers";
 import { Category } from "../../../services/category";
 import Scanner from "../../../components/Scanner.vue";
+import { generateNutritionFacts, AIServiceError } from "../../../services/aiService";
 
 const state = useState()!;
 const route = useRoute();
@@ -93,7 +94,9 @@ const ingredientsText = ref("");
 const stepsText = ref("");
 const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
-
+const isAIConfigured = ref(false);
+const isNutritionOverwriteWarningOpen = ref(false);
+const isGeneratingNutrition = ref(false);
 
 watch(
   item,
@@ -122,6 +125,11 @@ onMounted(async () => {
   ];
 
   editInSingleTextArea.value = (await getSetting("EditInSingleTextArea", "false")) === "true";
+
+  // Check AI configuration
+  const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+  const modelName = await getSetting("OpenAIModelName", "");
+  isAIConfigured.value = !!apiKey && !!modelName;
 
   if (query.value.importFromUrl == "1") {
     isImportFromUrlModalOpen.value = true;
@@ -246,6 +254,94 @@ async function save() {
     },
     2000
   );
+}
+
+async function generateNutritionWithAI() {
+  // Check if any nutrition field has a non-zero value
+  const hasExistingData = 
+    item.value.nutrition.servingSize > 0 ||
+    item.value.nutrition.calories > 0 ||
+    item.value.nutrition.totalFat > 0 ||
+    item.value.nutrition.saturatedFat > 0 ||
+    item.value.nutrition.transFat > 0 ||
+    item.value.nutrition.unsaturatedFat > 0 ||
+    item.value.nutrition.cholesterol > 0 ||
+    item.value.nutrition.sodium > 0 ||
+    item.value.nutrition.carbohydrates > 0 ||
+    item.value.nutrition.fiber > 0 ||
+    item.value.nutrition.sugar > 0 ||
+    item.value.nutrition.protein > 0;
+  
+  if (hasExistingData) {
+    // Show warning dialog
+    isNutritionOverwriteWarningOpen.value = true;
+  } else {
+    // Proceed immediately if no existing data
+    await proceedWithNutritionGeneration();
+  }
+}
+
+async function proceedWithNutritionGeneration() {
+  // Close the warning dialog if it was open
+  isNutritionOverwriteWarningOpen.value = false;
+  
+  // Set loading state
+  isGeneratingNutrition.value = true;
+  
+  try {
+    // Get AI settings
+    const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+    const model = await getSetting("OpenAIModelName", "");
+    
+    if (!apiKey || !model) {
+      throw new AIServiceError("AI configuration is missing. Please configure AI settings.");
+    }
+    
+    // Call AI service to generate nutrition facts
+    const nutrition = await generateNutritionFacts(
+      item.value.ingredients,
+      item.value.nutrition.servingSize,
+      { apiKey, model }
+    );
+    
+    // Populate all nutrition fields with rounded values
+    item.value.nutrition.servingSize = Math.round(nutrition.servingSize * 10) / 10;
+    item.value.nutrition.calories = Math.round(nutrition.calories * 10) / 10;
+    item.value.nutrition.totalFat = Math.round(nutrition.totalFat * 10) / 10;
+    item.value.nutrition.saturatedFat = Math.round(nutrition.saturatedFat * 10) / 10;
+    item.value.nutrition.transFat = Math.round(nutrition.transFat * 10) / 10;
+    item.value.nutrition.unsaturatedFat = Math.round(nutrition.unsaturatedFat * 10) / 10;
+    item.value.nutrition.cholesterol = Math.round(nutrition.cholesterol * 10) / 10;
+    item.value.nutrition.sodium = Math.round(nutrition.sodium * 10) / 10;
+    item.value.nutrition.carbohydrates = Math.round(nutrition.carbohydrates * 10) / 10;
+    item.value.nutrition.fiber = Math.round(nutrition.fiber * 10) / 10;
+    item.value.nutrition.sugar = Math.round(nutrition.sugar * 10) / 10;
+    item.value.nutrition.protein = Math.round(nutrition.protein * 10) / 10;
+    
+    // Show success notification
+    notify(
+      {
+        group: "success",
+        title: t("general.success"),
+        text: t("pages.recipe.id.edit.nutritionGeneratedSuccess"),
+      },
+      4000
+    );
+  } catch (error) {
+    console.error("Failed to generate nutrition:", error);
+    
+    // Show error notification
+    notify(
+      {
+        group: "error",
+        title: t("general.error"),
+        text: t("pages.recipe.id.edit.nutritionGeneratedError"),
+      },
+      4000
+    );
+  } finally {
+    isGeneratingNutrition.value = false;
+  }
 }
 
 async function addImage() {
@@ -734,6 +830,24 @@ function changeLanguage() {
         " />
       <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
+        <button
+          v-if="isAIConfigured"
+          data-testid="generate-nutrition-ai-button"
+          type="button"
+          :disabled="!item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingNutrition"
+          @click="generateNutritionWithAI"
+          class="flex items-center gap-2 px-4 py-2 mb-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          :class="item.ingredients && item.ingredients.length > 0 && item.ingredients.some((ing: string) => ing.trim()) && !isGeneratingNutrition ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400'"
+        >
+          <svg v-if="!isGeneratingNutrition" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+          </svg>
+          <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ isGeneratingNutrition ? t("general.loading") : t("pages.recipe.id.edit.generateNutritionAI") }}
+        </button>
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>
@@ -893,6 +1007,20 @@ function changeLanguage() {
         <input :id="`lang_${language}`" type="radio" :value="language" v-model="selectedLanguage" />
         <label :for="`lang_${language}`" class="dark:text-white ml-2">{{ t(`pages.options.${language}`) }}</label>
       </div>
+    </Modal>
+    <Modal :isOpen="isNutritionOverwriteWarningOpen" @closed="isNutritionOverwriteWarningOpen = false"
+      data-testid="nutrition-overwrite-warning-dialog"
+      :title="t('pages.recipe.id.edit.nutritionOverwriteWarningTitle')" :buttons="[
+        {
+          title: t('general.cancel'),
+          action: () => isNutritionOverwriteWarningOpen = false,
+        },
+        {
+          title: t('general.continue'),
+          action: proceedWithNutritionGeneration,
+        },
+      ]">
+      <span class="dark:text-white">{{ t('pages.recipe.id.edit.nutritionOverwriteWarning') }}</span>
     </Modal>
     <BusyIndicator :busy="isImporting" :message1="t('pages.recipe.id.edit.importContent1')"
       :message2="t('pages.recipe.id.edit.importContent2')" />

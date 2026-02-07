@@ -8,6 +8,7 @@
     "done": "Done",
     "error": "Error",
     "cancel": "Cancel",
+    "continue": "Continue",
     "save": "Save",
     "seconds": "seconds ",
     "minutes": "minutes ",
@@ -138,7 +139,14 @@
           "changeLanguageTitle": "Change recipe language",
           "category": "Category",
           "selectCategory": "Select category...",
-          "importFromShareQRCode": "Scan QR Code"
+          "importFromShareQRCode": "Scan QR Code",
+          "generateNutritionAI": "Generate with AI",
+          "nutritionOverwriteWarning": "This will replace existing nutrition data. Continue?",
+          "nutritionOverwriteWarningTitle": "Replace Nutrition Data?",
+          "nutritionGeneratedSuccess": "Nutrition facts generated successfully. Please verify values for accuracy.",
+          "nutritionGeneratedError": "Unable to generate nutrition facts. Please try again.",
+          "aiMissingFields": "AI response is missing required nutrition fields: {{fields}}",
+          "aiGenerationFailed": "Failed to generate nutrition facts. Please check your AI configuration and try again."
         },
         "gallery": {
           "recipeImage": "Recipe Image"
@@ -269,7 +277,12 @@
       "abortError": "Ok. I won't answer that question.",
       "unableToAnswer": "I'm sorry, I'm unable to answer that question right now.",
       "inputPlaceholder": "Type a message...",
-      "messageInputAriaLabel": "Chat message input"
+      "messageInputAriaLabel": "Chat message input",
+      "noRecipeError": "Error: No recipe found. This tool only works when viewing a specific recipe.",
+      "noIngredientsError": "Error: Recipe has no ingredients. Please add ingredients before generating nutrition facts.",
+      "aiNotConfiguredError": "Error: AI chat is not configured. Please configure your OpenAI API key and model in settings.",
+      "nutritionCalculatedSuccess": "I've calculated the nutrition facts for this recipe and saved them. You can view them in the recipe details or edit page.",
+      "nutritionCalculationFailed": "I couldn't generate nutrition facts. Please try again."
     },
     "categories": {
       "title": "Categories",
@@ -348,6 +361,12 @@
       "notes": "Whole wheat flour may be replaced with rye flour for added taste"
     }
   ],
+  "components": {
+    "nutritionFacts": {
+      "perServing": "Per Serving ({{servings}} servings)",
+      "per100g": "100g"
+    }
+  },
   "installPrompt": {
     "installWithPromptMessage": "Sharp Cooking is designed to work best when installed as a standalone app. Would you like to install?",
     "installManualMessage": "Sharp Cooking is designed to work best when installed as a standalone app. In iOS, please use share and select Add to Home Screen.",

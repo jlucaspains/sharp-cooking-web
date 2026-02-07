@@ -22,6 +22,7 @@ import {
 import { z } from "zod";
 import { Runnable } from "@langchain/core/runnables";
 import { BaseLanguageModelInput } from "@langchain/core/language_models/base";
+import { generateNutritionFacts, AIServiceError } from "../../../services/aiService";
 
 const { t } = useTranslation();
 const route = useRoute();
@@ -156,7 +157,55 @@ onMounted(async () => {
     }
   )
 
-  const tools = [getAllRecipes, getCurrentRecipe, lookupRecipeByName, updateRecipeIngredientsByName];
+  const generateNutritionFactsTool = tool(
+    async () => {
+      try {
+        // Get current recipe
+        const recipe = await getRecipe(id.value);
+        
+        if (!recipe) {
+          return t('pages.chat.noRecipeError');
+        }
+
+        if (!recipe.ingredients || recipe.ingredients.length === 0 || recipe.ingredients.every((ing: string) => !ing.trim())) {
+          return t('pages.chat.noIngredientsError');
+        }
+
+        // Get AI settings
+        const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+        const model = await getSetting("OpenAIModelName", "");
+
+        if (!apiKey || !model) {
+          return t('pages.chat.aiNotConfiguredError');
+        }
+
+        // Call AI service to generate nutrition facts
+        const nutritionFacts = await generateNutritionFacts(
+          recipe.ingredients,
+          recipe.nutrition.servingSize,
+          { apiKey, model }
+        );
+
+        // Update recipe with generated nutrition
+        recipe.nutrition = nutritionFacts;
+        await saveRecipe(recipe);
+
+        return t('pages.chat.nutritionCalculatedSuccess');
+      } catch (error) {
+        if (error instanceof AIServiceError) {
+          return `Error: ${error.message}`;
+        }
+        return t('pages.chat.nutritionCalculationFailed');
+      }
+    },
+    {
+      name: "generateNutritionFacts",
+      description: "Calculate nutritional facts for the current recipe using AI. Use this when user asks to generate nutrition, calculate nutrition facts, add nutrition info, or similar requests.",
+      schema: z.object({}),
+    }
+  )
+
+  const tools = [getAllRecipes, getCurrentRecipe, lookupRecipeByName, updateRecipeIngredientsByName, generateNutritionFactsTool];
   toolsByName = Object.fromEntries(tools.map((tool) => [tool.name, tool]));
   llmWithTools = llm.bindTools(tools);
 

@@ -36,7 +36,7 @@ This file contains important patterns and conventions for developers and AI agen
 
 - Translation keys follow pattern: `pages.{pageName}.{keyName}`
 - Example: `t("pages.index.exportRecipeBook")`
-- Translation files must be updated in all locales: `en`, `pt`, `en-US`, `pt-BR`
+- Translation files must be updated in locales: `en`, `pt`
 - Files located in: `public/locales/{locale}/translation.json`
 - Use `{{variable}}` syntax for variable interpolation (e.g., `{{count}}`)
 
@@ -60,16 +60,27 @@ This file contains important patterns and conventions for developers and AI agen
 - Always include `await setup(page);` on `beforeEach` hook to prevent the app from trying to install during tests.
 - **NEVER** Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
 - **NEVER** Use `await import()` or `require()` or `page.evaluate()` for ES modules.
+- **NEVER** directly access the IndexedDB when testing. **ALWAYS** use existing page functionality to setup or verify data.
 - **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
 - Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
 - Some chromium tests can be flaky - run with retries if timing issues occur
 - **Large datasets**: Use database helpers (`createRecipe()``) to add each recipe. You may need to expand the timeout for the test after 30 recipes.
 - **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
+- **HeadlessUI Modals**: When testing modals with transitions, check for dialog content visibility (title/text) instead of dialog element visibility
+- **Ingredient fields**: Use `getByPlaceholder('1 cup flour')` selector - ingredient fields don't have labels, only placeholders
+- **Mocking APIs**: Use `page.route('https://api.example.com/**', handler)` to intercept API calls in tests
+  - OpenAI API responses must follow chat completion format with choices array
+  - Mock responses should use realistic data for testing validation logic
 
 ### Services Layer
 
 - **State Management**: `src/services/store.ts` provides reactive state
 - **Recipe Management**: `src/services/recipe.ts` defines Recipe, RecipeImage, RecipeNutrition classes
+- **AI Service**: `src/services/aiService.ts` provides generateNutritionFacts() for AI-powered nutrition calculation
+  - Uses ChatOpenAI directly for simplicity
+  - Returns RecipeNutrition object with all 12 nutrition fields
+  - Throws AIServiceError on failures for typed error handling
+- **Data Service**: `getSetting(name, defaultValue)` requires both parameters - use empty string `""` for optional settings
 - **Export Service**: `src/services/recipeBookExportService.ts` orchestrates PDF generation
   - Accepts RecipeBookExportRequest with selected recipes
   - Generates cover page, TOC, and recipe pages

@@ -491,8 +491,9 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
 </script>
 
 <template>
-  <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" class="nf"
-    :class="{ us: true }" :style="{ width: settings.width }">
+  <div>
+    <div itemtype="http://schema.org/NutritionInformation" style="background:white; color:black;" class="nf"
+      :class="{ us: true }" :style="{ width: settings.width }">
     <div class="nf-title">{{ t('pages.recipe.id.nutrition.title') }}
     </div>
     <div class="nf-line">
@@ -503,8 +504,11 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
         <div class="nf-item-name read-only">
           <span class="text-serving-size">{{ t('pages.recipe.id.nutrition.servingSize') }}
           </span>
-          <span class="text-serving-item">
+          <span class="text-serving-item" v-if="servingPerContainer > 0">
             {{ serving + ' ' + (props.itemName ? props.itemName : "") }}
+          </span>
+          <span class="text-serving-item" v-else>
+            {{ t('components.nutritionFacts.per100g') }}
           </span>
         </div>
       </div>
@@ -669,6 +673,7 @@ function roundToSpecificDecimalPlace(value: number, decimals: number) {
         <strong>{{ t('pages.recipe.id.nutrition.ingredient') }}</strong>
         <div v-html="ingredientStatement"></div>
       </div>
+    </div>
     </div>
   </div>
 </template>

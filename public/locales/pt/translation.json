@@ -8,6 +8,7 @@
     "done": "Pronto",
     "error": "Erro",
     "cancel": "Cancelar",
+    "continue": "Continuar",
     "save": "Salvar",
     "seconds": "segundos ",
     "minutes": "minutos ",
@@ -137,7 +138,14 @@
           "changeLanguageTitle": "Alterar idioma da receita",
           "category": "Categoria",
           "selectCategory": "Selecione categoria...",
-          "importFromShareQRCode": "Código QR"
+          "importFromShareQRCode": "Código QR",
+          "generateNutritionAI": "Gerar com IA",
+          "nutritionOverwriteWarning": "Isso substituirá os dados nutricionais existentes. Continuar?",
+          "nutritionOverwriteWarningTitle": "Substituir Dados Nutricionais?",
+          "nutritionGeneratedSuccess": "Dados nutricionais gerados com sucesso. Verifique os valores para precisão.",
+          "nutritionGeneratedError": "Não foi possível gerar dados nutricionais. Tente novamente.",
+          "aiMissingFields": "A resposta da IA está faltando campos de nutrição obrigatórios: {{fields}}",
+          "aiGenerationFailed": "Falha ao gerar dados nutricionais. Verifique sua configuração de IA e tente novamente."
         },
         "gallery": {
           "recipeImage": "Imagem de Receita"
@@ -267,7 +275,12 @@
       "abortError": "Ok. Eu não vou responder essa pergunta.",
       "unableToAnswer": "Desculpe, eu não consigo responder sua pergunta no momento.",
       "inputPlaceholder": "Digite uma mensagem...",
-      "messageInputAriaLabel": "Entrada de mensagem do chat"
+      "messageInputAriaLabel": "Entrada de mensagem do chat",
+      "noRecipeError": "Erro: Nenhuma receita encontrada. Esta ferramenta funciona apenas ao visualizar uma receita específica.",
+      "noIngredientsError": "Erro: A receita não tem ingredientes. Adicione ingredientes antes de gerar dados nutricionais.",
+      "aiNotConfiguredError": "Erro: O chat de IA não está configurado. Configure sua chave de API OpenAI e modelo nas configurações.",
+      "nutritionCalculatedSuccess": "Calculei os dados nutricionais para esta receita e salvei. Você pode visualizá-los na página de detalhes ou edição da receita.",
+      "nutritionCalculationFailed": "Não consegui gerar dados nutricionais. Tente novamente."
     },
     "categories": {
       "title": "Categorias",
@@ -346,6 +359,12 @@
       "notes": "Pode substituir a farinha de trigo integral por centeio para adicionar sabor"
     }
   ],
+  "components": {
+    "nutritionFacts": {
+      "perServing": "Por Porção ({{servings}} porções)",
+      "per100g": "100g"
+    }
+  },
   "installPrompt": {
     "installWithPromptMessage": "O Sharp Cooking foi projetado para funcionar melhor quando instalado como um aplicativo independente. Gostaria de instalar?",
     "installManualMessage": "O Sharp Cooking foi projetado para funcionar melhor quando instalado como um aplicativo independente. No iOS, use o compartilhamento e selecione Adicionar à tela inicial.",
