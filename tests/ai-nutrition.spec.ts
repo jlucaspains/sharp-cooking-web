@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, createRecipe, configureAI } from './helpers';
+import { setup, configureAI } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
@@ -241,8 +241,8 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
     const button = page.getByTestId('generate-nutrition-ai-button');
     await button.click();
 
-    // Wait for the generation to complete (check for success notification or field update)
-    await page.waitForTimeout(2000);
+    // Wait for the generation to complete by checking for success notification
+    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
 
     // Verify all fields are populated with the mocked values (rounded to 1 decimal)
     await expect(page.locator('input#servingSize')).toHaveValue('100');
