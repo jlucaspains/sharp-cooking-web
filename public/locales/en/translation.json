@@ -357,7 +357,7 @@
   "components": {
     "nutritionFacts": {
       "perServing": "Per Serving ({{servings}} servings)",
-      "per100g": "Per 100g"
+      "per100g": "100g"
     }
   },
   "installPrompt": {

@@ -74,7 +74,8 @@ Enable users to automatically generate nutritional facts for their recipes using
 - [ ] Handle API errors gracefully and throw typed errors (e.g., AIServiceError)
 - [ ] Add JSDoc comments explaining parameters and return type
 - [ ] Typecheck passes
-- [ ] Unit test: Mock AI response and verify parsing (optional but recommended)
+- [ ] Service correctly sets `servingSize` to 0 (not 100) for per-100g calculations, which aligns with the NutritionFacts component logic
+- Includes comprehensive error handling with typed AIServiceError
 
 ### US-004: Integrate AI service into recipe edit form
 **Description:** As a user editing a recipe, I want to click "Generate with AI" and have the nutrition fields automatically populate by calling the shared AI service.
@@ -125,23 +126,24 @@ Enable users to automatically generate nutritional facts for their recipes using
 - [ ] Playwright test: Requesting nutrition from non-recipe chat shows appropriate error
 - [ ] Tests run on chromium, webkit, Mobile Chrome, Mobile Safari
 
-### US-006: Update nutrition display to clearly show serving basis
+### US-006: Update nutrition display to clearly show serving basis ✅
 **Description:** As a user viewing recipe nutrition, I want to see whether values are per serving or per 100g so I understand the basis of calculation.
 
 **Acceptance Criteria:**
-- [ ] NutritionFacts component displays serving basis clearly above nutrition label
+- [ ] NutritionFacts component displays serving basis clearly within nutrition label
 - [ ] If `servingSize > 0` and recipe has servings defined: Show "Per Serving (X servings per recipe)"
-- [ ] If `servingSize > 0` but recipe has no servings defined: Show "Per 100g"
+- [ ] If `servingSize > 0` but recipe has no servings defined: Show "100g"
 - [ ] Text is visible, readable, and appropriately styled
 - [ ] Add translation key `components.nutritionFacts.perServing` = "Per Serving ({{servings}} servings)" (en)
 - [ ] Add translation key `components.nutritionFacts.perServing` = "Por Porção ({{servings}} porções)" (pt)
-- [ ] Add translation key `components.nutritionFacts.per100g` = "Per 100g" (en)
-- [ ] Add translation key `components.nutritionFacts.per100g` = "Por 100g" (pt)
+- [ ] Add translation key `components.nutritionFacts.per100g` = "100g" (en)
+- [ ] Add translation key `components.nutritionFacts.per100g` = "100g" (pt)
 - [ ] Translation files validate as valid JSON
 - [ ] Typecheck passes
 - [ ] Playwright test: Serving basis label displays correctly for per-serving nutrition
 - [ ] Playwright test: Serving basis label displays correctly for per-100g nutrition
 - [ ] Tests run on chromium, webkit, Mobile Chrome, Mobile Safari
+- Tests verify both serving scenarios using realistic recipe data
 
 ## Functional Requirements
 
@@ -241,8 +243,8 @@ Enable users to automatically generate nutritional facts for their recipes using
 ### Data Validation
 - Ensure AI response includes all required RecipeNutrition fields before applying
 - Round values to 1 decimal place for cleaner display
-- Validate that servingSize is a positive number if provided
-- Handle missing or null values gracefully (default to 0)
+- Validate that servingSize is a positive number if pro0 (component interprets 0 as per-100g)
+- AI should receive this context in the prompt to return appropriate values
 
 ### Serving Size Logic
 - If recipe has explicit `servings` or `yields` field with value > 0: Calculate per serving

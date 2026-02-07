@@ -60,7 +60,7 @@ ${basisInstruction}
 
 Return ONLY valid JSON with these exact fields (all numeric values):
 {
-  "servingSize": ${servingSize > 0 ? servingSize : 100},
+  "servingSize": ${servingSize > 0 ? servingSize : 0},
   "calories": 0,
   "totalFat": 0,
   "saturatedFat": 0,
@@ -123,7 +123,7 @@ Do not include any explanations or markdown formatting. Return only the JSON obj
 
     // Create and return RecipeNutrition object
     return new RecipeNutrition(
-      nutritionData.servingSize,
+      servingSize > 0 ? servingSize : 0,
       nutritionData.calories,
       nutritionData.totalFat,
       nutritionData.saturatedFat,
