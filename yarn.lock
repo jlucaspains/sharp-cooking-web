@@ -2996,9 +2996,9 @@ jspdf@^4.1.0:
     html2canvas "^1.0.0-rc.5"
 
 "langsmith@>=0.4.0 <1.0.0":
-  version "0.4.0"
-  resolved "https://registry.npmjs.org/langsmith/-/langsmith-0.4.0.tgz"
-  integrity sha512-/X99fHBuBFFup778dNmgAVJMdFULz0S8yZUT1cD1RRSviMjxq1GZo8PulRR1ALDxpgYsJs8ueF9godUzF13LSw==
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.5.0.tgz#69d2fa04f5a87cd41a98d0d254999fdfdd80f30b"
+  integrity sha512-5U9Ar/wAu5vyTBBImvMLrM9sjynHzN703oLHScEqJaXWE6gm+uti0rWDryQZ6ObnuqSNa4IOUudYej9X6VNEwg==
   dependencies:
     "@types/uuid" "^10.0.0"
     chalk "^4.1.2"
