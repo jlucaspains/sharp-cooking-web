@@ -72,7 +72,8 @@
       "allCategoryFirst": "Show 'All' category first",
       "allCategoryFirstDescription": "When enabled, the 'All' category will appear at the beginning of the category list.",
       "categories": "Categories",
-      "categoriesDescription": "Maintain list of categories"
+      "categoriesDescription": "Maintain list of categories",
+      "executionMode": "Execution Mode"
     },
     "preview-features": {
       "title": "Preview Features",

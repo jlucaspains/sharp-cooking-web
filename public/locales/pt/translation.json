@@ -72,7 +72,8 @@
       "allCategoryFirst": "Mostrar categoria 'Todas' primeiro",
       "allCategoryFirstDescription": "Quando ativado, a categoria 'Todas' aparecerá no início da lista de categorias.",
       "categories": "Categorias",
-      "categoriesDescription": "Manter lista de categorias"
+      "categoriesDescription": "Manter lista de categorias",
+      "executionMode": "Modo de Execução"
     },
     "preview-features": {
       "enableAiChat": "Ativar Chat de IA",

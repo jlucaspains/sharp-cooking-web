@@ -308,6 +308,12 @@ function goToAIOptions() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.privacyPolicyDescription") }}</span>
       </div>
     </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="reviewPrivacyPolicy">
+      <span class="dark:text-white">{{ t("pages.options.executionMode") }}</span>
+      <div>
+        <span class="text-gray-500 text-sm">{{ state.runningInWailsApp ? "Desktop" : "PWA" }}</span>
+      </div>
+    </div>
     <Modal :isOpen="isStepsIntervalModalOpen" @closed="isStepsIntervalModalOpen = false"
       :title="t('pages.options.stepsIntervalQuestion')" :buttons="[
       {

@@ -6,15 +6,17 @@ import {
     saveSetting,
     getSetting
 } from "../services/dataService";
+import { useState } from "../services/store";
 
 const { t } = useTranslation();
 
 let deferredPrompt: any;
 const showInstallPromptModal = ref(false);
 const showInstallManualModal = ref(false);
+const state = useState()!;
 
 onMounted(async () => {
-    if (isAppInstalled() || await doNotAskToInstall()) {
+    if (state.runningInWailsApp || isAppInstalled() || await doNotAskToInstall()) {
         console.log("App already installed or user opted out");
         return;
     }

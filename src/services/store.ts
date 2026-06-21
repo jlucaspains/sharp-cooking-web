@@ -1,4 +1,5 @@
 import { reactive, provide, inject, InjectionKey } from 'vue';
+import { isWailsApp } from '../helpers/desktop';
 
 interface MenuOption {
     text?: string;
@@ -13,10 +14,14 @@ interface State {
     indexScrollY: number;
     message: any;
     useContainer: boolean;
-  }
+    runningInWailsApp: boolean;
+}
 
 export const stateSymbol = Symbol('state') as InjectionKey<State>;
-export const createState = () => reactive({ title: "", menuOptions: [], indexScrollY: 0, message: null, useContainer: true });
+export const createState = () => reactive({
+    title: "", menuOptions: [], indexScrollY: 0, message: null, useContainer: true,
+    runningInWailsApp: isWailsApp()
+});
 
 export const useState = () => inject(stateSymbol);
 export const provideState = () => provide(
