@@ -229,7 +229,7 @@ Return ONLY a valid JSON array of matching tag ids, e.g. ["vegetarian","dairy-fr
     }
 
     throw new AIServiceError(
-      i18next.t('pages.recipe.edit.aiDietTagsFailed'),
+      i18next.t('pages.recipe.id.edit.aiDietTagsFailed'),
       error
     );
   }
