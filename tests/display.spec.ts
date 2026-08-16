@@ -191,3 +191,31 @@ test('display works with compact timeline enabled', async ({ page }) => {
   await page.getByTestId('edit-button').click();
   await expect(page).toHaveURL(new RegExp(".*recipe/2/edit"));
 });
+
+test('Recipe with diet tags shows tag icons on the view page', async ({ page }) => {
+  await createRecipe(page, 2, 'Tagged Recipe', 5);
+  await page.getByTestId('tag-toggle-vegan').click();
+  await page.getByTestId('tag-toggle-gluten-free').click();
+  await page.getByTestId('topbar-single-button').click();
+  await page.waitForTimeout(500);
+  await page.goto('#/recipe/2');
+
+  // Wait for the view page (not the edit page) to actually be mounted before
+  // asserting on tag icons - the hash can update before Vue Router finishes
+  // swapping the route component.
+  await expect(page.getByTestId('edit-button')).toBeVisible();
+  await expect(page).toHaveURL(/.*\/recipe\/2$/);
+  await expect(page.getByRole('img', { name: 'Vegan' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Gluten free' })).toBeVisible();
+});
+
+test('Recipe with no diet tags shows no tag icons', async ({ page }) => {
+  await createRecipe(page, 2, 'Untagged Recipe', 5);
+  await page.getByTestId('topbar-single-button').click();
+  await page.waitForTimeout(500);
+  await page.goto('#/recipe/2');
+
+  await expect(page.getByTestId('edit-button')).toBeVisible();
+  await expect(page).toHaveURL(/.*\/recipe\/2$/);
+  await expect(page.getByRole('img', { name: 'Vegan' })).not.toBeVisible();
+});

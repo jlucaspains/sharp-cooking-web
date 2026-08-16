@@ -25,6 +25,7 @@ import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 import NutritionFacts from "../../../components/NutritionFacts.vue";
 import { recipeAsText } from "../../../helpers/shareHelpers";
+import TagIcon from "../../../components/TagIcon.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -37,6 +38,7 @@ const item = ref({
   score: 3,
   ingredients: [] as string[],
   steps: [] as string[],
+  tags: [] as string[],
   notes: "",
   multiplier: 1,
   changedOn: "",
@@ -658,6 +660,9 @@ function nutritionHasValues(): boolean {
 
       </button>
     </div>
+    <div v-if="item.tags && item.tags.length > 0" class="flex flex-wrap gap-2 mt-2">
+      <TagIcon v-for="tagId in item.tags ?? []" :key="tagId" :tag-id="tagId" />
+    </div>
     <div :class="enableCompactMobileTimeline ? 'pl-4' : ''" class="grid grid-cols-12 w-full mt-7 pr-1">
       <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(currentStartTime) }}
@@ -717,7 +722,7 @@ function nutritionHasValues(): boolean {
         </svg>
       </div>
       <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(finishTime) }}</span>
+        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="text-gray-500 sm:hidden pr-1 text-sm">{{ parseTime(finishTime) }}</span>
       </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>
