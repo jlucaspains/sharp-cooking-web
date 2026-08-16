@@ -146,7 +146,8 @@
           "nutritionGeneratedSuccess": "Nutrition facts generated successfully. Please verify values for accuracy.",
           "nutritionGeneratedError": "Unable to generate nutrition facts. Please try again.",
           "aiMissingFields": "AI response is missing required nutrition fields: {{fields}}",
-          "aiGenerationFailed": "Failed to generate nutrition facts. Please check your AI configuration and try again."
+          "aiGenerationFailed": "Failed to generate nutrition facts. Please check your AI configuration and try again.",
+          "aiDietTagsFailed": "Failed to generate diet tags. Please check your AI configuration and try again."
         },
         "gallery": {
           "recipeImage": "Recipe Image"
@@ -365,6 +366,13 @@
     "nutritionFacts": {
       "perServing": "Per Serving ({{servings}} servings)",
       "per100g": "100g"
+    },
+    "dietTags": {
+      "glutenFree": "Gluten free",
+      "lowFodmap": "Low FODMAP",
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "dairyFree": "Dairy free"
     }
   },
   "installPrompt": {

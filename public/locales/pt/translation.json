@@ -145,7 +145,8 @@
           "nutritionGeneratedSuccess": "Dados nutricionais gerados com sucesso. Verifique os valores para precisão.",
           "nutritionGeneratedError": "Não foi possível gerar dados nutricionais. Tente novamente.",
           "aiMissingFields": "A resposta da IA está faltando campos de nutrição obrigatórios: {{fields}}",
-          "aiGenerationFailed": "Falha ao gerar dados nutricionais. Verifique sua configuração de IA e tente novamente."
+          "aiGenerationFailed": "Falha ao gerar dados nutricionais. Verifique sua configuração de IA e tente novamente.",
+          "aiDietTagsFailed": "Falha ao gerar tags de dieta. Verifique sua configuração de IA e tente novamente."
         },
         "gallery": {
           "recipeImage": "Imagem de Receita"
@@ -363,6 +364,13 @@
     "nutritionFacts": {
       "perServing": "Por Porção ({{servings}} porções)",
       "per100g": "100g"
+    },
+    "dietTags": {
+      "glutenFree": "Sem glúten",
+      "lowFodmap": "Baixo FODMAP",
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "dairyFree": "Sem lactose"
     }
   },
   "installPrompt": {
