@@ -29,7 +29,10 @@ import i18next from "i18next";
 import { pickImage } from "../../../helpers/imageHelpers";
 import { Category } from "../../../services/category";
 import Scanner from "../../../components/Scanner.vue";
-import { generateNutritionFacts, AIServiceError } from "../../../services/aiService";
+import { generateNutritionFacts, generateDietTags, AIServiceError } from "../../../services/aiService";
+import { DIET_TAGS } from "../../../services/dietTags";
+import TagIcon from "../../../components/TagIcon.vue";
+import RoundMenuButton from "../../../components/RoundMenuButton.vue";
 
 const state = useState()!;
 const route = useRoute();
@@ -48,6 +51,7 @@ const item = ref({
   score: 3,
   ingredients: [""] as string[],
   steps: [""] as string[],
+  tags: [] as string[],
   notes: "",
   imageAvailable: false,
   multiplier: 1,
@@ -281,6 +285,19 @@ async function generateNutritionWithAI() {
   }
 }
 
+function toggleTag(tagId: string) {
+  const tags = item.value.tags ?? [];
+  const index = tags.indexOf(tagId);
+
+  if (index === -1) {
+    tags.push(tagId);
+  } else {
+    tags.splice(index, 1);
+  }
+
+  item.value.tags = tags;
+}
+
 async function proceedWithNutritionGeneration() {
   // Close the warning dialog if it was open
   isNutritionOverwriteWarningOpen.value = false;
@@ -327,9 +344,27 @@ async function proceedWithNutritionGeneration() {
       },
       4000
     );
+
+    // Generate diet tags and merge them into any existing tags (never remove existing tags)
+    try {
+      const suggestedTags = await generateDietTags(item.value.ingredients, { apiKey, model });
+      const mergedTags = new Set([...(item.value.tags ?? []), ...suggestedTags]);
+      item.value.tags = Array.from(mergedTags);
+    } catch (tagError) {
+      console.error("Failed to generate diet tags:", tagError);
+
+      notify(
+        {
+          group: "error",
+          title: t("general.error"),
+          text: t("pages.recipe.id.edit.dietTagsGeneratedError"),
+        },
+        4000
+      );
+    }
   } catch (error) {
     console.error("Failed to generate nutrition:", error);
-    
+
     // Show error notification
     notify(
       {
@@ -730,6 +765,20 @@ function changeLanguage() {
             <path d="M5 12l5 5l10 -10" />
           </svg>
         </button>
+        <RoundMenuButton v-if="isAIConfigured" :title="t('pages.recipe.id.edit.aiActionsTooltip')"
+          test-id="ai-actions-button" :items="[
+            {
+              text: t('pages.recipe.id.edit.generateNutritionAI'),
+              action: generateNutritionWithAI,
+              testId: 'generate-nutrition-menu-item',
+              disabled: !item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingNutrition,
+            },
+          ]">
+          <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="#ffffff">
+            <path
+              d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+          </svg>
+        </RoundMenuButton>
         <RoundButton :title="t('pages.recipe.id.edit.changeLanguage')"
           test-id="change-lang-button" @click="() => isLanguageModalOpen = true">
           <svg class="h-5 w-5 text-white m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px"
@@ -830,24 +879,20 @@ function changeLanguage() {
         " />
       <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
-        <button
-          v-if="isAIConfigured"
-          data-testid="generate-nutrition-ai-button"
-          type="button"
-          :disabled="!item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingNutrition"
-          @click="generateNutritionWithAI"
-          class="flex items-center gap-2 px-4 py-2 mb-4 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="item.ingredients && item.ingredients.length > 0 && item.ingredients.some((ing: string) => ing.trim()) && !isGeneratingNutrition ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400'"
-        >
-          <svg v-if="!isGeneratingNutrition" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-          </svg>
-          <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          {{ isGeneratingNutrition ? t("general.loading") : t("pages.recipe.id.edit.generateNutritionAI") }}
-        </button>
+        <span class="block mb-1">{{ t("pages.recipe.id.edit.manualTagsLabel") }}</span>
+        <div class="flex flex-wrap gap-2">
+          <button v-for="tag in DIET_TAGS" :key="tag.id" type="button"
+            :data-testid="`tag-toggle-${tag.id}`"
+            :aria-pressed="(item.tags ?? []).includes(tag.id)"
+            @click="toggleTag(tag.id)"
+            class="flex items-center gap-1 px-3 py-1.5 rounded-full border text-sm transition-colors"
+            :class="(item.tags ?? []).includes(tag.id)
+              ? 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600'
+              : 'bg-white hover:bg-gray-100 text-black border-gray-300'">
+            <TagIcon :tag-id="tag.id" />
+            {{ t(tag.labelKey) }}
+          </button>
+        </div>
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>
