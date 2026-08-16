@@ -722,7 +722,7 @@ function nutritionHasValues(): boolean {
         </svg>
       </div>
       <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="text-gray-500 sm:hidden pr-1 text-sm">{{ parseTime(finishTime) }}</span>
+        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(finishTime) }}</span>
       </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>
