@@ -273,6 +273,7 @@ function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia
         });
     model.categoryId = recipe.categoryId;
     model.category = category?.name;
+    model.tags = recipe.tags ?? [];
 
     return model;
 }
