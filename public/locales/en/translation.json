@@ -142,6 +142,8 @@
           "importFromShareQRCode": "Scan QR Code",
           "generateNutritionAI": "Generate with AI",
           "aiActionsTooltip": "AI actions",
+          "generatingNutritionMessage1": "Generating nutrition facts...",
+          "generatingNutritionMessage2": "This may take a moment. Diet tags are generated too.",
           "dietTagsGeneratedError": "Unable to generate diet tags. Nutrition facts were still saved.",
           "manualTagsLabel": "Diet Tags",
           "nutritionOverwriteWarning": "This will replace existing nutrition data. Continue?",

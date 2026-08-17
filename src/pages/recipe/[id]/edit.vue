@@ -1072,5 +1072,8 @@ function changeLanguage() {
 
     <BusyIndicator :busy="isProcessingImage" :message1="t('pages.recipe.id.edit.processImage1')"
       :message2="t('pages.recipe.id.edit.processImage2')" />
+
+    <BusyIndicator :busy="isGeneratingNutrition" :message1="t('pages.recipe.id.edit.generatingNutritionMessage1')"
+      :message2="t('pages.recipe.id.edit.generatingNutritionMessage2')" />
   </div>
 </template>
