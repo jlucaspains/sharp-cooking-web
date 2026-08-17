@@ -877,7 +877,6 @@ function changeLanguage() {
           rounded
           text-base text-black
         " />
-      <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
         <span class="block mb-1">{{ t("pages.recipe.id.edit.manualTagsLabel") }}</span>
         <div class="flex flex-wrap gap-2">
@@ -893,6 +892,9 @@ function changeLanguage() {
             {{ t(tag.labelKey) }}
           </button>
         </div>
+      </div>
+      <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
+      <div class="my-3 w-full">
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
             t("pages.recipe.id.edit.servingSize") }}</label>

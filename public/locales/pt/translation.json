@@ -143,7 +143,7 @@
           "aiActionsTooltip": "Ações de IA",
           "generatingNutritionMessage1": "Gerando dados nutricionais...",
           "generatingNutritionMessage2": "Isso pode demorar um pouco. As tags de dieta também são geradas.",
-          "dietTagsGeneratedError": "Não foi possível gerar as tags de dieta. Os dados nutricionais foram salvos mesmo assim.",
+          "dietTagsGeneratedError": "Não foi possível gerar as tags de dieta. Os dados nutricionais foram gerados mesmo assim.",
           "manualTagsLabel": "Tags de Dieta",
           "nutritionOverwriteWarning": "Isso substituirá os dados nutricionais existentes. Continuar?",
           "nutritionOverwriteWarningTitle": "Substituir Dados Nutricionais?",

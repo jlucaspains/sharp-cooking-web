@@ -185,6 +185,32 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
   test.beforeEach(async ({ page }) => {
     // Mock the OpenAI API response for all tests in this group
     await page.route('https://api.openai.com/**', async route => {
+      const requestBody = route.request().postDataJSON();
+      const promptText = JSON.stringify(requestBody?.messages ?? []);
+      const isDietTagRequest = promptText.includes('diet tags');
+
+      if (isDietTagRequest) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'chatcmpl-test-tags',
+            object: 'chat.completion',
+            created: Date.now(),
+            model: 'gpt-4',
+            choices: [{
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: JSON.stringify([])
+              },
+              finish_reason: 'stop'
+            }]
+          })
+        });
+        return;
+      }
+
       const nutrition = {
         servingSize: 100,
         calories: 250.5,
@@ -199,7 +225,7 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
         sugar: 4.3,
         protein: 8.6
       };
-      
+
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
