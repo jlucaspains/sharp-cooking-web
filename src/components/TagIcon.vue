@@ -28,11 +28,6 @@ const label = computed(() => {
       <line x1="12" y1="14" x2="15" y2="12" />
       <line x1="3" y1="21" x2="21" y2="3" />
     </svg>
-    <svg v-else-if="tagId === 'low-fodmap'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-      <path d="M8 3c-2 2-3 4-3 7a7 7 0 0 0 14 0c0-3-1-5-3-7" />
-      <path d="M9 12l2 2 4-4" />
-    </svg>
     <svg v-else-if="tagId === 'vegetarian'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
       <path d="M20 4C11 4 4 11 4 20c9 0 16-7 16-16z" />

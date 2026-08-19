@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe, setup } from './helpers';
+import { createRecipe, enableDietTags, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
@@ -193,6 +193,7 @@ test('display works with compact timeline enabled', async ({ page }) => {
 });
 
 test('Recipe with diet tags shows tag icons on the view page', async ({ page }) => {
+  await enableDietTags(page);
   await createRecipe(page, 2, 'Tagged Recipe', 5);
   await page.getByTestId('tag-toggle-vegan').click();
   await page.getByTestId('tag-toggle-gluten-free').click();
@@ -210,6 +211,7 @@ test('Recipe with diet tags shows tag icons on the view page', async ({ page }) 
 });
 
 test('Recipe with no diet tags shows no tag icons', async ({ page }) => {
+  await enableDietTags(page);
   await createRecipe(page, 2, 'Untagged Recipe', 5);
   await page.getByTestId('topbar-single-button').click();
   await page.waitForTimeout(500);

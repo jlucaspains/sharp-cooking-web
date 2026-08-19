@@ -99,6 +99,7 @@ const stepsText = ref("");
 const categories = ref([] as Array<Category>);
 const scanCodeWithCamera = ref(false);
 const isAIConfigured = ref(false);
+const isDietTagsEnabled = ref(false);
 const isNutritionOverwriteWarningOpen = ref(false);
 const isGeneratingNutrition = ref(false);
 
@@ -134,6 +135,8 @@ onMounted(async () => {
   const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
   const modelName = await getSetting("OpenAIModelName", "");
   isAIConfigured.value = !!apiKey && !!modelName;
+
+  isDietTagsEnabled.value = (await getSetting("EnableDietTags", "false")) === "true";
 
   if (query.value.importFromUrl == "1") {
     isImportFromUrlModalOpen.value = true;
@@ -346,21 +349,23 @@ async function proceedWithNutritionGeneration() {
     );
 
     // Generate diet tags and merge them into any existing tags (never remove existing tags)
-    try {
-      const suggestedTags = await generateDietTags(item.value.ingredients, { apiKey, model });
-      const mergedTags = new Set([...(item.value.tags ?? []), ...suggestedTags]);
-      item.value.tags = Array.from(mergedTags);
-    } catch (tagError) {
-      console.error("Failed to generate diet tags:", tagError);
+    if (isDietTagsEnabled.value) {
+      try {
+        const suggestedTags = await generateDietTags(item.value.ingredients, { apiKey, model });
+        const mergedTags = new Set([...(item.value.tags ?? []), ...suggestedTags]);
+        item.value.tags = Array.from(mergedTags);
+      } catch (tagError) {
+        console.error("Failed to generate diet tags:", tagError);
 
-      notify(
-        {
-          group: "error",
-          title: t("general.error"),
-          text: t("pages.recipe.id.edit.dietTagsGeneratedError"),
-        },
-        4000
-      );
+        notify(
+          {
+            group: "error",
+            title: t("general.error"),
+            text: t("pages.recipe.id.edit.dietTagsGeneratedError"),
+          },
+          4000
+        );
+      }
     }
   } catch (error) {
     console.error("Failed to generate nutrition:", error);
@@ -877,7 +882,7 @@ function changeLanguage() {
           rounded
           text-base text-black
         " />
-      <div class="my-3 w-full">
+      <div v-if="isDietTagsEnabled" class="my-3 w-full">
         <span class="block mb-1">{{ t("pages.recipe.id.edit.manualTagsLabel") }}</span>
         <div class="flex flex-wrap gap-2">
           <button v-for="tag in DIET_TAGS" :key="tag.id" type="button"

@@ -78,7 +78,9 @@
       "enableAiChat": "Ativar Chat de IA",
       "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
       "enableCompactMobileTimeline": "Ativar Timeline Compacta no Celular",
-      "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela."
+      "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela.",
+      "enableDietTags": "Ativar Tags de Dieta",
+      "enableDietTagsDescription": "Adiciona uma ação de IA para gerar tags de dieta (Sem glúten, Vegetariano, Vegano, Sem lactose) e as exibe nas páginas de edição e visualização da receita."
     },
     "recipe": {
       "id": {
@@ -372,7 +374,6 @@
     },
     "dietTags": {
       "glutenFree": "Sem glúten",
-      "lowFodmap": "Baixo FODMAP",
       "vegetarian": "Vegetariano",
       "vegan": "Vegano",
       "dairyFree": "Sem lactose"

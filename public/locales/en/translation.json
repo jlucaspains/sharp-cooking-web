@@ -79,7 +79,9 @@
       "enableAiChat": "Enable AI Chat",
       "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
       "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
-      "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space."
+      "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space.",
+      "enableDietTags": "Enable Diet Tags",
+      "enableDietTagsDescription": "Adds an AI action to generate diet tags (Gluten free, Vegetarian, Vegan, Dairy free) and shows them on the recipe edit and view pages."
     },
     "recipe": {
       "id": {
@@ -374,7 +376,6 @@
     },
     "dietTags": {
       "glutenFree": "Gluten free",
-      "lowFodmap": "Low FODMAP",
       "vegetarian": "Vegetarian",
       "vegan": "Vegan",
       "dairyFree": "Dairy free"

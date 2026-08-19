@@ -183,7 +183,6 @@ ${ingredients.map((ing, idx) => `${idx + 1}. ${ing}`).join('\n')}
 
 Only choose from this exact list of tag ids: ${DIET_TAG_IDS.join(', ')}.
 - "gluten-free": contains no wheat, barley, rye, or other gluten-containing ingredients.
-- "low-fodmap": contains no high-FODMAP ingredients (e.g. garlic, onion, wheat, most legumes, high-lactose dairy).
 - "vegetarian": contains no meat, poultry, fish, or seafood.
 - "vegan": contains no meat, poultry, fish, seafood, dairy, eggs, or honey.
 - "dairy-free": contains no milk, cheese, butter, cream, or other dairy ingredients.

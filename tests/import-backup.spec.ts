@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, createRecipe } from './helpers';
+import { setup, createRecipe, enableDietTags } from './helpers';
 
 test.beforeEach(async ({ page }) => {
     await setup(page);
@@ -360,6 +360,8 @@ test('Diet tags survive a full backup and restore round trip', async ({ page, br
             return [fileHandle];
         };
     });
+
+    await enableDietTags(page);
 
     // The app seeds a default demo recipe (id 1) on first load, so the recipe we create here
     // gets id 2 - see other specs (e.g. options.spec.ts) for the same assumption.

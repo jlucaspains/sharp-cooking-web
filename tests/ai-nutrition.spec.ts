@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, configureAI } from './helpers';
+import { setup, configureAI, enableDietTags } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
@@ -494,6 +494,8 @@ test.describe('US-005: LangGraph tool for chat interface', () => {
 
 test.describe('US-006: AI-generated diet tags', () => {
   test.beforeEach(async ({ page }) => {
+    await enableDietTags(page);
+
     await page.route('https://api.openai.com/**', async route => {
       const requestBody = route.request().postDataJSON();
       const promptText = JSON.stringify(requestBody?.messages ?? []);
