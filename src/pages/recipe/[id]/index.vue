@@ -25,11 +25,14 @@ import { RecipeMedia } from "../../../services/recipe";
 import i18next from "i18next";
 import NutritionFacts from "../../../components/NutritionFacts.vue";
 import { recipeAsText } from "../../../helpers/shareHelpers";
+import TagIcon from "../../../components/TagIcon.vue";
+import { DIET_TAGS, getDisplayTags } from "../../../services/dietTags";
 
 const route = useRoute();
 const router = useRouter();
 
 const id = computed(() => parseInt(route.params.id as string));
+const displayTags = computed(() => getDisplayTags(item.value.tags ?? []));
 const state = useState()!;
 const item = ref({
   id: 1,
@@ -37,6 +40,7 @@ const item = ref({
   score: 3,
   ingredients: [] as string[],
   steps: [] as string[],
+  tags: [] as string[],
   notes: "",
   multiplier: 1,
   changedOn: "",
@@ -73,6 +77,7 @@ let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
 let enableAiChat = false;
 const enableCompactMobileTimeline = ref(false);
+const isDietTagsEnabled = ref(false);
 
 function toggleStepCompletion(index: number) {
   if (completedSteps.value.has(index)) {
@@ -126,6 +131,8 @@ onMounted(async () => {
 
   const enableCompactMobileTimelineString = await getSetting("EnableCompactMobileTimeline", "false");
   enableCompactMobileTimeline.value = enableCompactMobileTimelineString == "true";
+
+  isDietTagsEnabled.value = (await getSetting("EnableDietTags", "false")) === "true";
 
   setupMenuOptions();
 
@@ -534,6 +541,13 @@ function nutritionHasValues(): boolean {
         <polyline points="21 15 16 10 5 21" />
       </svg>
     </div>
+    <div v-if="isDietTagsEnabled && displayTags.length > 0" class="flex flex-wrap justify-center gap-2 mb-3">
+      <span v-for="tagId in displayTags" :key="tagId"
+        class="flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 text-sm bg-white dark:bg-theme-gray text-black dark:text-white">
+        <TagIcon :tag-id="tagId" />
+        {{ t(DIET_TAGS.find((tag) => tag.id === tagId)?.labelKey ?? '') }}
+      </span>
+    </div>
     <div class="no-print float-right h-20">
       <button class="
           w-12
@@ -717,7 +731,7 @@ function nutritionHasValues(): boolean {
         </svg>
       </div>
       <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="sm:hidden pr-1">{{ parseTime(finishTime) }}</span>
+        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="text-gray-500 sm:hidden pr-1 text-sm">{{ parseTime(finishTime) }}</span>
       </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>

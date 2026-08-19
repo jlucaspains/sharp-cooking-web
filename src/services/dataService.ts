@@ -74,6 +74,17 @@ class RecipeDatabase extends Dexie {
                 recipe.categoryId = 0;
             });
         });
+        this.version(7).stores({
+            recipes: "++id,title,score,changedOn,categoryId",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            categories: "++id,name"
+        }).upgrade(async (transaction) => {
+            transaction.table("recipes").toCollection().modify((recipe: Recipe) => {
+                recipe.tags = [];
+            });
+        });
     }
 }
 
@@ -86,6 +97,10 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
         result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
+    if (result && !result.tags) {
+        result.tags = [];
+    }
+
     return result;
 }
 
@@ -94,6 +109,10 @@ export async function getRecipeByName(name: string): Promise<Recipe | undefined>
 
     if (result && !result.nutrition) {
         result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+
+    if (result && !result.tags) {
+        result.tags = [];
     }
 
     return result;
@@ -254,6 +273,7 @@ function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia
         });
     model.categoryId = recipe.categoryId;
     model.category = category?.name;
+    model.tags = recipe.tags ?? [];
 
     return model;
 }

@@ -89,6 +89,12 @@ export async function enableAIChat(page: Page) {
     await page.getByTestId('enable-ai-chat-toggle').click();
 }
 
+export async function enableDietTags(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-diet-tags-toggle').click();
+    await page.waitForTimeout(500);
+}
+
 export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {
     await page.goto('/#/ai-options');
     await page.waitForLoadState('networkidle');

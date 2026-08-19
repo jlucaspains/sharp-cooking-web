@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, configureAI } from './helpers';
+import { setup, configureAI, enableDietTags } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
@@ -8,46 +8,52 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('US-001: Generate with AI button', () => {
-  test('Button appears and is disabled when no ingredients exist', async ({ page }) => {
+  test('Magic wand button appears and its menu item is disabled when no ingredients exist', async ({ page }) => {
     // Create a recipe with no ingredients
     await page.goto('/#/recipe/0/edit');
     await page.getByLabel('Title').fill('Empty Recipe');
     await page.getByRole('button', { name: '⭐' }).nth(2).click();
     await page.waitForLoadState('networkidle');
 
-    // Check button is disabled when there are no ingredients
-    const button = page.getByTestId('generate-nutrition-ai-button');
-    await expect(button).toBeVisible();
-    await expect(button).toBeDisabled();
+    const wandButton = page.getByTestId('ai-actions-button');
+    await expect(wandButton).toBeVisible();
+    await wandButton.click();
+
+    const menuItem = page.getByTestId('generate-nutrition-menu-item');
+    await expect(menuItem).toBeVisible();
+    await expect(menuItem).toBeDisabled();
   });
 
-  test('Button is enabled when ingredients are present', async ({ page }) => {
+  test('Magic wand menu item is enabled when ingredients are present', async ({ page }) => {
     // Navigate to a recipe with ingredients (Sourdough Bread has ingredients)
     await page.goto('/');
     await page.getByText('Sourdough Bread').first().click();
     await page.getByTestId('edit-button').click();
     await page.waitForLoadState('networkidle');
 
-    // Check button is enabled
-    const button = page.getByTestId('generate-nutrition-ai-button');
-    await expect(button).toBeVisible();
-    await expect(button).not.toBeDisabled();
+    const wandButton = page.getByTestId('ai-actions-button');
+    await expect(wandButton).toBeVisible();
+    await wandButton.click();
+
+    const menuItem = page.getByTestId('generate-nutrition-menu-item');
+    await expect(menuItem).toBeVisible();
+    await expect(menuItem).not.toBeDisabled();
   });
 
-  test('Button is hidden when AI chat is disabled in options', async ({ page }) => {
+  test('Magic wand button is hidden when AI chat is disabled in options', async ({ page }) => {
     // Clear AI settings by going to AI options and clearing the fields
     await page.goto('/#/ai-options');
     await page.waitForLoadState('networkidle');
-    
+
     const authInput = page.locator('input[placeholder="token"]');
     const modelInput = page.locator('input[placeholder="Model Name"]');
-    
+
     await authInput.fill('');
     await authInput.blur();
-    
+
     await modelInput.fill('');
     await modelInput.blur();
-    
+
     await page.waitForTimeout(500);
 
     // Navigate to recipe edit
@@ -57,8 +63,8 @@ test.describe('US-001: Generate with AI button', () => {
     await page.waitForLoadState('networkidle');
 
     // Button should be hidden
-    const button = page.getByTestId('generate-nutrition-ai-button');
-    await expect(button).not.toBeVisible();
+    const wandButton = page.getByTestId('ai-actions-button');
+    await expect(wandButton).not.toBeVisible();
 
     // Re-enable AI settings for other tests
     await configureAI(page);
@@ -79,7 +85,8 @@ test.describe('US-002: Warning dialog before overwriting nutrition data', () => 
     await expect(servingSizeInput).toHaveValue('0');
 
     // Click the generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Warning dialog should NOT appear (nutrition fields are empty)
@@ -103,7 +110,8 @@ test.describe('US-002: Warning dialog before overwriting nutrition data', () => 
     await page.waitForLoadState('networkidle');
 
     // Click the generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for the dialog content to appear (HeadlessUI transition may take time)
@@ -124,7 +132,8 @@ test.describe('US-002: Warning dialog before overwriting nutrition data', () => 
     await page.waitForLoadState('networkidle');
 
     // Click the generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for dialog to appear
@@ -154,7 +163,8 @@ test.describe('US-002: Warning dialog before overwriting nutrition data', () => 
     await page.waitForLoadState('networkidle');
 
     // Click the generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for dialog to appear
@@ -175,6 +185,32 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
   test.beforeEach(async ({ page }) => {
     // Mock the OpenAI API response for all tests in this group
     await page.route('https://api.openai.com/**', async route => {
+      const requestBody = route.request().postDataJSON();
+      const promptText = JSON.stringify(requestBody?.messages ?? []);
+      const isDietTagRequest = promptText.includes('diet tags');
+
+      if (isDietTagRequest) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'chatcmpl-test-tags',
+            object: 'chat.completion',
+            created: Date.now(),
+            model: 'gpt-4',
+            choices: [{
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: JSON.stringify([])
+              },
+              finish_reason: 'stop'
+            }]
+          })
+        });
+        return;
+      }
+
       const nutrition = {
         servingSize: 100,
         calories: 250.5,
@@ -189,7 +225,7 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
         sugar: 4.3,
         protein: 8.6
       };
-      
+
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -219,7 +255,8 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
     await page.waitForLoadState('networkidle');
 
     // Click generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for success notification
@@ -238,7 +275,8 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
     await page.locator('input#calories').fill('0');
 
     // Click generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for the generation to complete by checking for success notification
@@ -266,7 +304,8 @@ test.describe('US-004: Integrate AI service into recipe edit form', () => {
     await page.waitForLoadState('networkidle');
 
     // Click generate button
-    const button = page.getByTestId('generate-nutrition-ai-button');
+    await page.getByTestId('ai-actions-button').click();
+    const button = page.getByTestId('generate-nutrition-menu-item');
     await button.click();
 
     // Wait for generation to complete
@@ -450,5 +489,107 @@ test.describe('US-005: LangGraph tool for chat interface', () => {
 
     // Wait for error message - should appear in chat response
     await expect(page.getByText(/No recipe found/i)).toBeVisible({ timeout: 15000 });
+  });
+});
+
+test.describe('US-006: AI-generated diet tags', () => {
+  test.beforeEach(async ({ page }) => {
+    await enableDietTags(page);
+
+    await page.route('https://api.openai.com/**', async route => {
+      const requestBody = route.request().postDataJSON();
+      const promptText = JSON.stringify(requestBody?.messages ?? []);
+      const isDietTagRequest = promptText.includes('diet tags');
+
+      if (isDietTagRequest) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'chatcmpl-test-tags',
+            object: 'chat.completion',
+            created: Date.now(),
+            model: 'gpt-4',
+            choices: [{
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: JSON.stringify(['vegetarian', 'dairy-free'])
+              },
+              finish_reason: 'stop'
+            }]
+          })
+        });
+        return;
+      }
+
+      const nutrition = {
+        servingSize: 100, calories: 250.5, totalFat: 12.3, saturatedFat: 3.2, transFat: 0.1,
+        unsaturatedFat: 8.9, cholesterol: 15.0, sodium: 380.0, carbohydrates: 28.7,
+        fiber: 2.5, sugar: 4.3, protein: 8.6
+      };
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          id: 'chatcmpl-test', object: 'chat.completion', created: Date.now(), model: 'gpt-4',
+          choices: [{ index: 0, message: { role: 'assistant', content: JSON.stringify(nutrition) }, finish_reason: 'stop' }]
+        })
+      });
+    });
+  });
+
+  test('Generating nutrition also assigns AI-suggested diet tags', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Sourdough Bread').first().click();
+    await page.getByTestId('edit-button').click();
+    await page.waitForLoadState('networkidle');
+
+    await page.getByTestId('ai-actions-button').click();
+    await page.getByTestId('generate-nutrition-menu-item').click();
+
+    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
+
+    await expect(page.getByTestId('tag-toggle-vegetarian')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByTestId('tag-toggle-dairy-free')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByTestId('tag-toggle-vegan')).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('AI-suggested tags merge with manually-added tags without removing them', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Sourdough Bread').first().click();
+    await page.getByTestId('edit-button').click();
+    await page.waitForLoadState('networkidle');
+
+    // Manually toggle a tag that the AI mock won't return
+    await page.getByTestId('tag-toggle-gluten-free').click();
+    await expect(page.getByTestId('tag-toggle-gluten-free')).toHaveAttribute('aria-pressed', 'true');
+
+    await page.getByTestId('ai-actions-button').click();
+    await page.getByTestId('generate-nutrition-menu-item').click();
+
+    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
+
+    // Manually-added tag survives the merge
+    await expect(page.getByTestId('tag-toggle-gluten-free')).toHaveAttribute('aria-pressed', 'true');
+    // AI-suggested tags were added too
+    await expect(page.getByTestId('tag-toggle-vegetarian')).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('User can manually toggle a diet tag on and off', async ({ page }) => {
+    await page.goto('/#/recipe/0/edit');
+    await page.getByLabel('Title').fill('Manual Tag Recipe');
+    await page.getByRole('button', { name: '⭐' }).nth(2).click();
+    await page.waitForLoadState('networkidle');
+
+    const tagButton = page.getByTestId('tag-toggle-vegan');
+    await expect(tagButton).toHaveAttribute('aria-pressed', 'false');
+
+    await tagButton.click();
+    await expect(tagButton).toHaveAttribute('aria-pressed', 'true');
+
+    await tagButton.click();
+    await expect(tagButton).toHaveAttribute('aria-pressed', 'false');
   });
 });

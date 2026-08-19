@@ -79,7 +79,9 @@
       "enableAiChat": "Enable AI Chat",
       "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
       "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
-      "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space."
+      "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space.",
+      "enableDietTags": "Enable Diet Tags",
+      "enableDietTagsDescription": "Adds an AI action to generate diet tags (Gluten free, Vegetarian, Vegan, Dairy free) and shows them on the recipe edit and view pages."
     },
     "recipe": {
       "id": {
@@ -141,12 +143,18 @@
           "selectCategory": "Select category...",
           "importFromShareQRCode": "Scan QR Code",
           "generateNutritionAI": "Generate with AI",
+          "aiActionsTooltip": "AI actions",
+          "generatingNutritionMessage1": "Generating nutrition facts...",
+          "generatingNutritionMessage2": "This may take a moment. Diet tags are generated too.",
+          "dietTagsGeneratedError": "Unable to generate diet tags. Nutrition facts were still generated.",
+          "manualTagsLabel": "Diet Tags",
           "nutritionOverwriteWarning": "This will replace existing nutrition data. Continue?",
           "nutritionOverwriteWarningTitle": "Replace Nutrition Data?",
           "nutritionGeneratedSuccess": "Nutrition facts generated successfully. Please verify values for accuracy.",
           "nutritionGeneratedError": "Unable to generate nutrition facts. Please try again.",
           "aiMissingFields": "AI response is missing required nutrition fields: {{fields}}",
-          "aiGenerationFailed": "Failed to generate nutrition facts. Please check your AI configuration and try again."
+          "aiGenerationFailed": "Failed to generate nutrition facts. Please check your AI configuration and try again.",
+          "aiDietTagsFailed": "Failed to generate diet tags. Please check your AI configuration and try again."
         },
         "gallery": {
           "recipeImage": "Recipe Image"
@@ -365,6 +373,12 @@
     "nutritionFacts": {
       "perServing": "Per Serving ({{servings}} servings)",
       "per100g": "100g"
+    },
+    "dietTags": {
+      "glutenFree": "Gluten free",
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "dairyFree": "Dairy free"
     }
   },
   "installPrompt": {
