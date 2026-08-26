@@ -392,10 +392,10 @@ test('Diet tags survive a full backup and restore round trip', async ({ page, br
     await page.getByTestId("save-import-button").click();
     await page.waitForTimeout(1000);
 
-    // The imported recipe gets the next id (3: seed=1, our created recipe=2) - verify its diet
-    // tag survived the round trip.
-    await page.goto('#/recipe/3');
-    await expect(page.getByText('Tagged Bread')).toBeVisible();
+    // Navigate to the imported recipe by title rather than assuming its id, then verify
+    // its diet tag survived the round trip.
+    await page.goto('/');
+    await page.getByText('Tagged Bread').first().click();
     await expect(page.getByRole('img', { name: 'Vegan' })).toBeVisible();
 });
 

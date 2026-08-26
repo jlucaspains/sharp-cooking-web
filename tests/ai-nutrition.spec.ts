@@ -38,6 +38,9 @@ test.describe('US-001: Generate with AI button', () => {
     const menuItem = page.getByTestId('generate-nutrition-menu-item');
     await expect(menuItem).toBeVisible();
     await expect(menuItem).not.toBeDisabled();
+
+    // Diet tags preview feature is off by default, so its AI action should not appear
+    await expect(page.getByTestId('generate-diet-tags-menu-item')).toHaveCount(0);
   });
 
   test('Magic wand button is hidden when AI chat is disabled in options', async ({ page }) => {
@@ -540,16 +543,16 @@ test.describe('US-006: AI-generated diet tags', () => {
     });
   });
 
-  test('Generating nutrition also assigns AI-suggested diet tags', async ({ page }) => {
+  test('Calculate Diet Tags assigns AI-suggested diet tags', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Sourdough Bread').first().click();
     await page.getByTestId('edit-button').click();
     await page.waitForLoadState('networkidle');
 
     await page.getByTestId('ai-actions-button').click();
-    await page.getByTestId('generate-nutrition-menu-item').click();
+    await page.getByTestId('generate-diet-tags-menu-item').click();
 
-    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Diet tags generated successfully. Please verify them for accuracy.')).toBeVisible({ timeout: 10000 });
 
     await expect(page.getByTestId('tag-toggle-vegetarian')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByTestId('tag-toggle-dairy-free')).toHaveAttribute('aria-pressed', 'true');
@@ -567,9 +570,9 @@ test.describe('US-006: AI-generated diet tags', () => {
     await expect(page.getByTestId('tag-toggle-gluten-free')).toHaveAttribute('aria-pressed', 'true');
 
     await page.getByTestId('ai-actions-button').click();
-    await page.getByTestId('generate-nutrition-menu-item').click();
+    await page.getByTestId('generate-diet-tags-menu-item').click();
 
-    await expect(page.getByText('Nutrition facts generated successfully. Please verify values for accuracy.')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Diet tags generated successfully. Please verify them for accuracy.')).toBeVisible({ timeout: 10000 });
 
     // Manually-added tag survives the merge
     await expect(page.getByTestId('tag-toggle-gluten-free')).toHaveAttribute('aria-pressed', 'true');
