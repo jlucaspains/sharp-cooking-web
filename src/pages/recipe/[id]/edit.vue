@@ -102,6 +102,7 @@ const isAIConfigured = ref(false);
 const isDietTagsEnabled = ref(false);
 const isNutritionOverwriteWarningOpen = ref(false);
 const isGeneratingNutrition = ref(false);
+const isGeneratingDietTags = ref(false);
 
 watch(
   item,
@@ -305,7 +306,6 @@ async function proceedWithNutritionGeneration() {
   // Close the warning dialog if it was open
   isNutritionOverwriteWarningOpen.value = false;
   
-  // Set loading state
   isGeneratingNutrition.value = true;
   
   try {
@@ -347,26 +347,6 @@ async function proceedWithNutritionGeneration() {
       },
       4000
     );
-
-    // Generate diet tags and merge them into any existing tags (never remove existing tags)
-    if (isDietTagsEnabled.value) {
-      try {
-        const suggestedTags = await generateDietTags(item.value.ingredients, { apiKey, model });
-        const mergedTags = new Set([...(item.value.tags ?? []), ...suggestedTags]);
-        item.value.tags = Array.from(mergedTags);
-      } catch (tagError) {
-        console.error("Failed to generate diet tags:", tagError);
-
-        notify(
-          {
-            group: "error",
-            title: t("general.error"),
-            text: t("pages.recipe.id.edit.dietTagsGeneratedError"),
-          },
-          4000
-        );
-      }
-    }
   } catch (error) {
     console.error("Failed to generate nutrition:", error);
 
@@ -381,6 +361,41 @@ async function proceedWithNutritionGeneration() {
     );
   } finally {
     isGeneratingNutrition.value = false;
+  }
+}
+
+async function generateDietTagsWithAI() {
+  isGeneratingDietTags.value = true;
+
+  // Get AI settings
+  const apiKey = await getSetting("OpenAIAuthorizationHeader", "");
+  const model = await getSetting("OpenAIModelName", "");
+  
+  if (!apiKey || !model) {
+    throw new AIServiceError("AI configuration is missing. Please configure AI settings.");
+  }
+  
+  // Generate diet tags and merge them into any existing tags (never remove existing tags)
+  if (isDietTagsEnabled.value) {
+    try {
+      const suggestedTags = await generateDietTags(item.value.ingredients, { apiKey, model });
+      const mergedTags = new Set([...(item.value.tags ?? []), ...suggestedTags]);
+      item.value.tags = Array.from(mergedTags);
+    } catch (tagError) {
+      console.error("Failed to generate diet tags:", tagError);
+
+      notify(
+        {
+          group: "error",
+          title: t("general.error"),
+          text: t("pages.recipe.id.edit.dietTagsGeneratedError"),
+        },
+        4000
+      );
+    }
+    finally {
+      isGeneratingNutrition.value = false;
+    }
   }
 }
 
@@ -773,11 +788,23 @@ function changeLanguage() {
         <RoundMenuButton v-if="isAIConfigured" :title="t('pages.recipe.id.edit.aiActionsTooltip')"
           test-id="ai-actions-button" :items="[
             {
+              text: t('pages.recipe.id.edit.aiFeatures'),
+              action: () => Promise<void>,
+              testId: 'ai-feature-placeholder',
+              disabled: true,
+            },
+            {
               text: t('pages.recipe.id.edit.generateNutritionAI'),
               action: generateNutritionWithAI,
               testId: 'generate-nutrition-menu-item',
               disabled: !item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingNutrition,
             },
+            {
+              text: t('pages.recipe.id.edit.generateDietTags'),
+              action: generateDietTagsWithAI,
+              testId: 'generate-diet-tags-menu-item',
+              disabled: !item.ingredients || item.ingredients.length === 0 || item.ingredients.every((ing: string) => !ing.trim()) || isGeneratingDietTags,
+            }
           ]">
           <svg class="h-5 w-5 text-white m-auto" viewBox="0 0 24 24" fill="#ffffff">
             <path

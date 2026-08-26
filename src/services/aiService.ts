@@ -184,7 +184,7 @@ ${ingredients.map((ing, idx) => `${idx + 1}. ${ing}`).join('\n')}
 Only choose from this exact list of tag ids: ${DIET_TAG_IDS.join(', ')}.
 - "gluten-free": contains no wheat, barley, rye, or other gluten-containing ingredients.
 - "vegetarian": contains no meat, poultry, fish, or seafood.
-- "vegan": contains no meat, poultry, fish, seafood, dairy, eggs, or honey.
+- "vegan": contains no meat, poultry, fish, seafood, dairy, eggs, honey, or other animal derived ingredients.
 - "dairy-free": contains no milk, cheese, butter, cream, or other dairy ingredients.
 
 Return ONLY a valid JSON array of matching tag ids, e.g. ["vegetarian","dairy-free"]. Return an empty array [] if none apply. Do not include any explanation or markdown formatting.`;
