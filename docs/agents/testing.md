@@ -1,0 +1,21 @@
+# Testing
+
+- Only E2E tests are created and exclusively use Playwright
+- Playwright config has `webServer` option that can auto-start dev server for tests in local environment. CI runs on a deployed website.
+- Tests use `getByTestId()` first then `getByRole()`, and other accessibility-friendly selectors. It is ok to modify code to add the test id.
+- Always include tests for multiple browser engines: chromium, webkit, Mobile Chrome, Mobile Safari
+- Test helper file: `tests/helpers.ts` provides common setup functions
+- Always include `await setup(page);` on `beforeEach` hook to prevent the app from trying to install during tests.
+- **NEVER** Use `page.evaluate()` to test utility functions in browser context (e.g., PDF helpers)
+- **NEVER** Use `await import()` or `require()` or `page.evaluate()` for ES modules.
+- **NEVER** directly access the IndexedDB when testing. **ALWAYS** use existing page functionality to setup or verify data.
+- **Recipe test data**: Recipe IDs are auto-generated - don't assume specific IDs in test assertions
+- Use `createRecipeWithoutSaving()` + manual save when you need control over test flow
+- Some chromium tests can be flaky - run with retries if timing issues occur
+- **Large datasets**: Use database helpers (`createRecipe()`) to add each recipe. You may need to expand the timeout for the test after 30 recipes.
+- **Boundary testing**: Always test boundary values (e.g., 49, 50, 51 for "> 50" threshold)
+- **HeadlessUI Modals**: When testing modals with transitions, check for dialog content visibility (title/text) instead of dialog element visibility
+- **Ingredient fields**: Use `getByPlaceholder('1 cup flour')` selector - ingredient fields don't have labels, only placeholders
+- **Mocking APIs**: Use `page.route('https://api.example.com/**', handler)` to intercept API calls in tests
+  - OpenAI API responses must follow chat completion format with choices array
+  - Mock responses should use realistic data for testing validation logic
