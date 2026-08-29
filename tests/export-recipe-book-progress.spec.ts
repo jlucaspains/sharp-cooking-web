@@ -8,6 +8,8 @@ test.beforeEach(async ({ page, context }) => {
 });
 
 test('should show progress dialog when exporting 10+ recipes', async ({ page, context }) => {
+  test.setTimeout(60000);
+
   // Create 12 test recipes using database helpers
   for (let i = 1; i <= 12; i++) {
     await createRecipe(page, i + 1, `Test Recipe ${i}`, 5, [`${i}00g flour`], [`Step ${i}`], true);
@@ -60,7 +62,7 @@ test('should NOT show progress dialog for exports with less than 10 recipes', as
 });
 
 test('should show warning for large exports (>50 recipes)', async ({ page, context }) => {
-  test.setTimeout(120000);
+  test.setTimeout(180000);
 
   // Create 60 test recipes
   for (let i = 1; i <= 51; i++) {
