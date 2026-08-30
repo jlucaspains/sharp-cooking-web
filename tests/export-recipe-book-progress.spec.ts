@@ -16,7 +16,7 @@ test('should show progress dialog when exporting 10+ recipes', async ({ page, co
   await page.waitForTimeout(1000);
 
   // Select all recipes
-  await page.getByRole('button', { name: /select all/i }).click();
+  await page.getByRole('button', { name: 'Select All', exact: true }).click();
   await page.waitForTimeout(500);
 
   // Click export button
@@ -39,7 +39,7 @@ test('should NOT show progress dialog for exports with less than 10 recipes', as
   await page.waitForTimeout(1000);
 
   // Select all recipes
-  await page.getByRole('button', { name: /select all/i }).click();
+  await page.getByRole('button', { name: 'Select All', exact: true }).click();
   await page.waitForTimeout(500);
 
   // Click export
@@ -66,7 +66,7 @@ test('should show warning for large exports (>50 recipes)', async ({ page, conte
   await page.waitForTimeout(1000);
 
   // Select all recipes
-  await page.getByRole('button', { name: /select all/i }).click();
+  await page.getByRole('button', { name: 'Select All', exact: true }).click();
   await page.waitForTimeout(500);
 
   // Warning should appear
@@ -84,7 +84,7 @@ test('should NOT show warning for 5 recipes', async ({ page, context }) => {
   await page.waitForTimeout(2000);
 
   // Select all recipes
-  await page.getByRole('button', { name: /select all/i }).click();
+  await page.getByRole('button', { name: 'Select All', exact: true }).click();
   await page.waitForTimeout(1000);
 
   // Warning should NOT appear
@@ -101,7 +101,7 @@ test('should hide progress dialog after export completes', async ({ page, contex
   await page.waitForTimeout(1000);
 
   // Select all
-  await page.getByRole('button', { name: /select all/i }).click();
+  await page.getByRole('button', { name: 'Select All', exact: true }).click();
   await page.waitForTimeout(500);
 
   // Export
