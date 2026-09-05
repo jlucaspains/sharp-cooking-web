@@ -148,6 +148,8 @@
           "aiFeatures": "AI features",
           "generatingNutritionMessage1": "Generating nutrition facts...",
           "generatingNutritionMessage2": "This may take a moment.",
+          "generatingDietTagsMessage1": "Generating diet tags...",
+          "generatingDietTagsMessage2": "This may take a moment.",
           "dietTagsGeneratedSuccess": "Diet tags generated successfully. Please verify them for accuracy.",
           "dietTagsGeneratedError": "Unable to generate diet tags. Please try again.",
           "manualTagsLabel": "Diet Tags",
