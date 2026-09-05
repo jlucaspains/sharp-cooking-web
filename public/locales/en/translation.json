@@ -203,7 +203,7 @@
           "startTimeTooltip": "Set start time",
           "printTooltip": "Print",
           "noNutritionFacts": "This recipe does not have nutrition facts available.",
-          "chatWithAssistant": "Chat with Assistant"
+          "chatWithAssistant": "Chat with AI Assistant"
         },
         "print": {
           "action": "Print"

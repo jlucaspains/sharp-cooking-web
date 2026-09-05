@@ -946,7 +946,7 @@ function changeLanguage() {
           </button>
         </div>
       </div>
-      <label for="nutritionFacts">{{ t("pages.recipe.id.edit.nutrition") }}</label>
+      <label>{{ t("pages.recipe.id.edit.nutrition") }}</label>
       <div class="my-3 w-full">
         <div class="flex my-3">
           <label for="servingSize" class="block p-2 w-52 rounded-sm text-black dark:text-white">{{
