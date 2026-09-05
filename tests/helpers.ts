@@ -55,6 +55,40 @@ export async function createRecipeWithoutSaving(page: Page, title: string, ratin
     }
 }
 
+// Seeds many recipes at once via the backup import feature instead of driving
+// the "Add recipe" UI per recipe. Creating dozens of recipes one field/click at
+// a time is slow enough (~2s/recipe) that it times out on WebKit engines in CI;
+// importing a single backup file lets the app save them itself, in-browser.
+export async function seedRecipesViaBackupImport(page: Page, count: number, titlePrefix = 'Test Recipe') {
+    const recipes = Array.from({ length: count }, (_, i) => ({
+        id: i + 1,
+        title: `${titlePrefix} ${i + 1}`,
+        score: 5,
+        ingredients: [`${i + 1}00g flour`],
+        steps: [`Step ${i + 1}`],
+        multiplier: 1,
+    }));
+
+    const installFilePicker = (data: unknown[]) => {
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const file = new File([blob], 'file.json', { type: 'application/json' });
+        const fileHandle = { getFile: async () => file };
+        (window as any).showOpenFilePicker = async () => [fileHandle];
+    };
+
+    // The app uses hash-based routing, so navigating to the import page from an
+    // already-loaded page is a same-document navigation and addInitScript alone
+    // (which only runs on new documents) won't install the mock in time. Patch
+    // the current document directly too, in case no full reload happens.
+    await page.addInitScript(installFilePicker, recipes);
+    await page.evaluate(installFilePicker, recipes);
+
+    await page.goto('/#/recipe/import-backup');
+    await page.getByTestId('import-button').click();
+    await page.getByTestId('save-import-button').click();
+    await page.waitForSelector('text=/imported successfully/i');
+}
+
 export async function createCategory(page: Page, id: number, title: string) {
     await page.goto('/#/categories');
     await page.waitForTimeout(500);
@@ -87,6 +121,12 @@ export async function enableCompactMobileTimeline(page: Page) {
 export async function enableAIChat(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-ai-chat-toggle').click();
+}
+
+export async function enableDietTags(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-diet-tags-toggle').click();
+    await page.waitForTimeout(500);
 }
 
 export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {

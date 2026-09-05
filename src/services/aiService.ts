@@ -1,6 +1,7 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { RecipeNutrition } from "./recipe";
 import i18next from 'i18next';
+import { DIET_TAG_IDS } from "./dietTags";
 
 /**
  * Settings required for AI service operations
@@ -141,9 +142,93 @@ Do not include any explanations or markdown formatting. Return only the JSON obj
     if (error instanceof AIServiceError) {
       throw error;
     }
-    
+
     throw new AIServiceError(
       i18next.t('pages.recipe.edit.aiGenerationFailed'),
+      error
+    );
+  }
+}
+
+/**
+ * Determine which fixed diet tags apply to a recipe using AI
+ *
+ * @param ingredients - Array of ingredient strings (e.g., ["1 cup flour", "2 eggs"])
+ * @param settings - AI settings containing API key and model name
+ * @returns Promise<string[]> - Subset of DIET_TAG_IDS that apply to the recipe
+ * @throws {AIServiceError} - If AI call fails or response is invalid
+ */
+export async function generateDietTags(
+  ingredients: string[],
+  settings: AISettings
+): Promise<string[]> {
+  if (!settings.apiKey || !settings.model) {
+    throw new AIServiceError("AI settings are not configured. API key and model name are required.");
+  }
+
+  if (!ingredients || ingredients.length === 0) {
+    throw new AIServiceError("No ingredients provided for diet tag detection.");
+  }
+
+  try {
+    const llm = new ChatOpenAI({
+      model: settings.model,
+      apiKey: settings.apiKey,
+      streaming: false,
+    });
+
+    const prompt = `Analyze this recipe's ingredients and determine which of the following diet tags apply.
+Ingredients:
+${ingredients.map((ing, idx) => `${idx + 1}. ${ing}`).join('\n')}
+
+Only choose from this exact list of tag ids: ${DIET_TAG_IDS.join(', ')}.
+- "gluten-free": contains no wheat, barley, rye, or other gluten-containing ingredients.
+- "vegetarian": contains no meat, poultry, fish, or seafood.
+- "vegan": contains no meat, poultry, fish, seafood, dairy, eggs, honey, or other animal derived ingredients.
+- "dairy-free": contains no milk, cheese, butter, cream, or other dairy ingredients.
+
+Return ONLY a valid JSON array of matching tag ids, e.g. ["vegetarian","dairy-free"]. Return an empty array [] if none apply. Do not include any explanation or markdown formatting.`;
+
+    const response = await llm.invoke(prompt);
+    const content = response.content.toString().trim();
+
+    let jsonContent = content;
+    if (content.includes('```json')) {
+      const match = content.match(/```json\n([\s\S]*?)\n```/);
+      if (match) {
+        jsonContent = match[1];
+      }
+    } else if (content.includes('```')) {
+      const match = content.match(/```\n([\s\S]*?)\n```/);
+      if (match) {
+        jsonContent = match[1];
+      }
+    }
+
+    let tagData: unknown;
+    try {
+      tagData = JSON.parse(jsonContent);
+    } catch (parseError) {
+      throw new AIServiceError(
+        "Failed to parse AI response as JSON. Please try again.",
+        parseError
+      );
+    }
+
+    if (!Array.isArray(tagData)) {
+      throw new AIServiceError("AI response for diet tags was not an array.");
+    }
+
+    return tagData.filter(
+      (tag): tag is string => typeof tag === "string" && DIET_TAG_IDS.includes(tag)
+    );
+  } catch (error) {
+    if (error instanceof AIServiceError) {
+      throw error;
+    }
+
+    throw new AIServiceError(
+      i18next.t('pages.recipe.id.edit.aiDietTagsFailed'),
       error
     );
   }

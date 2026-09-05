@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup } from './helpers';
+import { setup, createRecipe, enableDietTags } from './helpers';
 
 test.beforeEach(async ({ page }) => {
     await setup(page);
@@ -327,6 +327,76 @@ test('Test search functionality', async ({ page }) => {
     await page.getByTestId("search-recipes").fill("");
     await expect(page.getByText('Chocolate Cake')).toBeVisible();
     await expect(page.getByText('Vanilla Cookies')).toBeVisible();
+});
+
+test('Diet tags survive a full backup and restore round trip', async ({ page, browserName }) => {
+    test.skip(browserName === 'webkit', 'not applicable');
+
+    // Capture whatever gets written to the "backup" file via the File System Access API mock,
+    // then feed that same content back out through the "open file" picker mock used for restore.
+    await page.addInitScript(() => {
+        let capturedBackup = '';
+        const stream = new WritableStream({
+            write(chunk) {
+                return new Promise(async (resolve, reject) => {
+                    const blob = new Blob([chunk]);
+                    capturedBackup += await blob.text();
+                    resolve();
+                });
+            },
+            close() { },
+            abort(err) {
+                console.error("Sink error:", err);
+            }
+        });
+        (window as any).showSaveFilePicker = async (param: any) => {
+            return { createWritable: async () => { return stream } };
+        };
+        (window as any).showOpenFilePicker = async (param: any) => {
+            const file = new File([capturedBackup], "file.json", { type: "application/json" });
+            const fileHandle = {
+                getFile: async () => { return file; }
+            };
+            return [fileHandle];
+        };
+    });
+
+    await enableDietTags(page);
+
+    // The app seeds a default demo recipe (id 1) on first load, so the recipe we create here
+    // gets id 2 - see other specs (e.g. options.spec.ts) for the same assumption.
+    await createRecipe(page, 2, "Tagged Bread", 5);
+    await page.getByTestId("tag-toggle-vegan").click();
+    await page.getByTestId("topbar-single-button").click();
+    await page.waitForTimeout(500);
+
+    // Take a backup (this backs up all recipes, including the seeded demo one)
+    await page.goto('/');
+    await page.getByTestId('topbar-options').click();
+    await page.getByRole('menuitem', { name: 'Options' }).click();
+    await page.getByText('Take a backup').click();
+    await page.waitForTimeout(500);
+
+    // Restore the backup we just took
+    await page.getByText('Restore a backup').click();
+    await expect(page).toHaveURL(new RegExp(".*/recipe/import-backup"));
+    await page.getByTestId("import-button").click();
+    await waitForFileProcessed(page);
+
+    // Only import our tagged recipe (deterministic resulting id) - deselect everything,
+    // then filter down to and re-select just "Tagged Bread".
+    await page.getByTestId("deselect-all-button").click();
+    await page.getByTestId("search-recipes").fill("Tagged Bread");
+    await expect(page.getByTestId("recipe-item-0")).toBeVisible();
+    await page.getByTestId("recipe-item-0").locator('input[type="checkbox"]').check();
+    await page.getByTestId("save-import-button").click();
+    await page.waitForTimeout(1000);
+
+    // Navigate to the imported recipe by title rather than assuming its id, then verify
+    // its diet tag survived the round trip.
+    await page.goto('/');
+    await page.getByText('Tagged Bread').first().click();
+    await expect(page.getByRole('img', { name: 'Vegan' })).toBeVisible();
 });
 
 test('Test recipe preview', async ({ page }) => {
