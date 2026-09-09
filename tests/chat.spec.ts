@@ -10,7 +10,7 @@ test.describe('Chat Page', () => {
     
     // Navigate to chat
     await page.getByTestId('topbar-options').click();
-    await page.getByRole('menuitem', { name: 'Chat with Assistant' }).click();
+    await page.getByRole('menuitem', { name: 'Chat with AI Assistant' }).click();
   });
 
   test('should display chat interface', async ({ page }) => {
