@@ -25,7 +25,7 @@ npm install --global yarn
 ```
 2. CD into the project root directory
 ```powershell
-cd c:\code\sharp-cooking-web
+cd sharp-cooking-web
 ```
 3. Install package dependencies
 ```powershell

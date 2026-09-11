@@ -9,6 +9,7 @@ import { useTranslation } from "i18next-vue";
 import BusyIndicator from "../../components/BusyIndicator.vue";
 import Modal from "../../components/Modal.vue";
 import i18next from "i18next";
+import { DIET_TAG_IDS } from "../../services/dietTags";
 
 interface ImportRecipeDisplay {
   isSelected: boolean;
@@ -94,6 +95,7 @@ async function saveBackup() {
                     ?? new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 parsedRecipe.language = recipe.language ?? i18next.language;
                 parsedRecipe.categoryId = recipe.categoryId || 0;
+                parsedRecipe.tags = (recipe.tags ?? []).filter((tag: string) => DIET_TAG_IDS.includes(tag));
 
                 const id = await saveRecipe(parsedRecipe);
 

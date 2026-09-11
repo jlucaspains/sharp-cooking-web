@@ -6,6 +6,7 @@ export class RecipeViewModel extends Recipe {
 
     this.ingredients = [];
     this.steps = [];
+    this.tags = [];
     this.nutrition = {
       servingSize: 0,
       totalFat: 0,

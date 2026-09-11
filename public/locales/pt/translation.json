@@ -61,7 +61,7 @@
       "storageStats": "Armazenamento",
       "storageNotTraceable": "O armazenamento não pode ser rastreado neste dispositivo.",
       "storageDescription": "Espaço usado {{used}} de {{remaining}} disponível.",
-      "previewFeatures": "Recursos de visualização",
+      "previewFeatures": "Recursos de pré-visualização",
       "previewFeaturesDescription": "Revisar e habilitar recursos que ainda estão em desenvolvimento e podem não funcionar como esperado.",
       "aiOptions": "Opções de IA",
       "aiOptionsDescription": "Configurações para o chat de IA",
@@ -75,10 +75,13 @@
       "categoriesDescription": "Manter lista de categorias"
     },
     "preview-features": {
-      "enableAiChat": "Ativar Chat de IA",
+      "title": "Recursos de pré-visualização",
+      "enableAiChat": "Ativar Assistente IA",
       "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
       "enableCompactMobileTimeline": "Ativar Timeline Compacta no Celular",
-      "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela."
+      "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela.",
+      "enableDietTags": "Ativar Tags de Dieta",
+      "enableDietTagsDescription": "Adiciona uma ação de IA para gerar tags de dieta (Sem glúten, Vegetariano, Vegano, Sem lactose) e as exibe nas páginas de edição e visualização da receita."
     },
     "recipe": {
       "id": {
@@ -139,13 +142,24 @@
           "category": "Categoria",
           "selectCategory": "Selecione categoria...",
           "importFromShareQRCode": "Código QR",
-          "generateNutritionAI": "Gerar com IA",
+          "generateNutritionAI": "Calcular Nutrição",
+          "generateDietTags": "Calcular Dietas",
+          "aiActionsTooltip": "Ações de IA",
+          "aiFeatures": "Ações de IA",
+          "generatingNutritionMessage1": "Gerando dados nutricionais...",
+          "generatingNutritionMessage2": "Isso pode demorar um pouco.",
+          "generatingDietTagsMessage1": "Gerando tags de dieta...",
+          "generatingDietTagsMessage2": "Isso pode demorar um pouco.",
+          "dietTagsGeneratedSuccess": "Tags de dieta geradas com sucesso. Verifique-as para garantir a precisão.",
+          "dietTagsGeneratedError": "Não foi possível gerar as tags de dieta. Tente novamente.",
+          "manualTagsLabel": "Tags de Dieta",
           "nutritionOverwriteWarning": "Isso substituirá os dados nutricionais existentes. Continuar?",
           "nutritionOverwriteWarningTitle": "Substituir Dados Nutricionais?",
           "nutritionGeneratedSuccess": "Dados nutricionais gerados com sucesso. Verifique os valores para precisão.",
           "nutritionGeneratedError": "Não foi possível gerar dados nutricionais. Tente novamente.",
           "aiMissingFields": "A resposta da IA está faltando campos de nutrição obrigatórios: {{fields}}",
-          "aiGenerationFailed": "Falha ao gerar dados nutricionais. Verifique sua configuração de IA e tente novamente."
+          "aiGenerationFailed": "Falha ao gerar dados nutricionais. Verifique sua configuração de IA e tente novamente.",
+          "aiDietTagsFailed": "Falha ao gerar tags de dieta. Verifique sua configuração de IA e tente novamente."
         },
         "gallery": {
           "recipeImage": "Imagem de Receita"
@@ -190,7 +204,8 @@
           "multiplierTooltip": "Aplicar multiplicador",
           "startTimeTooltip": "Aplicar hora de início",
           "printTooltip": "Imprimir",
-          "noNutritionFacts": "Esta receita não contém informações nutricionais disponíveis."
+          "noNutritionFacts": "Esta receita não contém informações nutricionais disponíveis.",
+          "chatWithAssistant": "Conversar com o assistente IA"
         },
         "print": {
           "action": "Imprimir"
@@ -363,6 +378,12 @@
     "nutritionFacts": {
       "perServing": "Por Porção ({{servings}} porções)",
       "per100g": "100g"
+    },
+    "dietTags": {
+      "glutenFree": "Sem glúten",
+      "vegetarian": "Vegetariano",
+      "vegan": "Vegano",
+      "dairyFree": "Sem lactose"
     }
   },
   "installPrompt": {

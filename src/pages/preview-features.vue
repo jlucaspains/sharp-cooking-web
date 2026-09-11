@@ -10,6 +10,7 @@ const { t } = useTranslation();
 const state = useState()!;
 const enableAiChat = ref(false);
 const enableCompactMobileTimeline = ref(false);
+const enableDietTags = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.preview-features.title");
@@ -17,9 +18,11 @@ onMounted(async () => {
 
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const enableCompactMobileTimelineValue = await getSetting("EnableCompactMobileTimeline", "false");
+  const enableDietTagsValue = await getSetting("EnableDietTags", "false");
 
   enableAiChat.value = enableAiChatValue === "true";
   enableCompactMobileTimeline.value = enableCompactMobileTimelineValue === "true";
+  enableDietTags.value = enableDietTagsValue === "true";
 });
 
 function updateEnableAiChat() {
@@ -28,6 +31,10 @@ function updateEnableAiChat() {
 
 function updateEnableCompactMobileTimeline() {
   saveSetting("EnableCompactMobileTimeline", `${enableCompactMobileTimeline.value}`);
+}
+
+function updateEnableDietTags() {
+  saveSetting("EnableDietTags", `${enableDietTags.value}`);
 }
 </script>
 
@@ -44,6 +51,12 @@ function updateEnableCompactMobileTimeline() {
         :display-name="t('pages.preview-features.enableCompactMobileTimeline')"
         :display-description="t('pages.preview-features.enableCompactMobileTimelineDescription')"
         test-id="enable-compact-mobile-timeline-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="enableDietTags" @change="updateEnableDietTags"
+        :display-name="t('pages.preview-features.enableDietTags')"
+        :display-description="t('pages.preview-features.enableDietTagsDescription')"
+        test-id="enable-diet-tags-toggle"></config-switch>
     </div>
   </div>
 </template>

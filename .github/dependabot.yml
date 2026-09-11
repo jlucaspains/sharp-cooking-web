@@ -5,16 +5,16 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
     groups:
       dependencies:
         patterns:
           - "*"
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/api" # Location of package manifests
+  - package-ecosystem: "pip"
+    directory: "/api"
     schedule:
       interval: "weekly"
     groups:
