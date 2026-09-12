@@ -1,4 +1,4 @@
-azure-functions~=2.3
+azure-functions
 pint~=0.25
 recipe-scrapers~=15.12
 python-multipart~=0.0.32
