@@ -31,7 +31,7 @@ test('change time', async ({ page, browserName }) => {
   await page.getByTestId('time-button').click();
   await page.getByTestId('time-value').type("1000AM");
   await page.getByRole('button').getByText("OK").click();
-  expect(await page.getByText('10:35 AM').textContent()).toMatch(/10:35.*/);
+  expect(await page.getByText('10:35 AM').first().textContent()).toMatch(/10:35.*/);
 });
 
 test('print recipe', async ({ page }) => {
@@ -171,11 +171,7 @@ test('share as code', async ({ page }) => {
   await expect(page.getByTestId("actual-share-code")).toHaveText("123456");
 });
 
-test('display works with compact timeline enabled', async ({ page }) => {
-  // Enable compact timeline feature
-  await page.goto('#/preview-features');
-  await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
-  
+test('display works with compact timeline', async ({ page }) => {
   await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake it for 30 min"]);
   await page.goto('#/recipe/2');
   

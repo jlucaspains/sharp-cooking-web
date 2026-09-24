@@ -113,11 +113,6 @@ export async function preventPageStats(page: Page) {
     });
 }
 
-export async function enableCompactMobileTimeline(page: Page) {
-    await page.goto('#/preview-features');
-    await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
-}
-
 export async function enableAIChat(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-ai-chat-toggle').click();

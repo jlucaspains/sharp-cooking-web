@@ -78,8 +78,6 @@
       "title": "Preview Features",
       "enableAiChat": "Enable AI Chat",
       "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
-      "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
-      "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space.",
       "enableNewDisplayView": "Enable New Display View",
       "enableNewDisplayViewDescription": "View recipes using a layout that better fills the available space.",
       "enableDietTags": "Enable Diet Tags",

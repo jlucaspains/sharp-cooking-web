@@ -9,7 +9,6 @@ const { t } = useTranslation();
 
 const state = useState()!;
 const enableAiChat = ref(false);
-const enableCompactMobileTimeline = ref(false);
 const enableDietTags = ref(false);
 const enableNewDisplayView = ref(false);
 
@@ -18,22 +17,16 @@ onMounted(async () => {
   state.menuOptions = [];
 
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
-  const enableCompactMobileTimelineValue = await getSetting("EnableCompactMobileTimeline", "false");
   const enableDietTagsValue = await getSetting("EnableDietTags", "false");
   const enableNewDisplayViewValue = await getSetting("EnableNewDisplayView", "false");
 
   enableAiChat.value = enableAiChatValue === "true";
-  enableCompactMobileTimeline.value = enableCompactMobileTimelineValue === "true";
   enableDietTags.value = enableDietTagsValue === "true";
   enableNewDisplayView.value = enableNewDisplayViewValue === "true";
 });
 
 function updateEnableAiChat() {
   saveSetting("EnableAiChat", `${enableAiChat.value}`);
-}
-
-function updateEnableCompactMobileTimeline() {
-  saveSetting("EnableCompactMobileTimeline", `${enableCompactMobileTimeline.value}`);
 }
 
 function updateEnableDietTags() {
@@ -52,12 +45,6 @@ function updateEnableNewDisplayView() {
         :display-name="t('pages.preview-features.enableAiChat')"
         :display-description="t('pages.preview-features.enableAiChatDescription')"
         test-id="enable-ai-chat-toggle"></config-switch>
-    </div>
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <config-switch v-model="enableCompactMobileTimeline" @change="updateEnableCompactMobileTimeline"
-        :display-name="t('pages.preview-features.enableCompactMobileTimeline')"
-        :display-description="t('pages.preview-features.enableCompactMobileTimelineDescription')"
-        test-id="enable-compact-mobile-timeline-toggle"></config-switch>
     </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <config-switch v-model="enableDietTags" @change="updateEnableDietTags"
