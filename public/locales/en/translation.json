@@ -80,6 +80,8 @@
       "enableAiChatDescription": "Allows for interacting with an AI assistant to get recipe insights and other cooking related information.",
       "enableCompactMobileTimeline": "Enable Compact Mobile Timeline",
       "enableCompactMobileTimelineDescription": "On mobile devices, display times inline with step numbers for a more compact layout and better use of screen space.",
+      "enableNewDisplayView": "Enable New Display View",
+      "enableNewDisplayViewDescription": "View recipes using a layout that better fills the available space.",
       "enableDietTags": "Enable Diet Tags",
       "enableDietTagsDescription": "Adds an AI action to generate diet tags (Gluten free, Vegetarian, Vegan, Dairy free) and shows them on the recipe edit and view pages."
     },

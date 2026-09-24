@@ -80,6 +80,8 @@
       "enableAiChatDescription": "Permite interagir com um assistente de IA para obter insights de receitas e outras informações relacionadas à culinária.",
       "enableCompactMobileTimeline": "Ativar Timeline Compacta no Celular",
       "enableCompactMobileTimelineDescription": "Em dispositivos móveis, exibe os horários ao lado dos números das etapas para um layout mais compacto e melhor uso do espaço da tela.",
+      "enableNewDisplayView": "Ativar Modo Amplo para Desktop",
+      "enableNewDisplayViewDescription": "Em telas grandes, exibe as receitas usando um layout que aproveita melhor o espaço disponível, com os ingredientes fixados ao lado das etapas.",
       "enableDietTags": "Ativar Tags de Dieta",
       "enableDietTagsDescription": "Adiciona uma ação de IA para gerar tags de dieta (Sem glúten, Vegetariano, Vegano, Sem lactose) e as exibe nas páginas de edição e visualização da receita."
     },
