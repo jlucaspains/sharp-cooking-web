@@ -124,6 +124,12 @@ export async function enableDietTags(page: Page) {
     await page.waitForTimeout(500);
 }
 
+export async function enableNewDisplayView(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-new-display-view-toggle').click();
+    await page.waitForTimeout(500);
+}
+
 export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {
     await page.goto('/#/ai-options');
     await page.waitForLoadState('networkidle');

@@ -124,7 +124,6 @@ export function prepareStepDisplay(input: string, currentTime: Date, locale: str
     }
 
     if (highlight && result.totalTimeInSeconds > 0) {
-        console.log(result.timeItems);
         for (const timeItem of result.timeItems) {
             const regexTimeItem = new RegExp(`${timeItem.timeText}( ?)${timeItem.timeUnitText}`, "g");
             displayText = displayText.replaceAll(regexTimeItem, `<span class="text-theme-primary">${timeItem.timeText}$1${timeItem.timeUnitText}</span>`);
