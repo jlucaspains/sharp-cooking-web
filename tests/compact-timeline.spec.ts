@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { createRecipe, setup, enableCompactMobileTimeline } from './helpers';
+import { createRecipe, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
-  await enableCompactMobileTimeline(page);
 });
 
 test('toggle ingredients completion', async ({ page }) => {
@@ -120,21 +119,6 @@ test('completion state persists during session', async ({ page }) => {
   // Note: Completion state is not persisted across navigations by design
   // This is intentional as it's meant for tracking during active cooking
   await expect(page.locator('[aria-label="Step 1"]')).toHaveAttribute('aria-checked', 'false');
-});
-
-test('compact timeline feature can be disabled', async ({ page }) => {
-  await createRecipe(page, 2, "New Bread", 5, ["100g flour"], ["Bake"]);
-  
-  // Disable the feature
-  await page.goto('#/preview-features');
-  await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
-  
-  await page.goto('#/recipe/2');
-  
-  // Checkboxes should still work (they're not dependent on the compact layout)
-  const step1Checkbox = page.locator('[aria-label="Step 1"]');
-  await step1Checkbox.click();
-  await expect(step1Checkbox).toHaveAttribute('aria-checked', 'true');
 });
 
 test('all steps and ingredients have proper aria labels', async ({ page }) => {

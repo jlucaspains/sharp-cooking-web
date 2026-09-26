@@ -160,7 +160,9 @@ test('individual recipe checkboxes should be clickable', async ({ page }) => {
 
 test('search filter should filter recipes', async ({ page }) => {
   // Get initial count of visible recipes
-  const recipesBefore = await page.locator('[role="checkbox"]').count();
+  const checkboxes = page.locator('[role="checkbox"]');
+  await checkboxes.waitFor({ state: 'visible', timeout: 1000 });
+  const recipesBefore = await checkboxes.count();
 
   // Type in search box
   const searchInput = page.getByPlaceholder(/search/i);

@@ -34,6 +34,7 @@ let allRecipes = [] as RecipeViewModel[];
 let debouncedWatch: (currentValue: string, oldValue: string) => void;
 let debouncedScroll: (currentValue: number) => void;
 const addOptions = ref([] as Array<{ name: string, text: string, action: () => void }>);
+const enableNewDisplayView = ref(false);
 
 function sortByTitle(items: Array<RecipeViewModel>) {
   return items.sort((a, b) => {
@@ -83,6 +84,10 @@ async function sort(type: string, items: Array<RecipeViewModel>, saveSort: boole
 
 onMounted(async () => {
   await initialize(t("initialRecipes", { returnObjects: true }) as any);
+
+  const enableNewDisplayViewValue = await getSetting("EnableNewDisplayView", "false");
+  enableNewDisplayView.value = enableNewDisplayViewValue === "true";
+
   addOptions.value = [{
     name: "AddManual",
     text: t("pages.index.addManually"),
@@ -194,7 +199,7 @@ function onScrol() {
 }
 
 function goToRecipe(id: number) {
-  router.push(`/recipe/${id}`);
+  router.push(enableNewDisplayView.value ? `/recipe/${id}/view` : `/recipe/${id}`);
 }
 
 function goToNew() {

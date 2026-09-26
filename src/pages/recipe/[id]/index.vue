@@ -76,7 +76,6 @@ const noSleep = new NoSleep();
 let defaultTimeSetting = "5";
 let useFractionsOverDecimal = false;
 let enableAiChat = false;
-const enableCompactMobileTimeline = ref(false);
 const isDietTagsEnabled = ref(false);
 
 function toggleStepCompletion(index: number) {
@@ -128,9 +127,6 @@ onMounted(async () => {
 
   const enableAiChatString = await getSetting("EnableAiChat", "false");
   enableAiChat = enableAiChatString == "true";
-
-  const enableCompactMobileTimelineString = await getSetting("EnableCompactMobileTimeline", "false");
-  enableCompactMobileTimeline.value = enableCompactMobileTimelineString == "true";
 
   isDietTagsEnabled.value = (await getSetting("EnableDietTags", "false")) === "true";
 
@@ -672,8 +668,8 @@ function nutritionHasValues(): boolean {
 
       </button>
     </div>
-    <div :class="enableCompactMobileTimeline ? 'pl-4' : ''" class="grid grid-cols-12 w-full mt-7 pr-1">
-      <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+    <div class="pl-4 grid grid-cols-12 w-full mt-7 pr-1">
+      <div class="hidden sm:block lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(currentStartTime) }}
       </div>
       <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleIngredientsCompletion" role="checkbox" :aria-checked="completedIngredients" :aria-label="t('pages.recipe.id.index.ingredients')">
@@ -687,18 +683,18 @@ function nutritionHasValues(): boolean {
           <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
         </svg>
       </div>
-      <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span class="font-semibold">{{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)</span><span v-if="enableCompactMobileTimeline" :class="completedIngredients ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden text-sm">{{ parseTime(currentStartTime) }}</span>
+      <div class="col-span-11 flex justify-between items-center lg:col-span-10 sm:col-span-9 mt-3">
+        <span class="font-semibold">{{ t('pages.recipe.id.index.ingredients') }} ({{ item.multiplier }}x)</span><span :class="completedIngredients ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden text-sm">{{ parseTime(currentStartTime) }}</span>
       </div>
       <template v-for="subItem in displayIngredients">
-        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div class="hidden sm:block lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div :class="enableCompactMobileTimeline ? 'col-span-11' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9" @click="showIngredientDetails(subItem)"
+        <div class="col-span-11 lg:col-span-10 sm:col-span-9" @click="showIngredientDetails(subItem)"
           v-html="subItem.text">
         </div>
       </template>
       <template v-for="(displayItem, index) in displayInstructions">
-        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+        <div class="hidden sm:block lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
           {{ parseTime(displayItem.startTime) }}
         </div>
         <div class="-ml-3.5 mt-3 cursor-pointer" @click="toggleStepCompletion(index)" role="checkbox" :aria-checked="completedSteps.has(index)" :aria-label="`${t('pages.recipe.id.index.step')} ${index + 1}`">
@@ -712,16 +708,16 @@ function nutritionHasValues(): boolean {
             <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
           </svg>
         </div>
-        <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-          <span class="font-semibold">{{ t('pages.recipe.id.index.step') }} {{ index + 1 }}</span><span v-if="enableCompactMobileTimeline" :class="completedSteps.has(index) ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden pr-1 text-sm">{{ parseTime(displayItem.startTime) }}</span>
+        <div class="col-span-11 flex justify-between items-center lg:col-span-10 sm:col-span-9 mt-3">
+          <span class="font-semibold">{{ t('pages.recipe.id.index.step') }} {{ index + 1 }}</span><span :class="completedSteps.has(index) ? 'text-gray-400 line-through' : 'text-gray-500'" class="sm:hidden pr-1 text-sm">{{ parseTime(displayItem.startTime) }}</span>
         </div>
-        <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3"></div>
+        <div class="hidden sm:block lg:col-span-1 sm:col-span-2 col-span-3"></div>
         <div class="border-l-4 border-theme-secondary"></div>
-        <div :class="enableCompactMobileTimeline ? 'col-span-11' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9" v-html="displayItem.text"
+        <div class="col-span-11 lg:col-span-10 sm:col-span-9" v-html="displayItem.text"
           @click="showInstructionDetails(displayItem)">
         </div>
       </template>
-      <div :class="enableCompactMobileTimeline ? 'hidden sm:block' : ''" class="lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
+      <div class="hidden sm:block lg:col-span-1 sm:col-span-2 col-span-3 mt-3">
         {{ parseTime(finishTime) }}
       </div>
       <div class="-ml-3.5 mt-3">
@@ -730,8 +726,8 @@ function nutritionHasValues(): boolean {
           <circle cx="12" cy="12" r="10" />
         </svg>
       </div>
-      <div :class="enableCompactMobileTimeline ? 'col-span-11 flex justify-between items-center' : 'col-span-8'" class="lg:col-span-10 sm:col-span-9 mt-3">
-        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span v-if="enableCompactMobileTimeline" class="text-gray-500 sm:hidden pr-1 text-sm">{{ parseTime(finishTime) }}</span>
+      <div class="col-span-11 flex justify-between items-center lg:col-span-10 sm:col-span-9 mt-3">
+        <span>{{ t('pages.recipe.id.index.enjoy') }}</span><span class="text-gray-500 sm:hidden pr-1 text-sm">{{ parseTime(finishTime) }}</span>
       </div>
     </div>
     <h2 v-if="item.hasNotes" class="mt-4">{{ t("pages.recipe.id.index.notes") }}</h2>

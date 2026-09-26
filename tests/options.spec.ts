@@ -149,7 +149,8 @@ test('steps interval', async ({ page, browserName }) => {
   await page.getByTestId('time-button').click();
   await page.getByTestId('time-value').type("1000AM");
   await page.getByRole('button').getByText("OK").click();
-  expect(await page.getByText('10:40 AM').textContent()).toMatch(/10:40.*/);
+  // There are 2 places in the page the new time repeats, check either of them
+  expect(await page.getByText('10:40 AM').first().textContent()).toMatch(/10:40.*/);
 });
 
 test('all category first toggle visibility', async ({ page }) => {
