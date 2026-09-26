@@ -113,11 +113,6 @@ export async function preventPageStats(page: Page) {
     });
 }
 
-export async function enableCompactMobileTimeline(page: Page) {
-    await page.goto('#/preview-features');
-    await page.getByTestId('enable-compact-mobile-timeline-toggle').click();
-}
-
 export async function enableAIChat(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-ai-chat-toggle').click();
@@ -126,6 +121,12 @@ export async function enableAIChat(page: Page) {
 export async function enableDietTags(page: Page) {
     await page.goto('#/preview-features');
     await page.getByTestId('enable-diet-tags-toggle').click();
+    await page.waitForTimeout(500);
+}
+
+export async function enableNewDisplayView(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-new-display-view-toggle').click();
     await page.waitForTimeout(500);
 }
 
