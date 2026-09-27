@@ -45,6 +45,37 @@ test('syncs a new recipe to a second device', async ({ browser }) => {
   await contextB.close();
 });
 
+test('does not re-download recipes that have not changed', async ({ browser }) => {
+  const store = createFakeRemoteStore();
+
+  const contextA = await browser.newContext();
+  const pageA = await contextA.newPage();
+  await setupDevice(pageA, store);
+
+  await createRecipe(pageA, 2, 'Untouched Bread 1', 5);
+  await createRecipe(pageA, 3, 'Untouched Bread 2', 5);
+  await syncNow(pageA);
+
+  const contextB = await browser.newContext();
+  const pageB = await contextB.newPage();
+  await setupDevice(pageB, store);
+
+  // First sync on device B has to pull every recipe (the app's own default sample recipe
+  // plus the two created above).
+  await syncNow(pageB);
+  const firstSyncDownloadCount = store.recipeFileDownloadCount;
+  expect(firstSyncDownloadCount).toBeGreaterThan(0);
+
+  // Nothing changed anywhere since - a second sync should list the folder but never
+  // download any recipe's content again.
+  store.recipeFileDownloadCount = 0;
+  await syncNow(pageB);
+  expect(store.recipeFileDownloadCount).toBe(0);
+
+  await contextA.close();
+  await contextB.close();
+});
+
 test('propagates a deletion to a second device', async ({ browser }) => {
   const store = createFakeRemoteStore();
 

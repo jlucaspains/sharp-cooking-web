@@ -5,12 +5,18 @@ import { Setting } from "./setting";
 import { Category } from "./category";
 import { getThumbnail } from "../helpers/videoHelpers";
 
+export interface RecipeSyncState {
+    uuid: string;
+    remoteEtag: string;
+}
+
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
     public recipeImages!: Table<RecipeImage, number>;
     public recipeMedia!: Table<RecipeMedia, number>;
     public settings!: Table<Setting, string>;
     public categories!: Table<Category, number>;
+    public recipeSyncState!: Table<RecipeSyncState, string>;
 
     public constructor() {
         super("RecipeDatabase");
@@ -100,6 +106,17 @@ class RecipeDatabase extends Dexie {
                 category.uuid = category.uuid || crypto.randomUUID();
                 category.changedOn = category.changedOn || now;
             });
+        });
+        this.version(9).stores({
+            recipes: "++id,title,score,changedOn,categoryId,uuid",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            categories: "++id,name,uuid",
+            // Caches the remote OneDrive etag last seen per recipe (by uuid), so cloud sync
+            // can tell which /recipes/<uuid>.json files changed remotely without downloading
+            // every one of them. Purely additive - empty until sync populates it.
+            recipeSyncState: "uuid"
         });
     }
 }
@@ -390,24 +407,42 @@ export async function getAllCategoriesForSync(): Promise<Category[]> {
     return await db.categories.toArray();
 }
 
-// Builds the full sync snapshot including soft-deleted rows (tombstones), unlike
-// prepareBackup() which is for the human-facing "Take Backup" download.
-export async function prepareSyncSnapshot(deviceId: string): Promise<BackupModel> {
-    const allRecipes = await db.recipes.toArray();
-    const allMedia = await db.recipeMedia.toArray();
-    const allCategories = await db.categories.toArray();
+// Builds the sync payload for a single recipe (including soft-delete tombstones - unlike
+// prepareBackup() which is for the human-facing "Take Backup" download). Media is omitted for
+// a deleted recipe - no point re-uploading photos for a tombstone.
+export async function prepareRecipeSyncPayload(recipeId: number): Promise<RecipeBackupModel | null> {
+    const recipe = await db.recipes.get(recipeId);
 
-    const result = new BackupModel();
-    for (const recipe of allRecipes) {
-        const category = allCategories.find(item => item.id == recipe.categoryId);
-        result.recipes.push(getBackupModel(recipe, category, allMedia));
+    if (!recipe) {
+        return null;
     }
 
-    result.categories = allCategories;
+    const category = recipe.categoryId ? await db.categories.get(recipe.categoryId) : undefined;
+    const allMedia = recipe.deletedOn ? [] : await db.recipeMedia.where("recipeId").equals(recipeId).toArray();
+
+    return getBackupModel(recipe, category, allMedia);
+}
+
+// Builds the shared categories sync payload (all categories, including tombstones, plus
+// device/export metadata) - recipes stay empty, they sync as individual files instead.
+export async function prepareCategoriesSyncPayload(deviceId: string): Promise<BackupModel> {
+    const result = new BackupModel();
+    result.categories = await db.categories.toArray();
     result.deviceId = deviceId;
     result.exportedOn = new Date().toISOString();
 
     return result;
+}
+
+// Per-recipe cache of the last remote OneDrive etag seen for that recipe's sync file, so a
+// sync can tell which files changed remotely without downloading every one of them.
+export async function getRecipeSyncEtag(uuid: string): Promise<string | undefined> {
+    const state = await db.recipeSyncState.get(uuid);
+    return state?.remoteEtag;
+}
+
+export async function setRecipeSyncEtag(uuid: string, remoteEtag: string): Promise<void> {
+    await db.recipeSyncState.put({ uuid, remoteEtag });
 }
 
 // Applies a category coming from a remote sync snapshot. `localId` should be the existing

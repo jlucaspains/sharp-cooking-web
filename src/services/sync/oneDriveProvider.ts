@@ -1,10 +1,12 @@
 import { PublicClientApplication, type AccountInfo } from "@azure/msal-browser";
 import { getSetting, saveSetting } from "../dataService";
-import { CloudProvider, CloudProviderAccount, RemoteFile } from "./cloudProvider";
+import { CloudProvider, CloudProviderAccount, PutResult, RemoteFile, RemoteFileMeta } from "./cloudProvider";
 
 const SCOPES = ["Files.ReadWrite.AppFolder"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
-const SYNC_FILE_PATH = "/me/drive/special/approot:/sharp-cooking-sync.json";
+const APP_ROOT = "/me/drive/special/approot";
+const CATEGORIES_FILE_PATH = `${APP_ROOT}:/categories.json`;
+const RECIPES_FOLDER_PATH = `${APP_ROOT}:/recipes`;
 
 let msalInstance: PublicClientApplication | null = null;
 
@@ -88,6 +90,76 @@ async function acquireTokenPopupWithRecovery(instance: PublicClientApplication, 
     }
 }
 
+// Now that a sync touches many small files instead of one big one, a first-ever sync (or a
+// large batch of changes) is more likely to hit Graph's throttling. Retry a 429 a couple of
+// times using its Retry-After hint before giving up.
+async function graphFetch(url: string, init: RequestInit, retriesLeft = 2): Promise<Response> {
+    const response = await fetch(url, init);
+
+    if (response.status === 429 && retriesLeft > 0) {
+        const retryAfterSeconds = Number(response.headers.get("Retry-After")) || 1;
+        await new Promise(resolve => setTimeout(resolve, retryAfterSeconds * 1000));
+        return graphFetch(url, init, retriesLeft - 1);
+    }
+
+    return response;
+}
+
+// Graph's error responses carry a JSON body with the actual reason under error.message - the
+// HTTP status alone (e.g. a bare 400) isn't enough to tell what was wrong with a request.
+async function describeError(response: Response): Promise<string> {
+    try {
+        const body = await response.json();
+        return body?.error?.message ?? JSON.stringify(body);
+    } catch {
+        return response.statusText;
+    }
+}
+
+// Graph's path-based upload isn't documented to reliably auto-create a missing parent
+// folder, so create /recipes explicitly the first time this session needs it rather than
+// rely on that. Cheap and idempotent - a 409 just means another device/tab beat us to it.
+let recipesFolderEnsured = false;
+
+async function ensureRecipesFolderExists(token: string): Promise<void> {
+    if (recipesFolderEnsured) {
+        return;
+    }
+
+    const response = await graphFetch(`${GRAPH_BASE}${RECIPES_FOLDER_PATH}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 404) {
+        // The special-folder alias's docs only ever show GET on its /children collection,
+        // never POST - resolve approot to a concrete item id first and create the folder
+        // there instead, which is unambiguously documented to support POST.
+        const approotResponse = await graphFetch(`${GRAPH_BASE}${APP_ROOT}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!approotResponse.ok) {
+            throw new Error(`Failed to resolve OneDrive app folder: ${approotResponse.status} ${await describeError(approotResponse)}`);
+        }
+
+        const approot = await approotResponse.json();
+
+        const createResponse = await graphFetch(`${GRAPH_BASE}/me/drive/items/${approot.id}/children`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ name: "recipes", folder: {}, "@microsoft.graph.conflictBehavior": "fail" }),
+        });
+
+        if (!createResponse.ok && createResponse.status !== 409) {
+            throw new Error(`Failed to create OneDrive recipes folder: ${createResponse.status} ${await describeError(createResponse)}`);
+        }
+    } else if (!response.ok) {
+        throw new Error(`Failed to check OneDrive recipes folder: ${response.status} ${await describeError(response)}`);
+    }
+
+    recipesFolderEnsured = true;
+}
+
 export class OneDriveProvider implements CloudProvider {
     readonly id = "onedrive";
 
@@ -135,9 +207,57 @@ export class OneDriveProvider implements CloudProvider {
         await saveSetting("OneDriveAccountName", "");
     }
 
-    async getRemoteFile(): Promise<RemoteFile | null> {
+    async getCategoriesFile(): Promise<RemoteFile | null> {
+        return this.getFile(CATEGORIES_FILE_PATH);
+    }
+
+    async putCategoriesFile(content: string, expectedEtag: string | null): Promise<PutResult> {
+        return this.putFile(CATEGORIES_FILE_PATH, content, expectedEtag);
+    }
+
+    async listRecipeFiles(): Promise<RemoteFileMeta[]> {
         const token = await getAccessToken();
-        const response = await fetch(`${GRAPH_BASE}${SYNC_FILE_PATH}:/content`, {
+        const result: RemoteFileMeta[] = [];
+        let url: string | null =
+            `${GRAPH_BASE}${RECIPES_FOLDER_PATH}:/children?$select=name,eTag,lastModifiedDateTime&$top=200`;
+
+        while (url) {
+            const response: Response = await graphFetch(url, { headers: { Authorization: `Bearer ${token}` } });
+
+            if (response.status === 404) {
+                // /recipes doesn't exist yet - nothing has ever been synced from any device.
+                return [];
+            }
+
+            if (!response.ok) {
+                throw new Error(`Failed to list OneDrive recipe files: ${response.status} ${await describeError(response)}`);
+            }
+
+            const json = await response.json();
+            for (const item of json.value ?? []) {
+                result.push({ name: item.name, etag: item.eTag, lastModifiedDateTime: item.lastModifiedDateTime });
+            }
+
+            url = json["@odata.nextLink"] ?? null;
+        }
+
+        return result;
+    }
+
+    async getRecipeFile(uuid: string): Promise<RemoteFile | null> {
+        return this.getFile(`${RECIPES_FOLDER_PATH}/${uuid}.json`);
+    }
+
+    async putRecipeFile(uuid: string, content: string, expectedEtag: string | null): Promise<PutResult> {
+        const token = await getAccessToken();
+        await ensureRecipesFolderExists(token);
+
+        return this.putFile(`${RECIPES_FOLDER_PATH}/${uuid}.json`, content, expectedEtag, token);
+    }
+
+    private async getFile(path: string): Promise<RemoteFile | null> {
+        const token = await getAccessToken();
+        const response = await graphFetch(`${GRAPH_BASE}${path}:/content`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -146,7 +266,7 @@ export class OneDriveProvider implements CloudProvider {
         }
 
         if (!response.ok) {
-            throw new Error(`Failed to download OneDrive sync file: ${response.status}`);
+            throw new Error(`Failed to download OneDrive file ${path}: ${response.status} ${await describeError(response)}`);
         }
 
         const content = await response.text();
@@ -155,10 +275,10 @@ export class OneDriveProvider implements CloudProvider {
         return { content, etag };
     }
 
-    async putRemoteFile(content: string, expectedEtag: string | null): Promise<{ success: boolean; etag?: string }> {
-        const token = await getAccessToken();
+    private async putFile(path: string, content: string, expectedEtag: string | null, token?: string): Promise<PutResult> {
+        const accessToken = token ?? await getAccessToken();
         const headers: Record<string, string> = {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
         };
 
@@ -166,7 +286,7 @@ export class OneDriveProvider implements CloudProvider {
             headers["If-Match"] = expectedEtag;
         }
 
-        const response = await fetch(`${GRAPH_BASE}${SYNC_FILE_PATH}:/content`, {
+        const response = await graphFetch(`${GRAPH_BASE}${path}:/content`, {
             method: "PUT",
             headers,
             body: content,
@@ -177,7 +297,7 @@ export class OneDriveProvider implements CloudProvider {
         }
 
         if (!response.ok) {
-            throw new Error(`Failed to upload OneDrive sync file: ${response.status}`);
+            throw new Error(`Failed to upload OneDrive file ${path}: ${response.status} ${await describeError(response)}`);
         }
 
         const json = await response.json();
