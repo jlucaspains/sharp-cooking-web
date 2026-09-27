@@ -6,6 +6,7 @@ import Notification from "./components/Notification.vue";
 import InstallPrompt from "./components/InstallPrompt.vue";
 import { i18nextPromise } from './i18n';
 import i18next from "i18next";
+import { autoSyncIfEnabled } from "./services/sync/syncService";
 
 const state = useState()!;
 
@@ -16,6 +17,9 @@ onMounted(async () => {
   document.body.classList.add("dark:bg-theme-gray");
   document.documentElement.lang = i18next.resolvedLanguage ?? "en";
   window.history.scrollRestoration = "manual"
+
+  autoSyncIfEnabled();
+  window.addEventListener("online", autoSyncIfEnabled);
 });
 </script>
 

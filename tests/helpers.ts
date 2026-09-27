@@ -130,6 +130,51 @@ export async function enableNewDisplayView(page: Page) {
     await page.waitForTimeout(500);
 }
 
+export async function enableCloudSync(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-cloud-sync-toggle').click();
+    await page.waitForTimeout(500);
+}
+
+export interface FakeRemoteStore {
+    content: string | null;
+    version: number;
+}
+
+export function createFakeRemoteStore(): FakeRemoteStore {
+    return { content: null, version: 0 };
+}
+
+// Installs a fake CloudProvider on `window.__testCloudProvider`, backed by a Node-side
+// in-memory store, so cloud-sync.vue picks it up instead of the real OneDrive/MSAL
+// provider (see src/pages/cloud-sync.vue). Real OAuth popups can't be driven in
+// Playwright, so this is the seam sync tests use instead. Pass the same store to two
+// pages to simulate two devices syncing through the same cloud file.
+export async function installFakeCloudProvider(page: Page, store: FakeRemoteStore) {
+    await page.exposeFunction('__fakeGetRemoteFile', async () => {
+        return store.content === null ? null : { content: store.content, etag: String(store.version) };
+    });
+    await page.exposeFunction('__fakePutRemoteFile', async (content: string, expectedEtag: string | null) => {
+        if (expectedEtag && expectedEtag !== String(store.version)) {
+            return { success: false };
+        }
+        store.content = content;
+        store.version++;
+        return { success: true, etag: String(store.version) };
+    });
+
+    await page.addInitScript(() => {
+        (window as any).__testCloudProvider = {
+            id: 'fake',
+            isConnected: async () => true,
+            connect: async () => ({ displayName: 'Test Account' }),
+            disconnect: async () => { },
+            getRemoteFile: () => (window as any).__fakeGetRemoteFile(),
+            putRemoteFile: (content: string, expectedEtag: string | null) => (window as any).__fakePutRemoteFile(content, expectedEtag),
+        };
+    });
+}
+
 export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {
     await page.goto('/#/ai-options');
     await page.waitForLoadState('networkidle');

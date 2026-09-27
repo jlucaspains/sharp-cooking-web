@@ -11,6 +11,7 @@ const state = useState()!;
 const enableAiChat = ref(false);
 const enableDietTags = ref(false);
 const enableNewDisplayView = ref(false);
+const enableCloudSync = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.preview-features.title");
@@ -19,10 +20,12 @@ onMounted(async () => {
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const enableDietTagsValue = await getSetting("EnableDietTags", "false");
   const enableNewDisplayViewValue = await getSetting("EnableNewDisplayView", "false");
+  const enableCloudSyncValue = await getSetting("EnableCloudSync", "false");
 
   enableAiChat.value = enableAiChatValue === "true";
   enableDietTags.value = enableDietTagsValue === "true";
   enableNewDisplayView.value = enableNewDisplayViewValue === "true";
+  enableCloudSync.value = enableCloudSyncValue === "true";
 });
 
 function updateEnableAiChat() {
@@ -35,6 +38,10 @@ function updateEnableDietTags() {
 
 function updateEnableNewDisplayView() {
   saveSetting("EnableNewDisplayView", `${enableNewDisplayView.value}`);
+}
+
+function updateEnableCloudSync() {
+  saveSetting("EnableCloudSync", `${enableCloudSync.value}`);
 }
 </script>
 
@@ -57,6 +64,12 @@ function updateEnableNewDisplayView() {
         :display-name="t('pages.preview-features.enableNewDisplayView')"
         :display-description="t('pages.preview-features.enableNewDisplayViewDescription')"
         test-id="enable-new-display-view-toggle"></config-switch>
+    </div>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
+      <config-switch v-model="enableCloudSync" @change="updateEnableCloudSync"
+        :display-name="t('pages.preview-features.enableCloudSync')"
+        :display-description="t('pages.preview-features.enableCloudSyncDescription')"
+        test-id="enable-cloud-sync-toggle"></config-switch>
     </div>
   </div>
 </template>

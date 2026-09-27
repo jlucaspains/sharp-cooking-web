@@ -72,7 +72,9 @@
       "allCategoryFirst": "Show 'All' category first",
       "allCategoryFirstDescription": "When enabled, the 'All' category will appear at the beginning of the category list.",
       "categories": "Categories",
-      "categoriesDescription": "Maintain list of categories"
+      "categoriesDescription": "Maintain list of categories",
+      "cloudSync": "Cloud Sync",
+      "cloudSyncDescription": "Connect a cloud drive to keep your recipes in sync across devices"
     },
     "preview-features": {
       "title": "Preview Features",
@@ -81,7 +83,31 @@
       "enableNewDisplayView": "Enable New Display View",
       "enableNewDisplayViewDescription": "View recipes using a layout that better fills the available space.",
       "enableDietTags": "Enable Diet Tags",
-      "enableDietTagsDescription": "Adds an AI action to generate diet tags (Gluten free, Vegetarian, Vegan, Dairy free) and shows them on the recipe edit and view pages."
+      "enableDietTagsDescription": "Adds an AI action to generate diet tags (Gluten free, Vegetarian, Vegan, Dairy free) and shows them on the recipe edit and view pages.",
+      "enableCloudSync": "Enable Cloud Sync",
+      "enableCloudSyncDescription": "Adds an option to connect a cloud drive (OneDrive) and keep recipes synced two-way across devices."
+    },
+    "cloud-sync": {
+      "title": "Cloud Sync",
+      "clientId": "OneDrive App Client ID",
+      "clientIdDescription": "Register an app in your Azure AD tenant and paste its client (application) ID here. Sharp Cooking only requests access to its own app folder in your OneDrive.",
+      "clientIdRequired": "Please provide a OneDrive App Client ID first",
+      "connect": "Connect to OneDrive",
+      "connectDescription": "Sign in with your Microsoft account to link OneDrive",
+      "connectedSuccessfully": "Connected to OneDrive successfully",
+      "connectFailed": "Could not connect to OneDrive",
+      "connectedAs": "Connected as {{account}}",
+      "disconnect": "Disconnect",
+      "syncNow": "Sync now",
+      "lastSyncedAt": "Last synced {{date}}",
+      "neverSynced": "Never synced",
+      "autoSync": "Sync automatically",
+      "autoSyncDescription": "Sync with OneDrive automatically when the app is opened and when the connection comes back online.",
+      "syncComplete": "Sync complete: {{pulled}} updated locally, {{pushed}} sent to the cloud.",
+      "syncCompleteWithConflicts": "Sync complete: {{pulled}} updated locally, {{pushed}} sent to the cloud, {{conflicts}} conflicts resolved by keeping the newest version.",
+      "syncFailed": "Sync failed. Please try again.",
+      "processing1": "Syncing your recipes...",
+      "processing2": "This may take a bit longer for large recipe books..."
     },
     "recipe": {
       "id": {
