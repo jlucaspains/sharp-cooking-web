@@ -129,7 +129,23 @@ async function applyRemoteRecipe(
     await applySyncedRecipe(remoteRecipe, localId, localCategoryId);
 }
 
+let inFlightSync: Promise<SyncResult> | null = null;
+
 export async function syncNow(provider: CloudProvider): Promise<SyncResult> {
+    if (inFlightSync) {
+        return await inFlightSync;
+    }
+
+    inFlightSync = runSync(provider);
+
+    try {
+        return await inFlightSync;
+    } finally {
+        inFlightSync = null;
+    }
+}
+
+async function runSync(provider: CloudProvider): Promise<SyncResult> {
     const lastSyncedAt = await getSetting("LastSyncedAt", "");
     const deviceId = await getOrCreateDeviceId();
 
@@ -250,10 +266,6 @@ export async function syncNow(provider: CloudProvider): Promise<SyncResult> {
     };
 }
 
-// Called on app load and when the connection comes back online. No-ops unless the user has
-// both opted into the cloud sync preview feature and turned on the "auto sync" toggle, and
-// stays silent on failure (e.g. offline) rather than surfacing a toast for a background sync
-// nobody asked to watch.
 export async function autoSyncIfEnabled(): Promise<void> {
     const cloudSyncEnabled = (await getSetting("EnableCloudSync", "false")) === "true";
     const autoSyncEnabled = (await getSetting("AutoSyncEnabled", "false")) === "true";

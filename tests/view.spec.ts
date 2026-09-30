@@ -172,6 +172,11 @@ test('share as file', async ({ page, browserName }) => {
           delete json.recipes[0].changedOn;
           delete json.recipes[0].uuid;
 
+          if (!json.recipes[0].language) {
+            console.error("Recipe language missing from the exported file");
+          }
+          delete json.recipes[0].language;
+
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
             console.error("File doesn't match expectation");

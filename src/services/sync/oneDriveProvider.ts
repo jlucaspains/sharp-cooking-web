@@ -9,15 +9,16 @@ const CATEGORIES_FILE_PATH = `${APP_ROOT}:/categories.json`;
 const RECIPES_FOLDER_PATH = `${APP_ROOT}:/recipes`;
 
 let msalInstance: PublicClientApplication | null = null;
+let msalClientId: string | null = null;
 
 async function getMsalInstance(): Promise<PublicClientApplication> {
-    if (msalInstance) {
-        return msalInstance;
-    }
-
     const clientId = await getSetting("OneDriveClientId", "");
     if (!clientId) {
         throw new Error("OneDrive client id is not configured");
+    }
+
+    if (msalInstance && msalClientId === clientId) {
+        return msalInstance;
     }
 
     msalInstance = new PublicClientApplication({
@@ -37,6 +38,7 @@ async function getMsalInstance(): Promise<PublicClientApplication> {
     });
 
     await msalInstance.initialize();
+    msalClientId = clientId;
 
     return msalInstance;
 }
@@ -203,6 +205,8 @@ export class OneDriveProvider implements CloudProvider {
         if (account) {
             await instance.clearCache({ account });
         }
+
+        recipesFolderEnsured = false;
 
         await saveSetting("OneDriveAccountName", "");
     }

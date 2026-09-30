@@ -311,6 +311,7 @@ function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia
     model.source = recipe.source;
     model.steps = recipe.steps;
     model.nutrition = recipe.nutrition;
+    model.language = recipe.language;
     model.media = allMedia
         .filter(item => item.recipeId == model.id)
         .map(item => {
@@ -388,17 +389,15 @@ export async function getCategoryById(id: number): Promise<Category> {
 }
 
 export async function deleteCategory(id: number) {
-    await db.categories.update(id, { deletedOn: new Date().toISOString() });
+    const now = new Date().toISOString();
+    await db.categories.update(id, { deletedOn: now });
 
-    db.recipes.where("categoryId").equals(id).modify((recipe: Recipe) => {
+    await db.recipes.where("categoryId").equals(id).modify((recipe: Recipe) => {
         recipe.categoryId = 0;
+        recipe.changedOn = now;
     });
 }
 
-// The functions below are used by the cloud sync merge algorithm only. They intentionally
-// bypass the deletedOn filtering (sync needs to see tombstones) and the changedOn/uuid
-// stamping done by saveRecipe/saveCategory (sync must preserve the timestamp/uuid the
-// record arrived with, not overwrite it with "now").
 export async function getAllRecipesForSync(): Promise<Recipe[]> {
     return await db.recipes.toArray();
 }

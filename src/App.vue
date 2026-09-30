@@ -7,6 +7,7 @@ import InstallPrompt from "./components/InstallPrompt.vue";
 import { i18nextPromise } from './i18n';
 import i18next from "i18next";
 import { autoSyncIfEnabled } from "./services/sync/syncService";
+import { purgeDeletedRecords } from "./services/dataService";
 
 const state = useState()!;
 
@@ -18,6 +19,10 @@ onMounted(async () => {
   document.documentElement.lang = i18next.resolvedLanguage ?? "en";
   window.history.scrollRestoration = "manual"
 
+  await purgeDeletedRecords();
+
+  // Do not await as it may take a while and 
+  // this will block app startup
   autoSyncIfEnabled();
   window.addEventListener("online", autoSyncIfEnabled);
 });

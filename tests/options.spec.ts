@@ -71,6 +71,11 @@ test('create backup with categories', async ({ page, browserName }) => {
           delete json.categories[0].uuid;
           delete json.categories[0].changedOn;
 
+          if (!json.recipes[1].language) {
+            console.error("Recipe language missing from the exported file");
+          }
+          delete json.recipes[1].language;
+
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
             console.error("File doesn't match expectation");
