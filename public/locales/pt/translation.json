@@ -72,7 +72,9 @@
       "allCategoryFirst": "Mostrar categoria 'Todas' primeiro",
       "allCategoryFirstDescription": "Quando ativado, a categoria 'Todas' aparecerá no início da lista de categorias.",
       "categories": "Categorias",
-      "categoriesDescription": "Manter lista de categorias"
+      "categoriesDescription": "Manter lista de categorias",
+      "cloudSync": "Sincronização na Nuvem",
+      "cloudSyncDescription": "Conecte um drive na nuvem para manter suas receitas sincronizadas entre dispositivos"
     },
     "preview-features": {
       "title": "Recursos de pré-visualização",
@@ -81,7 +83,34 @@
       "enableNewDisplayView": "Ativar Nova Visualização",
       "enableNewDisplayViewDescription": "Visualize receitas usando um layout que preenche melhor o espaço disponível.",
       "enableDietTags": "Ativar Tags de Dieta",
-      "enableDietTagsDescription": "Adiciona uma ação de IA para gerar tags de dieta (Sem glúten, Vegetariano, Vegano, Sem lactose) e as exibe nas páginas de edição e visualização da receita."
+      "enableDietTagsDescription": "Adiciona uma ação de IA para gerar tags de dieta (Sem glúten, Vegetariano, Vegano, Sem lactose) e as exibe nas páginas de edição e visualização da receita.",
+      "enableCloudSync": "Ativar Sincronização na Nuvem",
+      "enableCloudSyncDescription": "Adiciona uma opção para conectar um drive na nuvem (OneDrive) e manter as receitas sincronizadas nos dois sentidos entre dispositivos."
+    },
+    "cloud-sync": {
+      "title": "Sincronização na Nuvem",
+      "clientId": "ID do Cliente do App OneDrive",
+      "clientIdDescription": "Registre um aplicativo no seu locatário do Azure AD e cole aqui o ID do cliente (aplicativo). O Sharp Cooking solicita acesso apenas à sua própria pasta de aplicativo no seu OneDrive.",
+      "clientIdRequired": "Informe primeiro um ID do Cliente do App OneDrive",
+      "connect": "Conectar ao OneDrive",
+      "connectDescription": "Entre com sua conta Microsoft para vincular o OneDrive",
+      "connectedSuccessfully": "Conectado ao OneDrive com sucesso",
+      "connectFailed": "Não foi possível conectar ao OneDrive",
+      "reauthRequiredTitle": "Sincronização pausada",
+      "reauthRequiredText": "Seu acesso ao OneDrive expirou e as receitas não estão mais sincronizando. Reconecte para retomar.",
+      "reconnect": "Reconectar ao OneDrive",
+      "connectedAs": "Conectado como {{account}}",
+      "disconnect": "Desconectar",
+      "syncNow": "Sincronizar agora",
+      "lastSyncedAt": "Última sincronização em {{date}}",
+      "neverSynced": "Nunca sincronizado",
+      "autoSync": "Sincronizar automaticamente",
+      "autoSyncDescription": "Sincroniza com o OneDrive automaticamente ao abrir o aplicativo e ao voltar a ficar online.",
+      "syncComplete": "Sincronização concluída: {{pulled}} atualizadas localmente, {{pushed}} enviadas para a nuvem.",
+      "syncCompleteWithConflicts": "Sincronização concluída: {{pulled}} atualizadas localmente, {{pushed}} enviadas para a nuvem, {{conflicts}} conflitos resolvidos mantendo a versão mais recente.",
+      "syncFailed": "Falha na sincronização. Tente novamente.",
+      "processing1": "Sincronizando suas receitas...",
+      "processing2": "Isso pode demorar um pouco mais para livros de receitas grandes..."
     },
     "recipe": {
       "id": {
@@ -350,6 +379,7 @@
       "title": "Pão de fermentação natural",
       "score": 5,
       "source": "Breadtopia",
+      "uuid": "c81c34e0-cfa3-49a1-8715-01004db603bd",
       "ingredients": [
         "142g farinha de trigo integral",
         "312g farinha de trigo para pães",

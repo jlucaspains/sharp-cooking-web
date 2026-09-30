@@ -8,6 +8,7 @@ export class Step {
 
 export class Recipe {
     id?: number;
+    uuid?: string;
     title!: string;
     score!: number;
     ingredients!: string[];
@@ -15,6 +16,7 @@ export class Recipe {
     notes!: string;
     multiplier: number = 1;
     changedOn!: string;
+    deletedOn?: string;
     source!: string;
     nutrition!: RecipeNutrition;
     language?: string;

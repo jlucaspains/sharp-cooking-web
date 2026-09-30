@@ -27,6 +27,7 @@ const categoriesEnabled = ref(false);
 const allCategoryFirst = ref(false);
 const enableAiChat = ref(false);
 const editInSingleTextArea = ref(false);
+const enableCloudSync = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -38,6 +39,7 @@ onMounted(async () => {
   const allCategoryFirstValue = await getSetting("AllCategoryFirst", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
+  const enableCloudSyncValue = await getSetting("EnableCloudSync", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
@@ -48,6 +50,7 @@ onMounted(async () => {
   allCategoryFirst.value = allCategoryFirstValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
+  enableCloudSync.value = enableCloudSyncValue === "true";
 });
 
 watch(displayLanguage, async (value) => {
@@ -142,6 +145,10 @@ function goToCategoriesSetup() {
 function goToAIOptions() {
   router.push("/ai-options");
 }
+
+function goToCloudSync() {
+  router.push("/cloud-sync");
+}
 </script>
 
 <template>
@@ -234,6 +241,19 @@ function goToAIOptions() {
       </div>
       <div>
         <span class="text-gray-500 text-sm">{{ t("pages.options.aiOptionsDescription") }}</span>
+      </div>
+    </div>
+    <div v-if="enableCloudSync" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCloudSync">
+      <label class="dark:text-white">{{ t("pages.options.cloudSync") }}</label>
+      <div class="dark:text-white float-right ">
+        <button data-testid="cloud-sync-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <polyline points="9 6 15 12 9 18" />
+          </svg></button>
+      </div>
+      <div>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.cloudSyncDescription") }}</span>
       </div>
     </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">

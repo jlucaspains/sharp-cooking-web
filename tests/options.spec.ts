@@ -9,7 +9,7 @@ test('create backup', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
 
   await page.addInitScript(() => {
-    const comparer = '{"recipes":[{"id":1,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["Mix together the dry ingredients","Dissolve the starter into water","Add wet into dry ingredients and stir until incorporated","Cover with plastic or airtight lid and reserve for 15 minutes","Perform the first set of folds and reserve for another 15 minutes","Perform the second set of folds and reserve for another 15 minutes","Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step","Ferment for 10-14 hours at room temperature (68F - 72F)","Shape and proof for about 2 hours","Bake in covered dutch oven ou La Cloche at 420F for 30 minutes","Uncover and bake for another 15 minutes","Let it cool completely on cooling rack before carving"],"notes":"Whole wheat flour may be replaced with rye flour for added taste","multiplier":1,"source":"Breadtopia","nutrition":{"servingSize":0,"calories":0,"totalFat":0,"saturatedFat":0,"unsaturatedFat":0,"transFat":0,"carbohydrates":0,"sugar":0,"cholesterol":0,"sodium":0,"protein":0,"fiber":0},"tags":[],"media":[{"type":"img","url":"/bread.jpg"}]}],"categories":[],"version":2}';
+    const comparer = '{"recipes":[{"id":1,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["Mix together the dry ingredients","Dissolve the starter into water","Add wet into dry ingredients and stir until incorporated","Cover with plastic or airtight lid and reserve for 15 minutes","Perform the first set of folds and reserve for another 15 minutes","Perform the second set of folds and reserve for another 15 minutes","Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step","Ferment for 10-14 hours at room temperature (68F - 72F)","Shape and proof for about 2 hours","Bake in covered dutch oven ou La Cloche at 420F for 30 minutes","Uncover and bake for another 15 minutes","Let it cool completely on cooling rack before carving"],"notes":"Whole wheat flour may be replaced with rye flour for added taste","multiplier":1,"source":"Breadtopia","nutrition":{"servingSize":0,"calories":0,"totalFat":0,"saturatedFat":0,"unsaturatedFat":0,"transFat":0,"carbohydrates":0,"sugar":0,"cholesterol":0,"sodium":0,"protein":0,"fiber":0},"tags":[],"media":[{"type":"img","url":"/bread.jpg"}]}],"categories":[],"version":3}';
     const stream = new WritableStream({
       write(chunk) {
         return new Promise(async (resolve, reject) => {
@@ -17,6 +17,7 @@ test('create backup', async ({ page, browserName }) => {
           const result = await blob.text()
           const json = JSON.parse(result);
           delete json.recipes[0].changedOn;
+          delete json.recipes[0].uuid;
 
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));
@@ -55,7 +56,7 @@ test('create backup with categories', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'not applicable');
 
   await page.addInitScript(() => {
-    const comparer = '{"recipes":[{"id":1,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["Mix together the dry ingredients","Dissolve the starter into water","Add wet into dry ingredients and stir until incorporated","Cover with plastic or airtight lid and reserve for 15 minutes","Perform the first set of folds and reserve for another 15 minutes","Perform the second set of folds and reserve for another 15 minutes","Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step","Ferment for 10-14 hours at room temperature (68F - 72F)","Shape and proof for about 2 hours","Bake in covered dutch oven ou La Cloche at 420F for 30 minutes","Uncover and bake for another 15 minutes","Let it cool completely on cooling rack before carving"],"notes":"Whole wheat flour may be replaced with rye flour for added taste","multiplier":1,"source":"Breadtopia","nutrition":{"servingSize":0,"calories":0,"totalFat":0,"saturatedFat":0,"unsaturatedFat":0,"transFat":0,"carbohydrates":0,"sugar":0,"cholesterol":0,"sodium":0,"protein":0,"fiber":0},"tags":[],"media":[{"type":"img","url":"/bread.jpg"}]},{"id":2,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["bake"],"notes":"","multiplier":1,"nutrition":{"servingSize":0,"totalFat":0,"saturatedFat":0,"sodium":0,"protein":0,"cholesterol":0,"calories":0,"carbohydrates":0,"fiber":0,"sugar":0,"transFat":0,"unsaturatedFat":0},"categoryId":1,"tags":[],"media":[],"category":"Bread"}],"categories":[{"name":"Bread","id":1}],"version":2}';
+    const comparer = '{"recipes":[{"id":1,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["Mix together the dry ingredients","Dissolve the starter into water","Add wet into dry ingredients and stir until incorporated","Cover with plastic or airtight lid and reserve for 15 minutes","Perform the first set of folds and reserve for another 15 minutes","Perform the second set of folds and reserve for another 15 minutes","Perform the third set of folds and make a window pane test. If gluten is not developed yet, repeat this step","Ferment for 10-14 hours at room temperature (68F - 72F)","Shape and proof for about 2 hours","Bake in covered dutch oven ou La Cloche at 420F for 30 minutes","Uncover and bake for another 15 minutes","Let it cool completely on cooling rack before carving"],"notes":"Whole wheat flour may be replaced with rye flour for added taste","multiplier":1,"source":"Breadtopia","nutrition":{"servingSize":0,"calories":0,"totalFat":0,"saturatedFat":0,"unsaturatedFat":0,"transFat":0,"carbohydrates":0,"sugar":0,"cholesterol":0,"sodium":0,"protein":0,"fiber":0},"tags":[],"media":[{"type":"img","url":"/bread.jpg"}]},{"id":2,"title":"Sourdough Bread","score":5,"ingredients":["142g whole wheat flour","312g white bread flour","7.1g salt","354g purified water","80g starter"],"steps":["bake"],"notes":"","multiplier":1,"nutrition":{"servingSize":0,"totalFat":0,"saturatedFat":0,"sodium":0,"protein":0,"cholesterol":0,"calories":0,"carbohydrates":0,"fiber":0,"sugar":0,"transFat":0,"unsaturatedFat":0},"categoryId":1,"tags":[],"media":[],"category":"Bread"}],"categories":[{"name":"Bread","id":1}],"version":3}';
     const stream = new WritableStream({
       write(chunk) {
         return new Promise(async (resolve, reject) => {
@@ -63,7 +64,17 @@ test('create backup with categories', async ({ page, browserName }) => {
           const result = await blob.text()
           const json = JSON.parse(result);
           delete json.recipes[0].changedOn;
+          delete json.recipes[0].uuid;
           delete json.recipes[1].changedOn;
+          delete json.recipes[1].uuid;
+          delete json.recipes[1].categoryUuid;
+          delete json.categories[0].uuid;
+          delete json.categories[0].changedOn;
+
+          if (!json.recipes[1].language) {
+            console.error("Recipe language missing from the exported file");
+          }
+          delete json.recipes[1].language;
 
           if (JSON.stringify(json) !== comparer) {
             console.error(JSON.stringify(json));

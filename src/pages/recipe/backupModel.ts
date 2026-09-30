@@ -12,10 +12,13 @@ export class RecipeBackupModel extends Recipe {
 
   media?: Array<{type: string, url: string}>;
   category?: string;
+  categoryUuid?: string;
 }
 
 export class BackupModel {
   recipes: RecipeBackupModel[] = [];
   categories: Category[] = [];
-  version: number = 2;
+  version: number = 3;
+  deviceId?: string;
+  exportedOn?: string;
 }
