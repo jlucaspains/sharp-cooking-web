@@ -3,6 +3,7 @@ import {
   createRecipe,
   setup,
   enableCloudSync,
+  enableAutoSync,
   installFakeCloudProvider,
   createFakeRemoteStore,
   type FakeRemoteStore,
@@ -110,4 +111,33 @@ test('propagates a deletion to a second device', async ({ browser }) => {
 
   await contextA.close();
   await contextB.close();
+});
+
+test('warns instead of syncing when the sign-in expired', async ({ page }) => {
+  const store = createFakeRemoteStore();
+
+  await setup(page);
+  await installFakeCloudProvider(page, store);
+  await enableCloudSync(page);
+  await enableAutoSync(page);
+
+  store.silentAccess = false;
+  await createRecipe(page, 2, 'Stranded Bread', 5);
+
+  await page.goto('/');
+  await expect(page.getByText('Cloud sync paused')).toBeVisible();
+  expect(store.recipeFiles.size).toBe(0);
+
+  await page.goto('/#/cloud-sync');
+  await expect(page.getByTestId('onedrive-reauth-warning')).toBeVisible();
+
+  store.silentAccess = true;
+  await page.getByTestId('onedrive-client-id-input').fill('00000000-0000-0000-0000-000000000000');
+  await page.getByTestId('onedrive-client-id-input').blur();
+  await page.getByTestId('onedrive-reconnect-button').click();
+  await expect(page.getByTestId('onedrive-reauth-warning')).toBeHidden();
+
+  await page.getByTestId('onedrive-sync-now-button').click();
+  await page.waitForSelector('text=/Sync complete/i');
+  expect(store.recipeFiles.size).toBeGreaterThan(0);
 });

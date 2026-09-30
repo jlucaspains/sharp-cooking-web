@@ -26,6 +26,7 @@ export interface CloudProviderAccount {
 export interface CloudProvider {
     readonly id: string;
     isConnected(): Promise<boolean>;
+    hasSilentAccess(): Promise<boolean>;
     connect(): Promise<CloudProviderAccount>;
     disconnect(): Promise<void>;
 

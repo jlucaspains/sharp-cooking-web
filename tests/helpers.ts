@@ -136,6 +136,12 @@ export async function enableCloudSync(page: Page) {
     await page.waitForTimeout(500);
 }
 
+export async function enableAutoSync(page: Page) {
+    await page.goto('/#/cloud-sync');
+    await page.getByTestId('auto-sync-toggle').click();
+    await page.waitForTimeout(500);
+}
+
 interface FakeFile {
     content: string;
     version: number;
@@ -144,13 +150,12 @@ interface FakeFile {
 export interface FakeRemoteStore {
     categoriesFile: FakeFile | null;
     recipeFiles: Map<string, FakeFile>;
-    // Counts calls to getRecipeFile (content downloads) - lets tests assert that unchanged
-    // recipes are never re-fetched, which is the entire point of the per-recipe-file design.
     recipeFileDownloadCount: number;
+    silentAccess: boolean;
 }
 
 export function createFakeRemoteStore(): FakeRemoteStore {
-    return { categoriesFile: null, recipeFiles: new Map(), recipeFileDownloadCount: 0 };
+    return { categoriesFile: null, recipeFiles: new Map(), recipeFileDownloadCount: 0, silentAccess: true };
 }
 
 // Installs a fake CloudProvider on `window.__testCloudProvider`, backed by a Node-side
@@ -160,6 +165,7 @@ export function createFakeRemoteStore(): FakeRemoteStore {
 // this is the seam sync tests use instead. Pass the same store to two pages to simulate two
 // devices syncing through the same cloud files.
 export async function installFakeCloudProvider(page: Page, store: FakeRemoteStore) {
+    await page.exposeFunction('__fakeHasSilentAccess', async () => store.silentAccess);
     await page.exposeFunction('__fakeGetCategoriesFile', async () => {
         return store.categoriesFile
             ? { content: store.categoriesFile.content, etag: String(store.categoriesFile.version) }
@@ -200,6 +206,7 @@ export async function installFakeCloudProvider(page: Page, store: FakeRemoteStor
         (window as any).__testCloudProvider = {
             id: 'fake',
             isConnected: async () => true,
+            hasSilentAccess: () => (window as any).__fakeHasSilentAccess(),
             connect: async () => ({ displayName: 'Test Account' }),
             disconnect: async () => { },
             getCategoriesFile: () => (window as any).__fakeGetCategoriesFile(),

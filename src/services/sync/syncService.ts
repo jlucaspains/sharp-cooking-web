@@ -258,6 +258,7 @@ async function runSync(provider: CloudProvider): Promise<SyncResult> {
     }
 
     await saveSetting("LastSyncedAt", new Date().toISOString());
+    await saveSetting("SyncNeedsReauth", "false");
 
     return {
         pulled: categoryResult.pulled + pulled,
@@ -266,18 +267,29 @@ async function runSync(provider: CloudProvider): Promise<SyncResult> {
     };
 }
 
-export async function autoSyncIfEnabled(): Promise<void> {
+export function getProvider(): CloudProvider {
+    return (window as any).__testCloudProvider ?? new OneDriveProvider();
+}
+
+export type AutoSyncOutcome = "completed" | "reauth-required";
+
+export async function autoSyncIfEnabled(): Promise<AutoSyncOutcome> {
     const cloudSyncEnabled = (await getSetting("EnableCloudSync", "false")) === "true";
     const autoSyncEnabled = (await getSetting("AutoSyncEnabled", "false")) === "true";
 
     if (!cloudSyncEnabled || !autoSyncEnabled) {
-        return;
+        return "completed";
     }
 
-    const provider = new OneDriveProvider();
+    const provider = getProvider();
 
     if (!(await provider.isConnected())) {
-        return;
+        return "completed";
+    }
+
+    if (!(await provider.hasSilentAccess())) {
+        await saveSetting("SyncNeedsReauth", "true");
+        return "reauth-required";
     }
 
     try {
@@ -285,4 +297,6 @@ export async function autoSyncIfEnabled(): Promise<void> {
     } catch (error) {
         console.error("Automatic cloud sync failed", error);
     }
+
+    return "completed";
 }

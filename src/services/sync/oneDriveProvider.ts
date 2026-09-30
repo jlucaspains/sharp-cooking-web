@@ -175,6 +175,22 @@ export class OneDriveProvider implements CloudProvider {
         return getAccount(instance) !== null;
     }
 
+    async hasSilentAccess(): Promise<boolean> {
+        if (!(await this.isConnected())) {
+            return false;
+        }
+
+        const instance = await getMsalInstance();
+
+        try {
+            // No popup fallback here - a throw means only an interactive sign-in can recover.
+            await instance.acquireTokenSilent({ scopes: SCOPES, account: getAccount(instance)! });
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     async connect(): Promise<CloudProviderAccount> {
         const instance = await getMsalInstance();
 

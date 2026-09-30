@@ -8,10 +8,25 @@ import { i18nextPromise } from './i18n';
 import i18next from "i18next";
 import { autoSyncIfEnabled } from "./services/sync/syncService";
 import { purgeDeletedRecords } from "./services/dataService";
+import { notify } from "notiwind";
 
 const state = useState()!;
 
 await i18nextPromise;
+
+// Warn once per app load - the online event can fire repeatedly on a flaky connection.
+let reauthWarningShown = false;
+
+async function autoSync() {
+  const outcome = await autoSyncIfEnabled();
+
+  if (outcome !== "reauth-required" || reauthWarningShown) {
+    return;
+  }
+
+  reauthWarningShown = true;
+  notify({ group: "warning", title: i18next.t("pages.cloud-sync.reauthRequiredTitle"), text: i18next.t("pages.cloud-sync.reauthRequiredText") }, 6000);
+}
 
 onMounted(async () => {
   await i18nextPromise;
@@ -23,8 +38,8 @@ onMounted(async () => {
 
   // Do not await as it may take a while and 
   // this will block app startup
-  autoSyncIfEnabled();
-  window.addEventListener("online", autoSyncIfEnabled);
+  autoSync();
+  window.addEventListener("online", autoSync);
 });
 </script>
 

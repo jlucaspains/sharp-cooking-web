@@ -3,9 +3,8 @@ import { onMounted, ref } from "vue";
 import { useState } from "../services/store";
 import { useTranslation } from "i18next-vue";
 import { getSetting, saveSetting } from "../services/dataService";
-import { OneDriveProvider } from "../services/sync/oneDriveProvider";
 import { CloudProvider } from "../services/sync/cloudProvider";
-import { syncNow } from "../services/sync/syncService";
+import { getProvider, syncNow } from "../services/sync/syncService";
 import { notify } from "notiwind";
 import BusyIndicator from "../components/BusyIndicator.vue";
 import ConfigSwitch from "../components/ConfigSwitch.vue";
@@ -13,10 +12,7 @@ import ConfigSwitch from "../components/ConfigSwitch.vue";
 const { t } = useTranslation();
 const state = useState()!;
 
-// Playwright can't drive the real Microsoft OAuth popup, so E2E tests inject a fake
-// provider on `window.__testCloudProvider` (see tests/helpers.ts). Production always uses
-// the real OneDriveProvider.
-const provider: CloudProvider = (window as any).__testCloudProvider ?? new OneDriveProvider();
+const provider: CloudProvider = getProvider();
 
 const oneDriveClientId = ref("");
 const isConnected = ref(false);
@@ -24,6 +20,7 @@ const accountName = ref("");
 const autoSyncEnabled = ref(false);
 const lastSyncedAt = ref("");
 const isBusy = ref(false);
+const needsReauth = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.cloud-sync.title");
@@ -34,6 +31,7 @@ onMounted(async () => {
   autoSyncEnabled.value = (await getSetting("AutoSyncEnabled", "false")) === "true";
   lastSyncedAt.value = await getSetting("LastSyncedAt", "");
   isConnected.value = await provider.isConnected();
+  needsReauth.value = isConnected.value && (await getSetting("SyncNeedsReauth", "false")) === "true";
 });
 
 function updateOneDriveClientId() {
@@ -56,6 +54,8 @@ async function connect() {
     const account = await provider.connect();
     isConnected.value = true;
     accountName.value = account.displayName;
+    needsReauth.value = false;
+    await saveSetting("SyncNeedsReauth", "false");
 
     notify({ group: "success", title: t("general.success"), text: t("pages.cloud-sync.connectedSuccessfully") }, 3000);
   } catch (error) {
@@ -84,6 +84,7 @@ async function runSync() {
   try {
     const result = await syncNow(provider);
     lastSyncedAt.value = await getSetting("LastSyncedAt", "");
+    needsReauth.value = false;
 
     const message = result.conflicts > 0
       ? t("pages.cloud-sync.syncCompleteWithConflicts", { pulled: result.pulled, pushed: result.pushed, conflicts: result.conflicts })
@@ -119,6 +120,14 @@ async function runSync() {
     </div>
 
     <template v-else>
+      <div v-if="needsReauth" data-testid="onedrive-reauth-warning"
+        class="mt-4 px-4 py-2 bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 dark:border-yellow-600 rounded text-yellow-800 dark:text-yellow-200 text-sm">
+        <span class="font-semibold">{{ t("pages.cloud-sync.reauthRequiredTitle") }}</span>
+        <div>{{ t("pages.cloud-sync.reauthRequiredText") }}</div>
+        <button @click="connect" data-testid="onedrive-reconnect-button" class="mt-2 font-semibold underline">
+          {{ t("pages.cloud-sync.reconnect") }}
+        </button>
+      </div>
       <div class="mt-4 p-2 rounded-sm">
         <span class="dark:text-white">{{ t("pages.cloud-sync.connectedAs", { account: accountName }) }}</span>
       </div>
