@@ -1,10 +1,10 @@
 azure-functions
-pint~=0.25
+pint~=0.26
 recipe-scrapers~=15.12
 python-multipart~=0.0.32
 Pillow==11.1
 pillow-avif-plugin~=1.6
 pytest~=9.1
-azure-cosmos~=4.16
+azure-cosmos~=4.17
 jsonschema~=4.26
 qrcode==8.2
