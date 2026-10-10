@@ -8,13 +8,13 @@ import { getProvider, syncNow } from "../services/sync/syncService";
 import { notify } from "notiwind";
 import BusyIndicator from "../components/BusyIndicator.vue";
 import ConfigSwitch from "../components/ConfigSwitch.vue";
+import { secondsToString } from "../helpers/timeHelpers";
 
 const { t } = useTranslation();
 const state = useState()!;
 
 const provider: CloudProvider = getProvider();
 
-const oneDriveClientId = ref("");
 const isConnected = ref(false);
 const accountName = ref("");
 const autoSyncEnabled = ref(false);
@@ -26,7 +26,6 @@ onMounted(async () => {
   state.title = t("pages.cloud-sync.title");
   state.menuOptions = [];
 
-  oneDriveClientId.value = await getSetting("OneDriveClientId", "");
   accountName.value = await getSetting("OneDriveAccountName", "");
   autoSyncEnabled.value = (await getSetting("AutoSyncEnabled", "false")) === "true";
   lastSyncedAt.value = await getSetting("LastSyncedAt", "");
@@ -34,20 +33,16 @@ onMounted(async () => {
   needsReauth.value = isConnected.value && (await getSetting("SyncNeedsReauth", "false")) === "true";
 });
 
-function updateOneDriveClientId() {
-  saveSetting("OneDriveClientId", `${oneDriveClientId.value}`);
-}
-
 function updateAutoSyncEnabled() {
   saveSetting("AutoSyncEnabled", `${autoSyncEnabled.value}`);
 }
 
-async function connect() {
-  if (!oneDriveClientId.value) {
-    notify({ group: "warning", title: t("general.warning"), text: t("pages.cloud-sync.clientIdRequired") }, 3000);
-    return;
-  }
+function timeAgo(date: Date) {
+  const secondsElapsed = (Date.now() - new Date(date).getTime()) / 1000;
+  return secondsToString(Math.floor(secondsElapsed), t, true);
+}
 
+async function connect() {
   isBusy.value = true;
 
   try {
@@ -102,16 +97,7 @@ async function runSync() {
 
 <template>
   <div class="w-full lg:px-40 mx-auto">
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
-      <span class="dark:text-white">{{ t("pages.cloud-sync.clientId") }}</span>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.cloud-sync.clientIdDescription") }}</span>
-      </div>
-      <input v-model="oneDriveClientId" @change="updateOneDriveClientId" placeholder="00000000-0000-0000-0000-000000000000"
-        data-testid="onedrive-client-id-input"
-        class="block p-2 w-full rounded-sm bg-white text-black shadow-xs">
-    </div>
-
+    
     <div v-if="!isConnected" class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="connect">
       <span class="dark:text-white">{{ t("pages.cloud-sync.connect") }}</span>
       <div>
@@ -139,8 +125,8 @@ async function runSync() {
         data-testid="onedrive-sync-now-button">
         <span class="dark:text-white">{{ t("pages.cloud-sync.syncNow") }}</span>
         <div>
-          <span class="text-gray-500 text-sm">
-            {{ lastSyncedAt ? t("pages.cloud-sync.lastSyncedAt", { date: new Date(lastSyncedAt).toLocaleString() }) : t("pages.cloud-sync.neverSynced") }}
+          <span class="text-gray-500 text-sm" v-html="lastSyncedAt ? t('pages.cloud-sync.lastSyncedAt', { date: timeAgo(new Date(lastSyncedAt)) }) : t('pages.cloud-sync.neverSynced')">
+            
           </span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { PublicClientApplication, type AccountInfo } from "@azure/msal-browser";
-import { getSetting, saveSetting } from "../dataService";
+import { saveSetting } from "../dataService";
 import { CloudProvider, CloudProviderAccount, PutResult, RemoteFile, RemoteFileMeta } from "./cloudProvider";
 
 const SCOPES = ["Files.ReadWrite.AppFolder"];
@@ -7,29 +7,19 @@ const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
 const APP_ROOT = "/me/drive/special/approot";
 const CATEGORIES_FILE_PATH = `${APP_ROOT}:/categories.json`;
 const RECIPES_FOLDER_PATH = `${APP_ROOT}:/recipes`;
+const msalClientId = "2bf61af4-a410-4a02-920b-c42f2e3a4c3f";
 
 let msalInstance: PublicClientApplication | null = null;
-let msalClientId: string | null = null;
 
 async function getMsalInstance(): Promise<PublicClientApplication> {
-    const clientId = await getSetting("OneDriveClientId", "");
-    if (!clientId) {
-        throw new Error("OneDrive client id is not configured");
-    }
-
-    if (msalInstance && msalClientId === clientId) {
+    if (msalInstance) {
         return msalInstance;
     }
 
     msalInstance = new PublicClientApplication({
         auth: {
-            clientId,
+            clientId: msalClientId,
             authority: "https://login.microsoftonline.com/common",
-            // Points at a bare static page (public/auth.html), not the Vue app itself. Login
-            // only ever happens via loginPopup/acquireTokenPopup here (never a full-page
-            // redirect), and the response comes back as a URL hash - if that hash lands on
-            // the real app, the hash-based Vue Router tries to match it as a route and
-            // errors out before/while MSAL reads the auth code from it.
             redirectUri: `${window.location.origin}/auth.html`,
         },
         cache: {
@@ -38,8 +28,6 @@ async function getMsalInstance(): Promise<PublicClientApplication> {
     });
 
     await msalInstance.initialize();
-    msalClientId = clientId;
-
     return msalInstance;
 }
 
@@ -166,11 +154,6 @@ export class OneDriveProvider implements CloudProvider {
     readonly id = "onedrive";
 
     async isConnected(): Promise<boolean> {
-        const clientId = await getSetting("OneDriveClientId", "");
-        if (!clientId) {
-            return false;
-        }
-
         const instance = await getMsalInstance();
         return getAccount(instance) !== null;
     }

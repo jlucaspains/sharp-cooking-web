@@ -89,9 +89,6 @@
     },
     "cloud-sync": {
       "title": "Sincronização na Nuvem",
-      "clientId": "ID do Cliente do App OneDrive",
-      "clientIdDescription": "Registre um aplicativo no seu locatário do Azure AD e cole aqui o ID do cliente (aplicativo). O Sharp Cooking solicita acesso apenas à sua própria pasta de aplicativo no seu OneDrive.",
-      "clientIdRequired": "Informe primeiro um ID do Cliente do App OneDrive",
       "connect": "Conectar ao OneDrive",
       "connectDescription": "Entre com sua conta Microsoft para vincular o OneDrive",
       "connectedSuccessfully": "Conectado ao OneDrive com sucesso",
@@ -102,7 +99,7 @@
       "connectedAs": "Conectado como {{account}}",
       "disconnect": "Desconectar",
       "syncNow": "Sincronizar agora",
-      "lastSyncedAt": "Última sincronização em {{date}}",
+      "lastSyncedAt": "Última sincronização há {{date}}",
       "neverSynced": "Nunca sincronizado",
       "autoSync": "Sincronizar automaticamente",
       "autoSyncDescription": "Sincroniza com o OneDrive automaticamente ao abrir o aplicativo e ao voltar a ficar online.",

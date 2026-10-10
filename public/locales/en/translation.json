@@ -89,9 +89,6 @@
     },
     "cloud-sync": {
       "title": "Cloud Sync",
-      "clientId": "OneDrive App Client ID",
-      "clientIdDescription": "Register an app in your Azure AD tenant and paste its client (application) ID here. Sharp Cooking only requests access to its own app folder in your OneDrive.",
-      "clientIdRequired": "Please provide a OneDrive App Client ID first",
       "connect": "Connect to OneDrive",
       "connectDescription": "Sign in with your Microsoft account to link OneDrive",
       "connectedSuccessfully": "Connected to OneDrive successfully",
@@ -102,7 +99,7 @@
       "connectedAs": "Connected as {{account}}",
       "disconnect": "Disconnect",
       "syncNow": "Sync now",
-      "lastSyncedAt": "Last synced {{date}}",
+      "lastSyncedAt": "Last synced {{date}} ago",
       "neverSynced": "Never synced",
       "autoSync": "Sync automatically",
       "autoSyncDescription": "Sync with OneDrive automatically when the app is opened and when the connection comes back online.",
