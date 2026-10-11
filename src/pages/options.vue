@@ -2,9 +2,8 @@
 import { onMounted, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useState } from "../services/store";
-import { saveSetting, getSetting, prepareBackup } from "../services/dataService";
+import { saveSetting, getSetting } from "../services/dataService";
 import Modal from "../components/Modal.vue";
-import { fileSave } from "browser-fs-access";
 import { useTranslation } from "i18next-vue";
 import { humanFileSize } from "../helpers/storageHelper";
 import ConfigSwitch from "../components/ConfigSwitch.vue";
@@ -27,7 +26,6 @@ const categoriesEnabled = ref(false);
 const allCategoryFirst = ref(false);
 const enableAiChat = ref(false);
 const editInSingleTextArea = ref(false);
-const enableCloudSync = ref(false);
 
 onMounted(async () => {
   state.title = t("pages.options.title");
@@ -39,7 +37,6 @@ onMounted(async () => {
   const allCategoryFirstValue = await getSetting("AllCategoryFirst", "false");
   const enableAiChatValue = await getSetting("EnableAiChat", "false");
   const editInSingleTextAreaValue = await getSetting("EditInSingleTextArea", "false");
-  const enableCloudSyncValue = await getSetting("EnableCloudSync", "false");
 
   stepsInterval.value = parseInt(stepsInvervalValue);
   useFractions.value = useFractionsValue === "true";
@@ -50,7 +47,6 @@ onMounted(async () => {
   allCategoryFirst.value = allCategoryFirstValue === "true";
   enableAiChat.value = enableAiChatValue === "true";
   editInSingleTextArea.value = editInSingleTextAreaValue === "true";
-  enableCloudSync.value = enableCloudSyncValue === "true";
 });
 
 watch(displayLanguage, async (value) => {
@@ -81,17 +77,6 @@ function reviewReleaseNotes() {
 function changeStepsInterval() {
   stepsIntervalEditing.value = stepsInterval.value;
   isStepsIntervalModalOpen.value = true;
-}
-
-async function takeBackup() {
-  const backup = await prepareBackup();
-  const stringBackup = JSON.stringify(backup);
-  const blob = new Blob([stringBackup]);
-  await fileSave(blob, { fileName: "sharp_cooking.json", mimeTypes: ["application/json"] });
-}
-
-function restoreBackup() {
-  router.push("/recipe/import-backup");
 }
 
 function reviewTermsOfUse() {
@@ -146,8 +131,8 @@ function goToAIOptions() {
   router.push("/ai-options");
 }
 
-function goToCloudSync() {
-  router.push("/cloud-sync");
+function goToBackupAndSync() {
+  router.push("/backup-sync");
 }
 </script>
 
@@ -243,19 +228,6 @@ function goToCloudSync() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.aiOptionsDescription") }}</span>
       </div>
     </div>
-    <div v-if="enableCloudSync" class="p-2 dark:text-white rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToCloudSync">
-      <label class="dark:text-white">{{ t("pages.options.cloudSync") }}</label>
-      <div class="dark:text-white float-right ">
-        <button data-testid="cloud-sync-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
-            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <polyline points="9 6 15 12 9 18" />
-          </svg></button>
-      </div>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.cloudSyncDescription") }}</span>
-      </div>
-    </div>
     <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary">
       <span class="dark:text-white">{{ t("pages.options.storageStats") }}</span>
       <div>
@@ -275,30 +247,17 @@ function goToCloudSync() {
         <span class="text-gray-500 text-sm">{{ t("pages.options.previewFeaturesDescription") }}</span>
       </div>
     </div>
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="takeBackup">
-      <span class="dark:text-white">{{ t("pages.options.takeBackup") }}</span>
+    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="goToBackupAndSync">
+      <span class="dark:text-white">{{ t("pages.options.backupAndSync") }}</span>
       <div class="dark:text-white float-right ">
-        <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <button data-testid="backup-and-sync-button"><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24"
+            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" />
             <polyline points="9 6 15 12 9 18" />
           </svg></button>
       </div>
       <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.takeBackupDescription") }}</span>
-      </div>
-    </div>
-    <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="restoreBackup">
-      <span class="dark:text-white">{{ t("pages.options.restoreBackup") }}</span>
-      <div class="dark:text-white float-right ">
-        <button><svg class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <polyline points="9 6 15 12 9 18" />
-          </svg></button>
-      </div>
-      <div>
-        <span class="text-gray-500 text-sm">{{ t("pages.options.restoreBackupDescription") }}</span>
+        <span class="text-gray-500 text-sm">{{ t("pages.options.backupAndSyncDescription") }}</span>
       </div>
     </div>
 

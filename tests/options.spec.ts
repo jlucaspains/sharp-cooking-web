@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createCategory, createRecipe, setup } from './helpers';
+import { createCategory, createRecipe, enableCloudSync, setup } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await setup(page);
@@ -46,9 +46,10 @@ test('create backup', async ({ page, browserName }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
+  await page.getByTestId('backup-and-sync-button').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
-  await page.getByText('Take a backup').click();
+  await page.getByTestId('take-backup-button').click();
   await consoleWaiter;
 });
 
@@ -106,9 +107,10 @@ test('create backup with categories', async ({ page, browserName }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
+  await page.getByTestId('backup-and-sync-button').click();
 
   const consoleWaiter = page.waitForEvent("console", item => item.type() == "error" || item.type() == "info")
-  await page.getByText('Take a backup').click();
+  await page.getByTestId('take-backup-button').click();
   await consoleWaiter;
 });
 
@@ -116,8 +118,27 @@ test('restore backup', async ({ page }) => {
   await page.goto('/');
   await page.getByTestId('topbar-options').click();
   await page.getByRole('menuitem', { name: 'Options' }).click();
-  await page.getByText('Restore a backup').click();
+  await page.getByTestId('backup-and-sync-button').click();
+  await expect(page).toHaveURL(new RegExp(".*/backup-sync"));
+  await page.getByTestId('restore-backup-button').click();
   await expect(page).toHaveURL(new RegExp(".*/recipe/import-backup"));
+});
+
+test('cloud sync option visibility in backup and sync', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('topbar-options').click();
+  await page.getByRole('menuitem', { name: 'Options' }).click();
+  await page.getByTestId('backup-and-sync-button').click();
+
+  // Cloud sync is a preview feature, so it is hidden until enabled
+  await expect(page.getByTestId('cloud-sync-button')).not.toBeVisible();
+
+  await enableCloudSync(page);
+
+  await page.goto('/#/backup-sync');
+  await expect(page.getByTestId('cloud-sync-button')).toBeVisible();
+  await page.getByTestId('cloud-sync-button').click();
+  await expect(page).toHaveURL(new RegExp(".*/cloud-sync"));
 });
 
 test('change language', async ({ page }) => {
@@ -203,6 +224,7 @@ test('all category first toggle state', async ({ page }) => {
   await expect(toggle).toBeChecked();
   
   // Refresh page and verify persistence
+  await page.waitForTimeout(100);
   await page.reload();
   await expect(toggle).toBeChecked();
   
@@ -211,6 +233,7 @@ test('all category first toggle state', async ({ page }) => {
   await expect(toggle).not.toBeChecked();
   
   // Refresh and verify it stayed off
+  await page.waitForTimeout(100);
   await page.reload();
   await expect(toggle).not.toBeChecked();
 });

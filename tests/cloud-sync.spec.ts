@@ -132,8 +132,6 @@ test('warns instead of syncing when the sign-in expired', async ({ page }) => {
   await expect(page.getByTestId('onedrive-reauth-warning')).toBeVisible();
 
   store.silentAccess = true;
-  await page.getByTestId('onedrive-client-id-input').fill('00000000-0000-0000-0000-000000000000');
-  await page.getByTestId('onedrive-client-id-input').blur();
   await page.getByTestId('onedrive-reconnect-button').click();
   await expect(page.getByTestId('onedrive-reauth-warning')).toBeHidden();
 

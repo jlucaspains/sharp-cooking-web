@@ -46,10 +46,6 @@
       "stepsIntervalQuestion": "Please provide the interval in minutes",
       "multiplierType": "Multiplier uses fractions",
       "multiplierTypeDescription": "Uses fractions over decimals",
-      "takeBackup": "Take a backup",
-      "takeBackupDescription": "Keep your data safe with a file backup",
-      "restoreBackup": "Restore a backup",
-      "restoreBackupDescription": "Restore your data to a known point",
       "termsOfUse": "Terms of Use",
       "termsOfUseDescription": "Review the terms of use of Sharp Cooking",
       "privacyPolicy": "Privacy Policy",
@@ -73,6 +69,15 @@
       "allCategoryFirstDescription": "When enabled, the 'All' category will appear at the beginning of the category list.",
       "categories": "Categories",
       "categoriesDescription": "Maintain list of categories",
+      "backupAndSync": "Backup & Sync",
+      "backupAndSyncDescription": "Back up, restore and sync your recipes"
+    },
+    "backup-sync": {
+      "title": "Backup & Sync",
+      "takeBackup": "Take a backup",
+      "takeBackupDescription": "Keep your data safe with a file backup",
+      "restoreBackup": "Restore a backup",
+      "restoreBackupDescription": "Restore your data to a known point",
       "cloudSync": "Cloud Sync",
       "cloudSyncDescription": "Connect a cloud drive to keep your recipes in sync across devices"
     },
