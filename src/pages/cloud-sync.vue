@@ -115,7 +115,7 @@ async function runSync() {
         </button>
       </div>
       <div class="mt-4 p-2 rounded-sm">
-        <span class="dark:text-white">{{ t("pages.cloud-sync.connectedAs", { account: accountName }) }}</span>
+        <span class="dark:text-white">{{ t("pages.cloud-sync.connectedAs", { service: provider.id, account: accountName }) }}</span>
       </div>
       <div class="mt-4 p-2 rounded-sm cursor-pointer active:bg-theme-secondary" @click="disconnect"
         data-testid="onedrive-disconnect-button">

@@ -101,7 +101,7 @@
       "reauthRequiredTitle": "Cloud sync paused",
       "reauthRequiredText": "Your OneDrive sign-in expired, so recipes are no longer syncing. Reconnect to resume.",
       "reconnect": "Reconnect to OneDrive",
-      "connectedAs": "Connected as {{account}}",
+      "connectedAs": "Connected to {{service}} as {{account}}",
       "disconnect": "Disconnect",
       "syncNow": "Sync now",
       "lastSyncedAt": "Last synced {{date}} ago",

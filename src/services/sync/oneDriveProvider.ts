@@ -31,17 +31,12 @@ async function getMsalInstance(): Promise<PublicClientApplication> {
     return msalInstance;
 }
 
-// MSAL sets a lock while a login/token popup is open to stop a second one starting
-// concurrently, historically tracked under this sessionStorage key, and clears it itself
-// once that popup completes normally. If a previous attempt died mid-flight (crashed tab,
-// popup closed by hand) the lock can be left stuck, and every future loginPopup() call
-// fails immediately with "interaction_in_progress". This is a best-effort recovery: removing
-// a key that no longer exists is a harmless no-op either way.
+// Remove msal key to prevent stuck interactions.
 function clearStuckInteractionLock(): void {
     try {
         sessionStorage.removeItem("msal.interaction.status");
     } catch {
-        // sessionStorage inaccessible (private browsing, etc.) - nothing to clean up.
+        // nothing to clean up. Ignore.
     }
 }
 
@@ -80,9 +75,6 @@ async function acquireTokenPopupWithRecovery(instance: PublicClientApplication, 
     }
 }
 
-// Now that a sync touches many small files instead of one big one, a first-ever sync (or a
-// large batch of changes) is more likely to hit Graph's throttling. Retry a 429 a couple of
-// times using its Retry-After hint before giving up.
 async function graphFetch(url: string, init: RequestInit, retriesLeft = 2): Promise<Response> {
     const response = await fetch(url, init);
 
@@ -95,8 +87,6 @@ async function graphFetch(url: string, init: RequestInit, retriesLeft = 2): Prom
     return response;
 }
 
-// Graph's error responses carry a JSON body with the actual reason under error.message - the
-// HTTP status alone (e.g. a bare 400) isn't enough to tell what was wrong with a request.
 async function describeError(response: Response): Promise<string> {
     try {
         const body = await response.json();
@@ -106,9 +96,6 @@ async function describeError(response: Response): Promise<string> {
     }
 }
 
-// Graph's path-based upload isn't documented to reliably auto-create a missing parent
-// folder, so create /recipes explicitly the first time this session needs it rather than
-// rely on that. Cheap and idempotent - a 409 just means another device/tab beat us to it.
 let recipesFolderEnsured = false;
 
 async function ensureRecipesFolderExists(token: string): Promise<void> {
@@ -121,9 +108,6 @@ async function ensureRecipesFolderExists(token: string): Promise<void> {
     });
 
     if (response.status === 404) {
-        // The special-folder alias's docs only ever show GET on its /children collection,
-        // never POST - resolve approot to a concrete item id first and create the folder
-        // there instead, which is unambiguously documented to support POST.
         const approotResponse = await graphFetch(`${GRAPH_BASE}${APP_ROOT}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -151,7 +135,7 @@ async function ensureRecipesFolderExists(token: string): Promise<void> {
 }
 
 export class OneDriveProvider implements CloudProvider {
-    readonly id = "onedrive";
+    readonly id = "OneDrive";
 
     async isConnected(): Promise<boolean> {
         const instance = await getMsalInstance();
@@ -185,8 +169,6 @@ export class OneDriveProvider implements CloudProvider {
                 throw error;
             }
 
-            // A previous attempt (crashed tab, popup closed by hand) left MSAL's lock
-            // stuck - clear it and give this attempt one clean retry.
             clearStuckInteractionLock();
             result = await instance.loginPopup({ scopes: SCOPES });
         }

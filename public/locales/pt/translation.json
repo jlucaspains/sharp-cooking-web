@@ -101,7 +101,7 @@
       "reauthRequiredTitle": "Sincronização pausada",
       "reauthRequiredText": "Seu acesso ao OneDrive expirou e as receitas não estão mais sincronizando. Reconecte para retomar.",
       "reconnect": "Reconectar ao OneDrive",
-      "connectedAs": "Conectado como {{account}}",
+      "connectedAs": "Conectado a {{service}} como {{account}}",
       "disconnect": "Desconectar",
       "syncNow": "Sincronizar agora",
       "lastSyncedAt": "Última sincronização há {{date}}",
