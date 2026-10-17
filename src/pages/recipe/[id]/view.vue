@@ -828,20 +828,20 @@ ul li {
   margin-right: 0;
 }
 
-.wide-hero-image :deep(.list-images) {
+.wide-hero-image :deep(:not(.gallery-open) > .list-images) {
   padding-bottom: 0;
   height: 13rem;
   align-items: flex-start;
 }
 
-.wide-hero-image :deep(.list-images img) {
+.wide-hero-image :deep(:not(.gallery-open) > .list-images img) {
   height: 13rem;
   max-height: 13rem;
   width: 100%;
   object-fit: cover;
 }
 
-.wide-hero-image :deep(.youtube-player) {
+.wide-hero-image :deep(:not(.gallery-open) .youtube-player) {
   height: 13rem !important;
 }
 

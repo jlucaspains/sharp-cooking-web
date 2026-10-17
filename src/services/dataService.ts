@@ -5,12 +5,18 @@ import { Setting } from "./setting";
 import { Category } from "./category";
 import { getThumbnail } from "../helpers/videoHelpers";
 
+export interface RecipeSyncState {
+    uuid: string;
+    remoteEtag: string;
+}
+
 class RecipeDatabase extends Dexie {
     public recipes!: Table<Recipe, number>;
     public recipeImages!: Table<RecipeImage, number>;
     public recipeMedia!: Table<RecipeMedia, number>;
     public settings!: Table<Setting, string>;
     public categories!: Table<Category, number>;
+    public recipeSyncState!: Table<RecipeSyncState, string>;
 
     public constructor() {
         super("RecipeDatabase");
@@ -85,6 +91,33 @@ class RecipeDatabase extends Dexie {
                 recipe.tags = [];
             });
         });
+        this.version(8).stores({
+            recipes: "++id,title,score,changedOn,categoryId,uuid",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            categories: "++id,name,uuid"
+        }).upgrade(async (transaction) => {
+            const now = new Date().toISOString();
+            transaction.table("recipes").toCollection().modify((recipe: Recipe) => {
+                recipe.uuid = recipe.uuid || crypto.randomUUID();
+            });
+            transaction.table("categories").toCollection().modify((category: Category) => {
+                category.uuid = category.uuid || crypto.randomUUID();
+                category.changedOn = category.changedOn || now;
+            });
+        });
+        this.version(9).stores({
+            recipes: "++id,title,score,changedOn,categoryId,uuid",
+            recipeImages: "++id,recipeId",
+            recipeMedia: "++id,recipeId",
+            settings: "name",
+            categories: "++id,name,uuid",
+            // Caches the remote OneDrive etag last seen per recipe (by uuid), so cloud sync
+            // can tell which /recipes/<uuid>.json files changed remotely without downloading
+            // every one of them. Purely additive - empty until sync populates it.
+            recipeSyncState: "uuid"
+        });
     }
 }
 
@@ -92,6 +125,10 @@ const db = new RecipeDatabase();
 
 export async function getRecipe(id: number): Promise<Recipe | undefined> {
     const result = await db.recipes.get(id);
+
+    if (result?.deletedOn) {
+        return undefined;
+    }
 
     if (result && !result.nutrition) {
         result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -105,7 +142,7 @@ export async function getRecipe(id: number): Promise<Recipe | undefined> {
 }
 
 export async function getRecipeByName(name: string): Promise<Recipe | undefined> {
-    const result = await db.recipes.where("title").equals(name).first();
+    const result = await db.recipes.where("title").equals(name).filter(recipe => !recipe.deletedOn).first();
 
     if (result && !result.nutrition) {
         result.nutrition = new RecipeNutrition(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -119,11 +156,11 @@ export async function getRecipeByName(name: string): Promise<Recipe | undefined>
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
-    return await db.recipes.toArray();
+    return await db.recipes.filter(recipe => !recipe.deletedOn).toArray();
 }
 
 export async function getRecipesByCategory(categoryId: number): Promise<Recipe[]> {
-    return await db.recipes.where("categoryId").equals(categoryId).toArray();
+    return await db.recipes.where("categoryId").equals(categoryId).filter(recipe => !recipe.deletedOn).toArray();
 }
 
 export async function getRecipeMediaList(id: number): Promise<RecipeMedia[]> {
@@ -151,6 +188,7 @@ export async function getRecipeMediaUrl(id: number): Promise<string | undefined>
 }
 
 export async function saveRecipe(recipe: Recipe): Promise<number> {
+    recipe.uuid = recipe.uuid || crypto.randomUUID();
     recipe.changedOn = new Date().toISOString();
     const result = await db.recipes.put(recipe);
 
@@ -187,7 +225,16 @@ export async function deleteRecipe(id: number) {
         db.recipeMedia.delete(item.id || 0);
     }
 
-    await db.recipes.delete(id);
+    await db.recipes.update(id, { deletedOn: new Date().toISOString() });
+}
+
+export async function purgeDeletedRecords(retentionDays: number = 30) {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - retentionDays);
+    const cutoffIso = cutoff.toISOString();
+
+    await db.recipes.filter(recipe => !!recipe.deletedOn && recipe.deletedOn < cutoffIso).delete();
+    await db.categories.filter(category => !!category.deletedOn && category.deletedOn < cutoffIso).delete();
 }
 
 export async function deleteRecipeMedia(id: number) {
@@ -214,9 +261,9 @@ export async function getSetting(name: string, defaultValue: string): Promise<st
 }
 
 export async function prepareBackup(): Promise<BackupModel> {
-    const allRecipes = await db.recipes.toArray();
+    const allRecipes = await db.recipes.filter(recipe => !recipe.deletedOn).toArray();
     const allMedia = await db.recipeMedia.toArray();
-    const allCategories = await db.categories.toArray();
+    const allCategories = await db.categories.filter(category => !category.deletedOn).toArray();
 
     const result = new BackupModel();
     for (const recipe of allRecipes) {
@@ -264,6 +311,7 @@ function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia
     model.source = recipe.source;
     model.steps = recipe.steps;
     model.nutrition = recipe.nutrition;
+    model.language = recipe.language;
     model.media = allMedia
         .filter(item => item.recipeId == model.id)
         .map(item => {
@@ -272,26 +320,31 @@ function getBackupModel(recipe: Recipe, category: Category | undefined, allMedia
             };
         });
     model.categoryId = recipe.categoryId;
+    model.categoryUuid = category?.uuid;
     model.category = category?.name;
     model.tags = recipe.tags ?? [];
+    model.uuid = recipe.uuid;
+    model.deletedOn = recipe.deletedOn;
 
     return model;
 }
 
 export async function saveCategory(category: Category): Promise<number> {
+    category.uuid = category.uuid || crypto.randomUUID();
+    category.changedOn = new Date().toISOString();
     const result = await db.categories.put(category);
     return result;
 }
 
 export async function getCategories(): Promise<Array<Category>> {
-    const categories = await db.categories.toArray();
+    const categories = await db.categories.filter(category => !category.deletedOn).toArray();
     const result = [] as Array<Category>;
     for (const category of categories) {
         const resultItem = {
             id: category.id, name: category.name
         } as Category;
 
-        const recipes = db.recipes.where("categoryId").equals(category.id);
+        const recipes = db.recipes.where("categoryId").equals(category.id).filter(recipe => !recipe.deletedOn);
         const count = await recipes.count();
         const recipe = await recipes.first();
 
@@ -308,7 +361,7 @@ export async function getCategories(): Promise<Array<Category>> {
             result.push(resultItem);
         }
     }
-    const allRecipesCount = await db.recipes.count();
+    const allRecipesCount = await db.recipes.filter(recipe => !recipe.deletedOn).count();
     const allCategoryFirst = await getSetting("AllCategoryFirst", "false");
     const allCategory = { id: 0, name: "All", image: undefined, recipeCount: allRecipesCount };
     
@@ -322,13 +375,13 @@ export async function getCategories(): Promise<Array<Category>> {
 }
 
 export async function getAllCategories(): Promise<Array<Category>> {
-    return await db.categories.toArray();
+    return await db.categories.filter(category => !category.deletedOn).toArray();
 }
 
 export async function getCategoryById(id: number): Promise<Category> {
     const category = await db.categories.get(id);
 
-    if (category == null) {
+    if (category == null || category.deletedOn) {
         throw new Error("Category not found");
     }
 
@@ -336,9 +389,97 @@ export async function getCategoryById(id: number): Promise<Category> {
 }
 
 export async function deleteCategory(id: number) {
-    await db.categories.delete(id);
+    const now = new Date().toISOString();
+    await db.categories.update(id, { deletedOn: now });
 
-    db.recipes.where("categoryId").equals(id).modify((recipe: Recipe) => {
+    await db.recipes.where("categoryId").equals(id).modify((recipe: Recipe) => {
         recipe.categoryId = 0;
+        recipe.changedOn = now;
     });
+}
+
+export async function getAllRecipesForSync(): Promise<Recipe[]> {
+    return await db.recipes.toArray();
+}
+
+export async function getAllCategoriesForSync(): Promise<Category[]> {
+    return await db.categories.toArray();
+}
+
+// Builds the sync payload for a single recipe (including soft-delete tombstones - unlike
+// prepareBackup() which is for the human-facing "Take Backup" download). Media is omitted for
+// a deleted recipe - no point re-uploading photos for a tombstone.
+export async function prepareRecipeSyncPayload(recipeId: number): Promise<RecipeBackupModel | null> {
+    const recipe = await db.recipes.get(recipeId);
+
+    if (!recipe) {
+        return null;
+    }
+
+    const category = recipe.categoryId ? await db.categories.get(recipe.categoryId) : undefined;
+    const allMedia = recipe.deletedOn ? [] : await db.recipeMedia.where("recipeId").equals(recipeId).toArray();
+
+    return getBackupModel(recipe, category, allMedia);
+}
+
+// Builds the shared categories sync payload (all categories, including tombstones, plus
+// device/export metadata) - recipes stay empty, they sync as individual files instead.
+export async function prepareCategoriesSyncPayload(deviceId: string): Promise<BackupModel> {
+    const result = new BackupModel();
+    result.categories = await db.categories.toArray();
+    result.deviceId = deviceId;
+    result.exportedOn = new Date().toISOString();
+
+    return result;
+}
+
+// Per-recipe cache of the last remote OneDrive etag seen for that recipe's sync file, so a
+// sync can tell which files changed remotely without downloading every one of them.
+export async function getRecipeSyncEtag(uuid: string): Promise<string | undefined> {
+    const state = await db.recipeSyncState.get(uuid);
+    return state?.remoteEtag;
+}
+
+export async function setRecipeSyncEtag(uuid: string, remoteEtag: string): Promise<void> {
+    await db.recipeSyncState.put({ uuid, remoteEtag });
+}
+
+// Applies a category coming from a remote sync snapshot. `localId` should be the existing
+// local numeric id when this uuid already exists on this device, or undefined for a brand
+// new category so Dexie assigns a fresh local id.
+export async function applySyncedCategory(category: Category, localId: number | undefined): Promise<number> {
+    const toWrite = { ...category, id: localId } as Category;
+    return await db.categories.put(toWrite);
+}
+
+// Applies a recipe (with its media) coming from a remote sync snapshot. `localId` mirrors
+// applySyncedCategory. `localCategoryId` is the already-resolved local category id matching
+// the recipe's categoryUuid (0 if unresolved/uncategorized).
+export async function applySyncedRecipe(recipe: RecipeBackupModel, localId: number | undefined, localCategoryId: number): Promise<number> {
+    const toWrite: Recipe = {
+        id: localId,
+        uuid: recipe.uuid,
+        title: recipe.title,
+        score: recipe.score,
+        ingredients: recipe.ingredients,
+        steps: recipe.steps,
+        notes: recipe.notes,
+        multiplier: recipe.multiplier,
+        changedOn: recipe.changedOn,
+        deletedOn: recipe.deletedOn,
+        source: recipe.source,
+        nutrition: recipe.nutrition,
+        language: recipe.language,
+        categoryId: localCategoryId,
+        tags: recipe.tags ?? [],
+    };
+
+    const newId = await db.recipes.put(toWrite);
+
+    await db.recipeMedia.where("recipeId").equals(newId).delete();
+    for (const item of recipe.media ?? []) {
+        await db.recipeMedia.add(new RecipeMedia(newId, item.type, item.url));
+    }
+
+    return newId;
 }

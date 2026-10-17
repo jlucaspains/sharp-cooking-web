@@ -130,6 +130,96 @@ export async function enableNewDisplayView(page: Page) {
     await page.waitForTimeout(500);
 }
 
+export async function enableCloudSync(page: Page) {
+    await page.goto('#/preview-features');
+    await page.getByTestId('enable-cloud-sync-toggle').click();
+    await page.waitForTimeout(500);
+}
+
+export async function enableAutoSync(page: Page) {
+    await page.goto('/#/cloud-sync');
+    await page.getByTestId('auto-sync-toggle').click();
+    await page.waitForTimeout(500);
+}
+
+interface FakeFile {
+    content: string;
+    version: number;
+}
+
+export interface FakeRemoteStore {
+    categoriesFile: FakeFile | null;
+    recipeFiles: Map<string, FakeFile>;
+    recipeFileDownloadCount: number;
+    silentAccess: boolean;
+}
+
+export function createFakeRemoteStore(): FakeRemoteStore {
+    return { categoriesFile: null, recipeFiles: new Map(), recipeFileDownloadCount: 0, silentAccess: true };
+}
+
+// Installs a fake CloudProvider on `window.__testCloudProvider`, backed by a Node-side
+// in-memory virtual filesystem, so cloud-sync.vue picks it up instead of the real
+// OneDrive/MSAL provider (see src/pages/cloud-sync.vue and
+// src/services/sync/cloudProvider.ts). Real OAuth popups can't be driven in Playwright, so
+// this is the seam sync tests use instead. Pass the same store to two pages to simulate two
+// devices syncing through the same cloud files.
+export async function installFakeCloudProvider(page: Page, store: FakeRemoteStore) {
+    await page.exposeFunction('__fakeHasSilentAccess', async () => store.silentAccess);
+    await page.exposeFunction('__fakeGetCategoriesFile', async () => {
+        return store.categoriesFile
+            ? { content: store.categoriesFile.content, etag: String(store.categoriesFile.version) }
+            : null;
+    });
+    await page.exposeFunction('__fakePutCategoriesFile', async (content: string, expectedEtag: string | null) => {
+        const current = store.categoriesFile;
+        if (expectedEtag && (!current || expectedEtag !== String(current.version))) {
+            return { success: false };
+        }
+        const version = (current?.version ?? 0) + 1;
+        store.categoriesFile = { content, version };
+        return { success: true, etag: String(version) };
+    });
+    await page.exposeFunction('__fakeListRecipeFiles', async () => {
+        return Array.from(store.recipeFiles.entries()).map(([uuid, file]) => ({
+            name: `${uuid}.json`,
+            etag: String(file.version),
+            lastModifiedDateTime: new Date().toISOString(),
+        }));
+    });
+    await page.exposeFunction('__fakeGetRecipeFile', async (uuid: string) => {
+        store.recipeFileDownloadCount++;
+        const file = store.recipeFiles.get(uuid);
+        return file ? { content: file.content, etag: String(file.version) } : null;
+    });
+    await page.exposeFunction('__fakePutRecipeFile', async (uuid: string, content: string, expectedEtag: string | null) => {
+        const current = store.recipeFiles.get(uuid);
+        if (expectedEtag && (!current || expectedEtag !== String(current.version))) {
+            return { success: false };
+        }
+        const version = (current?.version ?? 0) + 1;
+        store.recipeFiles.set(uuid, { content, version });
+        return { success: true, etag: String(version) };
+    });
+
+    await page.addInitScript(() => {
+        (window as any).__testCloudProvider = {
+            id: 'fake',
+            isConnected: async () => true,
+            hasSilentAccess: () => (window as any).__fakeHasSilentAccess(),
+            connect: async () => ({ displayName: 'Test Account' }),
+            disconnect: async () => { },
+            getCategoriesFile: () => (window as any).__fakeGetCategoriesFile(),
+            putCategoriesFile: (content: string, expectedEtag: string | null) =>
+                (window as any).__fakePutCategoriesFile(content, expectedEtag),
+            listRecipeFiles: () => (window as any).__fakeListRecipeFiles(),
+            getRecipeFile: (uuid: string) => (window as any).__fakeGetRecipeFile(uuid),
+            putRecipeFile: (uuid: string, content: string, expectedEtag: string | null) =>
+                (window as any).__fakePutRecipeFile(uuid, content, expectedEtag),
+        };
+    });
+}
+
 export async function configureAI(page: Page, apiKey: string = 'test-api-key', modelName: string = 'gpt-4') {
     await page.goto('/#/ai-options');
     await page.waitForLoadState('networkidle');

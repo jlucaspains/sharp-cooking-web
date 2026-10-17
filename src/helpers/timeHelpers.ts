@@ -13,7 +13,7 @@ export function getImpliedTimeFromString(input: string, timeIdentifierRegex: str
         + (days * 24 * 60 * 60 * 1000);
 }
 
-export function secondsToString(totalSeconds: number, t: (input: string) => string) {
+export function secondsToString(totalSeconds: number, t: (input: string) => string, returnEarly: boolean = false) {
     const days = Math.floor((totalSeconds % 31536000) / 86400);
     const hours = Math.floor(((totalSeconds % 31536000) % 86400) / 3600);
     const minutes = Math.floor((((totalSeconds % 31536000) % 86400) % 3600) / 60);
@@ -23,13 +23,13 @@ export function secondsToString(totalSeconds: number, t: (input: string) => stri
     if (days > 0) {
       result += `${days} ${t("general.days")} `;
     }
-    if (hours > 0) {
+    if (hours > 0 && (!returnEarly || days == 0)) {
       result += `${hours} ${t("general.hours")} `;
     }
-    if (minutes > 0) {
+    if (minutes > 0 && (!returnEarly || hours == 0)) {
       result += `${minutes} ${t("general.minutes")} `;
     }
-    if (seconds > 0) {
+    if (seconds > 0 && (!returnEarly || minutes == 0)) {
       result += `${seconds} ${t("general.seconds")}`;
     }
   

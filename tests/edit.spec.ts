@@ -4,6 +4,7 @@ import { setup } from './helpers';
 async function enableEditInSingleEditor(page: any) {
   await page.goto('#/options');
   await page.getByTestId('edit-in-single-text-area-toggle').click();
+  await page.waitForTimeout(500);
 }
 
 test.beforeEach(async ({ page }) => {

@@ -12,6 +12,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@azure/msal-browser": "^5.23.0",
     "@headlessui/vue": "^1.7.23",
     "@jlucaspains/sharp-recipe-parser": "^2.1.0",
     "@langchain/core": "^1.2.12",

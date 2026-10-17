@@ -374,11 +374,12 @@ test('Diet tags survive a full backup and restore round trip', async ({ page, br
     await page.goto('/');
     await page.getByTestId('topbar-options').click();
     await page.getByRole('menuitem', { name: 'Options' }).click();
-    await page.getByText('Take a backup').click();
+    await page.getByTestId('backup-and-sync-button').click();
+    await page.getByTestId('take-backup-button').click();
     await page.waitForTimeout(500);
 
     // Restore the backup we just took
-    await page.getByText('Restore a backup').click();
+    await page.getByTestId('restore-backup-button').click();
     await expect(page).toHaveURL(new RegExp(".*/recipe/import-backup"));
     await page.getByTestId("import-button").click();
     await waitForFileProcessed(page);

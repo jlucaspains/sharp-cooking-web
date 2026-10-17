@@ -7,6 +7,17 @@ import tailwindcss from "@tailwindcss/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      // auth.html is the MSAL redirect-bridge page (see src/services/sync/authRedirectBridge.ts) -
+      // a second, separate entry so Vite actually bundles its module script instead of only
+      // emitting index.html.
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        auth: fileURLToPath(new URL('./auth.html', import.meta.url)),
+      },
+    },
+  },
   plugins: [vue(), tailwindcss(), VitePWA({
     base: '/',
     includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
