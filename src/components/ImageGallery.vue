@@ -102,27 +102,30 @@ function close() {
 <template>
     <div class="grid grid-cols-12 w-full lg:max-w-7xl mx-auto lg:p-4">
         <div class="col-span-12 lg:mr-2">
-            <div class="transition-all duration-1000 ease-in-out w-full" ref="el"
-                :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
+            <!-- Teleported while open so the overlay escapes ancestor stacking contexts -->
+            <Teleport to="body" :disabled="!isOpen">
+                <div class="transition-all duration-1000 ease-in-out w-full" ref="el"
+                    :class="{ 'gallery-open fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
 
-                <div v-show="isOpen" class="btn-close-section">
-                    <a href="#" @click.prevent="toggleImage(activeImage)">
-                        <svg class="h-6 w-6 float-right dark:text-white" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" />
-                            <line x1="18" y1="6" x2="6" y2="18" />
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                    </a>
-                </div>
-                <ul
-                    class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
-                    <template v-for="(image, i) in props.images" :key="`image-${i}`">
-                        <li class="w-full shrink-0 snap-start">
+                    <div v-show="isOpen" class="btn-close-section">
+                        <a href="#" @click.prevent="toggleImage(activeImage)">
+                            <svg data-testid="image-gallery-close" class="h-6 w-6 float-right dark:text-white"
+                                width="24" height="24" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </a>
+                    </div>
+                    <ul :class="{ 'flex-1 min-h-0': isOpen }"
+                        class="list-images flex flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
+                        <template v-for="(image, i) in props.images" :key="`image-${i}`">
+                            <li class="w-full shrink-0 snap-start" :class="{ 'h-full': isOpen }">
                             <a v-if="image.type == 'img'" href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
-                                    :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
+                                    :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'max-h-full': isOpen }">
                             </a>
                             <iframe v-else title="Youtube video" class="youtube-player lg:h-80 h-60" type="text/html"
                                 width="100%" height="100%" 
@@ -132,67 +135,68 @@ function close() {
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 :src="image.url"></iframe>
                         </li>
-                    </template>
-                </ul>
+                        </template>
+                    </ul>
 
-                <div class="m-auto max-w-full">
-                    <div class="flex" v-show="props.images.length > 1">
-                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
-                            href="#" @click.prevent="prev">
-                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <line x1="5" y1="12" x2="11" y2="18" />
-                                <line x1="5" y1="12" x2="11" y2="6" />
-                            </svg>
-                        </a>
-                        <ul
-                            :class="{ 'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
-                            <template v-for="(image, i) in props.images" :key="`thumb-${i}`">
-                                <li class="shrink-0 snap-start mx-1">
-                                    <a class="inline-block" href="#" @click.prevent="activeImage = i">
-                                        <svg :class="{ 'h-6 w-6': true, 'dark:text-white': activeImage == i, 'text-slate-400': activeImage != i }"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="3" fill="currentColor" />
-                                        </svg>
-                                    </a>
-                                </li>
-                            </template>
-                        </ul>
-                        <ul
-                            :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
-                            <template v-for="(image, i) in props.images" :key="`nav-${i}`">
-                                <li class="shrink-0 snap-start  mx-1">
-                                    <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
-                                        :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
-                                        <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
-                                            class="w-28" height="150" width="150">
-                                        <div v-else>
-                                            <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24">
-                                                <path fill="currentColor"
-                                                    d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.89 20.1 3 19 3M10 16V8L15 12" />
+                    <div class="m-auto max-w-full">
+                        <div class="flex" v-show="props.images.length > 1">
+                            <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 text-indigo-600 items-center text-xl bg-white dark:bg-theme-gray p-4': true }"
+                                href="#" @click.prevent="prev">
+                                <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <line x1="5" y1="12" x2="11" y2="18" />
+                                    <line x1="5" y1="12" x2="11" y2="6" />
+                                </svg>
+                            </a>
+                            <ul
+                                :class="{ 'md:hidden': !isOpen, 'hidden': isOpen, 'flex mx-auto grow justify-center flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
+                                <template v-for="(image, i) in props.images" :key="`thumb-${i}`">
+                                    <li class="shrink-0 snap-start mx-1">
+                                        <a class="inline-block" href="#" @click.prevent="activeImage = i">
+                                            <svg :class="{ 'h-6 w-6': true, 'dark:text-white': activeImage == i, 'text-slate-400': activeImage != i }"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="3" fill="currentColor" />
                                             </svg>
-                                        </div>
-                                    </a>
-                                </li>
-                            </template>
-                        </ul>
-                        <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
-                            href="#" @click.prevent="next">
-                            <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <line x1="13" y1="18" x2="19" y2="12" />
-                                <line x1="13" y1="6" x2="19" y2="12" />
-                            </svg>
-                        </a>
+                                        </a>
+                                    </li>
+                                </template>
+                            </ul>
+                            <ul
+                                :class="{ 'hidden md:flex': !isOpen, 'flex': isOpen, 'grow flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth': true }">
+                                <template v-for="(image, i) in props.images" :key="`nav-${i}`">
+                                    <li class="shrink-0 snap-start  mx-1">
+                                        <a class="inline-block border-4" href="#" @click.prevent="activeImage = i"
+                                            :class="{ 'border-indigo-600': activeImage == i, 'border-white': activeImage != i }">
+                                            <img v-if="image.type == 'img'" :alt="`Image Gallery ${i}`" :src="image.url"
+                                                class="w-28" height="150" width="150">
+                                            <div v-else>
+                                                <svg class="h-20 w-20 dark:text-white" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.89 20.1 3 19 3M10 16V8L15 12" />
+                                                </svg>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </template>
+                            </ul>
+                            <a :class="{ 'hidden md:inline-flex': !isOpen, 'inline-flex': isOpen, 'h-28 grow-0 items-center text-xl text-indigo-600 bg-white dark:bg-theme-gray p-4': true }"
+                                href="#" @click.prevent="next">
+                                <svg class="h-6 w-6 dark:text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <line x1="13" y1="18" x2="19" y2="12" />
+                                    <line x1="13" y1="6" x2="19" y2="12" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Teleport>
         </div>
     </div>
 </template>

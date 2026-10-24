@@ -11,6 +11,7 @@ Sharp Cooking is a recipe book Progressive Web App (installable, offline-capable
 
 ## Conventions
 
+- [Coding Conventions](docs/agents/coding.md)
 - [Navigation & Menus](docs/agents/navigation.md)
 - [Routing](docs/agents/routing.md)
 - [Translations / i18n](docs/agents/i18n.md)

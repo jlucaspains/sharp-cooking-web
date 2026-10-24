@@ -26,6 +26,7 @@ test('Serving basis label displays correctly for per-serving nutrition', async (
   await page.locator('input#protein').fill('6');
 
   await page.getByTestId("topbar-single-button").click();
+  await page.waitForTimeout(100);
 
   // Navigate to view page to see the nutrition label
   await page.goto('/');
@@ -64,6 +65,7 @@ test('Serving basis label displays correctly for per-100g nutrition', async ({ p
   await page.getByTestId("topbar-single-button").click();
 
   // Navigate to view page to see the nutrition label
+  await page.waitForTimeout(100);
   await page.goto('/');
   await page.getByText('Sourdough Bread 2').first().click();
   await page.waitForLoadState('networkidle');
