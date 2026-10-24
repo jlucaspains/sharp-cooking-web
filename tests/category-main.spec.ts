@@ -5,6 +5,8 @@ test.beforeEach(async ({ page }) => {
   await setup(page);
   await page.goto('#/options');
   await page.getByTestId('enable-category-toggle').click();
+  await page.goto('/#/');
+  await expect(page.getByTestId('category-item').first()).toBeVisible();
 });
 
 test('title is Home', async ({ page }) => {
@@ -82,12 +84,13 @@ test('all category appears first when toggle enabled', async ({ page }) => {
   await page.getByTestId("topbar-single-button").click();
 
   await page.waitForTimeout(500);
-  await page.goto('/');
+  await page.goto('/#/');
 
   await page.goto('#/options');
   await page.getByTestId('all-category-first-toggle').click();
 
-  await page.goto('/');
+  // same-document navigation: a full reload can drop the unawaited setting write
+  await page.goto('/#/');
 
   // Get all category names
   const categoryItems = page.getByTestId('category-item');

@@ -105,7 +105,7 @@ function close() {
             <!-- Teleported while open so the overlay escapes ancestor stacking contexts -->
             <Teleport to="body" :disabled="!isOpen">
                 <div class="transition-all duration-1000 ease-in-out w-full" ref="el"
-                    :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
+                    :class="{ 'gallery-open fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white dark:bg-theme-gray flex flex-col gap-4 p-6': isOpen }">
 
                     <div v-show="isOpen" class="btn-close-section">
                         <a href="#" @click.prevent="toggleImage(activeImage)">
@@ -119,13 +119,13 @@ function close() {
                             </svg>
                         </a>
                     </div>
-                    <ul
-                        class="list-images flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
+                    <ul :class="{ 'flex-1 min-h-0': isOpen }"
+                        class="list-images flex flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6">
                         <template v-for="(image, i) in props.images" :key="`image-${i}`">
-                            <li class="w-full shrink-0 snap-start">
+                            <li class="w-full shrink-0 snap-start" :class="{ 'h-full': isOpen }">
                             <a v-if="image.type == 'img'" href="#" @click.prevent="toggleImageIfNotOpen(i)">
                                 <img :alt="`Image Gallery ${i}`" :src="image.url"
-                                    :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'lg:max-h-full': isOpen }">
+                                    :class="{ 'm-auto max-w-full': true, 'lg:max-h-80 max-h-60': !isOpen, 'max-h-full': isOpen }">
                             </a>
                             <iframe v-else title="Youtube video" class="youtube-player lg:h-80 h-60" type="text/html"
                                 width="100%" height="100%" 

@@ -95,6 +95,7 @@ export async function createCategory(page: Page, id: number, title: string) {
     await page.getByTestId('add-menu-button').click();
     await page.getByTestId('new-category-name').fill(title);
     await page.getByText('OK').click();
+    await expect(page.getByTestId('new-category-name')).toBeHidden();
 }
 
 export async function setup(page: Page) {

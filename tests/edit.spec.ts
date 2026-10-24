@@ -151,19 +151,20 @@ test('change language', async ({ page }) => {
   await page.getByTestId('edit-button').click();
   await page.getByTestId('change-lang-button').click();
 
-  expect(page.getByLabel('American English')).toBeChecked();
+  await expect(page.getByLabel('American English')).toBeChecked();
 
   await page.getByLabel('Brazilian Portuguese').check();
   await page.getByRole('button', { name: 'OK' }).click();
 
   await page.getByTestId("topbar-single-button").click();
+  await expect(page.getByText('Saved successfully!')).toBeVisible();
 
   await page.goto('/');
   await page.getByText('Sourdough Bread').first().click();
   await page.getByTestId('edit-button').click();
   await page.getByTestId('change-lang-button').click();
 
-  expect(page.getByLabel('Brazilian Portuguese')).toBeChecked();
+  await expect(page.getByLabel('Brazilian Portuguese')).toBeChecked();
 });
 
 test('edit ingredients and steps in single text area', async ({ page }) => {
@@ -174,6 +175,7 @@ test('edit ingredients and steps in single text area', async ({ page }) => {
   await page.locator('#ingredients').fill('New Ingredient 1\nNew Ingredient 2');
   await page.locator('#steps').fill('New Step 1\nNew Step 2');
   await page.getByTestId("topbar-single-button").click();
+  await expect(page.getByText('Saved successfully!')).toBeVisible();
   await page.waitForTimeout(500);
   await page.goto('#/recipe/1');
   await expect(page.getByText('New Ingredient 1')).toHaveText("New Ingredient 1");
