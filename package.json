@@ -46,7 +46,7 @@
     "@types/lodash.debounce": "^4.0.8",
     "@vitejs/plugin-vue": "^6.0.10",
     "tailwindcss": "^4.0.0",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "vite": "^8.3.5",
     "vite-plugin-pages": "^0.33.3",
     "vite-plugin-pwa": "^2.0.0",
