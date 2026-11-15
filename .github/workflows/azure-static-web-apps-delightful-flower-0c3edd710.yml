@@ -55,6 +55,7 @@ jobs:
           output_location: "dist" # Built app content directory - optional
         env:
           VITE_CI: true
+          PYTHON_VERSION: "3.13"
 
   test:
     needs: [build_and_deploy_job]
